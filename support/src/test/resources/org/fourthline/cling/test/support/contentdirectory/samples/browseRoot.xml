@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
+
+    <!--
+        @id: An identifier for the object. The value of each object id property should
+             be unique with respect to the Content Directory.
+
+        @parentID: id property of object’s parent. The parentID of the Content Directory ‘root’
+                   container must be set to the reserved value of -1.  No other parentID
+                   attribute of any other Content Directory object may take this value. 
+
+        @childCount: Child count for the object. Applies to containers only.
+        
+        @restricted: When true, ability to modify a given object is confined to the
+                     Content Directory. Control point metadata write access is disabled.
+
+        @searchable: When true, the ability to perform a Search action under a container
+                     is enabled, otherwise a Search under that container will return no
+                     results. The default value of this attribute when if it is absent
+                     on a container is false.
+    -->
+    <container id="0" parentID="-1" childCount="3" restricted="true" searchable="true">
+
+        <!-- Name of the object -->
+        <dc:title>My multimedia stuff</dc:title>
+
+        <!-- Primary content creator or owner of the object -->
+        <dc:creator>John Doe</dc:creator>
+
+        <!-- Well, apprently the normal description type wasn't enough... -->
+        <upnp:longDescription>This is a long description!</upnp:longDescription>
+
+        <!--
+            Class of the object.
+
+            @name: Friendly name for the class of the object.  This should not be used for
+                   class based searches as it is not guaranteed to be unique or consistent
+                   across content items of the same class.
+        -->
+        <upnp:class name="Folder">object.container.storageFolder</upnp:class>
+
+        <!-- Combined space, in bytes, used by all the objects held in the storage represented
+             by the container. Value –1 is reserved to indicate that the space is ‘unknown’.
+        -->
+        <upnp:storageUsed>907000</upnp:storageUsed>
+
+        <!-- When present, controls the modifiability of the resources of a given object.
+             Ability of a Control Point to change 'writeStatus' of a given resource(s) is
+             implementation dependent. Allowed values are: WRITABLE, PROTECTED, NOT_WRITABLE,
+             UNKNOWN, MIXED.
+         -->
+        <upnp:writeStatus>WRITABLE</upnp:writeStatus>
+
+        <!--
+            Search class of the associated container object. If (object)@searchable = true, then
+
+            • If no searchClass elements are specified, then Search can return any match
+
+            • If searchClass elements are specified then, the Search can return only matches from
+              the classes specified in the searchClass tags
+
+            • searchClass is optional
+
+            • searchClass is always CDS determined
+
+            • searchClass semantics are per container, there is no parent-child relationship, they
+              only apply to searches started from that container.
+
+            @includeDerived: This is a required attribute of searchClass and indicates that
+                             the class specified also includes derived classes.
+
+            @name: This is an optional attribute of searchClass and indicates a friendly name for
+                   the class.
+
+        -->
+        <upnp:searchClass includeDerived="false">object.container.album.musicAlbum</upnp:searchClass>
+
+        <upnp:searchClass includeDerived="false">object.container.album.photoAlbum</upnp:searchClass>
+
+        <upnp:searchClass includeDerived="false">object.item.audioItem.musicTrack</upnp:searchClass>
+
+        <upnp:searchClass includeDerived="false">object.item.imageItem.photo</upnp:searchClass>
+
+        <upnp:searchClass name="Vendor Album Art" includeDerived="true">object.item.imageItem.photo.vendorAlbumArt</upnp:searchClass>
+
+    </container>
+</DIDL-Lite>

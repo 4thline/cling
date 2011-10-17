@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
+
+    <item id="100" parentID="1" restricted="false">
+        <dc:title>100</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+
+        <upnp:genre>Pop</upnp:genre>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:language>en-US</dc:language>>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <dc:rights>CC SA-BY</dc:rights>
+
+        <upnp:artist role="Performer">Some Artist</upnp:artist>
+        <upnp:album>Some Album</upnp:album>
+        <upnp:originalTrackNumber>11</upnp:originalTrackNumber>
+        <upnp:playlist>Some Playlist</upnp:playlist>
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <dc:contributor>Some Contributor</dc:contributor>
+        <dc:date>2010-12-24</dc:date>
+    </item>
+
+    <item id="101" parentID="1" restricted="false">
+        <dc:title>101</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.audioItem.audioBook</upnp:class>
+
+        <upnp:genre>Pop</upnp:genre>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:language>en-US</dc:language>>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <dc:rights>CC SA-BY</dc:rights>
+
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <upnp:producer>Some Producer</upnp:producer>
+        <dc:contributor>Some Contributor</dc:contributor>
+        <dc:date>2010-12-24</dc:date>
+    </item>
+
+    <item id="102" parentID="1" restricted="false">
+        <dc:title>102</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.audioItem.audioBroadcast</upnp:class>
+
+        <upnp:genre>Pop</upnp:genre>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:language>en-US</dc:language>>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <dc:rights>CC SA-BY</dc:rights>
+
+        <upnp:region>US</upnp:region>
+        <upnp:radioCallSign>KSJO</upnp:radioCallSign>
+        <upnp:radioStationID>107.7</upnp:radioStationID>
+        <upnp:radioBand>FM</upnp:radioBand>
+        <upnp:channelNr>123</upnp:channelNr>
+    </item>
+
+    <item id="103" parentID="1" restricted="false">
+        <dc:title>103</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.videoItem.movie</upnp:class>
+
+        <upnp:genre>Pop</upnp:genre>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <upnp:producer>Some Producer</upnp:producer>
+        <upnp:director>Some Director</upnp:director>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:language>en-US</dc:language>>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <upnp:rating>R</upnp:rating>
+
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <upnp:DVDRegionCode>2</upnp:DVDRegionCode>
+        <upnp:channelName>Some Channel</upnp:channelName>
+        <upnp:scheduledStartTime>2010-12-24T14:33:55</upnp:scheduledStartTime>
+        <upnp:scheduledEndTime>2010-12-24T14:43:55</upnp:scheduledEndTime>
+    </item>
+
+    <item id="104" parentID="1" restricted="false">
+        <dc:title>104</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.videoItem.videoBroadcast</upnp:class>
+
+        <upnp:genre>Pop</upnp:genre>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <upnp:producer>Some Producer</upnp:producer>
+        <upnp:director>Some Director</upnp:director>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:language>en-US</dc:language>>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <upnp:rating>R</upnp:rating>
+
+        <upnp:icon>http://some/icon</upnp:icon>
+        <upnp:region>US</upnp:region>
+        <upnp:channelNr>123</upnp:channelNr>
+    </item>
+
+    <item id="105" parentID="1" restricted="false">
+        <dc:title>105</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.videoItem.musicVideoClip</upnp:class>
+
+        <upnp:genre>Pop</upnp:genre>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <upnp:producer>Some Producer</upnp:producer>
+        <upnp:director>Some Director</upnp:director>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:language>en-US</dc:language>>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <upnp:rating>R</upnp:rating>
+
+        <upnp:artist role="Performer">Some Artist</upnp:artist>
+        <upnp:album>Some Album</upnp:album>
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <upnp:scheduledStartTime>2010-12-24T14:33:55</upnp:scheduledStartTime>
+        <upnp:scheduledEndTime>2010-12-24T14:43:55</upnp:scheduledEndTime>
+        <dc:contributor>Some Contributor</dc:contributor>
+        <dc:date>2010-12-24</dc:date>
+    </item>
+
+    <item id="106" parentID="1" restricted="false">
+        <dc:title>106</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.imageItem.photo</upnp:class>
+
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <upnp:rating>R</upnp:rating>
+        <dc:date>2010-12-24</dc:date>
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <dc:rights>CC SA-BY</dc:rights>
+
+        <upnp:album>Some Album</upnp:album>
+    </item>
+
+    <item id="107" parentID="1" restricted="false">
+        <dc:title>107</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.playlistItem</upnp:class>
+
+        <upnp:artist role="Performer">Some Artist</upnp:artist>
+        <upnp:genre>Pop</upnp:genre>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <dc:language>en-US</dc:language>>
+        <dc:date>2010-12-24</dc:date>
+    </item>
+
+    <item id="108" parentID="1" restricted="false">
+        <dc:title>108</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/getcontent.asp</res>
+        <upnp:class>object.item.textItem</upnp:class>
+
+        <upnp:author role="anotherrole">Some Author</upnp:author>
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <upnp:rating>R</upnp:rating>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:contributor>Some Contributor</dc:contributor>
+        <dc:language>en-US</dc:language>>
+        <dc:date>2010-12-24</dc:date>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <dc:rights>CC SA-BY</dc:rights>
+    </item>
+
+</DIDL-Lite>

@@ -1,0 +1,29 @@
+<div class="chapter" id="chapter.BinaryLight"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <div class="title">A first UPnP service and control point</div>
+    <div class="content">
+
+        <p>
+            The most basic UPnP service imaginable is the <em>binary light</em>. This device has one service,
+            the power switch, turning the light on and off. In fact, the <em>SwitchPower:1</em> service and
+            the <em>BinaryLight:1</em> device are standardized templates you can download
+            <a href="http://www.upnp.org/resources/documents.asp">here</a>.
+        </p>
+
+        <p>
+            In the following sections we'll implement this UPnP service and device with
+            the Cling Core library as a simple Java console application.
+        </p>
+
+        <xi:include href="switchpower.xhtml"/>
+        <xi:include href="bindingdevice.xhtml"/>
+        <xi:include href="server.xhtml"/>
+        <xi:include href="client.xhtml"/>
+        <xi:include href="executeaction.xhtml"/>
+        <xi:include href="startingapp.xhtml"/>
+        <xi:include href="debugapp.xhtml"/>
+
+    </div>
+</div>

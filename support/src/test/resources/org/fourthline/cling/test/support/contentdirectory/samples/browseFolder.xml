@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
+
+
+    <container id="4" parentID="1" childCount="3" restricted="false">
+
+        <dc:title>Brand New Day</dc:title>
+        <dc:creator>Sting</dc:creator>
+
+        <upnp:class>object.container.album.musicAlbum</upnp:class>
+
+        <upnp:searchClass includeDerived="false">object.item.audioItem.musicTrack</upnp:searchClass>
+
+    </container>
+
+    <container id="5" parentID="1" childCount="4" restricted="false">
+
+        <dc:title>Singles Soundtrack</dc:title>
+        <dc:creator>Various Artists</dc:creator>
+
+        <upnp:class>object.container.album.musicAlbum</upnp:class>
+
+        <upnp:searchClass includeDerived="false">object.item.audioItem.musicTrack</upnp:searchClass>
+
+        <upnp:storageUsed>1234</upnp:storageUsed>
+        <upnp:storageFree>12345</upnp:storageFree>
+        <upnp:storageTotal>123456</upnp:storageTotal>
+        <upnp:storageMaxPartition>1234567</upnp:storageMaxPartition>
+        <upnp:storageMedium>UNKNOWN</upnp:storageMedium>
+
+        <upnp:albumArtURI dlna:profileID="JPEG_TN" xmlns:dlna="urn:schemas-dlna-org:metadata-1-0/" >http://some/album/art</upnp:albumArtURI>
+        <upnp:artistDiscographyURI>http://some/disco</upnp:artistDiscographyURI>
+        <upnp:lyricsURI>http://some/lyrics</upnp:lyricsURI>
+
+    </container>
+
+</DIDL-Lite>

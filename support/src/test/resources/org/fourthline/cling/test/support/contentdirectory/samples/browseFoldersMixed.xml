@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
+
+    <container id="200" parentID="199" childCount="3" restricted="true">
+        <dc:title>200</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <upnp:class>object.container.album</upnp:class>
+
+        <dc:description>Some Description</dc:description>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <dc:date>2010-12-24</dc:date>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <upnp:storageMedium>NETWORK</upnp:storageMedium>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:contributor>Some Contributor</dc:contributor>
+        <dc:rights>CC SA-BY</dc:rights>
+
+    </container>
+
+    <container id="201" parentID="199" childCount="2" restricted="true">
+        <dc:title>Some Photos</dc:title>
+        <dc:creator>Some Creator</dc:creator>
+        <upnp:class>object.container.album.photoAlbum</upnp:class>
+
+        <item id="2010" parentID="201" restricted="true">
+            <dc:title>Photo 2010</dc:title>
+            <dc:creator>Some Creator</dc:creator>
+            <upnp:class>object.item.imageItem.photo</upnp:class>
+            <upnp:album>Some Photos</upnp:album>
+            <res protocolInfo="http-get:*:audio/x-ms-wma:*" size="200000">http://10.0.0.1/getcontent.asp</res>
+        </item>
+
+        <item id="2011" parentID="201" restricted="true">
+            <dc:title>Photo 2011</dc:title>
+            <dc:creator>Some Creator</dc:creator>
+            <upnp:class>object.item.imageItem.photo</upnp:class>
+            <upnp:album>Some Photos</upnp:album>
+            <res protocolInfo="http-get:*:audio/x-ms-wma:*" size="200000">http://10.0.0.1/getcontent.asp</res>
+        </item>
+
+    </container>
+
+</DIDL-Lite>

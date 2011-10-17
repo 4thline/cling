@@ -1,0 +1,47 @@
+<div class="section" id="section.BinaryLightExecuteAction" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Executing an action</div>
+    <div class="content">
+
+        <p>
+            The control point we are creating here is only interested in services that implement
+            <em>SwitchPower</em>. According to its template definition this service has the
+            <code>SwitchPower</code> service identifier, so when a device has been discovered we
+            can check if it offers that service:
+        </p>
+
+        <a class="citation" href="javacode://example.binarylight.BinaryLightClient#createRegistryListener(UpnpService)"/>
+
+        <p>
+            If a service becomes available we immediately execute an action on that service. When a
+            <code>SwitchPower</code> device disappears from the network a log message is printed.
+            Remember that this is a very trivial control point, it executes a single a fire-and-forget
+            operation when a service becomes available:
+        </p>
+
+        <a class="citation" href="javacode://example.binarylight.BinaryLightClient" id="BinaryLightClient.executeAction"
+                style="include: EXECUTEACTION"/>
+
+        <p>
+            The <code>Action</code> (metadata) and the <code>ActionInvocation</code> (actual call data) APIs
+            allow very fine-grained control of how an invocation is prepared, how input values are set,
+            how the action is executed, and how the output and outcome is handled. UPnP is inherently
+            asynchronous, so just like the registry listener, executing an action is exposed to you
+            as a callback-style API.
+        </p>
+
+        <p>
+            It is recommended that you encapsulate specific action invocations within a subclass of
+            <code>ActionInvocation</code>, which gives you an opportunity to further abstract the input
+            and output values of an invocation. Note however that an instance of <code>ActionInvocation</code>
+            is not thread-safe and should not be executed in parallel by two threads.
+        </p>
+
+        <p>
+            The <code>ActionCallback</code> has two main methods you have to implement, one is called
+            when the execution was successful, the other when it failed. There are many reasons why an
+            action execution might fail, read the API documentation for all possible combinations or
+            just print the generated user-friendly default error message.
+        </p>
+
+    </div>
+</div>

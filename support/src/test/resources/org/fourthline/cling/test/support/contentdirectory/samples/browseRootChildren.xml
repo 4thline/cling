@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
+
+    <container id="1" parentID="0" childCount="2" restricted="false">
+
+        <dc:title>My Music</dc:title>
+
+        <upnp:class>object.container.storageFolder</upnp:class>
+        <upnp:storageUsed>730000</upnp:storageUsed>
+        <upnp:writeStatus>WRITABLE</upnp:writeStatus>
+        <upnp:searchClass includeDerived="false">object.container.album.musicAlbum</upnp:searchClass>
+        <upnp:searchClass includeDerived="false">object.item.audioItem.musicTrack</upnp:searchClass>
+
+        <!--
+            Create class of the associated container object.
+
+            If restricted = false, then
+
+            • If no createClass elements are specified, then CreateObject can create any class of
+              object under the container.
+
+            • If createClass elements are specified then, CreateObject can only create classes of
+              objects specified in the createClass tags.
+
+            • createClass is optional
+
+            • createClass semantics are per container, there is no parent-child relationship, they
+              only apply to CreateObject actions in that container.
+
+            @includeDerived: This is a required attribute of createClass and indicates that
+                             the class specified also includes derived classes.
+
+            @name: This is an optional attribute of createClass and indicates a friendly name for
+                   the class.
+        -->
+        <upnp:createClass includeDerived="false">object.container.album.musicAlbum</upnp:createClass>
+
+    </container>
+
+    <container id="2" parentID="0" childCount="2" restricted="false">
+
+        <dc:title>My Photos</dc:title>
+
+        <upnp:class>object.container.storageFolder</upnp:class>
+        <upnp:storageUsed>177000</upnp:storageUsed>
+        <upnp:writeStatus>WRITABLE</upnp:writeStatus>
+
+        <upnp:searchClass includeDerived="false">object.container.album.photoAlbum</upnp:searchClass>
+
+        <upnp:searchClass includeDerived="false">object.item.imageItem.photo</upnp:searchClass>
+
+        <upnp:createClass includeDerived="false">object.container.album.photoAlbum</upnp:createClass>
+
+    </container>
+
+    <container id="3" parentID="0" childCount="2" restricted="false">
+
+        <dc:title>Album Art</dc:title>
+
+        <upnp:class>object.container.storageFolder</upnp:class>
+        <upnp:storageUsed>40000</upnp:storageUsed>
+        <upnp:writeStatus>WRITABLE</upnp:writeStatus>
+
+        <upnp:searchClass name="Vendor Album Art"
+                          includeDerived="true">object.item.imageItem.photo.vendorAlbumArt</upnp:searchClass>
+
+        <upnp:createClass includeDerived="true">object.item.imageItem.photo.vendorAlbumArt</upnp:createClass>
+
+    </container>
+</DIDL-Lite>

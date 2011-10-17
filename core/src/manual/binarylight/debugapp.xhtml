@@ -1,0 +1,214 @@
+<div class="section" id="section.BinaryLightDebugApp" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Debugging and logging</div>
+    <div class="content">
+
+        <p>
+            Although the binary light is a very simple example, you might run into problems. Cling Core
+            helps you resolve most problems with extensive logging. Internally, Cling Core uses Java JDK logging,
+            also known as <code>java.util.logging</code> or JUL. There are no wrappers, logging frameworks,
+            logging services, or other dependencies.
+        </p>
+
+        <p>
+            By default, the implementation of JUL in the Sun JDK will print only messages with level
+            INFO, WARNING, or SEVERE on <code>System.out</code>, and it will print each message over two
+            lines. This is quite inconvenient and ugly, so your first step is probably to configure one
+            line per message. This requires a custom logging handler.
+        </p>
+
+        <p>
+            Next you want to configure logging levels for different logging categories. Cling Core will
+            output some INFO level messages on startup and shutdown, but is otherwise silent during runtime
+            unless a problem occurs - it will then log messages at WARNING or SEVERE level.
+        </p>
+
+        <p>
+            For debugging, usually more detailed logging levels for various log categories are required.
+            The logging categories in Cling Core are package names, e.g the root logger is available under
+            the name <code>org.fourthline.cling</code>. The following tables show typically used categories and the
+            recommended level for debugging:
+        </p>
+
+        <table class="infotable fullwidth" border="1">
+            <thead>
+            <tr>
+                <th>Network/Transport</th>
+                <th class="thirdwidth">&#160;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.transport.spi.DatagramIO (FINE)</code><br/>
+                    <code>org.fourthline.cling.transport.spi.MulticastReceiver (FINE)</code><br/>
+                </td>
+                <td>UDP communication</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.transport.spi.DatagramProcessor (FINER)</code><br/>
+                </td>
+                <td>UDP datagram processing and content</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.transport.spi.UpnpStream (FINER)</code><br/>
+                    <code>org.fourthline.cling.transport.spi.StreamServer (FINE)</code><br/>
+                    <code>org.fourthline.cling.transport.spi.StreamClient (FINE)</code><br/>
+                </td>
+                <td>TCP communication</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.transport.spi.SOAPActionProcessor (FINER)</code><br/>
+                </td>
+                <td>SOAP action message processing and content</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.transport.spi.GENAEventProcessor (FINER)</code><br/>
+                </td>
+                <td>GENA event message processing and content</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.transport.impl.HttpHeaderConverter (FINER)</code><br/>
+                </td>
+                <td>HTTP header processing</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br/>
+
+        <table class="infotable fullwidth" border="1">
+            <thead>
+            <tr>
+                <th>UPnP Protocol</th>
+                <th class="thirdwidth">&#160;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.protocol.ProtocolFactory (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.async (FINER)</code><br/>
+                </td>
+                <td>Discovery (Notification &amp; Search)</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.protocol.ProtocolFactory (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.RetrieveRemoteDescriptors (FINE)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.ReceivingRetrieval (FINE)</code><br/>
+                    <code>org.fourthline.cling.binding.xml.DeviceDescriptorBinder (FINE)</code><br/>
+                    <code>org.fourthline.cling.binding.xml.ServiceDescriptorBinder (FINE)</code><br/>
+                </td>
+                <td>Description</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.protocol.ProtocolFactory (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.ReceivingAction (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.SendingAction (FINER)</code><br/>
+                </td>
+                <td>Control</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.model.gena (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.ProtocolFactory (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.ReceivingEvent (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.ReceivingSubscribe (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.ReceivingUnsubscribe (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.SendingEvent (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.SendingSubscribe (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.SendingUnsubscribe (FINER)</code><br/>
+                    <code>org.fourthline.cling.protocol.sync.SendingRenewal (FINER)</code><br/>
+                </td>
+                <td>GENA</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <br/>
+
+        <table class="infotable fullwidth" border="1">
+            <thead>
+            <tr>
+                <th>Core</th>
+                <th class="thirdwidth">&#160;</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.transport.Router (FINER)</code><br/>
+                </td>
+                <td>
+                    Message Router
+                </td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.registry.Registry (FINER)</code><br/>
+                    <code>org.fourthline.cling.registry.LocalItems (FINER)</code><br/>
+                    <code>org.fourthline.cling.registry.RemoteItems (FINER)</code><br/>
+                </td>
+                <td>Registry</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.binding.annotations (FINER)</code><br/>
+                    <code>org.fourthline.cling.model.meta.LocalService (FINER)</code><br/>
+                    <code>org.fourthline.cling.model.action (FINER)</code><br/>
+                    <code>org.fourthline.cling.model.state (FINER)</code><br/>
+                    <code>org.fourthline.cling.model.DefaultServiceManager (FINER)</code><br/>
+                </td>
+                <td>Local service binding &amp; invocation</td>
+            </tr>
+            <tr>
+                <td class="nowrap">
+                    <code>org.fourthline.cling.controlpoint (FINER)</code><br/>
+                </td>
+                <td>Control Point interaction</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p>
+            One way to configure JUL is with a properties file. For example, create
+            the following file as <code>mylogging.properties</code>:
+        </p>
+
+        <div><pre><![CDATA[# Enables a one-message-per-line handler (shipping in seamless-util.jar)
+handlers=org.seamless.util.logging.SystemOutLoggingHandler
+
+# The default (root) log level
+.level=INFO
+
+# Extra settings for various categories
+
+org.fourthline.cling.level=INFO
+
+org.fourthline.cling.protocol.level=FINEST
+
+org.fourthline.cling.registry.Registry.level=FINER
+org.fourthline.cling.registry.LocalItems.level=FINER
+org.fourthline.cling.registry.RemoteItems.level=FINER ]]></pre></div>
+
+        <p>
+            You can now start your application with a system property that names your logging
+            configuration:
+        </p>
+
+        <div><pre><![CDATA[$ java -cp /path/to/seamless-jar-files:/path/to/cling-core.jar:classes/ \
+        -Djava.util.logging.config.file=/path/to/mylogging.properties \
+        example.binaryLight.BinaryLightServer]]></pre></div>
+
+        <p>
+            You should see the desired log messages printed on <code>System.out</code>.
+        </p>
+
+    </div>
+</div>

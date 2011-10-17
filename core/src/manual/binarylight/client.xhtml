@@ -1,0 +1,44 @@
+<div class="section" id="section.BinaryLightClient" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Creating a control point</div>
+    <div class="content">
+
+        <p>
+            The client application has the same basic scaffolding as the server, it also uses a
+            shared single instance of <code>UpnpService</code>:
+        </p>
+
+        <a class="citation" href="javacode://example.binarylight.BinaryLightClient"
+           style="exclude: REGISTRYLISTENER, EXECUTEACTION"/>
+
+        <p>
+            Typically a control point sleeps until a device with a specific type of service becomes
+            available on the network. The <code>RegistryListener</code> is called by Cling when a
+            remote device has been discovered - or when it announced itself automatically. Because you
+            usually do not want to wait for the periodic announcements of devices, a control point
+            can also execute a search for all devices (or devices with certain service types or UDN),
+            which will trigger an immediate discovery announcement from those devices that match
+            the search query.
+        </p>
+
+        <p>
+            You can already see the <code>ControlPoint</code> API here with its <code>search(...)</code>
+            method, this is one of the main interfaces you interact with when writing a UPnP client with
+            Cling.
+        </p>
+
+        <p>
+            If you compare this code with the server code from the previous section you can see
+            that we are not shutting down the <code>UpnpService</code> when the application quits. This
+            is not an issue here, because this application does not have any local devices or service
+            event listeners (not the same as registry listeners) bound and registered. Hence, we
+            do not have to announce their departure on application shutdown and can keep the
+            code simple for the sake of the example.
+        </p>
+
+        <p>
+            Let's focus on the registry listener implementation and what happens when a UPnP device has
+            been discovered on the network.
+        </p>
+
+    </div>
+</div>

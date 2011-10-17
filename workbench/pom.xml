@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.fourthline.cling</groupId>
+        <artifactId>cling</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <name>Cling Workbench</name>
+    <artifactId>cling-workbench</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+
+            <!-- Package a standalone JAR with all dependencies -->
+            <plugin>
+                <groupId>org.dstovall</groupId>
+                <artifactId>onejar-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>workbench-standalone-jar</id>
+                        <goals>
+                            <goal>one-jar</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.fourthline.cling.workbench.Workbench</mainClass>
+                            <attachToBuild>true</attachToBuild>
+                            <classifier>standalone</classifier>
+                            <filename>${project.build.finalName}-standalone.jar</filename>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>workbench-bridge-cli-jar</id>
+                        <goals>
+                            <goal>one-jar</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>org.fourthline.cling.workbench.bridge.Main</mainClass>
+                            <attachToBuild>true</attachToBuild>
+                            <classifier>bridge-cli</classifier>
+                            <filename>${project.build.finalName}-bridge-cli.jar</filename>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Build an OS X application and disk image -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>osxappbundle-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>org.fourthline.cling.workbench.Workbench</mainClass>
+                    <iconFile>${basedir}/src/main/resources/WorkbenchIcon.icns</iconFile>
+                    <jvmVersion>1.6+</jvmVersion>
+                    <javaApplicationStub>${basedir}/../misc/JavaApplicationStub</javaApplicationStub>
+                </configuration>
+            </plugin>
+
+            <!-- Website lifecycle -->
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <reportPlugins>
+                        <!-- THESE IGNORE GLOBAL PLUGIN MANAGEMENT! -->
+
+                        <!-- We want cross-referenced source code -->
+                        <plugin>
+                            <artifactId>maven-jxr-plugin</artifactId>
+                        </plugin>
+
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+            
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.fourthline.cling</groupId>
+            <artifactId>cling-support</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.fourthline.cling</groupId>
+            <artifactId>cling-bridge</artifactId>
+            <version>${project.version}</version>
+            <classifier>classes</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-servlet</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>args4j</groupId>
+            <artifactId>args4j</artifactId>
+            <version>${args4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se-core</artifactId>
+            <version>${weld.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-core</artifactId>
+            <version>${weld.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+        </dependency>
+
+        <!-- Here you pick what logging system you really want to use -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <!-- Oh, I have an idea! There is one in every JVM classpath! -->
+            <artifactId>slf4j-jdk14</artifactId>
+            <!-- Has to be >= 1.5.5 because SLF4J is garbage -->
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <!-- TODO: http://seamframework.org/Community/WeldSEAndSlf4j
+        <dependency>
+            <groupId>org.jboss.weld.se</groupId>
+            <artifactId>weld-se</artifactId>
+            <version>1.1.1.Final</version>
+        </dependency>
+        -->
+
+        <dependency>
+            <groupId>javax.ejb</groupId>
+            <artifactId>ejb-api</artifactId>
+            <version>${ejb.api.version}</version>
+        </dependency>
+        
+    </dependencies>
+
+</project>

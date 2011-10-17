@@ -1,0 +1,6 @@
+org.fourthline.cling.workbench.plugins.binarylight.controlpoint.SwitchPowerControlPointAdapter
+org.fourthline.cling.workbench.plugins.contentdirectory.ContentDirectoryControlPointAdapter
+org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPointAdapter
+org.fourthline.cling.workbench.plugins.renderingcontrol.RenderingControlPointAdapter
+org.fourthline.cling.workbench.plugins.messagebox.MessageBoxControlPointAdapter
+org.fourthline.cling.workbench.plugins.igd.WANIPConnectionControlPointAdapter

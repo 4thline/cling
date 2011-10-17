@@ -1,0 +1,42 @@
+<div class="section" id="section.BasicAPI.Registry" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">The Registry</div>
+    <div class="content">
+
+        <p>
+            The <code>Registry</code>, which you access with <code>getRegistry()</code> on the
+            <code>UpnpService</code>, is the heart of a Cling Core UPnP stack. The registry
+            is responsible for:
+        </p>
+
+        <ul>
+            <li>
+                Maintaining discovered UPnP devices on your network. It also offers a management
+                API so you can register local devices and offer local services. This is how you
+                expose your own UPnP devices on the network. The registry handles all notification,
+                expiration, request routing, refreshing, and so on.
+            </li>
+            <li>
+                Managing GENA (general event &amp; notification architecture) subscriptions. Any
+                outgoing subscription to a remote service is known by the registry, it is refreshed
+                periodically so it doesn't expire. Any incoming eventing subscription to a local
+                service is also known and maintained by the registry (expired and removed when necessary).
+            </li>
+            <li>
+                Providing the interface for the addition and removal of <code>RegistryListener</code>
+                instances. A registry listener is used in client or server UPnP applications, it
+                provides a uniform interface for notification of registry events. Typically, you write
+                and register a listener to be notified when a service you want to work with becomes
+                available on the network - on a local or remote device - and when it disappears.
+            </li>
+        </ul>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.registry.RegistryBrowseTest"/>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.registry.RegistryListenerTest"/>
+        </div>
+
+    </div>
+</div>

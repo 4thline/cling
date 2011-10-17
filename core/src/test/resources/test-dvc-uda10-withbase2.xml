@@ -1,0 +1,40 @@
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+    <specVersion>
+        <major>1</major>
+        <minor>0</minor>
+    </specVersion>
+    <URLBase>http://127.0.0.1:0</URLBase> <!-- No path -->
+    <device>
+        <deviceType>urn:schemas-upnp-org:device:mydevice:1</deviceType>
+        <friendlyName>My Testdevice</friendlyName>
+        <manufacturer>4th Line</manufacturer>
+        <manufacturerURL>/mfc.html</manufacturerURL> <!-- Path starts with slash -->
+        <modelDescription>TEST Device</modelDescription>
+        <modelName>MYMODEL</modelName>
+        <modelNumber>ONE</modelNumber>
+        <!-- Path doesn't start with slash -->
+        <modelURL>model.html</modelURL>
+        <serialNumber>000da201238c</serialNumber>
+        <UDN>uuid:MY-DEVICE-123</UDN>
+        <UPC>100000000001</UPC>
+        <presentationURL>http://www.4thline.org/some_ui</presentationURL>
+        <iconList>
+            <icon>
+                <mimetype>image/png</mimetype>
+                <width>32</width>
+                <height>32</height>
+                <url>icon.png</url>
+                <depth>8</depth>
+            </icon>
+        </iconList>
+        <serviceList>
+            <service>
+                <serviceType>urn:schemas-upnp-org:service:MY-SERVICE-TYPE-ONE:1</serviceType>
+                <serviceId>urn:upnp-org:serviceId:MY-SERVICE-123</serviceId>
+                <controlURL>control</controlURL>
+                <eventSubURL>events</eventSubURL>
+                <SCPDURL>svc.xml</SCPDURL>
+            </service>
+        </serviceList>
+    </device>
+</root>

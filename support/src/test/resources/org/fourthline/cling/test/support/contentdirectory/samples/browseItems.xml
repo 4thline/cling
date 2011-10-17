@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
+
+    <!--
+        @restricted: When true, ability to modify a given object is confined to the Content Directory.
+                     Control point metadata write access is disabled.
+    -->
+    <item id="6" parentID="5" restricted="false">
+
+        <dc:title>Chloe Dancer</dc:title>
+        <dc:creator>Mother Love Bone</dc:creator>
+
+        <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+
+        <!--
+            Resource, typically a media file, associated with the object.
+            Values must be properly escaped URIs as described in [RFC 2396].
+
+            @size: Size in bytes of the resource.
+
+            @res@duration: Time duration of the playback of the resource, at
+                           normal speed.
+
+            @bitrate: Bitrate in bytes/seconds of the encoding of the resource.
+
+            @sampleFrequency: Sample frequency of the audio in HZ.
+
+            @bitsPerSample: Encoding characteristic of the resource.
+
+            @nrAudioChannels: Number of audio channels, e.g., 1 for mono, 2 for stereo,
+                              6 for Dolby Surround
+
+            @resolution: XxY resolution of the resource in pixels (typically image item
+                         or video item). String pattern is of the form: [0-9]+x[0-9]+
+                         (one or more digits, 'x', followed by one or more digits).
+            @colorDepth: Encoding characteristic of the resource.
+
+            @protocolInfo: A string that identifies the recommended HTTP protocol for
+                           transmitting the resource. If not present, then the content
+                           has not yet been fully imported by CDS and is  not yet
+                           accesible for playback purposes.
+
+            @protection: Some identification of a protection system used for the resource .
+
+            @importUri: URI via which the resource can be imported to the CDS via
+                        ImportResource() or HTTP POST.
+
+        -->
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*"
+             size="200000"
+             duration="00:03:25"
+             bitrate="8192"
+             sampleFrequency="44100"
+             bitsPerSample="16"
+             nrAudioChannels="2"
+             resolution="120x130"
+             colorDepth="8"
+             protection="None"
+             importUri="http://10.0.0.1/import">http://10.0.0.1/getcontent.asp?id=6&amp;foo=bar</res>
+
+        <dc:description>Some Description</dc:description>
+        <dc:publisher>Some Publisher</dc:publisher>
+        <dc:publisher>Another Publisher</dc:publisher>
+        <dc:contributor>Some Contributor</dc:contributor>
+        <dc:date>2010-12-24</dc:date>
+        <dc:language>en-US</dc:language>>
+        <dc:relation>http://some/related/resource</dc:relation>
+        <dc:rights>CC SA-BY</dc:rights>
+
+        <upnp:genre>Pop</upnp:genre>
+        <upnp:album>Singles Soundtrack</upnp:album>
+        <upnp:artist role="performer">Mother Love Bone</upnp:artist>
+        <upnp:actor role="myrole">Some Actor</upnp:actor>
+        <upnp:author role="anotherrole">Some Author</upnp:author>
+        <upnp:producer>Some Producer</upnp:producer>
+        <upnp:director>Some Director</upnp:director>
+        <upnp:playlist>Some Playlist</upnp:playlist>
+        <upnp:longDescription>Some Long Description</upnp:longDescription>
+        <upnp:icon>http://some/icon</upnp:icon>
+        <upnp:region>US</upnp:region>
+        <upnp:rating>R</upnp:rating>
+        <upnp:radioCallSign>KSJO</upnp:radioCallSign>
+        <upnp:radioStationID>107.7</upnp:radioStationID>
+        <upnp:radioBand>FM</upnp:radioBand>
+
+        <upnp:channelNr>123</upnp:channelNr>
+        <upnp:channelName>Some Channel</upnp:channelName>
+        <upnp:scheduledStartTime>2010-12-24T14:33:55</upnp:scheduledStartTime>
+        <upnp:scheduledEndTime>2010-12-24T14:43:55</upnp:scheduledEndTime>
+
+        <upnp:DVDRegionCode>2</upnp:DVDRegionCode>
+        <upnp:originalTrackNumber>11</upnp:originalTrackNumber>
+        <upnp:toc>123abc</upnp:toc>
+        <upnp:userAnnotation>Some User Annotation</upnp:userAnnotation>
+
+    </item>
+
+    <item id="7" parentID="5" restricted="false">
+
+        <dc:title>Drown</dc:title>
+        <dc:creator>Smashing Pumpkins</dc:creator>
+
+        <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+
+        <res protocolInfo="http-get:*:audio/mpeg:*" size="140000">http://10.0.0.1/getcontent.asp?id=7</res>
+
+    </item>
+
+    <item id="8" parentID="5" restricted="false">
+
+        <dc:title>State Of Love And Trust</dc:title>
+
+        <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*" size="70000">http://10.0.0.1/getcontent.asp?id=8</res>
+
+    </item>
+
+    <!--
+        @refID: id property of the item being referred to.
+    -->
+    <item id="9" parentID="5" refID="8" restricted="false">
+        
+        <dc:title>State Of Love And Trust</dc:title>
+        <dc:creator>Pearl Jam</dc:creator>
+
+        <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+
+    </item>
+
+</DIDL-Lite>

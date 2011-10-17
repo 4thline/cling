@@ -1,0 +1,91 @@
+<scpd xmlns="urn:schemas-upnp-org:service-1-0">
+    
+    <specVersion>
+        <major>1</major>
+        <minor>0</minor>
+    </specVersion>
+
+    <actionList>
+
+        <action>
+            <name>SetTarget</name>
+            <argumentList>
+                <argument>
+                    <name>NewTargetValue</name>
+                    <relatedStateVariable>Target</relatedStateVariable>
+                    <direction>in</direction>
+                </argument>
+            </argumentList>
+        </action>
+
+        <action>
+            <name>GetTarget</name>
+            <argumentList>
+                <argument>
+                    <name>RetTargetValue</name>
+                    <relatedStateVariable>Target</relatedStateVariable>
+                    <direction>out</direction>
+                    <retval/>
+                </argument>
+            </argumentList>
+        </action>
+
+        <action>
+            <name>GetStatus</name>
+            <argumentList>
+                <argument>
+                    <name>ResultStatus</name>
+                    <relatedStateVariable>Status</relatedStateVariable>
+                    <direction>out</direction>
+                </argument>
+            </argumentList>
+        </action>
+
+    </actionList>
+
+    <serviceStateTable>
+
+        <stateVariable sendEvents="no">
+            <name>Target</name>
+            <dataType>boolean</dataType>
+            <defaultValue>0</defaultValue>
+        </stateVariable>
+
+        <stateVariable sendEvents="yes">
+            <name>Status</name>
+            <dataType>boolean</dataType>
+            <defaultValue>0</defaultValue>
+        </stateVariable>
+
+        <stateVariable sendEvents="yes">
+            <name>SomeVar</name>
+            <dataType>string</dataType>
+            <defaultValue>foo</defaultValue>
+            <allowedValueList>
+                <allowedValue>foo</allowedValue>
+                <allowedValue>bar</allowedValue>
+            </allowedValueList>
+        </stateVariable>
+
+        <stateVariable sendEvents="no">
+            <name>AnotherVar</name>
+            <dataType>ui4</dataType>
+            <allowedValueRange>
+                <minimum>0</minimum>
+                <maximum>10</maximum>
+                <step>2</step>
+            </allowedValueRange>
+        </stateVariable>
+
+        <stateVariable>
+            <name>ModeratedMaxRateVar</name>
+            <dataType>string</dataType>
+        </stateVariable>
+
+        <stateVariable>
+            <name>ModeratedMinDeltaVar</name>
+            <dataType>i4</dataType>
+        </stateVariable>
+
+    </serviceStateTable>
+</scpd>

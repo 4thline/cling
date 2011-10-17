@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Cling FAQ</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        Cling FAQ
+    </h1>
+
+    <h2>General Questions</h2>
+
+    <dl>
+        <dt>
+            <a id="g1"/>
+            <a href="#g1">
+                <em>Which version of the UPnP specification does Cling implement?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                Cling Core is compatible with the
+                <a href="http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf">
+                UPnP Device Architecture 1.0</a>.
+            </p>
+        </dd>
+        <dt>
+            <a id="g2"/>
+            <a href="#g2">
+            <em>Can I use Cling to access a UPnP/DLNA MediaServer in Android?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                Yes, you can write a control point application for Android with
+                Cling Core as a UPnP library. You can find additional utilities for
+                browsing and parsing a MediaServer content directory in the
+                Cling Support module.
+            </p>
+        </dd>
+        <dt>
+            <a id="g3"/>
+            <a href="#g3">
+            <em>Can I use Cling in my commercial application or device?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                Cling is licensed under the LGPL, so there are no restrictions on the use of the unmodified Cling JAR
+                files/binaries. You can use the unmodified JAR files/binaries in any application or device, for any
+                purpose. The following distribution (for free or for pay) restrictions apply:
+            </p>
+            <ul>
+                <li>
+                    If you distribute Cling with your application or device, you have to include a notice like
+                    "contains LGPL software" and a link to the Cling homepage, so your users also get the benefit of
+                    Free Software.
+                </li>
+                <li>
+                    You have to allow replacement of the Cling library in your distributed application. This means
+                    replacement of the JAR file (e.g. in a WAR or EAR package) or replacement of Cling .class files
+                    in the Android APK package (dex2jar). You can not lock your distribution package with any kind
+                    of obfuscation or DRM scheme.
+                </li>
+                <li>
+                    If you modify Cling source code, and you distribute a binary compiled from this modified source
+                    code, you have to distribute your changed source code as well under the LGPL (upon request).
+                    Typically this means you contribute your changes  back to the Cling project, to be included in
+                    an official Cling release.
+                </li>
+            </ul>
+            <p>
+                <a href="mailto:license(at)4thline.com">Contact us</a> if you have questions about the licensing of Cling.
+            </p>
+        </dd>
+    </dl>
+
+    <h2>Technical Questions</h2>
+
+    <dl>
+        <dt>
+            <a id="t1"/>
+            <a href="#t1">
+            <em>What are the dependencies of Cling Core?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                Cling Core is distributed as a single JAR file. It only has one other
+                dependency, the <code>seamless-*</code> libraries. All JAR files are
+                typically packaged next to each other in the ZIP distribution. You
+                have to add these JAR files to your classpath.
+            </p>
+        </dd>
+        <dt>
+            <a id="t2"/>
+            <a href="#t2">
+            <em>How can I access the services of a device?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                First write a control point and a <code>RegistryListener</code> as explained
+                <a href="/projects/cling/core/manual/cling-core-manual.html#section.BinaryLightClient">in
+                the manual</a>. Then call <code>device.getServices()</code> when a device has
+                been discovered.
+            </p>
+        </dd>
+        <dt>
+            <a id="t3"/>
+            <a href="#t3">
+            <em>Cling doesn't work if I start my application on Tomcat/JBoss/Glassfish/etc?!</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                You'll get an error on startup, this error tells you that Cling couldn't use
+                the Java JDK's <code>HTTPURLConnection</code> for HTTP client operations. This is
+                an old and badly designed part of the JDK: Only "one application" in the whole
+                JVM can configure it. You have to switch Cling to an alternative HTTP client,
+                e.g. the other bundled implementation based on Apache HTTP Core. This is explained
+                in more detail in <a href="/projects/cling/core/manual/cling-core-manual.html#section.BasicAPI.UpnpService.Configuration">
+                the user manual</a>.
+            </p>
+        </dd>
+        <dt>
+            <a id="t4"/>
+            <a href="#t4">
+            <em>Is IPv6 supported?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                No, the default configuration of the UPnP stack in Cling Core will filter
+                all network interfaces and IP addresses that are not IPv4. Some other parts
+                of the Cling Core library might also assume that addresses are IPv4 and the
+                whole library has not been tested in an IPv6 only environment. You are welcome
+                to test Cling on IPv6 with a custom <code>UpnpServiceConfiguration</code> and
+                <code>NetworkAddressFactory</code> and contribute back any necessary changes.
+            </p>
+        </dd>
+        <dt>
+            <a id="t5"/>
+            <a href="#t5">
+            <em>I don't see debug log messages on Android?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                The java.util.logging implementation on Android is broken, it does not allow you to print
+                debug-level messages easily. See
+                <a href="http://mailinglists.945824.n3.nabble.com/Setting-Cling-Log-Levels-in-Android-tp2010097p2010097.html">this
+                discussion</a> for a simple solution.
+            </p>
+        </dd>
+    </dl>
+
+</div>
+
+</body>
+</html>
+
+

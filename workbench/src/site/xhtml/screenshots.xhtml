@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Screenshots</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        Cling Workbench Screenshots
+    </h1>
+
+    <p>
+        The following snapshot shows the main Cling Workbench window with some open dialogs:
+    </p>
+
+    <img src="/projects/cling/workbench/images/Cling%20Workbench%20Screenshot%2002.png"
+         width="975" height="883" 
+         alt="Cling Workbench Screenshot 2"
+         style="border: 1px solid gray; display: block; margin: 0 auto;"/>
+
+    <ul>
+        <li>
+            On the top left you can see the logging/debug control window; the workbench is a developer's tool for
+            examining and working with UPnP devices and services. As most vendors violate the UPnP specification,
+            fine-grained debugging of network communication is often necessary to understand workarounds.
+        </li>
+
+        <li>
+            Top right you can see a demo device that implements a simple <em>SwitchPower</em> service as a light bulb,
+            and <a href="/projects/cling/workbench/xref/org/fourthline/cling/workbench/plugins/binarylight/controlpoint/SwitchPowerController.html">its
+            custom control panel </a> (a <em>ControlPoint</em> plugin of the workbench). All the way on the right
+            is the generic event monitoring dialog of the workbench. When you switch the light, the monitor will show
+            the change in status immediately.
+        </li>
+
+        <li>
+            In the middle you see the device and service browser. The left hand side is a list of all discovered devices,
+            the right panels show the metadata of a particular device and its services. The workbench supports invoking
+            actions on services, and displaying the output argument values.
+        </li>
+    </ul>
+
+    <p>
+        This is the built-in control point for <em>WANIPConnection</em> service and NAT port mapping on
+        an <em>InternetGatewayDevice</em>:
+    </p>
+
+    <img src="/projects/cling/workbench/images/Cling%20Workbench%20Screenshot%2004.png"
+         width="616" height="564"
+         alt="Cling Workbench Screenshot 4"
+         style="border: 1px solid gray; display: block; margin: 0 auto;"/>
+
+    <p>
+        These dialogs show some of the built-in control points, for <em>ContentDirectory</em>, <em>AVTransport</em>, and
+        <em>RenderingControl</em> (volume only) services:
+    </p>
+
+    <img src="/projects/cling/workbench/images/Cling%20Workbench%20Screenshot%2003.png"
+         width="761" height="737"
+         alt="Cling Workbench Screenshot 3"
+         style="border: 1px solid gray; display: block; margin: 0 auto;"/>
+
+
+
+</div>
+
+</body>
+</html>

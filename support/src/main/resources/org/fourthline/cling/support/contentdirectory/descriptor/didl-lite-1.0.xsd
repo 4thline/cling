@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+            xmlns:didl-lite="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+            xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified" version="1.0"
+            xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+            jaxb:version="2.1">
+<!--
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+    jaxb:extensionBindingPrefixes="xjc"
+-->
+
+    <xsd:annotation>
+        <xsd:appinfo>
+            <jaxb:schemaBindings>
+                <jaxb:package name="org.fourthline.cling.support.contentdirectory.descriptor.didl"/>
+            </jaxb:schemaBindings>
+            <jaxb:globalBindings generateElementClass="true" typesafeEnumMaxMembers="100">
+<!--
+                <xjc:superClass name="org.fourthline.cling.support.didl.DidlObject"/>
+-->
+            </jaxb:globalBindings>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">
+            DIDL-Lite schema for UPnP A/V Content Directory Services, version 1.0.
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:import namespace="urn:schemas-upnp-org:metadata-1-0/upnp/" schemaLocation="upnp-cds-1.0.xsd"/>
+    <xsd:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="dc-elements-1.1.xsd"/>
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/xml.xsd"/>
+
+    <xsd:element name="DIDL-Lite">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    'DIDL-Lite' is the root element of DIDL-Lite documents.
+                    &lt;p>
+                    Attributes:
+                    &lt;p>
+                    xml:lang use: optional
+                    &lt;p>
+                    The 'xml:lang' attribute may optionally be used to specify the language of text
+                    in the DIDL-Lite document.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <jaxb:property name="children"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+                <xsd:element ref="didl-lite:item"/>
+                <xsd:element ref="didl-lite:container"/>
+                <xsd:element ref="didl-lite:desc"/>
+            </xsd:choice>
+<!-- TODO
+            <xsd:attribute ref="xml:lang" use="optional"/>
+-->
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="container">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    A 'container' element may contain any number of
+                    &lt;p>
+                    1. Dublin Core,&lt;br/>
+                    2. upnp,&lt;br/>
+                    3. res,&lt;br/>
+                    4. ref,&lt;br/>
+                    5 item,&lt;br/>
+                    6. container&lt;br/>
+                    and 7. desc elements.&lt;br/>
+                    &lt;p>
+                    In all cases, the first element in each container child element sequence is
+                    required to be "dc:title". The 'upnp:class' element must also appear under
+                    container. Each container is required to specify a value for the 'id'
+                    and 'parentID' attributes. Each container is also required to specify a value for
+                    the 'restricted' attribute (true, false, 1, 0). When restricted="true", the ability to
+                    change or delete the container is restricted.
+                    &lt;p>
+                    Other optional container element attributes are 'parentID', 'childCount',
+                    and 'searchable'.
+                    &lt;p>
+                    Other optional attributes are 'parentID' and 'childCount'.
+                    &lt;p>
+                    Attributes:
+                    &lt;p>
+                    id type: string use: required&lt;br/>
+                    parentID type: string use: required&lt;br/>
+                    childCount type: int use: optional&lt;br/>
+                    restricted type: boolean use: required&lt;br/>
+                    &lt;p>
+                    The equivalent MPEG21 DIDL element is 'CONTAINER'
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:sequence>
+                <xsd:element ref="dc:title"/>
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:annotation>
+                        <xsd:appinfo>
+                            <jaxb:property name="children"/>
+                        </xsd:appinfo>
+                    </xsd:annotation>
+                    <xsd:any namespace="urn:schemas-upnp-org:metadata-1-0/upnp/" processContents="strict"/>
+                    <xsd:any namespace="http://purl.org/dc/elements/1.1/" processContents="strict"/>
+                    <xsd:element ref="didl-lite:desc"/>
+                    <xsd:element ref="didl-lite:item"/>
+                    <xsd:element ref="didl-lite:res"/>
+
+                    <!--
+                        Section 2.8.3: Incremental navigation i.e. the full hierarchy is never returned
+                        in one call since this is likely to flood the resources available to the control
+                        point (memory, network bandwidth, etc.).
+
+                        So... why is this recursive then?
+                        -->
+                    <xsd:element ref="didl-lite:container"/>
+
+                </xsd:choice>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="parentID" type="xsd:string" use="required"/>
+            <xsd:attribute name="childCount" type="xsd:int"/>
+            <xsd:attribute name="restricted" type="xsd:boolean" use="required"/>
+            <xsd:attribute name="searchable" type="xsd:boolean"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="item">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    An 'item' element contains any number of
+                    &lt;p/>
+                    1. Dublin Core,&lt;br/>
+                    2. upnp,&lt;br/>
+                    3. res, and&lt;br/>
+                    4. desc elements.&lt;br/>
+                    &lt;p/>
+                    In all cases, the first element in each item child element sequence is required
+                    to be "dc:title". The 'upnp:class' element must also appear under item. Each item
+                    is additionally required to specify a value for the 'id' attribute. If the item
+                    is actually a reference to another item, a value for 'refID' is specified.
+                    Each item is also required to specify a value for the 'parentID attribute, as well
+                    as the 'restricted' attribute (true, false, 1, 0). When restricted="true", the
+                    ability to change or delete the item is restricted.
+                    &lt;p/>
+                    Attributes:
+                    &lt;p/>
+                    id type: string use: required&lt;br/>
+                    parentID type: string use: required&lt;br/>
+                    refID type: string use: optional&lt;br/>
+                    restricted type: boolean use: required&lt;br/>
+                    &lt;p/>
+                    The equivalent MPEG21 DIDL element is 'ITEM'.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:sequence>
+                <xsd:element ref="dc:title"/>
+                <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                    <xsd:annotation>
+                        <xsd:appinfo>
+                            <jaxb:property name="children"/>
+                        </xsd:appinfo>
+                    </xsd:annotation>
+                    <xsd:any namespace="urn:schemas-upnp-org:metadata-1-0/upnp/" processContents="strict"/>
+                    <xsd:any namespace="http://purl.org/dc/elements/1.1/" processContents="strict"/>
+                    <xsd:element ref="didl-lite:desc"/>
+                    <xsd:element ref="didl-lite:res"/>
+                </xsd:choice>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="refID" type="xsd:string"/>
+            <xsd:attribute name="parentID" type="xsd:string" use="required"/>
+            <xsd:attribute name="restricted" type="xsd:boolean" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="res">
+        <xsd:complexType mixed="true">
+            <xsd:annotation>
+                <xsd:documentation>
+                    A 'res' element indentifies a resource. A resource is typically some type of a
+                    binary asset, such as photo, song, video, etc. A 'res' element contains a uri
+                    that identifies the resource.
+                    &lt;p/>
+                    Attributes:
+                    &lt;p/>
+                    'importUri' type: anyURI use: optional&lt;br/>
+                    The 'importUri' attribute is the optional uri locator for resource update.
+                    &lt;p/>
+                    'protocolInfo' type: string use: required&lt;br/>
+                    The 'protocolInfo' attribute is a string that identifies the streaming or
+                    transport protocol for transmitting the resource. If not present then the
+                    content has not yet been fully imported by the ContentDirectory and is not yet
+                    accesible for playback purposes.
+                    &lt;p/>
+                    'size' type: unsignedLong use: optional&lt;br/>
+                    The size, in bytes, of the resource.
+                    &lt;p/>
+                    'duration' type: string use: optional&lt;br/>
+                    The 'duration' attribute identifies the duration of the playback of the resource, at normal speed.
+                    The form of the duration string is: H*:MM:SS.F*, or H*:MM:SS.F0/F1 where :
+                    H* means any number of digits (including no digits) to indicate elapsed hours
+                    MM means exactly 2 digits to indicate minutes (00 to 59)
+                    SS means exactly 2 digits to indicate seconds (00 to 59)
+                    F* means any number of digits (including no digits) to indicate fractions of seconds
+                    F0/F1 means a fraction, with F0 and F1 at least one digit long, and F0 &lt; F1
+                    The string may be preceded by an optional + or - sign, and the decimal point itself may
+                    be omitted if there are no fractional second digits.
+                    &lt;p/>
+                    'bitrate' type: unsignedInt use: optional&lt;br/>
+                    The bitrate in bytes/second of the resource.
+                    &lt;p/>
+                    'sampleFrequency' type: unsignedInt use: optional&lt;br/>
+                    The sample frequency of the resource in Hz
+                    &lt;p/>
+                    'bitsPerSample' type: unsignedInt use: optional&lt;br/>
+                    The bits per sample of the resource.
+                    &lt;p/>
+                    'nrAudioChannels' type: unsignedInt use: optional&lt;br/>
+                    Number of audio channels of the resource, e.g. 1 for mono, 2 for stereo, 6 for Dolby surround, etc.
+                    &lt;p/>
+                    'resolution' type: pattern-string use: optional&lt;br/>
+                    X*Y resolution of the resource (image or video). The string pattern is restricted to strings of the
+                    form: [0-9]+x[0-9]+ (one or more digits,'x', followed by one or more digits).
+                    &lt;p/>
+                    'colorDepth' type: unsignedInt use: optional&lt;br/>
+                    The color depth in bits of the resource (image or video).
+                    &lt;p/>
+                    'protection' type: string use: optional&lt;br/>
+                    Some statement of the protection type of the resource (not standardized).
+                    &lt;p/>
+                    The equivalent MPEG21 DIDL element is 'RESOURCE'.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="importUri" type="xsd:anyURI"/>
+                    <xsd:attribute name="protocolInfo" type="xsd:string" use="required"/>
+                    <xsd:attribute name="size" type="xsd:unsignedLong"/>
+                    <xsd:attribute name="duration" type="xsd:string"/>
+                    <xsd:attribute name="bitrate" type="xsd:unsignedInt"/>
+                    <xsd:attribute name="sampleFrequency" type="xsd:unsignedInt"/>
+                    <xsd:attribute name="bitsPerSample" type="xsd:unsignedInt"/>
+                    <xsd:attribute name="nrAudioChannels" type="xsd:unsignedInt"/>
+                    <xsd:attribute name="colorDepth" type="xsd:unsignedInt"/>
+                    <xsd:attribute name="protection" type="xsd:string"/>
+                    <xsd:attribute name="resolution">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:pattern value="[0-9]+x[0-9]+"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:attribute>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="desc">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    A 'desc' element identifies a descriptor. A descriptor is intended to contain a block of metadata. A
+                    bio
+                    of a music artist is an example use of 'desc'. A 'desc' element may possess child elements from any
+                    namespace except the DIDL-Lite namespace. Values for 'id' and 'nameSpace' is required. An optional
+                    'type' attribute allows designation of the metadata type, e.g. 'ratings', 'rights', etc.
+
+                    Attributes:
+                    'id' type: string use: optional
+                    'name' type: string use: optional
+                    'nameSpace' type: uri use: optional
+
+                    The equivalent MPEG21 DIDL element is 'DESCRIPTOR'.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:sequence>
+                <xsd:any namespace="##other"/>
+            </xsd:sequence>
+            <xsd:attribute name="id" type="xsd:string" use="required"/>
+            <xsd:attribute name="type" type="xsd:string"/>
+            <xsd:attribute name="nameSpace" type="xsd:anyURI" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
+

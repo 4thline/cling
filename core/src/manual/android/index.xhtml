@@ -1,0 +1,608 @@
+<div class="chapter" id="chapter.Android"
+     xmlns="http://www.w3.org/1999/xhtml">
+
+    <div class="title">Cling on Android</div>
+    <div class="content">
+
+        <p>
+            Cling Core provides a UPnP stack for Android applications. Typically you'd write control point
+            applications, as most Android systems today are small hand-held devices. You can however also
+            write UPnP server applications on Android, all features of Cling Core are supported.
+        </p>
+
+        <div class="note">
+            <div class="title">Cling on the Android emulator</div>
+            At the time of writing, receiving UDP Multicast datagrams was not supported by the Android
+            emulator. The emulator will send (multicast) UDP datagrams, however. You will be able
+            to send a multicast UPnP search and receive UDP unicast responses, therefore discover
+            existing running devices. You will not discover devices which have been turned on
+            after your search, and you will not receive any message when a device is switched off.
+            Other control points on your network will not discover your local Android
+            device/services at all. All of this can be confusing when testing your application, so
+            unless you really understand what works and what doesn't, you might want to use a
+            real device instead.
+        </div>
+
+        <p>
+            This chapter explains how you can integrate Cling with your Android application as a
+            shared Android application service component.
+        </p>
+
+        <div class="section" id="section.Android.ConfiguringService">
+            <div class="title">Configuring the application service</div>
+            <div class="content">
+
+                <p>
+                    You can instantiate the Cling <code>UpnpService</code> in your Android application's
+                    main activity. On the other hand, if several activities in your application require
+                    access to the UPnP stack, a better design would utilize a background
+                    <code>android.app.Service</code>. Any activity that wants to access the UPnP stack
+                    can then bind and unbind from this service as needed.
+                </p>
+
+                <p>
+                    The interface of this service component is <code>org.fourthline.cling.android.AndroidUpnpService</code>:
+                </p>
+
+        <div><pre class="prettyprint"><![CDATA[public interface AndroidUpnpService {
+    public UpnpService get();
+    public UpnpServiceConfiguration getConfiguration();
+    public Registry getRegistry();
+    public ControlPoint getControlPoint();
+}]]></pre></div>
+
+                <p>
+                    An activity typically accesses the <code>Registry</code> of known
+                    UPnP devices or searches for and controls UPnP devices with the
+                    <code>ControlPoint</code>.
+                </p>
+
+                <p>
+                    You have to configure the built-in implementation of this service component in your
+                    <code>AndroidManifest.xml</code>:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[
+<manifest ...>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <application ...>
+
+        <activity ...>
+            ...
+        </activity>
+
+        <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
+
+    </application>
+
+</manifest>]]></pre></div>
+
+                <p>
+                    The Cling UPnP service requires access to the WiFi interface on the device,
+                    this is in fact the only network interface on which it will bind. The service
+                    will automatically detect when the WiFi interface is switched off and handle
+                    this situation gracefully: Any client operation will result in a "no response
+                    from server" state, which your code has to expect anyway.
+                </p>
+
+                <p>
+                    The service component starts and stops the UPnP system when the service component
+                    is created and destroyed. This depends on how you access the service component
+                    from within your activities.
+                </p>
+
+            </div>
+        </div>
+
+        <div class="section" id="section.Android.BindService">
+            <div class="title">Accessing the service from an activity</div>
+            <div class="content">
+
+                <p>
+                    The lifecycle of services in Android is well defined. The first activity which
+                    binds to a service will start the service if it is not already running. When no
+                    activity is bound to the service any more, the operating system will destroy the
+                    service.
+                </p>
+
+                <p>
+                    Let's write a simple UPnP browsing activity. It shows all devices on your network
+                    in a list and it has a menu option which triggers a search action. The activity
+                    connects to the UPnP service and then listens to any device additions or removals
+                    in the registry, so the displayed list of devices is kept up-to-date.
+                </p>
+
+                <p>
+                    This is the skeleton of the activity class:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[import android.app.ListActivity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
+import org.fourthline.cling.android.AndroidUpnpService;
+import org.fourthline.cling.android.AndroidUpnpServiceImpl;
+import org.fourthline.cling.model.meta.Device;
+import org.fourthline.cling.model.meta.LocalDevice;
+import org.fourthline.cling.model.meta.RemoteDevice;
+import org.fourthline.cling.registry.DefaultRegistryListener;
+import org.fourthline.cling.registry.Registry;
+
+public class UpnpBrowser extends ListActivity {
+
+    private ArrayAdapter<DeviceDisplay> listAdapter;
+
+    private AndroidUpnpService upnpService;
+
+    private ServiceConnection serviceConnection = ...
+
+    private RegistryListener registryListener = new BrowseRegistryListener();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        listAdapter =
+            new ArrayAdapter(
+                this,
+                android.R.layout.simple_list_item_1
+            );
+        setListAdapter(listAdapter);
+
+        getApplicationContext().bindService(
+            new Intent(this, AndroidUpnpServiceImpl.class),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        );
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (upnpService != null) {
+            upnpService.getRegistry().removeListener(registryListener);
+        }
+        getApplicationContext().unbindService(serviceConnection);
+    }
+
+    ...
+
+}]]></pre></div>
+
+                <p>
+                    We utilize the default layout provided by the Android runtime and the <code>ListActivity</code>
+                    superclass. Note that this activity can be your applications main activity, or further up
+                    in the stack of a task. The <code>listAdapter</code> is the glue between the device additions
+                    and removals on the Cling <code>Registry</code> and the list of items shown in the user interface.
+                </p>
+
+                <p>
+                    The <code>upnpService</code> variable is <code>null</code> when no backend service
+                    is bound to this activity. Binding and unbinding occurs in the <code>onCreate()</code>
+                    and <code>onDestroy()</code> callbacks, so the activity is bound to the service as
+                    long as it is alive.
+                </p>
+
+                <div class="note">
+                    <div class="title">Pausing the UPnP service in the background</div>
+                    When an activity is no longer active (in stopped or paused state) it will still be
+                    bound to the UPnP service. The UPnP service will continue running, even if
+                    your application is not visible anymore. This will consume CPU time and power on
+                    your device, as the UPnP service's registry has to periodically maintain discovered
+                    devices, refresh announcements of local devices, remove expired GENA event
+                    subscriptions, and so on. You can tell the UPnP service to no longer maintain its registry
+                    by calling <code>Registry#pause()</code> when your activity's <code>onPause()</code> or
+                    <code>onStop()</code> method is called. You can then resume the background service
+                    maintenance with <code>Registry#resume()</code>, or check the status with
+                    <code>Registry#isPaused()</code>. Please read the Javadoc of these methods for more
+                    details and what consequences pausing registry maintenance has on devices, services,
+                    and GENA subscriptions.
+                </div>
+
+                <p>
+                    Binding and unbinding the service is handled with this <code>ServiceConnection</code>:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[private ServiceConnection serviceConnection = new ServiceConnection() {
+
+    public void onServiceConnected(ComponentName className, IBinder service) {
+        upnpService = (AndroidUpnpService) service;
+
+        // Refresh the list with all known devices
+        listAdapter.clear();
+        for (Device device : upnpService.getRegistry().getDevices()) {
+            registryListener.deviceAdded(device);
+        }
+
+        // Getting ready for future device advertisements
+        upnpService.getRegistry().addListener(registryListener);
+
+        // Search asynchronously for all devices
+        upnpService.getControlPoint().search();
+    }
+
+    public void onServiceDisconnected(ComponentName className) {
+        upnpService = null;
+    }
+};]]></pre></div>
+
+                <p>
+                    First, all UPnP devices that are already known can be queried and displayed (there
+                    might be none if the UPnP service was just started and no device has so far
+                    announced its presence.)
+                </p>
+                <p>
+                    Next a listener is registered with the <code>Registry</code> of the UPnP service.
+                    This listener will process additions and removals of devices as they are
+                    discovered on your network, and update the items shown in the user interface list.
+                    The <code>BrowseRegistryListener</code> is removed when the activity is destroyed.
+                </p>
+
+                <p>
+                    Finally, you start asynchronous discovery by sending a search message to all
+                    UPnP devices, so they will announce themselves. Note that this search message is
+                    NOT required every time you connect to the service. It is only necessary once,
+                    to populate the registry with all known devices when your (main) activity and
+                    application starts.
+                </p>
+
+                <p>
+                    This is the <code>BrowseRegistryListener</code>, its only job is to update the
+                    displayed list items:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[class BrowseRegistryListener extends DefaultRegistryListener {
+
+    @Override
+    public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
+        deviceAdded(device);
+    }
+
+    @Override
+    public void remoteDeviceDiscoveryFailed(Registry registry, final RemoteDevice device, final Exception ex) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                Toast.makeText(
+                        BrowseActivity.this,
+                        "Discovery failed of '" + device.getDisplayString() + "': " +
+                                (ex != null ? ex.toString() : "Couldn't retrieve device/service descriptors"),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+        deviceRemoved(device);
+    }
+
+    @Override
+    public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
+        deviceAdded(device);
+    }
+
+    @Override
+    public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
+        deviceRemoved(device);
+    }
+
+    @Override
+    public void localDeviceAdded(Registry registry, LocalDevice device) {
+        deviceAdded(device);
+    }
+
+    @Override
+    public void localDeviceRemoved(Registry registry, LocalDevice device) {
+        deviceRemoved(device);
+    }
+
+    public void deviceAdded(final Device device) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                DeviceDisplay d = new DeviceDisplay(device);
+                int position = listAdapter.getPosition(d);
+                if (position >= 0) {
+                    // Device already in the list, re-set new value at same position
+                    listAdapter.remove(d);
+                    listAdapter.insert(d, position);
+                } else {
+                    listAdapter.add(d);
+                }
+            }
+        });
+    }
+
+    public void deviceRemoved(final Device device) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                listAdapter.remove(new DeviceDisplay(device));
+            }
+        });
+    }
+}]]></pre></div>
+
+                <p>
+                    For performance reasons, when a new device has been discovered, we don't wait until a fully
+                    hydrated (all services retrieved and validated) device metadata model is available.
+                    We react as quickly as possible and don't wait until the <code>remoteDeviceAdded()</code> method
+                    will be called. We display any device even while discovery is still running. You'd usually
+                    not care about this on a desktop computer, however, Android handheld devices are slow and
+                    UPnP uses several bloated XML descriptors to exchange metadata about devices and services.
+                    Sometimes it can take several seconds before a device and  its services are fully available.
+                    The <code>remoteDeviceDiscoveryStarted()</code> and <code>remoteDeviceDiscoveryFailed()</code>
+                    methods are called as soon as possible in the discovery process. By the way, devices are
+                    equal (<code>a.equals(b)</code>) if they have the same UDN, they might not be
+                    identical (<code>a==b</code>).
+                </p>
+
+                <p>
+                    Note that the <code>Registry</code> will call the listener methods in a separate thread. You
+                    have to update the displayed list data in the thread of the user interface.
+                </p>
+
+                <p>
+                    The following two methods on the activity add a menu with a search action, so a user can
+                    refresh the list manually:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    menu.add(0, 0, 0, R.string.search_lan)
+        .setIcon(android.R.drawable.ic_menu_search);
+    return true;
+}
+
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == 0 && upnpService != null) {
+        upnpService.getRegistry().removeAllRemoteDevices();
+        upnpService.getControlPoint().search();
+    }
+    return false;
+}]]></pre></div>
+
+                <p>
+                    Finally, the <code>DeviceDisplay</code> class is a very simple JavaBean that only
+                    provides a <code>toString()</code> method for rendering the list. You can display
+                    any information about UPnP devices by changing this method:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[class DeviceDisplay {
+    Device device;
+
+    public DeviceDisplay(Device device) {
+        this.device = device;
+    }
+
+    public Device getDevice() {
+        return device;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeviceDisplay that = (DeviceDisplay) o;
+        return device.equals(that.device);
+    }
+
+    @Override
+    public int hashCode() {
+        return device.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        // Display a little star while the device is being loaded
+        return device.isFullyHydrated() ? device.getDisplayString() : device.getDisplayString() + " *";
+    }
+}]]></pre></div>
+
+                <p>
+                    We have to override the equality operations as well, so we can remove and add
+                    devices from the list manually with the <code>DeviceDisplay</code> instance as
+                    a convenient handle.
+                </p>
+            </div>
+        </div>
+
+        <div class="section" id="section.Android.Optimize">
+            <div class="title">Optimizing service behavior</div>
+            <div class="content">
+
+                <p>
+                    The UPnP service consumes memory and CPU time while it is running. Although
+                    this is typically not an issue on a regular machine, this might be a problem
+                    on an Android handset. You can preserve memory and handset battery power if
+                    you disable certain features of the Cling UPnP service, or if you even pause
+                    and resume it when appropriate.
+                </p>
+
+                <p>
+                    Furthermore, some Android handsets do not support multicast networking
+                    (HTC phones, for example), so you have to configure Cling accordingly on such
+                    a device and disable most of the UPnP discovery protocol.
+                </p>
+
+                <div class="section" id="section.Android.Optimize.MaintainRegistry">
+                    <div class="title">Tuning registry maintenance</div>
+                    <div class="content">
+
+                        <p>
+                            There are several things going on in the background while the service is running.
+                            First, there is the registry of the service and its maintenance thread. If you
+                            are writing a control point, this background registry maintainer is going to
+                            renew your outbound GENA subscriptions with remote services periodically. It
+                            will also expire and remove any discovered remote devices when the drop off the
+                            network without saying goodbye. If you are providing a service, your device
+                            announcements will be refreshed by the registry maintainer and inbound GENA
+                            subscriptions will be removed if they haven't been renewed in time. Effectively,
+                            the registry maintainer prevents stale state on the UPnP network, so all
+                            participants have an up-to-date view of all other participants, and so on.
+                        </p>
+
+                        <p>
+                            By default the registry maintainer will run every second and check if there is
+                            something to do (most of the time there is nothing to do, of course). The default
+                            Android configuration however has a default sleep interval of five seconds, so
+                            it is already consuming less background CPU time - while your application might
+                            be exposed to somewhat outdated information. You can further tune this setting
+                            by overriding the <code>getRegistryMaintenanceIntervalMillis()</code> in the
+                            <code>UpnpServiceConfiguration</code>. On Android, you have to subclass the
+                            service implementation to provide a new configuration:
+                        </p>
+
+                        <div><pre class="prettyprint"><![CDATA[public class MyUpnpService extends AndroidUpnpServiceImpl {
+
+    @Override
+    protected AndroidUpnpServiceConfiguration createConfiguration(WifiManager wifiManager) {
+        return new AndroidUpnpServiceConfiguration(wifiManager) {
+
+            @Override
+            public int getRegistryMaintenanceIntervalMillis() {
+                return 7000;
+            }
+
+        };
+    }
+}]]></pre></div>
+
+                        <p>
+                            Don't forget to configure <code>MyUpnpService</code> in your
+                            <code>AndroidManifest.xml</code> now instead of the original implementation.
+                            You also have to use this type when binding to the service in your activities.
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="section" id="section.Android.Optimize.PauseRegistry">
+                    <div class="title">Pausing and resuming registry maintenance</div>
+                    <div class="content">
+
+                        <p>
+                            Another more effective but also more complex optimization is pausing
+                            and resuming the registry whenever your activities no longer need the UPnP
+                            service. This is typically the case when an activity is no longer in the
+                            foreground (paused) or even no longer visible (stopped). By default any
+                            activity state change has no impact on the state of the UPnP service
+                            unless you bind and unbind from and to the service in your activities
+                            lifecycle callbacks.
+                        </p>
+
+                        <p>
+                            In addition to binding and unbinding from the service you can also pause
+                            its registry by calling <code>Registry#pause()</code> when your activity's
+                            <code>onPause()</code> or <code>onStop()</code> method is called. You can then
+                            resume the background service maintenance (thread) with <code>Registry#resume()</code>,
+                            or check the status with <code>Registry#isPaused()</code>.
+                        </p>
+
+                        <p>
+                            Please read the Javadoc of these methods for more details and what consequences
+                            pausing registry maintenance has on devices, services, and GENA subscriptions.
+                            Depending on what your application does, this rather minor optimization might
+                            not be worth dealing with these effects. On the other hand, your application
+                            should already be able to handle failed GENA subscription renewals, or
+                            disappearing remote devices!
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <div class="section" id="section.Android.Optimize.Discovery">
+                    <div class="title">Configuring discovery</div>
+                    <div class="content">
+
+                        <p>
+                            The most effective optimization is selective discovery of UPnP devices. Although
+                            the UPnP service's network transport layer will keep running (threads are waiting
+                            and sockets are bound) in the background, this feature allows you to drop
+                            discovery messages selectively and quickly.
+                        </p>
+
+                        <p>
+                            For example, if you are writing a control point, you can drop any received discovery
+                            message if it doesn't advertise the service you want to control - you are not
+                            interested in any other device. On the other hand if you only <em>provide</em>
+                            devices and services, all discovery messages (except search messages for your
+                            services) can probably be dropped, you are not interested in any remote devices
+                            and their services at all.
+                        </p>
+
+                        <p>
+                            Discovery messages are selected and potentially dropped by Cling as soon as the
+                            UDP datagram content is available, so no further parsing and processing is needed
+                            and CPU time/memory consumption is significantly reduced while you keep the
+                            UPnP service running even in the background on an Android handset.
+                        </p>
+
+                        <p>
+                            To configure which services are supported by your control point application,
+                            override the service implementation as shown in the previous section and provide
+                            an array of <code>ServiceType</code> instances:
+                        </p>
+
+                        <div><pre class="prettyprint"><![CDATA[public class MyUpnpService extends AndroidUpnpServiceImpl {
+
+    @Override
+    protected AndroidUpnpServiceConfiguration createConfiguration(WifiManager wifiManager) {
+        return new AndroidUpnpServiceConfiguration(wifiManager) {
+
+            @Override
+            public ServiceType[] getExclusiveServiceTypes() {
+                return new ServiceType[] {
+                        new UDAServiceType("SwitchPower")
+                };
+            }
+
+        };
+    }
+}]]></pre></div>
+
+                        <p>
+                            This configuration will ignore any advertisement from any device that doesn't also
+                            advertise a <em>schemas-upnp-org:SwitchPower:1</em> service. This is what our
+                            control point can handle, so we don't need anything else. If instead you'd return
+                            an empty array (the default behavior), all services and devices will be
+                            discovered and no advertisements will be dropped.
+                        </p>
+
+                        <p>
+                            If you are not writing a control point but a server application, you can return
+                            <code>null</code> in the <code>getExclusiveServiceTypes()</code> method. This
+                            will disable discovery completely, now all device and service advertisements are
+                            dropped as soon as they are received.
+                        </p>
+
+                        <p>
+                            Another problem with UPnP discovery are bad quality Android devices (HTC) which
+                            might not support multicast networking. If you see a discovered remote device
+                            disappear from the Cling registry after a short time (a few minutes), but the
+                            device is cleary still connected to the network, you most likely have this issue.
+                            Your control point does not receive the periodic multicast heartbeat alive messages
+                            from remote devices. You have to disable remote device expiration in the Cling
+                            configuration and manually remove remote devices from the registry whenever you
+                            think they are expired. Read the Javadoc of the method
+                            <code>UpnpServiceConfiguration#getRemoteDeviceMaxAgeSeconds()</code> and override
+                            it accordingly as shown in the previous example.
+                        </p>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

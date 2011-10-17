@@ -1,0 +1,342 @@
+<xsd:schema targetNamespace="urn:schemas-upnp-org:device-1-0"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            xmlns="urn:schemas-upnp-org:device-1-0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <!--
+        No configId attribute on <root> and no ordering of elements expected (as a consequence and idiocy of
+        XML schema - another great MSFT idea - we can also not validate that all the required elements are
+        present, it's a "choice")! We could further restrict the required elements with xsd:all grouping, but
+        that doesn't work because we have the xsd:any elements that can be ... anything.
+
+        The xsd:any elements have to be ##any because the UDA 1.0 spec clearly states that anything
+        unknown has to be ignored, not just stuff from ##other namespaces! Implementations might
+        add XML elements without namespaces! Note that the UDA 1.1 specification schemas contain
+        ##other, which is just wrong if we want to validate against the schema and not just parse
+        the known elements. The same is true for xsd:anyAttribute.
+
+     -->
+
+    <xsd:element name="root">
+        <xsd:complexType>
+            <xsd:choice minOccurs="2" maxOccurs="unbounded">
+
+                <xsd:element name="specVersion" minOccurs="1" maxOccurs="1">
+                    <xsd:complexType>
+                        <xsd:choice maxOccurs="unbounded">
+                            <xsd:element name="major">
+                                <xsd:complexType>
+                                    <xsd:simpleContent>
+                                        <xsd:extension base="xsd:int">
+                                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                        </xsd:extension>
+                                    </xsd:simpleContent>
+                                </xsd:complexType>
+                            </xsd:element>
+                            <xsd:element name="minor">
+                                <xsd:complexType>
+                                    <xsd:simpleContent>
+                                        <xsd:extension base="xsd:int">
+                                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                        </xsd:extension>
+                                    </xsd:simpleContent>
+                                </xsd:complexType>
+                            </xsd:element>
+
+                            <xsd:any namespace="##any" minOccurs="0" processContents="lax"/>
+
+                        </xsd:choice>
+                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                    </xsd:complexType>
+                </xsd:element>
+
+                <xsd:element name="URLBase" type="urlBaseType" minOccurs="0"/>
+
+                <xsd:element name="device" type="device" minOccurs="1" maxOccurs="1"/>
+
+                <xsd:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+
+            </xsd:choice>
+
+            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="urlBaseType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:anyURI">
+                <xsd:anyAttribute namespace="##any" processContents="lax"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="device">
+        <xsd:choice maxOccurs="unbounded">
+
+            <xsd:element name="deviceType">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:anyURI">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="friendlyName">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="manufacturer">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="manufacturerURL" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:anyURI">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="modelDescription" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="modelName">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="modelNumber" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="modelURL" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:anyURI">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="serialNumber" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="UDN">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:anyURI">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="UPC" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="iconList" type="iconList"/>
+
+            <xsd:element name="serviceList" type="serviceList"/>
+
+            <xsd:element name="deviceList" type="deviceList"/>
+
+            <xsd:element name="presentationURL">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:anyURI">
+                            <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:any namespace="##any" minOccurs="0" processContents="lax"/>
+
+        </xsd:choice>
+
+        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+
+    </xsd:complexType>
+
+
+    <xsd:complexType name="iconList">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="icon">
+                <xsd:complexType>
+                    <xsd:choice maxOccurs="unbounded">
+                        <xsd:element name="mimetype">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="width">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:int">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="height">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:int">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="depth">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:int">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="url">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:anyURI">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:any namespace="##any" minOccurs="0" processContents="lax"/>
+                    </xsd:choice>
+
+                    <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:any namespace="##any" minOccurs="0" processContents="lax"/>
+        </xsd:choice>
+        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="deviceList">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="device" type="device"/>
+            <xsd:any namespace="##any" minOccurs="0" processContents="lax"/>
+        </xsd:choice>
+        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="serviceList">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="service">
+                <xsd:complexType>
+                    <xsd:choice maxOccurs="unbounded">
+                        <xsd:element name="serviceType">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:anyURI">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="serviceId">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:anyURI">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="SCPDURL">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:anyURI">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="controlURL">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:anyURI">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="eventSubURL">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:anyURI">
+                                        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:any namespace="##any" minOccurs="0" processContents="lax"/>
+                    </xsd:choice>
+                    <xsd:anyAttribute namespace="##any" processContents="lax"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:any namespace="##any" minOccurs="0" processContents="lax"/>
+        </xsd:choice>
+        <xsd:anyAttribute namespace="##any" processContents="lax"/>
+    </xsd:complexType>
+
+</xsd:schema>

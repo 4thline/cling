@@ -1,0 +1,98 @@
+<div class="section" id="section.BindingDevice" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Binding a UPnP device</div>
+    <div class="content">
+
+        <p>
+            Devices (and embedded devices) are created programmatically in Cling, with plain Java
+            code that instantiates an immutable graph of objects. The following method creates such a device
+            graph and binds the service from the previous section to the root device:
+        </p>
+
+        <a class="citation" href="javacode://example.binarylight.BinaryLightServer#createDevice()"/>
+
+        <p>
+            Let's step through this code. As you can see, all arguments that make up the device's metadata
+            have to be provided through constructors, because the metadata classes are immutable and hence
+            thread-safe.
+        </p>
+
+        <dl>
+            <dt>DeviceIdentity</dt>
+            <dd>
+                <p>
+                    Every device, no matter if it is a root device or an embedded device of a root device,
+                    requires a unique device name (UDN). This UDN should be stable, that is, it should not
+                    change when the device is restarted. When you physically unplug a UPnP appliance from the
+                    network (or when you simply turn it off or put it into standby mode), and when you make
+                    it available later on, it should expose the same UDN so that clients know they are dealing
+                    with the same device. The <code>UDN.uniqueSystemIdentifier()</code> method provides exactly
+                    that: A unique identifier that is the same every time this method is called on the same
+                    computer system. It hashes the network cards hardware address and a few other
+                    elements to guarantee uniqueness and stability.
+                </p>
+            </dd>
+            <dt>DeviceType</dt>
+            <dd>
+                <p>
+                    The type of a device also includes its version, a plain integer. In this case the
+                    <em>BinaryLight:1</em> is a standardized device template which adheres to the UDA (UPnP
+                    Device Architecture) specification.
+                </p>
+            </dd>
+            <dt>DeviceDetails</dt>
+            <dd>
+                <p>
+                    This detailed information about the device's "friendly name", as well as model and manufacturer
+                    information is optional. You should at least provide a friendly name value, this is what UPnP
+                    applications will display primarily.
+                </p>
+            </dd>
+            <dt>Icon</dt>
+            <dd>
+                <p>
+                    Every device can have a bunch of icons associated with it which similar to the friendly name
+                    are shown to users when appropriate. You do not have to provide any icons if you don't want to,
+                    use a constructor of <code>LocalDevice</code> without an icon parameter.
+                </p>
+            </dd>
+            <dt>Service</dt>
+            <dd>
+                <p>
+                    Finally, the most important part of the device are its services. Each <code>Service</code>
+                    instance encapsulates the metadata for a particular service, what actions and state variables it has,
+                    and how it can be invoked. Here we use the Cling annotation binder to
+                    instantiate a <code>Service</code>, reading the annotation metadata of the
+                    <code>SwitchPower</code> class.
+                </p>
+            </dd>
+        </dl>
+
+        <p>
+            Because a <code>Service</code> instance is only metadata that describes the service, you
+            have to set a <code>ServiceManager</code> to do some actual work. This is the link between the
+            metadata and your implementation of a service, where the rubber meets the road.
+            The <code>DefaultServiceManager</code> will instantiate the given <code>SwitchPower</code>
+            class when an action which operates on the service has to be executed (this happens lazily,
+            as late as possible). The manager will hold on to the instance and always re-use it as long
+            as the service is registered with the UPnP stack. In other words, the service manager is the
+            factory that instantiates your actual implementation of a UPnP service.
+        </p>
+
+        <p>
+            Also note that <code>LocalDevice</code> is the interface that represents a UPnP device which is
+            "local" to the running UPnP stack on the host. Any device that has been discovered through the network
+            will be a <code>RemoteDevice</code> with <code>RemoteService</code>'s, you typically do not
+            instantiate these directly.
+        </p>
+
+        <p>
+            A <code>ValidationException</code> will be thrown when the device graph you instantiated was invaild,
+            you can call <code>getErrors()</code> on the exception to find out which property value of which
+            class failed an integrity rule. The local service annotation binder will provide a
+            <code>LocalServiceBindingException</code> if something is wrong with your
+            annotation metadata on your service implementation class. An <code>IOException</code> can only
+            by thrown by this particular <code>Icon</code> constructor, when it reads the resource file.
+        </p>
+
+    </div>
+</div>

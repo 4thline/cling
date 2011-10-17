@@ -1,0 +1,56 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Cling Core - All Tests" parallel="false" thread-count="1" verbose="1">
+
+    <test name="Service">
+        <packages>
+            <package name="org.fourthline.cling.test.service"/>
+        </packages>
+    </test>
+
+    <test name="Model">
+        <packages>
+            <package name="org.fourthline.cling.test.model"/>
+            <package name="org.fourthline.cling.test.model.profile"/>
+        </packages>
+    </test>
+
+    <test name="Local">
+        <packages>
+            <package name="org.fourthline.cling.test.local"/>
+        </packages>
+    </test>
+
+    <test name="SSDP">
+        <packages>
+            <package name="org.fourthline.cling.test.ssdp"/>
+        </packages>
+    </test>
+
+    <test name="Description">
+        <packages>
+            <package name="org.fourthline.cling.test.resources"/>
+        </packages>
+    </test>
+
+    <test name="Control">
+        <packages>
+            <package name="org.fourthline.cling.test.control"/>
+        </packages>
+    </test>
+
+    <test name="GENA">
+        <packages>
+            <package name="org.fourthline.cling.test.gena"/>
+        </packages>
+    </test>
+
+    <test name="Examples">
+        <packages>
+            <package name="example.binarylight"/>
+            <package name="example.controlpoint"/>
+            <package name="example.registry"/>
+            <package name="example.localservice"/>
+        </packages>
+    </test>
+
+</suite>

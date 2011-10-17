@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>WAN Bridge and HTTP Gateway</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        The WAN Bridge &amp; HTTP Gateway in the Cling Workbench
+    </h1>
+
+    <p>
+        The Cling Workbench features an <strong>HTTP Gateway</strong>, so you can access all your UPnP devices
+        with a webbrowser, either while you are at home or even remotely. The HTTP interface is RESTful and
+        utilizes XHTML, thus enabling <a href="http://en.wikipedia.org/wiki/HATEOAS">HATEOAS</a> and easy
+        programmatic client access. (It's not "pretty" for humans.)
+    </p>
+
+    <p>
+        Furthermore, the <strong>WAN Bridge</strong> maintains a durable live connection between two LANs, typically
+        over a WAN. Endpoint connection management is implemented with RESTful HTTP interfaces. In other words,
+        you can discover and control your friends UPnP devices over the public Internet, and they
+        can discover and control yours. Devices from a remote LAN appear on your LAN and they act like they are
+        connected directly on your LAN. (At this time GENA eventing is not supported and subscriptions
+        to bridged remote devices will result in an error.)
+    </p>
+
+    <img src="/projects/cling/workbench/images/WAN%20Bridge.png"
+         width="704" height="138"
+         alt="WAN Bridge"
+         style="display: block; margin: 0 auto;"/>
+
+    <p>
+        The following screenshot shows the WAN Bridge configuration panel in the Cling Workbench with
+        two connected endpoints. The local Workbench is connected to two other Workbench instances.
+        In the background you see a proxy <code>MediaServer</code> device from one of the
+        connected endpoints:
+    </p>
+
+    <img src="/projects/cling/workbench/images/Cling%20Workbench%20Screenshot%2005.png"
+         width="877" height="540"
+         alt="Cling Workbench Screenshot 5"
+         style="border: 1px solid gray; display: block; margin: 0 auto;"/>
+
+    <p>
+        If available, the Workbench can create a NAT port mapping on your router and discover the
+        external IP address automatically. After starting the bridge you may access the local URL with
+        your webbrowser immediately, or send it to a friend who also has a running bridge. One of you will
+        then create the link by entering and connecting to the other's URL. It doesn't matter who sends
+        the URL and who creates the link, all UPnP devices from one LAN will be visible on the other LAN,
+        respectively. Either side may disconnect the link at any time.
+    </p>
+
+    <p>
+        All communication by default is in clear-text with plain HTTP, no HTTPS or other protocols. Security
+        is based on an authentication key embedded in the URL and all HTTP messages between two bridge
+        endpoints.
+    </p>
+
+    <h2>Starting the bridge from the command-line</h2>
+
+    <p>
+        The extra package <a href="/m2/org/fourthline/cling/cling-workbench/1.0.5/cling-workbench-1.0.5-bridge-cli.jar">
+        cling-workbench-bridge-cli.jar</a> provides a command-line version of the WAN Bridge. You can start it directly
+        from your shell:
+    </p>
+
+    <pre><![CDATA[java -jar cling-workbench-bridge-cli.jar \
+    -h 192.168.0.123 \
+    -url http://my.wan.hostname.and.port:8123 \
+    -demo]]></pre>
+
+    <p>
+        The options are the LAN interface for binding the HTTP gateway (192.168.0.123) and
+        the WAN-reachable hostname and port, which will be send to other endpoints for connecting.
+        The optional <code>-demo</code> argument can be provided to start a demo <em>Binary Light</em> device on
+        the UPnP stack that runs the bridge, this helps with testing.
+    </p>
+
+    <p>
+        Security is also based on an authentication key, so you have to watch the startup log messages of the
+        bridge for the generated key:
+    </p>
+
+    <pre><![CDATA[...
+INFO: <<< UPnP service started successfully
+INFO: Bridge configured with local URL: http://my.wan.hostname.and.port:8123/?auth=1surius3o7zuqf8qk1dp9qlc9]]></pre>
+
+    <p>
+        No port mapping on your NAT router will be created, you have to ensure that the configured WAN
+        hostname and port is reachable and mapped to the LAN host (and same port) on which the HTTP gateway
+        is bound. Open the local URL in your webbrowser to test this. Then access the minimal interface for
+        bridge link management with <code>http://my.wan.hostname.and.port:8123/link?auth=[key]</code>.
+    </p>
+
+</div>
+
+</body>
+</html>
+
+

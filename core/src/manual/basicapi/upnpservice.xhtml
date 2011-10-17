@@ -1,0 +1,339 @@
+<div class="section" id="section.BasicAPI.UpnpService" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Working with a UpnpService</div>
+    <div class="content">
+
+        <p>
+            The <code>UpnpService</code> is an interface:
+        </p>
+
+        <div><pre class="prettyprint"><![CDATA[public interface UpnpService {
+
+    public UpnpServiceConfiguration getConfiguration();
+    public ProtocolFactory getProtocolFactory();
+    public Router getRouter();
+
+    public ControlPoint getControlPoint();
+    public Registry getRegistry();
+
+    public void shutdown();
+
+}]]></pre></div>
+
+        <p>
+            An instance of <code>UpnpService</code> represents a running UPnP stack, including
+            all network listeners, background maintenance threads, and so on. Cling Core bundles a default
+            implementation which you can simply instantiate as follows:
+        </p>
+
+        <div><pre class="prettyprint"><![CDATA[UpnpService upnpService = new UpnpServiceImpl();]]></pre></div>
+
+        <p>
+            With this implementation, the local UPnP stack is ready immediately, it listens on the network for
+            UPnP messages. You should call the <code>shutdown()</code> method when you no longer need the UPnP stack.
+            The bundled implementation will then cut all connections with remote event listeners and also notify all
+            other UPnP participants on the network that your local services are no longer available. If you do
+            not shutdown your UPnP stack, remote control points might think that your services are still available
+            until your earlier announcements expire.
+        </p>
+
+        <p>
+            The bundled implementation offers two additional constructors:
+        </p>
+
+        <div><pre class="prettyprint"><![CDATA[UpnpService upnpService =
+    new UpnpServiceImpl(RegistryListener... registryListeners);]]></pre></div>
+
+        <p>
+            This constructor accepts your custom <code>RegistryListener</code> instances, which will be activated
+            immediately even before the UPnP stack listens on any network interface. This means that you can be
+            notified of <em>all</em> incoming device and service registrations as soon as the network stack is ready.
+            Note that this is rarely useful, you'd typically send search requests after the stack is up and running
+            anyway - after adding listeners to the registry.
+        </p>
+
+        <p>
+            The second constructor supports customization of the UPnP stack configuration:
+        </p>
+
+        <div><pre class="prettyprint"><![CDATA[UpnpService upnpService =
+    new UpnpServiceImpl(new DefaultUpnpServiceConfiguration(8081));]]></pre></div>
+
+        <p>
+            This example configuration will change the TCP listening port of the UPnP stack to <code>8081</code>,
+            the default being an ephemeral (system-selected free) port. The <code>UpnpServiceConfiguration</code>
+            is also an interface, in the example above you can see how the bundled default implementation
+            is instantiated.
+        </p>
+
+        <p>
+            The following section explain the methods of the <code>UpnpService</code> interface and what
+            they return in more detail.
+        </p>
+
+        <div class="section" id="section.BasicAPI.UpnpService.Configuration" xmlns="http://www.w3.org/1999/xhtml">
+            <div class="title">Customizing configuration settings</div>
+            <div class="content">
+
+                <p>
+                    This is the configuration interface of the default UPnP stack in Cling Core, an instance of
+                    which you have to provide when creating the <code>UpnpServiceImpl</code>:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[public interface UpnpServiceConfiguration {
+
+    // NETWORK
+    public NetworkAddressFactory createNetworkAddressFactory();
+
+    public DatagramProcessor getDatagramProcessor();
+    public SOAPActionProcessor getSoapActionProcessor();
+    public GENAEventProcessor getGenaEventProcessor();
+
+    public StreamClient createStreamClient();
+    public MulticastReceiver createMulticastReceiver(NetworkAddressFactory naf);
+    public DatagramIO createDatagramIO(NetworkAddressFactory naf);
+    public StreamServer createStreamServer(NetworkAddressFactory naf);
+
+    public Executor getMulticastReceiverExecutor();
+    public Executor getDatagramIOExecutor();
+    public Executor getStreamServerExecutor();
+
+    // DESCRIPTORS
+    public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10();
+    public ServiceDescriptorBinder getServiceDescriptorBinderUDA10();
+
+    // PROTOCOL
+    public Executor getAsyncProtocolExecutor();
+    public Executor getSyncProtocolExecutor();
+
+    // REGISTRY
+    public Namespace getNamespace();
+    public Executor getRegistryMaintainerExecutor();
+    public Executor getRegistryListenerExecutor();
+
+}]]></pre></div>
+
+                <p>
+                    This is quite an extensive SPI but you typically won't implement it from scratch. Overriding
+                    and customizing the bundled <code>DefaultUpnpServiceConfiguration</code> should suffice in most
+                    cases.
+                </p>
+
+                <p>
+                    The configuration settings reflect the internal structure of Cling Core:
+                </p>
+
+                <dl>
+                    <dt>Network</dt>
+                    <dd>
+                        <p>
+                            The <code>NetworkAddressFactory</code> provides the network interfaces, ports, and
+                            multicast settings which are used by the UPnP stack. At the time of writing, the following
+                            interfaces and IP addresses are ignored by the default configuration: any IPv6 interfaces
+                            and addresses, interfaces whose name starts with "vmnet", and the local loopback.
+                            Otherwise, all interfaces and their TCP/IP addresses are used and bound.
+                        </p>
+                        <p>
+                            You can set the system property <code>org.fourthline.cling.network.useInterfaces</code> to
+                            provide a comma-separated list of network interfaces you'd like to bind excusively.
+                            Additionally, you can restrict the actual TCP/IP addresses to which the stack will
+                            bind with a comma-separated list of IP address provided through the
+                            <code>org.fourthline.cling.network.useAddresses</code> system property.
+                        </p>
+                        <p>
+                            Furthermore, the configuration declares the network-level message listeners and
+                            senders, that is, the implementations used by the network <code>Router</code>.
+                        </p>
+                        <p>
+                            Stream messages are TCP HTTP requests and responses, the bundled implementation
+                            will use the Sun JDK 6.0 webserver to listen for HTTP requests, and it sends
+                            HTTP requests through the standard JDK <code>HttpURLConnection</code>.
+                        </p>
+                        <p>
+                            UDP unicast and multicast datagrams are received, parsed, and send by a custom
+                            implementation bundled with Cling Core that does not require any particular Sun
+                            JDK classes.
+                        </p>
+                    </dd>
+
+                    <dt>Descriptors</dt>
+                    <dd>
+                        <p>
+                            Reading and writing UPnP XML descriptors is handled by binders, you can provide
+                            alternative implementations if necessary.
+                        </p>
+                    </dd>
+
+                    <dt>Executors</dt>
+                    <dd>
+                        <p>
+                            The Cling UPnP stack is multi-threaded, thread creation and execution is handled
+                            through <code>java.util.concurrent</code> executors. The default configuration
+                            uses a pool of threads with a maximum size of 64 concurrently running threads,
+                            which should suffice for even very large installations. Executors can be
+                            configured fine-grained, for network message handling, actual UPnP protocol
+                            execution (handling discovery, control, and event procedures), and local
+                            registry maintenance and listener callback execution. Most likely you will not
+                            have to customize any of these settings.
+                        </p>
+                    </dd>
+                </dl>
+
+                <p>
+                    If you are trying to use Cling Core in a runtime container such as Tomcat, JBoss AS,
+                    or Glassfish, you might run into an error on startup. The error tells you that
+                    Cling couldn't use the Java JDK's <code>HTTPURLConnection</code> for HTTP
+                    client operations. This is an old and badly designed part of the JDK: Only "one
+                    application" in the whole JVM can configure it. If your container is already using
+                    the <code>HTTPURLConnection</code>, you have to switch Cling to an alternative
+                    HTTP client, e.g. the other bundled implementation based on Apache HTTP Core.
+                </p>
+
+                <p>
+                    Furthermore, as mentioned earlier, Cling Core provides HTTP services using, by default,
+                    the SUN JDK 6.x bundled webserver. If you are not deploying with the Sun JDK, or if you
+                    also switched the HTTP client already to Apache HTTP Core, you probably also have or
+                    want to switch the HTTP server.
+                </p>
+
+                <p>
+                    This is how you override the default network transport configuration:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[...
+import org.fourthline.cling.transport.impl.apache.StreamClientConfigurationImpl;
+import org.fourthline.cling.transport.impl.apache.StreamClientImpl;
+import org.fourthline.cling.transport.impl.apache.StreamServerConfigurationImpl;
+import org.fourthline.cling.transport.impl.apache.StreamServerImpl;
+
+public class MyUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
+
+    @Override
+    public StreamClient createStreamClient() {
+        return new StreamClientImpl(new StreamClientConfigurationImpl());
+    }
+
+    @Override
+    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
+        return new StreamServerImpl(
+                new StreamServerConfigurationImpl(
+                        networkAddressFactory.getStreamListenPort()
+                )
+        );
+    }
+
+}]]></pre></div>
+                <p>
+                    Don't forget to add the Apache HTTP Core libraries to your classpath or as dependencies
+                    in your <code>pom.xml</code>!
+                </p>
+
+            </div>
+
+
+        </div>
+
+        <div class="section" id="section.BasicAPI.UpnpService.ProtocolFactory" xmlns="http://www.w3.org/1999/xhtml">
+            <div class="title">The protocol factory</div>
+            <div class="content">
+
+                <p>
+                    Cling Core internals are modular and any aspect of the UPnP protocol is handled by
+                    an implementation (class) which can be replaced without affecting any other aspect.
+                    The <code>ProtocolFactory</code> provides implementations, it is
+                    always the first access point for the UPnP stack when a message which arrives on the
+                    network or an outgoing message has to be handled:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[public interface ProtocolFactory {
+
+    public ReceivingAsync createReceivingAsync(IncomingDatagramMessage message)
+                            throws ProtocolCreationException;;
+
+    public ReceivingSync createReceivingSync(StreamRequestMessage requestMessage);
+                            throws ProtocolCreationException;;
+
+    public SendingNotificationAlive createSendingNotificationAlive(LocalDevice ld);
+    public SendingNotificationByebye createSendingNotificationByebye(LocalDevice ld);
+    public SendingSearch createSendingSearch(UpnpHeader searchTarget);
+    public SendingAction createSendingAction(ActionInvocation invocation, URL url);
+    public SendingSubscribe createSendingSubscribe(RemoteGENASubscription s);
+    public SendingRenewal createSendingRenewal(RemoteGENASubscription s);
+    public SendingUnsubscribe createSendingUnsubscribe(RemoteGENASubscription s);
+    public SendingEvent createSendingEvent(LocalGENASubscription s);
+    
+}]]></pre></div>
+
+                <p>
+                    This API is a low-level interface that allows you to access the internals of the UPnP stack,
+                    in the rare case you need to manually trigger a particular procedure.
+                </p>
+
+                <p>
+                    The first two methods are called by the networking code when a message arrives,
+                    either multicast or unicast UDP datagrams, or a TCP (HTTP) stream request. The default
+                    protocol factory implementation will then pick the appropriate receiving protocol
+                    implementation to handle the incoming message.
+                </p>
+
+                <p>
+                    The local registry of local services known to the UPnP stack naturally also sends messages,
+                    such as alive and byebye notifications. Also, if you write a UPnP control point various search,
+                    control, and eventing messages are send by the local UPnP stack. The protocol factory decouples
+                    the message sender (registry, control point) from the actual creation, preparation, and
+                    transmission of the messages.
+                </p>
+
+                <p>
+                    Transmission and reception of messages at the lowest-level is the job of the
+                    network <code>Router</code>.
+                </p>
+
+            </div>
+        </div>
+
+        <div class="section" id="section.BasicAPI.UpnpService.Router" xmlns="http://www.w3.org/1999/xhtml">
+            <div class="title">Accessing low-level network services</div>
+            <div class="content">
+
+                <p>
+                    The reception and sending of messages, that is, all message transport, is encapsulated
+                    through the <code>Router</code> interface:
+                </p>
+
+                <div><pre class="prettyprint"><![CDATA[public interface Router {
+
+    public void received(IncomingDatagramMessage msg);
+    public void received(UpnpStream stream);
+
+    public void send(OutgoingDatagramMessage msg);
+    public StreamResponseMessage send(StreamRequestMessage msg);
+
+    public void broadcast(byte[] bytes);
+
+}]]></pre></div>
+
+                <p>
+                    UPnP works with two types of messages: Multicast and unicast UDP
+                    datagrams which are typically handled asynchronously, and request/response TCP messages
+                    with an HTTP payload. The Cling Core bundled <code>RouterImpl</code> will
+                    instantiate and maintain the listeners for incoming messages as well as transmit any
+                    outgoing messages.
+                </p>
+
+                <p>
+                    The actual implementation of a message receiver which listens on the network or a message
+                    sender is provided by the <code>UpnpServiceConfiguration</code>, which we have introduced
+                    earlier. You can access the <code>Router</code> directly if you have to execute
+                    low-level operations on the network layer of the UPnP stack.
+                </p>
+
+                <p>
+                    Most of the time you will however work with the <code>ControlPoint</code> and
+                    <code>Registry</code> interfaces to interact with the UPnP stack.
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>

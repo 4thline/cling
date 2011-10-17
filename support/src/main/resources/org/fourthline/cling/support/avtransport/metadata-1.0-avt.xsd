@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema targetNamespace="urn:schemas-upnp-org:metadata-1-0/AVT/"
+            xmlns:avt="urn:schemas-upnp-org:metadata-1-0/AVT/"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <!--
+    TODO: This schema was copied from AVTransport1.0.pdf.
+    Apparently the UPnP clowns couldn't agree if it is *Metadata or *MetaData.
+    So I've made changes and now all elements are called *MetaData, like the
+    state variables in the spec. That _will_ break if someone really uses
+    the original schema.
+    -->
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">
+            Schema for UPnP A/V AVTransport Service events, version 0.1(sic!)
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <!--============================================================
+
+         'Event' is the root element of AVTransport event document fragments.
+         'InstanceID' is the only valid child of 'Event'.
+
+        ============================================================-->
+    <xsd:element name="Event">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>Event is the root
+                    element
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:element ref="avt:InstanceID"/>
+            </xsd:choice>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     'InstanceID' elements identify an individual event instance.
+
+    ============================================================-->
+    <xsd:group name="allowed-under-InstanceID">
+        <xsd:annotation>
+            <xsd:documentation>
+                This group defines the elements allowed under the InstanceID element
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element ref="avt:TransportState"/>
+            <xsd:element ref="avt:TransportStatus"/>
+            <xsd:element ref="avt:PlaybackStorageMedium"/>
+            <xsd:element ref="avt:RecordStorageMedium"/>
+            <xsd:element ref="avt:PossiblePlaybackStorageMedia"/>
+            <xsd:element ref="avt:PossibleRecordStorageMedia"/>
+            <xsd:element ref="avt:CurrentPlayMode"/>
+            <xsd:element ref="avt:TransportPlaySpeed"/>
+            <xsd:element ref="avt:RecordMediumWriteStatus"/>
+            <xsd:element ref="avt:CurrentRecordQualityMode"/>
+            <xsd:element ref="avt:PossibleRecordQualityModes"/>
+            <xsd:element ref="avt:NumberOfTracks"/>
+            <xsd:element ref="avt:CurrentTransportActions"/>
+            <xsd:element ref="avt:CurrentTrack"/>
+            <xsd:element ref="avt:CurrentTrackDuration"/>
+            <xsd:element ref="avt:CurrentMediaDuration"/>
+            <xsd:element ref="avt:CurrentTrackURI"/>
+            <xsd:element ref="avt:CurrentTrackMetaData"/>
+            <xsd:element ref="avt:AVTransportURI"/>
+            <xsd:element ref="avt:AVTransportURIMetaData"/>
+            <xsd:element ref="avt:NextAVTransportURI"/>
+            <xsd:element ref="avt:NextAVTransportURIMetaData"/>
+        </xsd:choice>
+    </xsd:group>
+    <xsd:element name="InstanceID">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    InstanceID elements identify an individual event instance.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:group ref="avt:allowed-under-InstanceID"/>
+            </xsd:choice>
+            <!-- TODO: That attribute was missing in the spec! -->
+            <xsd:attribute name="val" type="xsd:unsignedInt" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     TransportState
+
+    ============================================================-->
+    <xsd:element name="TransportState">
+        <xsd:complexType>
+            <xsd:attribute name="val" use="required">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="STOPPED"/>
+                        <xsd:enumeration value="PLAYING"/>
+                        <xsd:enumeration value="TRANSITIONING"/>
+                        <xsd:enumeration value="PAUSED_PLAYBACK"/>
+                        <xsd:enumeration value="PAUSED_RECORDING"/>
+                        <xsd:enumeration value="RECORDING"/>
+                        <xsd:enumeration value="NO_MEDIA_PRESENT"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     TransportStatus
+
+    ============================================================-->
+    <xsd:element name="TransportStatus">
+        <xsd:complexType>
+            <xsd:attribute name="val" use="required">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:enumeration value="OK"/>
+                        <xsd:enumeration value="ERROR_OCCURRED"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     PlaybackStorageMedium
+
+    ============================================================-->
+    <xsd:element name="PlaybackStorageMedium">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     RecordStorageMedium
+
+    ============================================================-->
+    <xsd:element name="RecordStorageMedium">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     PossiblePlaybackStorageMedia
+
+    ============================================================-->
+    <xsd:element name="PossiblePlaybackStorageMedia">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     PossibleRecordStorageMedia
+
+    ============================================================-->
+    <xsd:element name="PossibleRecordStorageMedia">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentPlayMode
+
+    ============================================================-->
+    <xsd:element name="CurrentPlayMode">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     TransportPlaySpeed
+
+    ============================================================-->
+    <xsd:element name="TransportPlaySpeed">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     RecordMediumWriteStatus
+
+    ============================================================-->
+    <xsd:element name="RecordMediumWriteStatus">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentRecordQualityMode
+
+    ============================================================-->
+    <xsd:element name="CurrentRecordQualityMode">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     PossibleRecordQualityModes (!!! TYPO IN SPEC !!!)
+
+    ============================================================-->
+    <xsd:element name="PossibleRecordQualityModes">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     NumberOfTracks
+
+    ============================================================-->
+    <xsd:element name="NumberOfTracks">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentTrack
+
+    ============================================================-->
+    <xsd:element name="CurrentTrack">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentTrackDuration
+
+    ============================================================-->
+    <xsd:element name="CurrentTrackDuration">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentMediaDuration
+
+    ============================================================-->
+    <xsd:element name="CurrentMediaDuration">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentTrackMetaData
+
+    ============================================================-->
+    <xsd:element name="CurrentTrackMetaData">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentTrackURI
+
+    ============================================================-->
+    <xsd:element name="CurrentTrackURI">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     AVTransportURI
+
+    ============================================================-->
+    <xsd:element name="AVTransportURI">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     AVTransportURIMetaData
+
+    ============================================================-->
+    <xsd:element name="AVTransportURIMetaData">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     NextAVTransportURI
+
+    ============================================================-->
+    <xsd:element name="NextAVTransportURI">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     NextAVTransportURIMetaData
+
+    ============================================================-->
+    <xsd:element name="NextAVTransportURIMetaData">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     CurrentTransportActions
+
+    ============================================================-->
+    <xsd:element name="CurrentTransportActions">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

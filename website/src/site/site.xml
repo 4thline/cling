@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/DECORATION/1.0.0 http://maven.apache.org/xsd/decoration-1.0.0.xsd"
+
+         name="Cling">
+
+    <skin>
+        <groupId>org.fourthline.site</groupId>
+        <artifactId>fourthline-skin</artifactId>
+        <version>1.0</version>
+    </skin>
+
+    <body>
+        <head>
+            <link href="/projects/p-template.xhtml" rel="p-parent"/>
+        </head>
+
+        <menu>
+            <item name="Overview" href="/projects/cling/"/>
+            <item name="Changelog" href="/projects/cling/changelog.txt"/>
+            <item name="Road Map" href="/projects/cling/roadmap.html"/>
+            <item name="FAQ" href="/projects/cling/faq.html"/>
+            <item name="In Production" href="/projects/cling/inproduction.html"/>
+        </menu>
+
+        <menu>
+            <item name="Library: Core" href="/projects/cling/core/"/>
+            <item name="User Manual" href="/projects/cling/core/manual/cling-core-manual.html"/>
+            <item name="API Documentation" href="/projects/cling/core/apidocs/index.html"/>
+            <item name="Source (Main)" href="/projects/cling/core/xref/index.html"/>
+            <item name="Source (Test)" href="/projects/cling/core/xref-test/index.html"/>
+        </menu>
+
+        <menu>
+            <item name="Module: Support" href="/projects/cling/support/"/>
+            <item name="User Manual" href="/projects/cling/support/manual/cling-support-manual.html"/>
+            <item name="API Documentation" href="/projects/cling/support/apidocs/index.html"/>
+            <item name="Source (Main)" href="/projects/cling/support/xref/index.html"/>
+            <item name="Source (Test)" href="/projects/cling/support/xref-test/index.html"/>
+        </menu>
+
+        <menu>
+            <item name="App: Workbench" href="/projects/cling/workbench/"/>
+            <item name="Screenshots" href="/projects/cling/workbench/screenshots.html"/>
+            <item name="Source" href="/projects/cling/workbench/xref/index.html"/>
+            <item name="WAN Bridge" href="/projects/cling/workbench/wanbridge.html"/>
+        </menu>
+
+        <menu>
+            <item name="App: MediaRenderer" href="/projects/cling/mediarenderer/"/>
+            <item name="Screenshots" href="/projects/cling/mediarenderer/screenshots.html"/>
+            <item name="Source" href="/projects/cling/mediarenderer/xref/index.html"/>
+        </menu>
+
+        <menu>
+            <item name="OSGi Driver" href="/projects/cling/osgi/"/>
+            <item name="User Manual" href="/projects/cling/osgi/manual/cling-osgi-basedriver-manual.html"/>
+            <item name="API Documentation" href="/projects/cling/osgi/apidocs/index.html"/>
+            <item name="Source (Main)" href="/projects/cling/osgi/xref/index.html"/>
+        </menu>
+
+    </body>
+
+</project>

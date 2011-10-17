@@ -1,0 +1,54 @@
+<div class="chapter" id="chapter.MediaServer"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <div class="title">Accessing and providing MediaServers</div>
+    <div class="content">
+
+        <p>
+            The standardized UPnP AV <em>MediaServer:1</em> device template describes some of the
+            the most popular UPnP services. Despite the name, these services are not about serving
+            and accessing media data such as music, picture, or video files. They are for sharing
+            metadata: The data about media files such as their name, format, and size, and a locator
+            that can be used to obtain the actual file. Transmission of the media file is outside
+            of the scope of these specifications; most of the time that is the job of a
+            simple HTTP server and client.
+        </p>
+
+        <div class="note">
+            <div class="title">ContentDirectory server or client on Android</div>
+            The XML parsing of DIDL content requires Android 2.2, it won't work on any older version.
+        </div>
+
+        <p>
+            A <em>MediaServer:1</em> device has at least a <em>ContentDirectory:1</em> and a
+            <em>ConnectionManager:1</em> service.
+        </p>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.mediaserver.ContentDirectoryBrowseTest"/>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.mediaserver.ContentDirectoryBrowseTest.MP3ContentDirectory"/>
+
+            <p>
+                Your <em>MediaServer:1</em> device also has to have a <em>ConnectionManager:1</em> service.
+            </p>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.mediaserver.ConnectionManagerSimpleTest"/>
+
+            <p>
+                If your transmission protocol is not HTTP but for example RTSP streaming, your
+                connection manager will have to do more work.
+            </p>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.mediaserver.ConnectionManagerPeerTest"/>
+        </div>
+
+    </div>
+</div>

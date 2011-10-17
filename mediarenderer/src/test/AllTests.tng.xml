@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Cling MediaRenderer - All Tests" parallel="false" thread-count="1" verbose="1">
+
+    <test name="All">
+        <packages>
+            <package name="org.fourthline.cling.test.mediarenderer"/>
+        </packages>
+    </test>
+
+</suite>

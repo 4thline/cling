@@ -1,0 +1,55 @@
+<div class="chapter" id="chapter.CreatingServices"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <div class="title">Creating and binding services</div>
+    <div class="content">
+
+        <p>
+            Out of the box, any Java class can be a UPnP service. Let's go back to the first
+            example of a UPnP service in chapter 1, the <a href="#section.SwitchPower">SwitchPower:1</a>
+            service implementation, repeated here:
+        </p>
+
+        <a class="citation" id="switchpower_repeat" href="javacode://example.binarylight.SwitchPower"/>
+
+        <p>
+            This class depends on the <code>org.fourthline.cling.annotation</code> package at compile-time.
+            The metadata encoded in these source annotations is preserved in the bytecode and Cling
+            will read it at runtime when you <a href="#section.BindingDevice">bind the service</a>
+            ("binding" is just a fancy word for reading and writing metadata). You can load and execute
+            this class without accessing the annotations, in any environment and without having
+            the Cling libraries on your classpath. This is a compile-time dependency only.
+        </p>
+
+        <p>
+            Cling annotations give you much flexibility in designing your service implementation class,
+            as shown in the following examples.
+        </p>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.localservice.BasicBindingTest"/>
+        </div>
+
+        <p>
+            An important piece is missing from the <a href="#section.SwitchPower">SwitchPower:1</a>
+            implementation: It doesn't fire any events when the status of the power switch changes. This
+            is in fact required by the specification that defines the <em>SwitchPower:1</em> service.
+            The following section explains how you can propagate state changes from within your
+            UPnP service to local and remote subscribers.
+        </p>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.localservice.EventProviderTest"/>
+        </div>
+
+        <p>
+            More advanced mappings are possible and often required, as shown in the next
+            examples. We are now leaving the <em>SwitchPower</em> service behind, as it is
+            no longer complex enough.
+        </p>
+
+        <xi:include href="convertingvalues.xhtml"/>
+
+    </div>
+</div>

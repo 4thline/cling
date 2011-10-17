@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <artifactId>cling</artifactId>
+        <groupId>org.fourthline.cling</groupId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <name>Cling Website</name>
+    <artifactId>cling-website</artifactId>
+    <packaging>pom</packaging>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>finalize-site</id>
+                        <phase>post-site</phase>
+                        <configuration>
+                            <tasks>
+
+                                <copy todir="${project.reporting.outputDirectory}/core">
+                                    <fileset dir="../core/target/site">
+                                        <include name="*.html"/>
+                                        <exclude name="project-reports.*"/>
+                                        <include name="manual/**/*"/>
+                                        <include name="apidocs/**/*"/>
+                                        <include name="xref/**/*"/>
+                                        <include name="xref-test/**/*"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${project.reporting.outputDirectory}/support">
+                                    <fileset dir="../support/target/site">
+                                        <include name="*.html"/>
+                                        <exclude name="project-reports.*"/>
+                                        <include name="manual/**/*"/>
+                                        <include name="apidocs/**/*"/>
+                                        <include name="xref/**/*"/>
+                                        <include name="xref-test/**/*"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${project.reporting.outputDirectory}/workbench">
+                                    <fileset dir="../workbench/target/site">
+                                        <include name="*.html"/>
+                                        <exclude name="project-reports.*"/>
+                                        <include name="images/**/*"/>
+                                        <include name="xref/**/*"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${project.reporting.outputDirectory}/mediarenderer">
+                                    <fileset dir="../mediarenderer/target/site">
+                                        <include name="*.html"/>
+                                        <exclude name="project-reports.*"/>
+                                        <include name="images/**/*"/>
+                                        <include name="xref/**/*"/>
+                                    </fileset>
+                                </copy>
+
+                                <copy todir="${project.reporting.outputDirectory}/osgi">
+                                    <fileset dir="../osgi/basedriver/target/site">
+                                        <include name="*.html"/>
+                                        <exclude name="project-reports.*"/>
+                                        <include name="manual/**/*"/>
+                                        <include name="apidocs/**/*"/>
+                                        <include name="xref/**/*"/>
+                                    </fileset>
+                                </copy>
+
+                                <!-- The Maven site plugin mangles all filenames, rename them back to .xhtml -->
+                                <move todir="${project.reporting.outputDirectory}">
+                                    <fileset dir="${project.reporting.outputDirectory}">
+                                        <include name="**/*.html"/>
+                                        <exclude name="**/apidocs/**/*"/>
+                                        <exclude name="**/xref/**/*"/>
+                                        <exclude name="**/xref-test/**/*"/>
+                                    </fileset>
+                                    <mapper type="glob" from="*.html" to="*.xhtml"/>
+                                </move>
+
+                                <delete dir="${project.reporting.outputDirectory}/css"/>
+                                <delete dir="${project.reporting.outputDirectory}/images"/>
+                                <delete dir="${project.reporting.outputDirectory}/core/manual/css"/>
+
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.fourthline.cling</groupId>
+            <artifactId>cling-workbench</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fourthline.cling</groupId>
+            <artifactId>cling-mediarenderer</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.fourthline.cling</groupId>
+            <artifactId>cling-osgi-basedriver</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

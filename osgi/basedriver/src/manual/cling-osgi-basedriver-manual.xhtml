@@ -1,0 +1,459 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xi="http://www.w3.org/2001/XInclude">
+<head>
+    <title>Cling OSGi Driver User Manual</title>
+    <link href="css/manual.css" media="screen" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+
+<div class="manual">
+    <div class="frontmatter">
+        <h1>Cling OSGi Driver for UPnP/DLNA</h1>
+
+        <h2>User Manual</h2>
+
+        <div class="authors">
+            <h3>Authors:</h3>
+
+            <div class="author">Bruce Green</div>
+        </div>
+
+        <div class="tableofcontents">
+            <h3>Table Of Contents:</h3>
+            <a class="toc"/>
+        </div>
+
+    </div>
+
+    <xi:include href="introduction.xhtml" xml:base="osgi/basedriver/src/manual/"/>
+
+    <xi:include href="installation/index.xhtml" xml:base="osgi/basedriver/src/manual/"/>
+
+</div>
+
+<div class="lemmanote">
+    This manual has been created with <a href="http://4thline.org/projects/lemma/">Lemma</a> from
+    tested source code and Javadoc. Try it, you will like it.
+</div>
+
+</body>
+</html>
+
+<!-- TODO: Migrate this tag soup to proper XHTML
+
+<p><span></span></p>
+<p><span>This specification
+specifies how OSGi bundles can be developed that interoperate with
+UPnP&trade; (Universal Plug and Play) devices and UPnP control</span></p>
+<p><span>points.</span><sup
+	><a href="#ftnt1" name="ftnt_ref1">[1]</a></sup></p>
+<p><span></span></p>
+<p><span>The OSGi Alliance provides a UPnP Device Service
+Java package</span><sup><a href="#ftnt2" name="ftnt_ref2">[2]</a></sup><span>
+which includes interfaces and classes that bundles operate with to use
+or provide UPnP devices. </span></p>
+<p><span></span></p>
+<p><span>Cling</span><sup><a href="#ftnt3" name="ftnt_ref3">[3]</a></sup><span>
+is a UPnP compliant Java software stack and provides the underlying UPnP
+implementation for this OSGi service. Hence the name &ldquo;Cling&rdquo;
+for OSGi.</span></p>
+<p><span></span></p>
+<p><span>The Cling stack is composed of:</span></p>
+<ol>
+	<li  value="1"><span>Cling Core: a Java library
+	that implements the UPnP Device Architecture 1.0</span><sup><a
+		href="#ftnt4" name="ftnt_ref4">[4]</a></sup><span>.</span></li>
+	<li ><span>Seamless: a Java library that
+	provides functionality for XML, HTTP, logging, etc.</span></li>
+</ol>
+<p><span></span></p>
+<p><span>The Cling project also includes other libraries.
+Their functionality is not required for this project.</span></p>
+<p><span></span></p>
+<p><span>This service is similar to the Apache Felix UPnP
+Device Service. Both are built upon a third party UPnP stack. Apache
+Felix is built upon CyberLink for Java</span><sup><a href="#ftnt5"
+	name="ftnt_ref5">[5]</a></sup><span>. This service is built upon
+Cling. While the underlying implementation is different, the Apache
+Felix&rsquo;s OSGi examples and testing should work this service.</span></p>
+<h2><a name="h.oysn86ei352c"></a><span>UPnP Base
+Driver</span></h2>
+<p><span>The core of a OSGi UPnP Device Service is UPnP </span><span
+	>base driver</span><span>. The base driver acts as
+a bridge between OSGi and the UPnP networks. It provides the following
+functions.</span></p>
+<p><span></span></p>
+<table border="1" cellpadding="0" cellspacing="0">
+	<tbody>
+		<tr>
+			<td>
+			<p><span>UPnP Base Driver
+			Function</span></p>
+			</td>
+			<td>
+			<p><span>Cling OSGi UPnP Device
+			Service Implementation</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span>Discover UPnP devices on the network
+			and map each discovered device into an OSGi registered UPnP Device
+			service.</span></p>
+			<p><span></span></p>
+			<p><span>UPnP devices detected on the local
+			network must be detected and automatically registered under the </span><span
+				>UPnPDevice </span><span>interface with the
+			Framework by the UPnP driver implementation bundle.</span></p>
+			</td>
+			<td>
+			<p><span>The Cling UPnP Service includes UPnP
+			network listeners, background maintenance threads, etc. Cling accepts
+			a custom </span><span>RegistryListener </span><span>instance
+			which is notified of all incoming device and service registrations as
+			soon as the network stack is ready</span><sup><a href="#ftnt6"
+				name="ftnt_ref6">[6]</a></sup><span>.</span></p>
+			<p><span></span></p>
+			<p><span>Using a Cling </span><span>RegistryListener
+			</span><span>the base driver can observe the discovery of devices and
+			then register them with the OSGi framework.</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span>Present UPnP marked services that are
+			registered with the OSGi Framework on one or more networks to be used
+			by other computers.</span></p>
+			<p><span></span></p>
+			<p><span>To make a UPnP service available to
+			UPnP control points on a network, an OSGi service object must be
+			registered under the UPnPDevice interface with the Framework. The
+			UPnP driver bundle must detect these UPnP Device services and must
+			make them available to the network as UPnP devices using the UPnP
+			protocol.</span></p>
+			</td>
+			<td>
+			<p><span>An OSGi bundle exposes its UPnP device
+			services by registering them with the OSGi framework. Using an OSGi
+			framework </span><span>ServiceTracker </span><span>the
+			base driver can observe the registration of these services and then
+			present them externally using Cling&rsquo;s UPnP Service.</span></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<h3><a name="h.k5hmna-4zctqf"></a><span >UPnP
+Device</span></h3>
+<p><span>A UPnP device is a logical representation of
+services associated with a networked computing device. A UPnP device can
+be a single UPnP device or a root UPnP device with a number of UPnP
+sub-devices. </span></p>
+<p><span></span></p>
+<p><span>A OSGi UPnP Device Service exposes a UPnP device
+with the </span><span>UPnPDevice </span><span>interface
+using OGSi&rsquo;s white board model. A base driver, upon discovering a
+UPnP device, would wrap the description of the device within an
+implementation of the </span><span>UPnPDevice </span><span>interface
+and then register that instance as a </span><span>UPnPDevice
+</span><span>with the OSGi framework. If the base driver detects that
+the UPnP device is not longer available it would unregister that
+instance from the OSGi framework.</span></p>
+<p><span></span></p>
+<p><span>A OSGi </span><span>UPnPDevice </span><span>can
+represent either an remote or local UPnP device. Remote devices are
+imported by the base driver from the network to the OSGi service
+registry. Local devices originate from with the OSGi Service Platform. A
+local UPnP device is registered by its provider with the OSGi framework
+and the base driver is required to then export that device to the
+network. </span></p>
+<p><span></span></p>
+<p><span>Clients within the OSGi framework have the choice of
+using a </span><span>UPnPDevice </span><span>service,
+listening to a device&rsquo;s events via </span><span>UPnPEventListener</span><span>,
+or both.</span></p>
+<h3><a name="h.wp451o-mnn2xa"></a><span >Discovering
+Devices</span></h3>
+<p><span>Upon activation the base driver will query and
+continual monitor the network for UPnP devices. Upon discover of the
+device the base driver will register a </span><span>UPnPDevice
+</span><span>with the OSGi framework. Clients wanting to use that device
+can then start using its service. &nbsp;The base driver will also begin
+tracking </span><span>UPnPEventListener&rsquo;s </span><span>registered
+for that device and its services. As events are received from an
+external device the base driver will route these events to all the
+appropriate OSGi listeners.</span></p>
+<h3><a name="h.2jwv8k-10b2to"></a><span >Presenting
+Devices</span></h3>
+<p><span>The base driver tracks the registration of internal
+</span><span>UPnPDevice&rsquo;s</span><span>. When an
+internal device is registered the base driver will present and support
+that device to the network according to the UPnP specification. It will
+also register a </span><span>UPnPEventListener </span><span>for
+that device to support external subscriptions to the device&rsquo;s
+services.</span></p>
+<p><span></span></p>
+<p><span>The base driver manages UPnP events fired by
+internal devices. It tracks all </span><span>UPnPEventListener&rsquo;s
+</span><span>and handles UPnP event. When it receives an event it
+notifies all of the appropriate listeners. </span></p>
+<p><span></span></p>
+<p><span>Internal </span><span>UPnPDevice&rsquo;s</span><span>
+do not need to track their listeners. When an internal device&rsquo;s
+state variable changes the </span><span>UPnPDevice </span><span>implementation
+will send an event to the OSGi Event Admin service. The base driver
+captures that event and then routes it to the listeners.</span></p>
+<h2><a name="h.bt1znj-cfw4os"></a><span>Running
+with Apache Felix</span></h2>
+<p><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2Ffelix.apache.org&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNEc95fZraqLLfumd4jdClWWdrfg_Q">Apache
+Felix</a></span><span> project is an source source implement of the</span><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2Fwww2.osgi.org%2FSpecifications%2FHomePage&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNHV5TJFa68oL6ghQRKgYRMIg9QW8w">
+</a></span><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2Fwww2.osgi.org%2FSpecifications%2FHomePage&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNHV5TJFa68oL6ghQRKgYRMIg9QW8w">OSGi
+R4 Service Platform</a></span><sup><a href="#ftnt7" name="ftnt_ref7">[7]</a></sup><span>
+under the Apache license. The Cling for OSGi has been tested with Felix.</span></p>
+<h3><a name="h.i3ym4r-6arnrh"></a><span >Requirements</span></h3>
+<ol>
+	<li  value="1"><span>Apache Felix Framework
+	Distribution 3.0.7</span></li>
+	<li ><span>OSGi Service Platform Release 4
+	Compendium Interfaces and Classes bundle.</span></li>
+	<li ><span>Apache Felix Event Admin 1.2.8 bundle.</span></li>
+</ol>
+<h3><a name="h.hkg80f-me2jf"></a><span >Installation</span></h3>
+<ol>
+	<li  value="1"><span>Extract the Apache Felix
+	Framework Distribution to a desired location.</span></li>
+</ol>
+<ol>
+	<li  value="4"><span>Deploy the OSGi Service
+	Platform Release and Apache Felix Event Admin bundles.</span></li>
+</ol>
+<ol>
+	<li value="1"><span>This can be achieved in
+	a variety of ways. The simplest is to copy of the bundles to the </span><span
+		>bundle </span><span>directory.</span></li>
+</ol>
+<ol>
+	<li  value="2"><span>Deploy the Cling for OSGi
+	bundle.</span></li>
+</ol>
+<ol>
+	<li value="2"><span>This can be achieved in
+	a variety of ways. The simplest is to copy of the bundle to the </span><span
+		>bundle </span><span>directory.</span></li>
+</ol>
+<h3><a name="h.6me2ju-n4j3w8"></a><span >Running
+Apache Felix</span></h3>
+<p><span>Start Apache Felix:</span></p>
+<p><span></span></p>
+<p><span>java -jar bin/felix.jar</span></p>
+<p><span></span></p>
+<p><span>Depending on the deployment strategy chosen the
+various bundles will load and activate. The installed bundles can be
+listed using the Felix shell command </span><span>lb</span><span>.
+This command should produce a result similar to this.</span></p>
+<p><span></span></p>
+<pre>
+START LEVEL 1
+   ID|State      |Level|Name
+    0|Active     |    0|System Bundle (3.0.7)
+    1|Active     |    1|Cling OSGi UPnP Base Driver (1.0.0.SNAPSHOT)
+    2|Active     |    1|Apache Felix Bundle Repository (1.6.2)
+    3|Active     |    1|Apache Felix EventAdmin (1.2.8)
+    4|Active     |    1|Apache Felix Gogo Command (0.6.1)
+    5|Active     |    1|Apache Felix Gogo Runtime (0.6.1)
+    6|Active     |    1|Apache Felix Gogo Shell (0.6.1)
+    7|Active     |    1|OSGi R4 Compendium Bundle (4.1.0)
+</pre>
+<p><span></span></p>
+<p><span>The Cling for OSGi is now running. It will expose
+external UPnP devices to the framework and present internal UPnP devices
+to the network.</span></p>
+<h4><a name="h.157t17-fimkku"></a><span
+	>Running Apache Felix</span></h4>
+<p><span>The Apache Felix Web Console UPnP Plugin is a
+deployable component for the Apache Felix Web Console. The UPnP Plugin
+lists all the registered UPnP devices, their actions and state
+variables. It will monitor state variables that send events and it can
+be used to invoke actions.</span></p>
+<p><span></span></p>
+<p><span>To run the web console with the UPnP plugin deploy
+the following bundles:</span></p>
+<p><span></span></p>
+<ol>
+	<li  value="1"><span>HTTP Service Bundle 2.0.4</span></li>
+	<li ><span>Apache Felix Web Console 3.1.6 (Full)</span></li>
+	<li ><span>Apache Felix Web Console UPNP Plugin
+	1.0.0</span></li>
+	<li ><span>JSON Bundle</span></li>
+</ol>
+<p><span></span></p>
+<p><span>Start Apache Felix:</span></p>
+<p><span></span></p>
+<p><span>java
+-Dorg.apache.felix.http.jettyEnabled=true -jar bin/felix.jar</span></p>
+<p><span></span></p>
+<p><span>The web console will be available at:</span></p>
+<p><span></span></p>
+<p><span>http://localhost:8080/system/console</span></p>
+<p><span></span></p>
+<p><span>One of the top menu links will be </span><span
+	>UPnP</span><span>. Click on this link to access
+the UPnP console. The UPnP console will look similar to this.</span></p>
+<p><img height="351" src="img/image00.png" width="622" /> <img
+	height="376" src="img/image01.png" width="621" /></p>
+<p><span>Here are some typical sources of the bundles
+mentioned.</span></p>
+<p><span></span></p>
+<table border="1" cellpadding="0" cellspacing="0">
+	<tbody>
+		<tr>
+			<td>
+			<p><span>Bundle(s)</span></p>
+			</td>
+			<td>
+			<p><span>Bundle Source</span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span>Apache Felix</span></p>
+			</td>
+			<td>
+			<p><span><a
+				href="http://www.google.com/url?q=http%3A%2F%2Ffelix.apache.org%2Fsite%2Fdownloads.cgi&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNHEbnCjALYbcjoc06lmB19XQJZvQQ">http://felix.apache.org/site/downloads.cgi</a></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span>OSGi Service Platform R4 Compendium</span></p>
+			</td>
+			<td>
+			<p><span><a
+				href="http://www.google.com/url?q=http%3A%2F%2Fmvnrepository.com%2Fartifact%2Forg.apache.felix%2Forg.osgi.compendium%2F1.4.0&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNGjZZNfk66Fhwyu09WFQ7fr6XAjUw">http://mvnrepository.com/artifact/org.apache.felix/org.osgi.compendium/1.4.0</a></span></p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+			<p><span>JSON</span></p>
+			</td>
+			<td>
+			<p><span><a
+				href="http://www.google.com/url?q=http%3A%2F%2Fwiki.chameleon.ow2.org%2Fxwiki%2Fbin%2Fview%2FMain%2FDownloads&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNHrQbRH88FCrqjU_zztH98YmZSDmw">http://wiki.chameleon.ow2.org/xwiki/bin/view/Main/Downloads</a></span></p>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<h2><a name="h.j7jip-haapnf"></a><span>Test
+Devices</span></h2>
+<h3><a name="h.biiv9k-pnbyw5"></a><span >Description</span></h3>
+<p><span>A test device is available to test the base driver.
+This device is comprised of a Test service. The Test service is
+comprised of a set of &ldquo;evented&rdquo; state variables (one for
+each OSGi UPnP variable type) and getter/setter actions for each
+variable. There is also a &ldquo;GetAllVariables&rdquo; action which
+returns the current value of each variable.</span></p>
+<p><span>All of the state variables are
+&ldquo;evented&rdquo;. Client applications may monitor them via
+UPnPEventListener.</span></p>
+<p><span>When instantiated the device set the state
+variables to a default value. If an external properties file is
+specified then it will use default to the values in that file. To
+specify a default data property file start the framework with the
+following Java runtime command line parameter.</span></p>
+<p><span>-Dorg.fourthline.cling.osgi.upnp.basedriver.get.test.properties=path_to_file</span></p>
+<p><span>This device is contained within an OSGi bundle.
+When the bundle is activated the device is instantiated and registered
+with the OSGi framework. When the bundle is deactivated the device is
+unregistered.</span></p>
+<h3><a name="h.310uv4-qjskwn"></a><span >Additional
+Runtime Requirements</span></h3>
+<p><span>None. This device does not have any special
+pre-requisites.</span></p>
+<h3><a name="h.kus0kz-60ly1s"></a><span >Test
+Client</span></h3>
+<p><span>The Test client is an OSGi bundle which include a
+client which will execute the Test Device&rsquo;s service. The client
+waits for a Test Device to be registered and then will run a set of get
+and set tests. It will also monitor changes to the state variables.</span></p>
+<h2><a name="h.5n8xo5-i2ndqe"></a><span>Sample
+Devices</span></h2>
+<h3><a name="h.fbkw8a-5vbfve"></a><span >Introduction</span></h3>
+<p><span>OSGi based UPnP sample devices provide examples of
+how to use the base driver. &nbsp;Each device or group of devices is
+contained within an OSGi bundle. When the bundle is activated the device
+is instantiated and registered with the OSGi framework. When the bundle
+is deactivated the device is unregistered.</span></p>
+<h3><a name="h.8suc1x-wjblvm"></a><span >UPnP
+Baisic Device</span></h3>
+<h3><a name="h.7ome3y-ywydmn"></a><span >Description</span></h3>
+<p><span>This sample implements a Basic device. A Basic
+device (version 1.0) is a minimal device (one that does not add any
+services or embedded devices) which is discoverable using UPnP discovery
+and may provide identifying information and a Presentation URL using the
+normal Device Description mechanism. The Basic Device type does not
+define any Services or embedded Devices.</span></p>
+<h3><a name="h.310uv4-qjskwn"></a><span >Additional
+Runtime Requirements</span></h3>
+<p><span>None. This device does not have any special
+pre-requisites.</span></p>
+<h3><a name="h.4v0a8f-rqa85u"></a><span >Lighting
+Controls</span></h3>
+<h3><a name="h.7ome3y-ywydmn"></a><span >Description</span></h3>
+<p><span>The UPnP Forum defines two standard lighting control
+devices:</span></p>
+<ol>
+	<li  value="1"><span>BinaryLight</span></li>
+	<li ><span>DimmableLight</span></li>
+</ol>
+<p><span>This sample implements each device.</span></p>
+<p><span>A BinaryLight device is comprised of a Switch Power
+Service.</span></p>
+<p><span>A DimmableLight device is comprised of a Switch
+Power and a Dimming Service. The switching component is serially
+connected to the dimming component. The dimmer&rsquo;s settings will not
+be physically realized by the load until the switch is on.</span></p>
+<h3><a name="h.310uv4-qjskwn"></a><span >Additional
+Runtime Requirements</span></h3>
+<p><span>Each device provides a presentation URL. This is an
+optional feature and will be activated if an HTTP Service is available.
+</span></p>
+<p><span></span></p>
+<div>
+<p><span>Cling for OSGi User Manual</span></p>
+</div>
+<hr />
+<div>
+<p><a href="#ftnt_ref1" name="ftnt1">[1]</a><span>OSGi
+Device Service specification version 1.1</span></p>
+</div>
+<div>
+<p><a href="#ftnt_ref2" name="ftnt2">[2]</a><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2Fwww.osgi.org%2Fjavadoc%2Fr4v42%2Forg%2Fosgi%2Fservice%2Fupnp%2Fpackage-summary.html&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNHHaxNqRlNObSzfW6c8QbWZpm2aMw">http://www.osgi.org/javadoc/r4v42/org/osgi/service/upnp/package-summary.html</a></span></p>
+</div>
+<div>
+<p><a href="#ftnt_ref3" name="ftnt3">[3]</a><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2F4thline.org%2Fprojects%2Fcling&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNH-OGDERqZNOAxgA21roYK99w8Z8g">http://4thline.org/projects/cling</a></span></p>
+</div>
+<div>
+<p><a href="#ftnt_ref4" name="ftnt4">[4]</a><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2Fwww.upnp.org&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNGFoqrSLZsGlEmD2DvbLg1hRTaM6Q">http://www.upnp.org</a></span></p>
+</div>
+<div>
+<p><a href="#ftnt_ref5" name="ftnt5">[5]</a><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fcgupnpjava&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNGtVLzW2vI7j9VP4GRFUg45otJ10g">http://sourceforge.net/projects/cgupnpjava</a></span></p>
+</div>
+<div>
+<p><a href="#ftnt_ref6" name="ftnt6">[6]</a><span><a
+	href="http://www.google.com/url?q=http%3A%2F%2F4thline.org%2Fprojects%2Fcling%2Fcore%2Fmanual%2Fcling-core-manual.html%23section.BasicAPI.UpnpService&amp;sa=D&amp;sntz=1&amp;usg=AFQjCNFs_-YWiiwteRVL79JLHCaxgxyI_w">http://4thline.org/projects/cling/core/manual/cling-core-manual.html#section.BasicAPI.UpnpService</a></span></p>
+</div>
+<div>
+<p><a href="#ftnt_ref7" name="ftnt7">[7]</a><span>The
+Felix project includes an implementation of the OSGi UPnP Device
+Service. This service is not required to run the Cling OSGi UPnP Device
+Service and should not be used at the same time.</span></p>
+</div>
+</body>
+</html>
+
+-->

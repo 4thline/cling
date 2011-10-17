@@ -1,0 +1,30 @@
+<div class="section" id="section.CreatingServices.ConvertingValues" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Converting string action argument values</div>
+    <div class="content">
+
+        <p>
+            The UPnP specification defines no framework for custom datatypes. The
+            predictable result is that service designers and vendors are overloading
+            strings with whatever semantics they consider necessary for their particular
+            needs. For example, the UPnP A/V specifications often require lists of values
+            (like a list of strings or a list of numbers), which are then transported
+            between service and control point as a single string - the individual values
+            are represented in this string separated by commas.
+        </p>
+
+        <p>
+            Cling supports these conversions and it tries to be as transparent as possible.
+        </p>
+
+        <div class="section">
+            <a class="citation"
+               href="javadoc://example.localservice.StringConvertibleTest"/>
+        </div>
+
+        <div class="section">
+            <a class="citation"
+               href="javadoc://example.localservice.EnumTest"/>
+        </div>
+
+    </div>
+</div>

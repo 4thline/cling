@@ -1,0 +1,291 @@
+<xsd:schema targetNamespace="urn:schemas-upnp-org:service-1-0"
+            xmlns="urn:schemas-upnp-org:service-1-0"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="scpd" type="scpdType"/>
+
+    <xsd:complexType name="scpdType">
+        <xsd:choice maxOccurs="unbounded">
+
+            <xsd:element name="specVersion">
+                <xsd:complexType>
+                    <xsd:choice maxOccurs="unbounded">
+                        <xsd:element name="major">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:int">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="minor">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:int">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:any namespace="##other" minOccurs="0" processContents="lax"/>
+                    </xsd:choice>
+                    <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="actionList" type="actionList" minOccurs="0"/>
+
+            <xsd:element name="serviceStateTable" type="serviceStateTable"/>
+
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+
+        </xsd:choice>
+
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="actionList">
+        <xsd:choice maxOccurs="unbounded">
+            <xsd:element name="action">
+                <xsd:complexType>
+                    <xsd:choice>
+                        <xsd:element name="name">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                        <xsd:element name="argumentList" minOccurs="0" type="argumentList"/>
+
+                        <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+
+
+                    </xsd:choice>
+                    <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xsd:choice>
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="argumentList">
+        <xsd:sequence>
+            <xsd:element name="argument" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="name">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="direction">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:restriction base="directionType">
+                                        <xsd:enumeration value="in"/>
+                                        <xsd:enumeration value="out"/>
+                                    </xsd:restriction>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="retval" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:complexContent>
+                                    <xsd:restriction base="xsd:anyType">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:restriction>
+                                </xsd:complexContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:element name="relatedStateVariable">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+                        <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                    </xsd:sequence>
+                    <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xsd:sequence>
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="serviceStateTable">
+        <xsd:sequence>
+            <xsd:element name="stateVariable" maxOccurs="unbounded">
+                <xsd:complexType>
+
+                    <xsd:sequence>
+
+                        <xsd:element name="name">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                        <xsd:element name="dataType">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:restriction base="dataTypeType">
+                                        <xsd:enumeration value="ui1"/>
+                                        <xsd:enumeration value="ui2"/>
+                                        <xsd:enumeration value="ui4"/>
+                                        <xsd:enumeration value="i1"/>
+                                        <xsd:enumeration value="i2"/>
+                                        <xsd:enumeration value="i4"/>
+                                        <xsd:enumeration value="int"/>
+                                        <xsd:enumeration value="r4"/>
+                                        <xsd:enumeration value="r8"/>
+                                        <xsd:enumeration value="number"/>
+                                        <xsd:enumeration value="fixed.14.4"/>
+                                        <xsd:enumeration value="float"/>
+                                        <xsd:enumeration value="char"/>
+                                        <xsd:enumeration value="string"/>
+                                        <xsd:enumeration value="date"/>
+                                        <xsd:enumeration value="dateTime"/>
+                                        <xsd:enumeration value="dateTime.tz"/>
+                                        <xsd:enumeration value="time"/>
+                                        <xsd:enumeration value="time.tz"/>
+                                        <xsd:enumeration value="boolean"/>
+                                        <xsd:enumeration value="bin.base64"/>
+                                        <xsd:enumeration value="bin.hex"/>
+                                        <xsd:enumeration value="uri"/>
+                                        <xsd:enumeration value="uuid"/>
+                                    </xsd:restriction>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                        <xsd:element name="defaultValue" minOccurs="0">
+                            <xsd:complexType>
+                                <xsd:simpleContent>
+                                    <xsd:extension base="xsd:string">
+                                        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                                    </xsd:extension>
+                                </xsd:simpleContent>
+                            </xsd:complexType>
+                        </xsd:element>
+
+                        <xsd:choice minOccurs="0">
+                            <xsd:element name="allowedValueList" type="allowedValueList"/>
+                            <xsd:element name="allowedValueRange" type="allowedValueRange"/>
+                        </xsd:choice>
+
+                        <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+                    </xsd:sequence>
+
+                    <xsd:attribute name="sendEvents" default="1">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:enumeration value="1"/>
+                                <xsd:enumeration value="0"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:attribute>
+
+                    <xsd:attribute name="multicast" default="0">
+                        <xsd:simpleType>
+                            <xsd:restriction base="xsd:string">
+                                <xsd:enumeration value="1"/>
+                                <xsd:enumeration value="0"/>
+                            </xsd:restriction>
+                        </xsd:simpleType>
+                    </xsd:attribute>
+
+                </xsd:complexType>
+
+            </xsd:element>
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xsd:sequence>
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="directionType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:anyAttribute namespace="##other" processContents="lax"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="dataTypeType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="type" type="xsd:string"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="allowedValueList">
+        <xsd:sequence>
+            <xsd:element name="allowedValue" maxOccurs="unbounded">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:string">
+                            <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
+        </xsd:sequence>
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="allowedValueRange">
+        <xsd:sequence>
+            <xsd:element name="minimum">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:double">
+                            <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="maximum">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:double">
+                            <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:element name="step" minOccurs="0">
+                <xsd:complexType>
+                    <xsd:simpleContent>
+                        <xsd:extension base="xsd:double">
+                            <xsd:anyAttribute namespace="##other" processContents="lax"/>
+                        </xsd:extension>
+                    </xsd:simpleContent>
+                </xsd:complexType>
+            </xsd:element>
+            <xsd:any namespace="##other" minOccurs="0" maxOccurs="unbounded"
+                     processContents="lax"/>
+        </xsd:sequence>
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>
+    </xsd:complexType>
+
+</xsd:schema>

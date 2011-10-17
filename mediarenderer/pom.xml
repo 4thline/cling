@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.fourthline.cling</groupId>
+        <artifactId>cling</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <name>Cling MediaRenderer</name>
+    <artifactId>cling-mediarenderer</artifactId>
+    <packaging>jar</packaging>
+
+    <build>
+        <plugins>
+
+            <!-- Package a standalone JAR with all dependencies -->
+            <plugin>
+                <groupId>org.dstovall</groupId>
+                <artifactId>onejar-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>one-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>org.fourthline.cling.mediarenderer.MediaRenderer</mainClass>
+                    <attachToBuild>true</attachToBuild>
+                    <classifier>standalone</classifier>
+                    <filename>${project.build.finalName}-standalone.jar</filename>
+                </configuration>
+            </plugin>
+
+            <!-- Build an OS X application and disk image -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>osxappbundle-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>org.fourthline.cling.mediarenderer.MediaRenderer</mainClass>
+                    <iconFile>${basedir}/src/main/resources/MediaRendererIcon.icns</iconFile>
+                    <jvmVersion>1.6+</jvmVersion>
+                    <javaApplicationStub>${basedir}/../misc/JavaApplicationStub</javaApplicationStub>
+                    <vmOptions>-Djna.library.path=/opt/local/lib</vmOptions>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>src/test/AllTests.tng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                    <!-- Run no tests by default, see profiles -->
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+
+            <!-- Website lifecycle -->
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <reportPlugins>
+                        <!-- THESE IGNORE GLOBAL PLUGIN MANAGEMENT! -->
+
+                        <!-- Javadoc on the website -->
+                        <plugin>
+                            <artifactId>maven-javadoc-plugin</artifactId>
+                            <reports>
+                                <report>javadoc</report>
+                            </reports>
+                            <configuration>
+                                <quiet>true</quiet>
+                                <detectOfflineLinks>false</detectOfflineLinks>
+                            </configuration>
+                        </plugin>
+
+                        <!-- We want cross-referenced source code -->
+                        <plugin>
+                            <artifactId>maven-jxr-plugin</artifactId>
+                        </plugin>
+
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.fourthline.cling</groupId>
+            <artifactId>cling-support</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>${jna.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.gstreamer-java</groupId>
+            <artifactId>gstreamer-java</artifactId>
+            <version>${gstreamer.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.eclipse.swt.carbon</groupId>
+                    <artifactId>macosx</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.swt.gtk.linux</groupId>
+                    <artifactId>x86</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.eclipse.swt.gtk.linux</groupId>
+                    <artifactId>x86_64</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>gstreamer-test</id>
+            <activation>
+                <file>
+                    <exists>/opt/local/lib/libgstreamer-0.10.a</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>false</skipTests>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>

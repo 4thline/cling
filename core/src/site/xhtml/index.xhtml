@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Introduction</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        Cling Core
+    </h1>
+
+    <p>
+        Working with UPnP devices and services requires significant infrastructure. Cling Core is a Java UPnP library
+        that implements this infrastructure, it offers clean and natural APIs for any developer who wants to
+        implement either UPnP services or control points.
+    </p>
+
+    <p>
+        The main features of Cling Core are:
+    </p>
+
+    <dl>
+        <dt><strong>Fine-grained and safe APIs</strong></dt>
+        <dd>
+            <p>
+                Cling Core is not just a thin layer on top of the low-level UPnP protocol, it offers rich and natural APIs
+                for developers. Every UPnP header, every message, and every piece of metadata is exposed as a type-safe API
+                with as few type casting and string-lookups as possible. Much of the API is thread-safe, thus simplifying
+                the pervasively multi-threaded environment in which UPnP operates.
+            </p>
+        </dd>
+        <dt><strong>Modular design and extensive SPIs</strong></dt>
+        <dd>
+            <p>
+                Almost all functionality of Cling Core can be overridden or replaced with custom code. Subsystems such
+                as network transport, message parsing, and even individual aspects of the UPnP protocol implementation
+                (such as discovery, control, eventing) offer SPIs for extension and customization.
+            </p>
+        </dd>
+        <dt><strong>Specification compliance</strong></dt>
+        <dd>
+            <p>
+                Many vendors who implement UPnP software violate the UPnP device architecture (UDA) specification in one
+                way or another. Cling Core's goal is to implement and respect every detail of the UDA specification.
+                Currently, Cling Core is targeting UDA 1.0, with preparations already made for future UDA 1.1 compliance.
+            </p>
+        </dd>
+        <dt><strong>Complete implementation</strong></dt>
+        <dd>
+            <p>
+                Cling Core does not take any shortcuts, no parts of the specification are omitted just because
+                they are difficult to implement.
+            </p>
+        </dd>
+        <dt><strong>Full support for Android</strong></dt>
+        <dd>
+            <p>
+                All features of Cling Core are supported on Android (see
+                <a href="/projects/cling/core/manual/cling-core-manual.html#chapter.Android">manual</a>,
+                platform level 7/Android 2.1 required). Use Cling
+                to write UPnP/DLNA Android clients or even server applications. The full source code of
+                the <em>UPnPBrowser</em> example application of the manual can be
+                found <a href="/projects/download/misc/">here</a>. You can see the application in
+                action in <a href="/weblog/software/New%20Cling%20beta3%20runs%20on%20Android%2021.html">this video</a>.
+            </p>
+        </dd>
+    </dl>
+
+
+    <h2>
+        Getting Started
+    </h2>
+
+    <p>
+        If you are using Maven, add the following information to your <code>pom.xml</code>:
+    </p>
+
+     <pre class="prettyprint"><![CDATA[<repositories>
+    <repository>
+        <id>4thline-repo</id>
+        <url>http://4thline.org/m2</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>org.fourthline.cling</groupId>
+        <artifactId>cling-core</artifactId>
+        <version>1.0.5</version>
+    </dependency>
+</dependencies>]]></pre>
+
+    <p>
+        Continue reading the <a href="manual/cling-core-manual.html">Cling Core User Manual</a>, the first
+        chapter explains how to implement a UPnP service and a control point. This chapter also contains
+        instructions for using Cling Core <strong>without Maven</strong> in a standalone console application.
+    </p>
+
+    <p>
+        Cling Core is Free Software, distributed under the terms of
+        the <a class="externalLink" href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License</a>.
+    </p>
+
+</div>
+
+</body>
+</html>

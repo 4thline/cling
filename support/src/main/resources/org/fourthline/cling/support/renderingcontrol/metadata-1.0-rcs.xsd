@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+TODO: UPNP VIOLATION: RenderingControl 1.0 specification schema says "/RCS" but examples
+say "AVT_RCS", guess what most people use?
+-->
+<xsd:schema targetNamespace="urn:schemas-upnp-org:metadata-1-0/AVT_RCS"
+            xmlns:rcs="urn:schemas-upnp-org:metadata-1-0/AVT_RCS"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">
+            Schema for UPnP A/V Rendering Control Service events, version 0.1 (sic!)
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <!--============================================================
+
+     'Event' is the root element of Rendering Control event document  fragments.
+     'InstanceID' is the only valid child of 'Event'.
+
+    ============================================================-->
+    <xsd:element name="Event">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    Event is the root element
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:element ref="rcs:InstanceID"/>
+            </xsd:choice>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     'InstanceID' elements identify an individual event instance.
+
+    ============================================================-->
+    <xsd:group name="allowed-under-InstanceID">
+        <xsd:annotation>
+            <xsd:documentation>
+                This group defines the elements allowed under the InstanceID element
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:choice>
+            <xsd:element ref="rcs:PresetNameList"/>
+            <xsd:element ref="rcs:Brightness"/>
+            <xsd:element ref="rcs:Contrast"/>
+            <xsd:element ref="rcs:Sharpness"/>
+            <xsd:element ref="rcs:RedVideoGain"/>
+            <xsd:element ref="rcs:GreenVideoGain"/>
+            <xsd:element ref="rcs:BlueVideoGain"/>
+            <xsd:element ref="rcs:RedVideoBlackLevel"/>
+            <xsd:element ref="rcs:GreenVideoBlackLevel"/>
+            <xsd:element ref="rcs:BlueVideoBlackLevel"/>
+            <xsd:element ref="rcs:ColorTemperature"/>
+            <xsd:element ref="rcs:HorizontalKeystone"/>
+            <xsd:element ref="rcs:VerticalKeystone"/>
+            <xsd:element ref="rcs:Mute"/>
+            <xsd:element ref="rcs:Volume"/>
+            <xsd:element ref="rcs:VolumeDB"/>
+            <xsd:element ref="rcs:Loudness"/>
+        </xsd:choice>
+    </xsd:group>
+
+    <xsd:element name="InstanceID">
+        <xsd:complexType>
+            <xsd:annotation>
+                <xsd:documentation>
+                    InstanceID elements identify an individual event instance.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded">
+                <xsd:group ref="rcs:allowed-under-InstanceID"/>
+            </xsd:choice>
+            <xsd:attribute name="val" type="xsd:unsignedInt" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     PresetNameList
+
+    ============================================================-->
+    <xsd:element name="PresetNameList">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:string"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     Brightness
+
+    ============================================================-->
+    <xsd:element name="Brightness">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--============================================================
+
+     Contrast
+
+    ============================================================-->
+
+    <xsd:element name="Contrast">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+    Sharpness
+
+    ============================================================-->
+    <xsd:element name="Sharpness">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     RedVideoGain
+
+    ============================================================-->
+    <xsd:element name="RedVideoGain">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     GreenVideoGain
+
+    ============================================================-->
+    <xsd:element name="GreenVideoGain">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     BlueVideoGain
+
+    ============================================================-->
+    <xsd:element name="BlueVideoGain">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     RedVideoBlackLevel
+
+    ============================================================-->
+    <xsd:element name="RedVideoBlackLevel">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     GreenVideoBlackLevel
+
+    ============================================================-->
+    <xsd:element name="GreenVideoBlackLevel">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     BlueVideoBlackLevel
+
+    ============================================================-->
+    <xsd:element name="BlueVideoBlackLevel">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     ColorTemperature
+
+    ============================================================-->
+    <xsd:element name="ColorTemperature">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+    HorizontalKeystone
+
+    ============================================================-->
+    <xsd:element name="HorizontalKeystone">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:integer"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+    VerticalKeystone
+
+    ============================================================-->
+    <xsd:element name="VerticalKeystone">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:integer"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     Mute
+
+    ============================================================-->
+    <xsd:element name="Mute">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:boolean"
+                           use="required"/>
+            <xsd:attribute name="channel" type="xsd:string"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     Volume
+
+    ============================================================-->
+    <xsd:element name="Volume">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:unsignedInt"
+                           use="required"/>
+            <xsd:attribute name="channel" type="xsd:string"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     VolumeDB
+
+    ============================================================-->
+    <xsd:element name="VolumeDB">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:integer"
+                           use="required"/>
+            <xsd:attribute name="channel" type="xsd:string"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <!--============================================================
+
+     Loudness
+
+    ============================================================-->
+    <xsd:element name="Loudness">
+        <xsd:complexType>
+            <xsd:attribute name="val" type="xsd:boolean"
+                           use="required"/>
+            <xsd:attribute name="channel" type="xsd:string"
+                           use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

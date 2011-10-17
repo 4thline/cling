@@ -1,0 +1,42 @@
+<div class="chapter" id="chapter.Installation"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <div class="title">Introduction</div>
+    <div class="content">
+
+        <p>
+            The Cling OSGi UPnP Device Service is an implementation of the OSGi UPnP Device Service
+            specification version 1.1 as defined in the OSGi Service Platform Service
+            Compendium (Release 4, Version 4.2 August 2009).
+        </p>
+
+        <p>
+            <em>
+            The UPnP Device Architecture specification provides the protocols for a peer-to-peer network.
+            It specifies how to join a network and how devices can be controlled using XML messages sent
+            over HTTP. The OSGi specifications address how code can be download and managed in a remote
+            system. Both standards are therefore fully complimentary. Using an OSGi Service Platform
+            to work with UPnP enabled devices is therefore a very successful combination. This specification
+            specifies how OSGi bundles can be developed that interoperate
+            with UPnPTM (Universal Plug and Play) devices and UPnP control points.
+            (OSGi Device Service specification version 1.1)
+            </em>
+        </p>
+
+        <p>
+            TODO: Continue manual here...
+        </p>
+
+        <p>
+            Important! I had to use this to get the HTTP port correct for the sample device
+            presentation URL:
+        </p>
+
+        <pre>java -Dorg.apache.felix.http.jettyEnabled=true -Dorg.osgi.service.http.port=8080 -jar bin/felix.jar</pre>
+
+        <!-- NOTE: Don't need to specify the include base path here again! -->
+        <xi:include href="somesection.xhtml"/>
+
+    </div>
+</div>

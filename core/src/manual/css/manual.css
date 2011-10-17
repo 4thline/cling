@@ -1,0 +1,234 @@
+.manual .frontmatter {
+    border: 1px solid black;
+    padding: 25px;
+}
+
+.manual .authors {
+    margin-top: 10px;
+}
+
+.manual .authors .author {
+    margin-left: 25px;
+}
+
+.manual .tableofcontents {
+    margin-top: 25px;
+}
+
+.manual .tableofcontents .toc {
+    margin-left: 25px;
+}
+
+.manual .tableofcontents .tocitem {
+    line-height: 140%;
+}
+
+.manual .tableofcontents .tocitem .prefix {
+    float: left;
+    padding-right: 10px;
+}
+
+.manual .tableofcontents .level_chapter .prefix:before {
+    content: "Chapter ";
+}
+
+.manual .tableofcontents .level_1 {
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.manual .tableofcontents .level_2 {
+    margin-left: 25px;
+}
+
+.manual .tableofcontents .level_3 {
+    margin-left: 50px;
+}
+
+.manual .tableofcontents .level_4 {
+    margin-left: 75px;
+}
+
+.manual .part {
+    margin-top: 50px;
+}
+
+.manual .title {
+    font-weight: normal;
+    margin-top: 1.2em;
+    margin-bottom: 0;
+}
+
+.manual .part > .title {
+    border-bottom: 1px dashed #3f4447;
+    font-size: 175%;
+    text-align: center;
+}
+
+.manual .part > .title:before {
+    content: "Part: ";
+}
+
+.manual .chapter {
+    margin-top: 25px;
+}
+
+.manual .chapter > .title,
+.chapter > .citation > .title {
+    font-size: 135%;
+}
+
+.manual .section {
+    margin-top: 20px;
+}
+
+.manual .section > .title,
+.section > .citation > .title {
+    font-size: 120%;
+}
+
+.manual .section .section {
+    margin-top: 20px;
+}
+
+.manual .section .section > .title,
+.manual .section .section > .citation > .title {
+    font-size: 90%;
+    font-weight: bold !important;
+}
+
+.manual .section .section .section {
+    margin-top: 20px;
+}
+
+.manual .section .section .section > .title,
+.section .section .section > .citation > .title {
+    font-size: 75%;
+    font-weight: bold !important;
+}
+
+.manual dl dt {
+    font-weight: bold;
+    font-style: italic;
+}
+
+.manual .infotable {
+    font-size: 75%;
+}
+
+.manual .infotable td {
+    padding: 5px;
+}
+
+.manual .fullwidth {
+    width: 100%;
+}
+
+.manual .halfwidth {
+    width: 50%;
+}
+
+.manual .thirdwidth {
+    width: 33%;
+}
+
+.manual .quarterwidth {
+    width: 25%;
+}
+
+.manual .tenwidth {
+    width: 10%;
+}
+
+.manual .onewidth {
+    width: 1%;
+}
+
+.manual .nowrap {
+    white-space: nowrap;
+}
+
+.manual pre {
+    background-color: #eeeeee;
+}
+
+.manual .note {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 25px;
+}
+
+.manual .note .title {
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+}
+
+.lemmanote {
+    font-size: 75%;
+    font-style: italic;
+}
+
+@media print {
+
+    .manual {
+        padding: 0 0 0 1em;
+    }
+
+    .manual .title {
+    }
+
+    .manual .frontmatter {
+        padding: 0 !important;
+        border: none !important;
+    }
+
+    .manual .tableofcontents .tocitem {
+        clear: both;
+    }
+
+    .manual .tableofcontents .tocitem .prefix {
+        float: left !important;
+        padding: 0 1em 0 0 !important;
+    }
+
+    .manual .tableofcontents .tocitem a {
+        float: none !important;
+        text-decoration: none !important;
+    }
+
+    .manual .tableofcontents level_1 {
+        margin: 0 !important;
+        padding: 0 0 0 1em !important;
+    }
+
+    .manual .tableofcontents .level_2 {
+        margin: 0 !important;
+        padding: 0 0 0 2em !important;
+    }
+
+    .manual .tableofcontents .level_3 {
+        margin: 0 !important;
+        padding: 0 0 0 3em !important;
+    }
+
+    .manual .tableofcontents .level_4 {
+        margin: 0 !important;
+        padding: 0 0 0 4em !important;
+    }
+
+    .manual p {
+        text-align: justify !important;
+        font-size: 90% !important;
+    }
+
+    .manual pre {
+        white-space: pre-wrap !important;
+        padding: 1em !important;
+        border: 1px solid #aaaaaa !important;
+        background: transparent none !important;
+        font-size: 70% !important;
+    }
+
+}

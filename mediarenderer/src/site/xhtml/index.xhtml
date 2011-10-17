@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Introduction</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        Cling MediaRenderer
+    </h1>
+
+    <img src="/projects/cling/mediarenderer/images/logo_mediarenderer.png"
+         width="250" height="210"
+         alt="Cling MediaRenderer Logo"
+         style="float: right; margin: 30px;"/>
+
+    <p>
+        The Cling MediaRenderer is a Java implementation of a <a href="http://en.wikipedia.org/wiki/Universal_Plug_and_Play#UPnP_AV_standards">UPnP MediaRenderer</a>
+        device. You can turn any device into a network controllable media player, which can play local files or streams from HTTP (media) servers. It even
+        handles multiple streams simultaneously on a single host.
+    </p>
+
+    <p>
+        Screenshots are available <a href="/projects/cling/mediarenderer/screenshots.html">here</a>.
+    </p>
+    
+    <p>
+        The playback backend is currently based on the <a href="http://gstreamer.freedesktop.org/">gstreamer</a> project. If you are using
+        Linux,  you should be able to install gstreamer as usual or you have it probably already installed.
+        On Windows, use <a href="http://www.gstreamer-winbuild.ylatuya.es/doku.php">this installer package</a>. For OS X you can either
+        <a href="http://trac.macports.org/browser/trunk/dports/gnome/gstreamer/Portfile">build it yourself with Macports</a> or you can
+        try <a href="http://codeanticode.wordpress.com/2009/04/03/gstreamer-installer-for-macosx/">this installer</a>.
+    </p>
+
+    <p>
+        Note: The OS X version will look for GStreamer libraries in <code>/opt/local/lib</code> (default location for MacPorts install),
+        the <em>JAR</em> version requires that you specify the location of your gstreamer install as a system property (e.g. on Linux):
+        <code>java -Djna.library.path=/usr/lib -jar cling-mediarenderer.jar</code>
+    </p>
+
+    <p>
+        If you want to run the MediaRenderer's display in windowed mode (not fullscreen), start it with the <code>-w</code> argument.
+    </p>
+
+    <h2>
+        Download
+    </h2>
+
+    <ul>
+        <li>
+            <a href="http://www.4thline.org/m2/org/fourthline/cling/cling-mediarenderer/1.0.5/cling-mediarenderer-1.0.5.dmg">Mac OS X desktop application (Snow Leopard required)</a>
+        </li>
+        <li>
+            <a href="http://www.4thline.org/m2/org/fourthline/cling/cling-mediarenderer/1.0.5/cling-mediarenderer-1.0.5-standalone.jar">JDK 1.6 desktop application (any OS)</a>
+        </li>
+        <li>
+            <a href="http://www.4thline.org/projects/download/">Cling main distribution (incl. Cling Core library)</a>
+        </li>
+    </ul>
+
+    <p>
+        Cling MediaRenderer is Free Software, distributed under the terms of
+        the <a class="externalLink" href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License</a>.
+    </p>
+
+</div>
+
+</body>
+</html>

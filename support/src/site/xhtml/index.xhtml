@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Introduction</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        Cling Support
+    </h1>
+
+    <p>
+        Utility, helper, and template classes for developers working with <a href="/projects/cling/core">Cling Core</a> are
+        available in the Cling Support module.
+    </p>
+
+    <p>
+        Currently bundled in Cling Support are:
+    </p>
+
+    <dl>
+        <dt><strong>InternetGatewayDevice utilities</strong></dt>
+        <dd>
+            <p>
+                Create <a href="/projects/cling/support/manual/cling-support-manual.html#section.PortMapping">NAT port mappings</a>,
+                <a href="/projects/cling/support/manual/cling-support-manual.html#section.ConnectionInfo">query the external IP address</a>,
+                and work with the connections of your <em>InternetGatewayDevice:1</em>.
+            </p>
+        </dd>
+        <dt><strong>AVTransport abstract service</strong></dt>
+        <dd>
+            <p>
+                An abstract implementation of the UPnP <em>AVTransport:1</em> service template,
+                with a state machine, data transfer classes for all types, and full support for per-instance eventing
+                through <em>LastChange</em>. Use this and the following two abstract services if you want to 
+                implement a <em>MediaRenderer</em> service or a control point for such a service.
+            </p>
+        </dd>
+
+        <dt><strong>RenderingControl abstract service</strong></dt>
+        <dd>
+            <p>
+                An abstract implementation of the UPnP <em>RenderingControl:1</em> service template,
+                focusing on audio control (volume and channels), with full support for per-instance eventing
+                through <em>LastChange</em>.
+            </p>
+        </dd>
+
+        <dt><strong>ConnectionManager abstract service</strong></dt>
+        <dd>
+            <p>
+                An abstract implementation of the UPnP <em>ConnectionManager:1</em> service template,
+                with type-safe protocol information exchange and mime-type content negotiation feature ("Can this renderer
+                accept the resource offered by this content directory?").
+            </p>
+        </dd>
+
+        <dt><strong>ContentDirectory browser</strong></dt>
+        <dd>
+            <p>
+                Client and server classes for working with a UPnP <em>ContentDirectory:1</em>. A complete and
+                type-safe model for DIDL, DC, and UPnP elements as required by the content directory XML descriptors.
+                A hand-written and extensible descriptor generator and parser. Use this if you want to implement a
+                <em>MediaServer</em> service or a control point for such a service.
+            </p>
+        </dd>
+
+        <dt><strong>MessageBox</strong></dt>
+        <dd>
+            <p>
+                Notification messages for networked Samsung TVs -
+                <a href="/projects/cling/support/manual/cling-support-manual.html#chapter.MessageBox">send any
+                message to your TV via UPnP</a>.
+            </p>
+        </dd>
+    </dl>
+
+    <h2>
+        Getting Started
+    </h2>
+
+    <p>
+        If you are using Maven, add the following dependency to your <code>pom.xml</code>:
+    </p>
+
+     <pre class="prettyprint"><![CDATA[<repositories>
+    <repository>
+        <id>4thline-repo</id>
+        <url>http://4thline.org/m2</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+
+<dependencies>
+    <dependency>
+        <groupId>org.fourthline.cling</groupId>
+        <artifactId>cling-support</artifactId>
+        <version>1.0.5</version>
+    </dependency>
+</dependencies>]]></pre>
+
+    <p>
+        Consult the <a href="/projects/cling/support/manual/cling-support-manual.html">Cling Support manual</a> for
+        detailed documentation of all features, as well as the
+        <a href="/projects/cling/core/manual/cling-core-manual.html">Cling Core manual</a> for basic setup and usage
+        of the Cling UPnP framework.
+    </p>
+
+    <p>
+        Cling Support is Free Software, distributed under the terms of
+        the <a class="externalLink" href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License</a>.
+    </p>
+
+</div>
+
+</body>
+</html>

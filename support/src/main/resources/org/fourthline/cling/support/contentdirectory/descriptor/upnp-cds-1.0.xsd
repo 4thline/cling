@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+        targetNamespace="urn:schemas-upnp-org:metadata-1-0/upnp/"
+        xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified"
+        attributeFormDefault="unqualified"
+        version="1.0"
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+        jaxb:version="2.1">
+
+    <xsd:annotation>
+        <xsd:appinfo>
+            <jaxb:schemaBindings>
+                <jaxb:package name="org.fourthline.cling.support.contentdirectory.descriptor.upnp"/>
+            </jaxb:schemaBindings>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:annotation>
+        <xsd:documentation xml:lang="en">
+            UPnP Content Directory Service 1.0 schema, derived from the crude examples in the PDF document.
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="class">
+        <xsd:complexType mixed="true">
+            <!-- TODO: That causes weird namespace errors in marshalled XML output...
+            <xsd:annotation>
+                <xsd:appinfo>
+                    <jaxb:class name="Clazz"/>
+                </xsd:appinfo>
+            </xsd:annotation>
+            -->
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="searchClass">
+        <xsd:complexType mixed="true">
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                    <xsd:attribute name="includeDerived" type="xsd:boolean" use="required"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="createClass">
+        <xsd:complexType mixed="true">
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute name="name" type="xsd:string" use="optional"/>
+                    <xsd:attribute name="includeDerived" type="xsd:boolean" use="required"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="writeStatus" type="upnp:writeStatusValue"/>
+    <xsd:simpleType name="writeStatusValue">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="WRITABLE"/>
+            <xsd:enumeration value="PROTECTED"/>
+            <xsd:enumeration value="NOT_WRITABLE"/>
+            <xsd:enumeration value="UNKNOWN"/>
+            <xsd:enumeration value="MIXED"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:element name="genre" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Name of the genre to which an object belongs.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="album" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Title of the album to which the item belongs.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="playlist" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Name of a playlist to which the item belongs.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="storageUsed" type="xsd:long" default="-1">
+        <xsd:annotation>
+            <xsd:documentation>
+                Combined space, in bytes, used by all the objects held in the storage
+                represented by the container.
+                Value –1 is reserved to indicate that the capacity is 'unknown'
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="storageTotal" type="xsd:long" default="-1">
+        <xsd:annotation>
+            <xsd:documentation>
+                Total capacity, in bytes, of the storage represented by the
+                container.
+                Value –1 is reserved to indicate that the capacity is 'unknown'
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="storageFree" type="xsd:long" default="-1">
+        <xsd:annotation>
+            <xsd:documentation>
+                Total free capacity, in bytes, of the storage represented by the container
+                Value –1 is reserved to indicate that the capacity is 'unknown'
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="storageMaxPartition" type="xsd:long" default="-1">
+        <xsd:annotation>
+            <xsd:documentation>
+                Largest amount of space, in bytes, available for storing a single resource
+                in the container.
+                Value –1 is reserved to indicate that the capacity is 'unknown'
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="storageMedium" type="upnp:storageMediumValue">
+        <xsd:annotation>
+            <xsd:documentation>
+                Indicates the type of storage medium used for the content. Potentially useful
+                for user-interface purposes.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:simpleType name="storageMediumValue">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="UNKNOWN"/>
+            <xsd:enumeration value="DV"/>
+            <xsd:enumeration value="MINI-DV"/>
+            <xsd:enumeration value="VHS"/>
+            <xsd:enumeration value="W-VHS"/>
+            <xsd:enumeration value="S-VHS"/>
+            <xsd:enumeration value="D-VHS"/>
+            <xsd:enumeration value="VHSC"/>
+            <xsd:enumeration value="VIDEO8"/>
+            <xsd:enumeration value="HI8"/>
+            <xsd:enumeration value="CD-ROM"/>
+            <xsd:enumeration value="CD-DA"/>
+            <xsd:enumeration value="CD-R"/>
+            <xsd:enumeration value="CD-RW"/>
+            <xsd:enumeration value="VIDEO-CD"/>
+            <xsd:enumeration value="SACD"/>
+            <xsd:enumeration value="MD-AUDIO"/>
+            <xsd:enumeration value="MD-PICTURE"/>
+            <xsd:enumeration value="DVD-ROM"/>
+            <xsd:enumeration value="DVD-VIDEO"/>
+            <xsd:enumeration value="DVD-R"/>
+            <xsd:enumeration value="DVD+RW">
+                <xsd:annotation>
+                    <xsd:appinfo>
+                        <jaxb:typesafeEnumMember name="DVD_PLUS_RW"/>
+                    </xsd:appinfo>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="DVD-RW"/>
+            <xsd:enumeration value="DVD-RAM"/>
+            <xsd:enumeration value="DVD-AUDIO"/>
+            <xsd:enumeration value="DAT"/>
+            <xsd:enumeration value="LD"/>
+            <xsd:enumeration value="HDD"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:element name="longDescription" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                A few lines of description of the content item (longer than
+                DublinCore's description element).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="icon" type="xsd:anyURI">
+        <xsd:annotation>
+            <xsd:documentation>
+                Some icon that a control point can use in its UI to display the
+                content, e.g. a CNN logo for a Tuner channel. Recommend same format
+                as the icon element in the UPnP device description document schema.
+                (PNG). Values must be properly escaped URIs as described in [RFC 2396].
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="region" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Some identification of the region, associated with the
+                "source" of the object, e.g. "US", "Latin America",
+                "Seattlle".
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="rating" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation>
+                Rating of the object's resource, for 'parental control' filtering purposes,
+                such as "R", "PG-13", "X", etc.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+</xsd:schema>

@@ -1,0 +1,38 @@
+<div class="section" id="section.BinaryLightStartingApp" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Starting the application</div>
+    <div class="content">
+
+        <p>
+            Compile the binary light demo application:
+        </p>
+
+        <div><pre><![CDATA[$ javac -cp /path/to/seamless-jar-files:/path/to/cling-core.jar \
+        -d classes/ \
+        src/example/binarylight/BinaryLightServer.java \
+        src/example/binarylight/BinaryLightClient.java \
+        src/example/binarylight/SwitchPower.java]]></pre></div>
+
+        <p>
+            Don't forget to copy your <code>icon.png</code> file into the <code>classes</code> output
+            directory as well, into the right package from which it is loaded as a reasource (the
+            <code>example.binarylight</code> package if you followed the previous sections verbatim).
+        </p>
+
+        <p>
+            You can start the server or client first, which one doesn't matter as they will
+            discover each other automatically:
+        </p>
+        
+        <div><pre><![CDATA[$ java -cp /path/to/seamless-jar-files:/path/to/cling-core.jar:classes/ \
+        example.binaryLight.BinaryLightServer]]></pre></div>
+
+        <div><pre><![CDATA[$ java -cp /path/to/seamless-jar-files:/path/to/cling-core.jar:classes/ \
+        example.binaryLight.BinaryLightClient]]></pre></div>
+
+        <p>
+            You should see discovery and action execution messages on each console. You can stop
+            and restart the applications individually (press CTRL+C on the console).
+        </p>
+
+    </div>
+</div>

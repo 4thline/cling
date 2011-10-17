@@ -1,0 +1,29 @@
+<!-- Roku sends "unknown track uri" instead of empty string. Cling should not fail when parsing this as URL. -->
+<Event xmlns="urn:schemas-upnp-org:metadata-1-0/AVT/">
+    <InstanceID val="0">
+        <TransportState val="STOPPED"/>
+        <TransportStatus val="OK"/>
+        <PlaybackStorageMedium val="NETWORK"/>
+        <RecordStorageMedium val="NOT_IMPLEMENTED"/>
+        <CurrentPlayMode val="NORMAL"/>
+        <TransportPlaySpeed val="1"/>
+        <RecordMediumWriteStatus val="NOT_IMPLEMENTED"/>
+        <CurrentRecordQualityMode val="NOT_IMPLEMENTED"/>
+        <NumberOfTracks val="1"/>
+        <CurrentTrack val="0"/>
+        <PossiblePlaybackStorageMedia val="UNKNOWN,NETWORK"/>
+        <PossibleRecordStorageMedia val="NOT_IMPLEMENTED"/>
+        <PossibleRecordQualityModes val="NOT_IMPLEMENTED"/>
+        <CurrentTrackDuration val="0:00:00"/>
+        <CurrentMediaDuration val="00:00:00"/>
+        <CurrentTrackMetaData
+                val="&lt;DIDL-Lite xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot; xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&quot;&gt; &lt;item&gt;&lt;upnp:class&gt;object.item.audioItem.musicTrack&lt;/upnp:class&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;"/>
+        <CurrentTrackURI val="unknown track uri"/>
+        <AVTransportURI val="http://192.168.0.99:3689/%25/1.mp3"/>
+        <AVTransportURIMetaData
+                val="&lt;DIDL-Lite xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot; xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&quot;&gt; &lt;item&gt;&lt;upnp:class&gt;object.item.audioItem.musicTrack&lt;/upnp:class&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;"/>
+        <NextAVTransportURI val="unknown next transport uri"/>
+        <NextAVTransportURIMetaData val=""/>
+        <CurrentTransportActions val="Play,Stop,Pause"/>
+    </InstanceID>
+</Event>

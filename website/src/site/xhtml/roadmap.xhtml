@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Road Map</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        Road Map
+    </h1>
+
+    <p>
+        The projects on 4thline.org are developed openly and released under Free Software licenses.
+        If you'd like to contribute and participate, join
+        our <a href="/projects/mailinglists.html">Mailinglists</a>.
+    </p>
+
+    <hr/>
+
+    <h2>
+        Cling 2.0
+    </h2>
+
+    <ul>
+        <li>
+            <strong>Integration with and for CDI (IN PROGRESS)</strong>
+            <p>
+                Currently all modules (transport, protocol, registry, binding) of Cling are wired through
+                constructor injection from a single UpnpService entry point constructor. We can keep this
+                flexibility (easy overriding by developers of create() methods) but at the same time enable
+                dependency injection frameworks. This is mostly adding CDI annotations on core classes and
+                testing Cling Core with <a href="http://seamframework.org/Weld">Weld</a>.
+            </p>
+        </li>
+        <li>
+            <strong>Client/server profile system</strong>
+            <p>
+                Similar to what other, more media-oriented UPnP packages provide, Cling will most likely
+                grow a profile system to help with device incompatibilities (for example, see the profile system
+                of <a href="http://www.serviio.org/index.php?option=com_content&amp;lview=article&amp;id=16">Serviio</a>).
+                This issue and the design of the profile system is under discussion on the Cling list
+                <a href="http://cling-users-and-developers.945824.n3.nabble.com/Device-Type-Detection-tp2217006p2217085.html">here</a>.
+            </p>
+        </li>
+        <li>
+            <strong>Providing an OSGi UPnP Device Service (IN PROGRESS)</strong>
+            <p>
+                Cling can be used to implement the OSGi UPnP Device Service specification version
+                1.1 as defined in the OSGi Service Platform Service Compendium (Release 4, Version 4.2
+                August 2009). A proof-of-concept implementation is already available
+                <a href="http://code.google.com/p/bwgz-org/">here</a> and its useful bits should
+                be added to Cling. This issue is under discussion
+                <a href="http://cling-users-and-developers.945824.n3.nabble.com/OSGi-Support-tp2188890p2215369.html">here</a>.
+            </p>
+        </li>
+        <li>
+            <strong>Switchable XML low-level routines for Android 2.1/2.2</strong>
+            <p>
+                Android 2.1 has awful support for XML parsing and printing (broken schema support,
+                no transformers), Android 2.2. is marginally better. Consider either dropping support
+                for Android 2.1 and removing half-baked XML utility classes, or adding configurable
+                low-level XML handling with automatic detection of 2.1 or 2.2.
+            </p>
+        </li>
+        <li>
+            <strong>GENA eventing support in the HTTP bridge</strong>
+            <p>
+                This has already been designed and needs to be implemented,
+                see <a href="/svn/cling/trunk/misc/Bridge%20Architecture.graffle">Bridge Architecture.graffle</a> in SVN.
+            </p>
+        </li>
+    </ul>
+
+</div>
+
+</body>
+</html>
+
+

@@ -1,0 +1,60 @@
+<div class="section" id="section.BasicAPI.ControlPoint" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Client operations with ControlPoint</div>
+    <div class="content">
+
+        <p>
+            Your primary API when writing a UPnP client application is the <code>ControlPoint</code>.
+            An instance is available with <code>getControlPoint()</code> on the <code>UpnpService</code>.
+        </p>
+
+        <div><pre class="prettyprint"><![CDATA[public interface ControlPoint {
+
+    public void search(UpnpHeader searchType);
+    public void execute(ActionCallback callback);
+    public void execute(SubscriptionCallback callback);
+
+}]]></pre>
+        </div>
+
+        <p>
+            A UPnP client application typically wants to:
+        </p>
+
+        <ul>
+            <li>
+                Search the network for a particular service which it knows how to utilize. Any response
+                to a search request will be delivered asynchronously, so you have to listen to the
+                <code>Registry</code> for device registrations, which will occur when devices
+                respond to your search request.
+            </li>
+            <li>
+                Execute actions which are offered by services. Action execution is processed asynchronously
+                in Cling Core, and your <code>ActionCallback</code> will be notified when the execution
+                was a success (with result values), or a failure (with error status code and messages).
+            </li>
+            <li>
+                Subscribe to a service's eventing, so your <code>SubscriptionCallback</code> is notified
+                asynchronously when the state of a service changes and an event has been received for your
+                client. You also use the callback to cancel the event subscription when you are no longer
+                interested in state changes.
+            </li>
+        </ul>
+
+        <p>
+            Let's start with searching for UPnP devices on the network.
+        </p>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.controlpoint.SearchExecuteTest"/>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.controlpoint.ActionInvocationTest"/>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.controlpoint.EventSubscriptionTest"/>
+        </div>
+
+    </div>
+</div>

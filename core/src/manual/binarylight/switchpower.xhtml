@@ -1,0 +1,38 @@
+<div class="section" id="section.SwitchPower" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">The SwitchPower service implementation</div>
+    <div class="content">
+
+        <p>
+            This is the source of the <em>SwitchPower:1</em> service - note that although there
+            are many annotations in the source, no runtime dependency on Cling exists:
+        </p>
+
+        <a class="citation" href="javacode://example.binarylight.SwitchPower"/>
+
+        <p>
+            To compile this class the Cling Core library has to be available on your
+            classpath. However, once compiled this class can be instantiated and executed in any
+            environment, there are no dependencies on any framework or library code.
+        </p>
+
+        <p>
+            The annotations are used by Cling to read the metadata that describes your service, what
+            UPnP state variables it has, how they are accessed, and what methods should be exposed
+            as UPnP actions. You can also provide Cling metadata in an XML file or programmatically through
+            Java code - both options are discussed later in this manual. Source code annotations are
+            usually the best choice.
+        </p>
+
+        <p>
+            You might have expected something even simpler: After all, a <em>binary light</em> only
+            needs a single boolean state, it is either on or off. The designers of this service also
+            considered that there might be a difference between switching the light on, and actually
+            seeing the result of that action. Imagine what happens if the light bulb is broken: The
+            target state of the light is set to <em>true</em> but the status is still <em>false</em>,
+            because the <em>SetTarget</em> action could not make the switch. Obviously this won't be
+            a problem with this simple demonstration because it only prints the status to standard
+            console output.
+        </p>
+
+    </div>
+</div>

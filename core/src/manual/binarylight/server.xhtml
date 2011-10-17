@@ -1,0 +1,45 @@
+<div class="section" id="section.BinaryLightServer" xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Running the server</div>
+    <div class="content">
+
+        <p>
+            The Cling Core main API entry point is a thread-safe and typically single shared instance of
+            <code>UpnpService</code>:
+        </p>
+
+        <a class="citation" href="javacode://example.binarylight.BinaryLightServer"
+           style="exclude: CREATEDEVICE"/>
+
+        <p>
+            (The <code>createDevice()</code> method from the previous section should be added to this class.)
+        </p>
+
+        <p>
+            As soon as the <code>UPnPServiceImpl</code> is created, the stack is up and running. You always
+            have to create a <code>UPnPService</code> instance, no matter if you write a client or a server.
+            The <code>UpnpService</code> maintains a registry of all the discovered remote device on the network,
+            and all the bound local devices. It manages advertisements for discovery and event handling
+            in the background.
+        </p>
+        <p>
+            You should shut down the UPnP service properly when your application quits, so that all
+            other UPnP systems on your network will be notified that bound devices which are local to your
+            application are no longer available. If you do not shut down the <code>UpnpService</code>
+            when your application quits, other UPnP control points on your network might still show devices
+            as available when they are in fact already gone.
+        </p>
+
+        <p>
+            The <code>createDevice()</code> method from the previous section is called here, as soon as the
+            <code>Registry</code> of the local UPnP service stack is available.
+        </p>
+
+        <p>
+            You can now compile and start this server, it should print some informational messages to your
+            console and then wait for connections from UPnP control points. Use the
+            <a href="http://4thline.org/projects/cling/workbench/">Cling Workbench</a> if you want to test your
+            server immediately.
+        </p>
+
+    </div>
+</div>

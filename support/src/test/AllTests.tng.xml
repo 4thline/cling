@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Cling Support - All Tests" parallel="false" thread-count="1" verbose="1">
+
+    <test name="Examples">
+        <packages>
+            <package name="example.igd"/>
+            <package name="example.messagebox"/>
+            <package name="example.mediarenderer"/>
+            <package name="example.mediaserver"/>
+        </packages>
+    </test>
+
+</suite>

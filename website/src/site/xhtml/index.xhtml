@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Java/Android UPnP library and tools</title>
+</head>
+
+<body>
+
+<div id="content-body">
+
+    <h1>
+        Cling - Java/Android UPnP library and tools
+    </h1>
+
+    <p>
+        Cling is an effort to create a UPnP-compatible software stack in Java. The project's goals are
+        strict specification compliance, complete, clean and extensive APIs, as well as rich
+        SPIs for easy customization.
+    </p>
+
+    <!--
+    <a href="resource://subversion/history?svnroot=http%3A%2F%2Fsvn.4thline.org%2Frepos%2F&amp;svnpath=%2Fcling%2Ftrunk&amp;days=5"/>
+    -->
+
+    <p>
+        The current release of Cling is <em>2.0-beta1 (2011-xx-xx)</em>, see
+        the <a href="/projects/cling/changelog.txt">Changelog</a> for a summary of improvements and
+        the <a href="/projects/cling/roadmap.html">Road Map</a> for future plans. You can
+        also find snapshot builds of the current development
+        trunk <a href="/projects/download/snapshots/cling/">here</a> or include version
+        <code>2.0-SNAPSHOT</code> as a dependency in your Maven <code>pom.xml</code>.
+    </p>
+
+    <p>
+        Read <a href="/projects/cling/core/manual/cling-core-manual.html#chapter.GettingStarted">this
+        chapter of the manual</a> for a simple Cling usage example.
+    </p>
+
+    <p>
+        Main modules of Cling are:
+    </p>
+
+    <dl class="freshlinks">
+
+        <dt><strong><a href="/projects/cling/core/">Cling Core</a></strong></dt>
+        <dd>
+            <p>
+                An embeddable Java library that implements the
+                <a href="http://www.upnp.org/resources/documents.asp">UPnP Device Architecture 1.0</a>. Use
+                Cling Core to expose services with a UPnP remoting interface, or to write control point applications
+                that discover UPnP devices and utilize their services. You can also integrate
+                <a href="/projects/cling/core/manual/cling-core-manual.html#chapter.Android">Cling Core as
+                an Android UPnP/DLNA library in your applications</a> (platform level 7/2.1 required).
+                The full source code of the <em>Android UPnPBrowser</em> example of the manual can be
+                found <a href="/projects/download/misc/">here</a>. You can see the application in
+                action in <a href="/weblog/software/New%20Cling%20beta3%20runs%20on%20Android%2021.html">this
+                video</a>.
+            </p>
+        </dd>
+
+        <dt><strong><a href="/projects/cling/support/">Cling Support</a></strong></dt>
+        <dd>
+            <p>
+                Optional classes and useful infrastructure for developing and controlling UPnP services with
+                Cling Core; extensions that simplify working with UPnP media servers and renderers,
+                <a href="/projects/cling/support/manual/cling-support-manual.html#section.PortMapping">NAT port
+                mapping on routers</a>, etc.
+            </p>
+        </dd>
+
+        <dt><strong><a href="/projects/cling/workbench/">Cling Workbench</a></strong></dt>
+        <dd>
+            <p>
+                A desktop application for browsing UPnP devices and interacting with their services, including
+                an <a href="/projects/cling/workbench/wanbridge.html">HTTP gateway and WAN/LAN bridge</a>.
+            </p>
+        </dd>
+
+        <dt><strong><a href="/projects/cling/mediarenderer/">Cling MediaRenderer</a></strong></dt>
+        <dd>
+            <p>
+                Standalone <a href="http://www.upnp.org/resources/documents.asp">UPnP MediaRenderer</a>, based on gstreamer.
+            </p>
+        </dd>
+
+    </dl>
+
+    <p>
+        Cling is Free Software, distributed under the terms of
+        the <a class="externalLink" href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License</a>.
+    </p>
+
+</div>
+
+</body>
+</html>

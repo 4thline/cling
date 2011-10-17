@@ -1,0 +1,62 @@
+<div class="chapter" id="chapter.MediaRenderer"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <div class="title">Accessing and providing MediaRenderers</div>
+    <div class="content">
+
+        <p>
+            The purpose of the <em>MediaRenderer:1</em>'s services is remote control of a
+            media output device. A device that implements a renderer and therefore
+            has the necessary <em>AVTransport:1</em> service can be controlled just like with
+            a traditional infrared remote. Think about how awkward it is to control
+            video playback on the Playstation3 with the game controller. The
+            <em>MediaRenderer</em> is like a programmable universal remote API, so you
+            could replace your infrared remote control or Playstation controller with an
+            iPad, Android handset, touchscreen panel, laptop computer, or anything else
+            that speaks UPnP.
+        </p>
+        <p>
+            (Unfortunately, the Playstation3 does not expose any
+            <em>MediaRenderer</em> services. In fact, most <em>MediaRenderer</em>
+            implementations in the wild, in TVs and set-top boxes, are incomplete
+            or incompatible given a to-the-letter interpretation of the specifications.
+            To make matters worse, instead of simplifying the UPnP A/V specifications,
+            more rules were added in DLNA guidelines, thus making compatiblity even
+            more difficult to achieve. A working and correctly behaving
+            <em>MediaRenderer</em> seems to be an exception, not the norm.)
+        </p>
+        <p>
+            The procedure is simple: First you send the URL of a media resource
+            to the renderer. How you obtained the URL of that resource is entirely up to you,
+            probably browsing a media server's resources metadata. Now you control the state
+            of the renderer, for example, playing, pausing, stopping, recording the video,
+            and so on. You can also control other properties such as volume and brightness of
+            the audio/video content through the standardized <em>RenderingControl:1</em> service
+            of a media renderer.
+        </p>
+
+        <p>
+           Cling Support provides the <code>org.fourthline.cling.support.avtransport.AbstractAVTransportService</code>
+           class, an abstract type with all the UPnP actions and state variable mappings already in place.
+           To implement a <em>MediaRenderer</em> you'd have to create a subclass and implement all methods.
+           You should consider this strategy if you already have an existing media player, and you want
+           to provide a UPnP remote control interface.
+        </p>
+
+        <p>
+            Alternatively, if you are writing a new media player, Cling can even provide the
+            state management and transitions for you, so all you have to implement is the
+            actual output of media data.
+        </p>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.mediarenderer.AVTransportTest"/>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.mediarenderer.AVTransportTest#testCustomPlayer"/>
+        </div>
+
+    </div>
+</div>

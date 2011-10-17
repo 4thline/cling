@@ -1,0 +1,29 @@
+<div class="chapter" id="chapter.MessageBox"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <div class="title">Sending messages to Samsung TVs</div>
+    <div class="content">
+
+        <p>
+            Many network-enabled Samsung TVs implement the proprietary <em>samsung.com:MessageBoxService:1</em>.
+            The original purpose of this service was most likely connectivity with Samsung mobile phones;
+            notification messages and alerts would appear on your TV when you are at home and your cellphone
+            is connected to your local WiFi network (and your TV is turned on).
+        </p>
+
+        <p>
+            Cling Support delivers client classes for sending notifications to your Samsung TV via UPnP. (See <a
+                href="http://sourceforge.net/apps/mediawiki/samygo/index.php?title=MessageBoxService_request_format">this
+            page</a> for more information about the reverse-engineered raw message format.)
+        </p>
+
+        <div class="note">
+            <div class="title">Sending messages from an Android handset</div>
+            The XML parsing of messages requires Android 2.2, it won't work on any older version.
+        </div>
+
+        <a class="citation" href="javadoc://example.messagebox.MessageBoxTest" style="read-title: false;"/>
+
+    </div>
+</div>
