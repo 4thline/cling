@@ -130,7 +130,7 @@
             <id>4thline-repo</id>
             <url>http://4thline.org/m2</url>
             <snapshots>
-                <enabled>false</enabled>
+                <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
         <pluginRepository>
