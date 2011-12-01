@@ -6,6 +6,7 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
+import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.UDAServiceId;
 import org.fourthline.cling.support.igd.callback.GetExternalIP;
 import org.fourthline.cling.support.model.Connection;
@@ -38,7 +39,7 @@ public class ConnectionInfoTest {
         LocalDevice device = IGDSampleData.createIGDevice(TestConnection.class);
         upnpService.getRegistry().addDevice(device);
 
-        LocalService service = device.findService(new UDAServiceId("WANIPConnection"));         // DOC: DOC1
+        Service service = device.findService(new UDAServiceId("WANIPConnection"));         // DOC: DOC1
 
         upnpService.getControlPoint().execute(
             new GetStatusInfo(service) {
@@ -79,7 +80,7 @@ public class ConnectionInfoTest {
         LocalDevice device = IGDSampleData.createIGDevice(TestConnection.class);
         upnpService.getRegistry().addDevice(device);
 
-        LocalService service = device.findService(new UDAServiceId("WANIPConnection"));         // DOC: DOC1
+        Service service = device.findService(new UDAServiceId("WANIPConnection"));         // DOC: DOC1
 
         upnpService.getControlPoint().execute(
             new GetExternalIP(service) {
