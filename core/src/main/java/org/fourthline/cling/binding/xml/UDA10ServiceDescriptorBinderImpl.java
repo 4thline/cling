@@ -412,10 +412,10 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
         appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.name, actionArgument.getName());
         appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.direction, actionArgument.getDirection().toString().toLowerCase());
-        appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.relatedStateVariable, actionArgument.getRelatedStateVariableName());
         if (actionArgument.isReturnValue()) {
             appendNewElement(descriptor, actionArgumentElement, ELEMENT.retval);
         }
+        appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.relatedStateVariable, actionArgument.getRelatedStateVariableName());
     }
 
     private void generateServiceStateTable(Service serviceModel, Document descriptor, Element scpdElement) {
