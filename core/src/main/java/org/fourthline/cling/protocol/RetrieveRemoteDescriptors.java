@@ -267,7 +267,14 @@ public class RetrieveRemoteDescriptors implements Runnable {
     protected RemoteService describeService(RemoteService service)
             throws DescriptorBindingException, ValidationException {
 
-        URL descriptorURL = service.getDevice().normalizeURI(service.getDescriptorURI());
+    	URL descriptorURL;
+    	try {
+    		descriptorURL = service.getDevice().normalizeURI(service.getDescriptorURI());
+    	}  catch(IllegalArgumentException e) {
+    		log.warning("Could not normalize service descriptor URL: " + service.getDescriptorURI());
+    		return null;
+    	}
+    	
         StreamRequestMessage serviceDescRetrievalMsg = new StreamRequestMessage(UpnpRequest.Method.GET, descriptorURL);
 
         log.fine("Sending service descriptor retrieval message: " + serviceDescRetrievalMsg);
