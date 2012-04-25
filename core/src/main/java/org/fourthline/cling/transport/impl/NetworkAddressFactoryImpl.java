@@ -376,6 +376,11 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             log.finer("Skipping loopback address: " + address);
             return false;
         }
+        
+        if (address.isLinkLocalAddress()) {
+        	log.finer("Skipping link-local address: " + address);
+        	return false;
+        }
 
         if (useAddresses.size() > 0 && !useAddresses.contains(address.getHostAddress())) {
             log.finer("Skipping unwanted address: " + address);
