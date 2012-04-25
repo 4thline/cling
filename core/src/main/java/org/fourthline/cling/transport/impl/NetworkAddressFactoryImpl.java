@@ -130,8 +130,9 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         try {
             NetworkInterface iface = NetworkInterface.getByInetAddress(inetAddress);
             return iface != null ? iface.getHardwareAddress() : null;
-        } catch (SocketException ex) {
-            throw new RuntimeException(ex);
+        } catch (Throwable ex) {
+        	// seen on Win32: java.lang.Error: IP Helper Library GetIpAddrTable function failed
+        	return null;
         }
     }
 
