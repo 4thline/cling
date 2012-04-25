@@ -281,7 +281,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         }
 
         if (iface.getName().toLowerCase().startsWith("vmnet") ||
-                iface.getDisplayName().toLowerCase().contains("vmnet")) {
+        		(iface.getDisplayName() != null &&  iface.getDisplayName().toLowerCase().contains("vmnet"))) {
             log.finer("Skipping network interface (VMWare): " + iface.getDisplayName());
             return false;
         }
