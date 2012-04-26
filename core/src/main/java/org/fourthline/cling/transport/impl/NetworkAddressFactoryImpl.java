@@ -220,6 +220,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             i++;
             prefix -= 8;
         }
+        if(i == ip.length) return true;
         final byte mask = (byte) ~((1 << 8 - prefix) - 1);
 
         return (ip[i] & mask) == (network[i] & mask);
