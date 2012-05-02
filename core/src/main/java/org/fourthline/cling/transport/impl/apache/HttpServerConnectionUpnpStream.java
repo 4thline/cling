@@ -17,6 +17,14 @@
 
 package org.fourthline.cling.transport.impl.apache;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.SocketTimeoutException;
+import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.apache.http.ConnectionClosedException;
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.HttpEntityEnclosingRequest;
@@ -32,6 +40,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.DefaultConnectionReuseStrategy;
 import org.apache.http.impl.DefaultHttpResponseFactory;
+import org.apache.http.impl.DefaultHttpServerConnection;
 import org.apache.http.message.BasicStatusLine;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.DefaultedHttpParams;
@@ -53,15 +62,8 @@ import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.transport.spi.UnsupportedDataException;
 import org.fourthline.cling.transport.spi.UpnpStream;
-import org.seamless.util.io.IO;
 import org.seamless.util.Exceptions;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.SocketTimeoutException;
-import java.net.URI;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.seamless.util.io.IO;
 
 /**
  * Implementation for Apache HTTP Components API.
@@ -106,6 +108,7 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
         return connection;
     }
 
+    @Override
     public void run() {
 
         try {
@@ -180,6 +183,20 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
 
             // Headers
             requestMessage.setHeaders(new UpnpHeaders(HeaderUtil.get(httpRequest)));
+            
+            InetAddress localAddress = ((DefaultHttpServerConnection)connection).getLocalAddress();
+            if(localAddress == null) {
+             log.warning("got HTTP request without Local Address");
+            } else {
+             requestMessage.setLocalAddress(localAddress.getHostAddress());
+            }
+            
+            InetAddress remoteAddress = ((DefaultHttpServerConnection)connection).getRemoteAddress();
+            if(remoteAddress == null) {
+             log.warning("got HTTP request without Remote Address");
+            } else {
+             requestMessage.setRemoteAddress(remoteAddress.getHostAddress());
+            }
 
             // Body
             if (httpRequest instanceof HttpEntityEnclosingRequest) {

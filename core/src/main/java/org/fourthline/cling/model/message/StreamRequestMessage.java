@@ -22,10 +22,13 @@ import java.net.URL;
 
 /**
  * A TCP (HTTP) stream request message.
- *
+ * 
  * @author Christian Bauer
  */
 public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
+
+    private String localAddress;
+    private String remoteAddress;
 
     public StreamRequestMessage(StreamRequestMessage source) {
         super(source);
@@ -43,7 +46,6 @@ public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
         super(new UpnpRequest(method, url));
     }
 
-
     public StreamRequestMessage(UpnpRequest operation, String body) {
         super(operation, BodyType.STRING, body);
     }
@@ -55,7 +57,6 @@ public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
     public StreamRequestMessage(UpnpRequest.Method method, URL url, String body) {
         super(new UpnpRequest(method, url), BodyType.STRING, body);
     }
-
 
     public StreamRequestMessage(UpnpRequest operation, byte[] body) {
         super(operation, BodyType.BYTES, body);
@@ -72,5 +73,21 @@ public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
     public URI getUri() {
         return getOperation().getURI();
     }
-    
+
+    public void setLocalAddress(String localAddress) {
+        this.localAddress = localAddress;
+    }
+
+    public String getLocalAddress() {
+        return localAddress;
+    }
+
+    public void setRemoteAddress(String remoteAddress) {
+        this.remoteAddress = remoteAddress;
+    }
+
+    public String getRemoteAddress() {
+        return remoteAddress;
+    }
+
 }

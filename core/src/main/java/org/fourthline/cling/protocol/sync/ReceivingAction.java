@@ -17,6 +17,9 @@
 
 package org.fourthline.cling.protocol.sync;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -33,9 +36,6 @@ import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.fourthline.cling.transport.spi.UnsupportedDataException;
 import org.seamless.util.Exceptions;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Handles reception of control messages, invoking actions on local services.
@@ -72,6 +72,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         super(upnpService, inputMessage);
     }
 
+    @Override
     protected StreamResponseMessage executeSync() {
 
         ContentTypeHeader contentTypeHeader =
@@ -111,6 +112,9 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             IncomingActionRequestMessage requestMessage =
                     new IncomingActionRequestMessage(getInputMessage(), resource.getModel());
 
+            requestMessage.setLocalAddress(getInputMessage().getLocalAddress());
+            requestMessage.setRemoteAddress(getInputMessage().getRemoteAddress());
+            
             // Preserve message in a TL
             requestThreadLocal.set(requestMessage);
             extraResponseHeadersThreadLocal.set(new UpnpHeaders());

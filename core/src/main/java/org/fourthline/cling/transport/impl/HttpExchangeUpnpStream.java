@@ -17,7 +17,13 @@
 
 package org.fourthline.cling.transport.impl;
 
-import com.sun.net.httpserver.HttpExchange;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpHeaders;
@@ -25,15 +31,10 @@ import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.transport.spi.UpnpStream;
-import org.seamless.util.io.IO;
 import org.seamless.util.Exceptions;
+import org.seamless.util.io.IO;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.sun.net.httpserver.HttpExchange;
 
 /**
  * Default implementation based on the JDK 6.0 built-in HTTP Server.
@@ -47,7 +48,7 @@ public class HttpExchangeUpnpStream extends UpnpStream {
 
     private static Logger log = Logger.getLogger(UpnpStream.class.getName());
 
-    private HttpExchange httpExchange;
+    private final HttpExchange httpExchange;
 
     public HttpExchangeUpnpStream(ProtocolFactory protocolFactory, HttpExchange httpExchange) {
         super(protocolFactory);
@@ -58,6 +59,7 @@ public class HttpExchangeUpnpStream extends UpnpStream {
         return httpExchange;
     }
 
+    @Override
     public void run() {
 
         try {
@@ -84,6 +86,13 @@ public class HttpExchangeUpnpStream extends UpnpStream {
 
             // Headers
             requestMessage.setHeaders(new UpnpHeaders(getHttpExchange().getRequestHeaders()));
+            
+            if (getHttpExchange().getLocalAddress().getAddress() != null) {
+                requestMessage.setLocalAddress(getHttpExchange().getLocalAddress().getAddress().getHostAddress());
+            }
+            if (getHttpExchange().getRemoteAddress().getAddress() != null) {
+                requestMessage.setRemoteAddress(getHttpExchange().getRemoteAddress().getAddress().getHostAddress());
+            }
 
             // Body
             byte[] bodyBytes;
