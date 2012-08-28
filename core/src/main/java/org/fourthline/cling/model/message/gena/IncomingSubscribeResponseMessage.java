@@ -34,7 +34,7 @@ public class IncomingSubscribeResponseMessage extends StreamResponseMessage {
     /**
      * @return <code>true</code> if this message has an SID and TIMEOUT header value.
      */
-    public boolean isVaildHeaders() {
+    public boolean isValidHeaders() {
         return getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class) != null &&
                 getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class) != null;
     }

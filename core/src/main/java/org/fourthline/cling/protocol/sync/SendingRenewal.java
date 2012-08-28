@@ -80,6 +80,15 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
                         }
                     }
             );
+        } else if (!responseMessage.isValidHeaders()) {
+            log.severe("Subscription renewal failed, invalid or missing (SID, Timeout) response headers");
+            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                    new Runnable() {
+                        public void run() {
+                            subscription.end(CancelReason.RENEWAL_FAILED, responseMessage.getOperation());
+                        }
+                    }
+            );
         } else {
             log.fine("Subscription renewed, updating in registry, response was: " + response);
             subscription.setActualSubscriptionDurationSeconds(responseMessage.getSubscriptionDurationSeconds());
