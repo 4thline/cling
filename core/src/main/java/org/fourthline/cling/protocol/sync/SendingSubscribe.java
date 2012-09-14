@@ -110,7 +110,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
                             }
                         }
                 );
-            } else if (!responseMessage.isVaildHeaders()) {
+            } else if (!responseMessage.isValidHeaders()) {
                 log.severe("Subscription failed, invalid or missing (SID, Timeout) response headers");
                 getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
                         new Runnable() {

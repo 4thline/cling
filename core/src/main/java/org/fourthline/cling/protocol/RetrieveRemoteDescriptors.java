@@ -119,18 +119,23 @@ public class RetrieveRemoteDescriptors implements Runnable {
     	}
     	
     	StreamRequestMessage deviceDescRetrievalMsg;
+    	StreamResponseMessage deviceDescMsg;
 
     	try {
+    		
     		deviceDescRetrievalMsg =
                 new StreamRequestMessage(UpnpRequest.Method.GET, rd.getIdentity().getDescriptorURL());
+
+    		log.fine("Sending device descriptor retrieval message: " + deviceDescRetrievalMsg);
+            deviceDescMsg = getUpnpService().getRouter().send(deviceDescRetrievalMsg);
+            
     	} catch(IllegalArgumentException e) {
     		// UpnpRequest constructor can throw IllegalArgumentException on invalid URI
+    		// IllegalArgumentException can also be thrown by Appache HttpClient on blank URI in send()
             log.warning("Device descriptor retrieval failed: " + e.getMessage());
             return ;
     	}
 
-        log.fine("Sending device descriptor retrieval message: " + deviceDescRetrievalMsg);
-        StreamResponseMessage deviceDescMsg = getUpnpService().getRouter().send(deviceDescRetrievalMsg);
 
         if (deviceDescMsg == null) {
             log.warning("Device descriptor retrieval failed, no response: " + rd.getIdentity().getDescriptorURL());
@@ -262,7 +267,14 @@ public class RetrieveRemoteDescriptors implements Runnable {
     protected RemoteService describeService(RemoteService service)
             throws DescriptorBindingException, ValidationException {
 
-        URL descriptorURL = service.getDevice().normalizeURI(service.getDescriptorURI());
+    	URL descriptorURL;
+    	try {
+    		descriptorURL = service.getDevice().normalizeURI(service.getDescriptorURI());
+    	}  catch(IllegalArgumentException e) {
+    		log.warning("Could not normalize service descriptor URL: " + service.getDescriptorURI());
+    		return null;
+    	}
+    	
         StreamRequestMessage serviceDescRetrievalMsg = new StreamRequestMessage(UpnpRequest.Method.GET, descriptorURL);
 
         log.fine("Sending service descriptor retrieval message: " + serviceDescRetrievalMsg);

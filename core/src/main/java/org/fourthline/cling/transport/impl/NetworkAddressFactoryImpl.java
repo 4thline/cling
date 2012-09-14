@@ -130,8 +130,9 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         try {
             NetworkInterface iface = NetworkInterface.getByInetAddress(inetAddress);
             return iface != null ? iface.getHardwareAddress() : null;
-        } catch (SocketException ex) {
-            throw new RuntimeException(ex);
+        } catch (Throwable ex) {
+        	// seen on Win32: java.lang.Error: IP Helper Library GetIpAddrTable function failed
+        	return null;
         }
     }
 
@@ -219,6 +220,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             i++;
             prefix -= 8;
         }
+        if(i == ip.length) return true;
         final byte mask = (byte) ~((1 << 8 - prefix) - 1);
 
         return (ip[i] & mask) == (network[i] & mask);
@@ -280,7 +282,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         }
 
         if (iface.getName().toLowerCase().startsWith("vmnet") ||
-                iface.getDisplayName().toLowerCase().contains("vmnet")) {
+        		(iface.getDisplayName() != null &&  iface.getDisplayName().toLowerCase().contains("vmnet"))) {
             log.finer("Skipping network interface (VMWare): " + iface.getDisplayName());
             return false;
         }
@@ -374,6 +376,11 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         if (address.isLoopbackAddress()) {
             log.finer("Skipping loopback address: " + address);
             return false;
+        }
+        
+        if (address.isLinkLocalAddress()) {
+        	log.finer("Skipping link-local address: " + address);
+        	return false;
         }
 
         if (useAddresses.size() > 0 && !useAddresses.contains(address.getHostAddress())) {
