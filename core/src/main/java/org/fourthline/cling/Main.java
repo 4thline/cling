@@ -93,6 +93,7 @@ public class Main {
         UpnpService upnpService = new UpnpServiceImpl(listener);
 
         // Send a search message to all devices and services, they should respond soon
+        System.out.println("Sending SEARCH message to all devices...");
         upnpService.getControlPoint().search(new STAllHeader());
 
         // Let's wait 10 seconds for them to respond

@@ -20,11 +20,11 @@ package org.fourthline.cling.workbench.main;
 import org.fourthline.cling.ManagedUpnpService;
 import org.fourthline.cling.workbench.bridge.backend.Bridge;
 
+import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Alternative;
 import javax.enterprise.inject.Specializes;
 
 /**
- * Weld is buggy: https://issues.jboss.org/browse/WELD-904
  *
  * @author Christian Bauer
  */
@@ -35,18 +35,15 @@ public class WorkbenchUpnpService extends ManagedUpnpService {
     protected Bridge bridge;
 
     @Override
-    public void start(Start start) {
+    public void start(@Observes Start start) {
         super.start(start);
         bridge = new Bridge(this);
     }
 
-
     @Override
-    public void shutdown(Shutdown shutdown) {
+    public void shutdown(@Observes Shutdown shutdown) {
         if (bridge != null)
             bridge.stop(true);
         super.shutdown(shutdown);
     }
-
-
 }

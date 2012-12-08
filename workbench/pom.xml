@@ -103,6 +103,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.seamless</groupId>
+            <artifactId>seamless-cdi</artifactId>
+            <version>${seamless.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>${jetty.version}</version>

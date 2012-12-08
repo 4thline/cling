@@ -76,7 +76,9 @@
                             !sun.net.*,
                             !org.apache.*,
                             !javax.*,
-                            !org.hibernate.*
+                            !org.hibernate.*,
+                            !org.dbunit.*,
+                            !org.xmlpull.*
                         </Import-Package>
                         <Embed-Transitive>false</Embed-Transitive>
                         <Embed-Dependency>

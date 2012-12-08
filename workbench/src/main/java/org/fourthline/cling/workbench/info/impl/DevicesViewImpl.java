@@ -18,6 +18,7 @@
 package org.fourthline.cling.workbench.info.impl;
 
 import org.fourthline.cling.model.meta.Device;
+import org.fourthline.cling.workbench.info.DeviceView;
 import org.fourthline.cling.workbench.info.DevicesView;
 
 import javax.annotation.PostConstruct;

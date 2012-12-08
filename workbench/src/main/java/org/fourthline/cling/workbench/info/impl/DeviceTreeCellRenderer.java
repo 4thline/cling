@@ -25,6 +25,7 @@ import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.meta.StateVariable;
 import org.fourthline.cling.workbench.Workbench;
+import org.fourthline.cling.workbench.info.InfoItem;
 import org.seamless.swing.Application;
 
 import javax.swing.ImageIcon;

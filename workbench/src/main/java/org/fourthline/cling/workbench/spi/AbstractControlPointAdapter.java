@@ -29,7 +29,6 @@ import javax.enterprise.event.Observes;
 @ApplicationScoped
 public abstract class AbstractControlPointAdapter {
 
-
     public void onUseServiceRequest(@Observes UseService request) {
         for (ServiceType supportedServiceType : getSupportedServiceTypes()) {
             if (request.service.getServiceType().implementsVersion(supportedServiceType)) {

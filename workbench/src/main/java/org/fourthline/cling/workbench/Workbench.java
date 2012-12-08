@@ -16,11 +16,15 @@
  */
 package org.fourthline.cling.workbench;
 
-import org.jboss.weld.environment.se.Weld;
-import org.jboss.weld.environment.se.WeldContainer;
 import org.fourthline.cling.support.shared.Main;
 import org.fourthline.cling.support.shared.log.LogView;
 import org.fourthline.cling.workbench.main.impl.WorkbenchPresenter;
+import org.jboss.weld.bootstrap.api.Bootstrap;
+import org.jboss.weld.bootstrap.spi.Deployment;
+import org.jboss.weld.environment.se.Weld;
+import org.jboss.weld.environment.se.WeldContainer;
+import org.jboss.weld.resources.spi.ResourceLoader;
+import org.seamless.cdi.weld.SeamlessWeldSEDeployment;
 import org.seamless.swing.logging.LogMessage;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -34,7 +38,12 @@ import java.util.logging.Level;
 public class Workbench extends Main {
 
     public static final String APPNAME = "Cling Workbench";
-    public static final Weld weld = new Weld();
+    public static final Weld weld = new Weld() {
+        @Override
+        protected Deployment createDeployment(ResourceLoader resourceLoader, Bootstrap bootstrap) {
+            return new SeamlessWeldSEDeployment(resourceLoader, bootstrap);
+        }
+    };
     public static final WeldContainer weldContainer = weld.initialize();
 
     public static void main(final String[] args) throws Exception {

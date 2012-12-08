@@ -18,7 +18,6 @@
 package org.fourthline.cling.workbench.info;
 
 import org.fourthline.cling.model.meta.Device;
-import org.fourthline.cling.workbench.info.impl.DeviceView;
 import org.fourthline.cling.support.shared.View;
 
 /**

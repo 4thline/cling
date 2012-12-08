@@ -31,6 +31,7 @@ import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.meta.StateVariable;
 import org.fourthline.cling.model.meta.StateVariableAllowedValueRange;
 import org.fourthline.cling.model.types.DLNADoc;
+import org.fourthline.cling.workbench.info.InfoItem;
 import org.seamless.util.io.HexBin;
 
 import javax.swing.tree.DefaultMutableTreeNode;

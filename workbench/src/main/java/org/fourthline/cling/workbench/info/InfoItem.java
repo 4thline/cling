@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.workbench.info.impl;
+package org.fourthline.cling.workbench.info;
 
 /**
  * @author Christian Bauer
