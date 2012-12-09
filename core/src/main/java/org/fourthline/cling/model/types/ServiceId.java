@@ -19,6 +19,7 @@ package org.fourthline.cling.model.types;
 
 import org.fourthline.cling.model.Constants;
 
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -29,8 +30,10 @@ import java.util.regex.Matcher;
  */
 public class ServiceId {
 
+    final private static Logger log = Logger.getLogger(ServiceId.class.getName());
+
     public static final Pattern PATTERN =
-            Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_ID+ ")");
+        Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_ID + ")");
 
     private String namespace;
     private String id;
@@ -72,8 +75,14 @@ public class ServiceId {
             if (matcher.matches()) {
                 return new ServiceId(matcher.group(1), matcher.group(2));
             } else {
-                throw new InvalidValueException("Can't parse Service ID string (namespace/id): " + s);
+                // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
+                String tokens[] = s.split("[:]");
+                if (tokens.length == 4) {
+                    log.warning("UPnP specification violation, trying to read invalid Service ID: " + s);
+                    return new ServiceId(tokens[1], tokens[3]);
+                }
             }
+            throw new InvalidValueException("Can't parse Service ID string (namespace/id): " + s);
         }
         return serviceId;
     }

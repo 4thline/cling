@@ -59,7 +59,14 @@ public class IncompatibilityTest {
         ServiceId serviceId = ServiceId.valueOf("urn:upnp-org:serviceId:urn:schemas-upnp-org:service:ConnectionManager");
         assertEquals(serviceId.getNamespace(), "upnp-org");
         assertEquals(serviceId.getId(), "urn:schemas-upnp-org:service:ConnectionManager");
+    }
 
+    // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
+    @Test
+    public void validatePSAudioBridgeServiceId() {
+        ServiceId serviceId = ServiceId.valueOf("urn:foo:ThisSegmentShouldBeNamed'service':baz");
+        assertEquals(serviceId.getNamespace(), "foo");
+        assertEquals(serviceId.getId(), "baz");
     }
 
     // TODO: UPNP VIOLATION: Some devices send spaces in URNs
