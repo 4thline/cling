@@ -19,6 +19,7 @@ package org.fourthline.cling.transport.impl.apache;
 
 import org.apache.http.ConnectionClosedException;
 import org.apache.http.ConnectionReuseStrategy;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -44,6 +45,7 @@ import org.apache.http.protocol.HttpService;
 import org.apache.http.protocol.ResponseConnControl;
 import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
+import org.apache.http.util.EntityUtils;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpHeaders;
@@ -53,11 +55,9 @@ import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.transport.spi.UnsupportedDataException;
 import org.fourthline.cling.transport.spi.UpnpStream;
-import org.seamless.util.io.IO;
 import org.seamless.util.Exceptions;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.util.logging.Level;
@@ -184,31 +184,19 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
             // Body
             if (httpRequest instanceof HttpEntityEnclosingRequest) {
                 log.fine("Request contains entity body, setting on UPnP message");
+                
                 HttpEntityEnclosingRequest entityEnclosingHttpRequest = (HttpEntityEnclosingRequest) httpRequest;
+                
+                HttpEntity entity = entityEnclosingHttpRequest.getEntity();
 
-                byte[] bodyBytes;
-                InputStream is = null;
-                try {
-                    is = entityEnclosingHttpRequest.getEntity().getContent();
-                    bodyBytes = IO.readBytes(is);
-                } finally {
-                    if (is != null)
-                        is.close();
-                }
-
-                if (bodyBytes.length > 0 && requestMessage.isContentTypeMissingOrText()) {
-
-                    log.fine("Request contains textual entity body, converting then setting string on message");
-                    requestMessage.setBodyCharacters(bodyBytes);
-
-                } else if (bodyBytes.length > 0) {
-
-                    log.fine("Request contains binary entity body, setting bytes on message");
-                    requestMessage.setBody(UpnpMessage.BodyType.BYTES, bodyBytes);
-
+                if (requestMessage.isContentTypeMissingOrText()) {
+                    log.fine("HTTP request message contains text entity");
+                    requestMessage.setBody(UpnpMessage.BodyType.STRING, EntityUtils.toString(entity));
                 } else {
-                    log.fine("Request did not contain entity body");
+                    log.fine("HTTP request message contains binary entity");
+                    requestMessage.setBody(UpnpMessage.BodyType.BYTES, EntityUtils.toByteArray(entity));
                 }
+                
 
             } else {
                 log.fine("Request did not contain entity body");
