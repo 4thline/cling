@@ -43,7 +43,7 @@
                 <serviceId>urn:upnp-org:serviceId:MY-SERVICE-123</serviceId>
                 <controlURL>service/upnp-org/MY-SERVICE-123/control</controlURL>
                 <eventSubURL>service/upnp-org/MY-SERVICE-123/events</eventSubURL>
-                <SCPDURL>service/upnp-org/MY-SERVICE-123/desc.xml</SCPDURL>
+                <SCPDURL>service/upnp-org/MY-SERVICE-123/desc</SCPDURL>
             </service>
         </serviceList>
         <deviceList>
@@ -75,7 +75,7 @@
                         <serviceId>urn:upnp-org:serviceId:MY-SERVICE-456</serviceId>
                         <controlURL>service/upnp-org/MY-SERVICE-456/control</controlURL>
                         <eventSubURL>service/upnp-org/MY-SERVICE-456/events</eventSubURL>
-                        <SCPDURL>service/upnp-org/MY-SERVICE-456/desc.xml</SCPDURL>
+                        <SCPDURL>service/upnp-org/MY-SERVICE-456/desc</SCPDURL>
                     </service>
                 </serviceList>
                 <deviceList>
@@ -98,7 +98,7 @@
                                 <serviceId>urn:upnp-org:serviceId:MY-SERVICE-789</serviceId>
                                 <controlURL>service/upnp-org/MY-SERVICE-789/control</controlURL>
                                 <eventSubURL>service/upnp-org/MY-SERVICE-789/events</eventSubURL>
-                                <SCPDURL>service/upnp-org/MY-SERVICE-789/desc.xml</SCPDURL>
+                                <SCPDURL>service/upnp-org/MY-SERVICE-789/desc</SCPDURL>
                             </service>
                         </serviceList>
                     </device>

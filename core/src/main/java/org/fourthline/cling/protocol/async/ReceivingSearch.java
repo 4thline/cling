@@ -159,8 +159,10 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         log.fine("Responding to 'all' search with advertisement messages for all local devices");
         for (LocalDevice localDevice : getUpnpService().getRegistry().getLocalDevices()) {
 
-            // We are re-using the regular notification messages here but override the NT with the ST header
+        	if(!getUpnpService().getRegistry().isLocalDeviceAdvertised(localDevice))
+        		continue;
 
+            // We are re-using the regular notification messages here but override the NT with the ST header
             log.finer("Sending root device messages: " + localDevice);
             List<OutgoingSearchResponse> rootDeviceMsgs =
                     createDeviceMessages(localDevice, activeStreamServer);
@@ -246,6 +248,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         log.fine("Responding to root device search with advertisement messages for all local root devices");
         for (LocalDevice device : getUpnpService().getRegistry().getLocalDevices()) {
 
+            if(!getUpnpService().getRegistry().isLocalDeviceAdvertised(device))
+           		continue;
+
             getUpnpService().getRouter().send(
                     new OutgoingSearchResponseRootDeviceUDN(
                             getInputMessage(),
@@ -259,6 +264,10 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
     protected void sendSearchResponseUDN(UDN udn, NetworkAddress activeStreamServer) {
         Device device = getUpnpService().getRegistry().getDevice(udn, false);
         if (device != null && device instanceof LocalDevice) {
+
+            if(!getUpnpService().getRegistry().isLocalDeviceAdvertised((LocalDevice)device))
+           		return;
+
             log.fine("Responding to UDN device search: " + udn);
             getUpnpService().getRouter().send(
                     new OutgoingSearchResponseUDN(
@@ -275,6 +284,10 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(deviceType);
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
+
+                if(!getUpnpService().getRegistry().isLocalDeviceAdvertised((LocalDevice)device))
+               		continue;
+
                 log.finer("Sending matching device type search result for: " + device);
                 getUpnpService().getRouter().send(
                         new OutgoingSearchResponseDeviceType(
@@ -292,6 +305,10 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(serviceType);
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
+
+                if(!getUpnpService().getRegistry().isLocalDeviceAdvertised((LocalDevice)device))
+               		continue;
+
                 log.finer("Sending matching service type search result: " + device);
                 getUpnpService().getRouter().send(
                         new OutgoingSearchResponseServiceType(

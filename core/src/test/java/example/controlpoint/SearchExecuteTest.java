@@ -25,6 +25,7 @@ import org.testng.annotations.Test;
 
 import java.util.UUID;
 
+import static org.testng.Assert.*;
 
 /**
  * Searching the network
@@ -167,7 +168,7 @@ public class SearchExecuteTest {
     @Test
     public void searchDefaults() {
         SendingSearch search = new SendingSearch(new MockUpnpService());
-        Assert.assertEquals(search.getSearchTarget().getString(), new STAllHeader().getString());
+        assertEquals(search.getSearchTarget().getString(), new STAllHeader().getString());
     }
 
     @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
@@ -176,16 +177,16 @@ public class SearchExecuteTest {
     }
 
     protected void assertMessages(MockUpnpService upnpService, UpnpHeader header) throws Exception {
-        Assert.assertEquals(upnpService.getOutgoingDatagramMessages().size(), 2);
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 10);
         for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
             assertSearchMessage(msg, header);
         }
     }
 
     protected void assertSearchMessage(UpnpMessage msg, UpnpHeader searchTarget) {
-        Assert.assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAN).getString(), new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()).getString());
-        Assert.assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MX).getString(), new MXHeader().getString());
-        Assert.assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(), searchTarget.getString());
-        Assert.assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString(), new HostHeader().getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MAN).getString(), new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()).getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.MX).getString(), new MXHeader().getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(), searchTarget.getString());
+        assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.HOST).getString(), new HostHeader().getString());
     }
 }

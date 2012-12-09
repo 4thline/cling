@@ -47,7 +47,7 @@ public class SampleServiceOne extends SampleService {
     }
 
     public static URI getThisDescriptorURI() {
-        return URI.create("service/upnp-org/MY-SERVICE-123/desc.xml");
+        return URI.create("service/upnp-org/MY-SERVICE-123/desc");
     }
 
     public static URI getThisControlURI() {

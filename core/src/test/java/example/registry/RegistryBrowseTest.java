@@ -21,7 +21,7 @@ import org.testng.annotations.Test;
 import java.net.URI;
 import java.util.Collection;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 /**
  * Browsing the Registry
@@ -113,7 +113,7 @@ public class RegistryBrowseTest {
                         SampleDeviceRoot.getDeviceDescriptorURI()
         );
 
-        Assert.assertNotNull(resource);
+        assertNotNull(resource);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -151,23 +151,21 @@ public class RegistryBrowseTest {
 
         upnpService.getRegistry().addDevice(rd);
 
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         Resource resource = upnpService.getRegistry().getResource(
-                URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb.xml")
+                URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb")
         );
-        assert resource != null;
+        assertNotNull(resource);
 
         upnpService.getRegistry().removeDevice(rd);
 
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
 
         resource = upnpService.getRegistry().getResource(
-                URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb.xml")
+                URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb")
         );
-        assert resource == null;
-
-
+        assertNull(resource);
     }
 
 /*

@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 /**
  * Sending search request messages using the supplied search type.
  * <p>
- * Sends all search messages twice, waits 0 to 100
+ * Sends all search messages 10 times, waits 0 to 100
  * milliseconds between each sending procedure.
  * </p>
  *
@@ -90,8 +90,8 @@ public class SendingSearch extends SendingAsync {
 
                 getUpnpService().getRouter().send(msg);
 
-                // UDA 1.0 is silent about this but UDA 1.1 recomments "a few hundred milliseconds"
-                log.finer("Sleeping "+ getBulkIntervalMilliseconds()+" milliseconds");
+                // UDA 1.0 is silent about this but UDA 1.1 recommends "a few hundred milliseconds"
+                log.finer("Sleeping " + getBulkIntervalMilliseconds() + " milliseconds");
                 Thread.sleep(getBulkIntervalMilliseconds());
 
             } catch (InterruptedException ex) {
@@ -101,7 +101,7 @@ public class SendingSearch extends SendingAsync {
     }
 
     public int getBulkRepeat() {
-        return 2; // UDA 1.0 says "repeat more than once", so we do it twice
+        return 10; // UDA 1.0 says "repeat more than once"
     }
 
     public int getBulkIntervalMilliseconds() {

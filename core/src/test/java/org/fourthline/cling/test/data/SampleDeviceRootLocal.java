@@ -42,7 +42,7 @@ public class SampleDeviceRootLocal extends SampleDeviceRoot {
 
     public static void assertLocalResourcesMatch(Resource[] resources){
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/desc.xml")).getClass(),
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/desc")).getClass(),
                 DeviceDescriptorResource.class
         );
         assertEquals(
@@ -54,7 +54,7 @@ public class SampleDeviceRootLocal extends SampleDeviceRoot {
                 IconResource.class
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/desc.xml")).getClass(),
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/desc")).getClass(),
                 ServiceDescriptorResource.class
         );
         assertEquals(
@@ -70,7 +70,7 @@ public class SampleDeviceRootLocal extends SampleDeviceRoot {
                 IconResource.class
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/desc.xml")).getClass(),
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/desc")).getClass(),
                 ServiceDescriptorResource.class
         );
         assertEquals(
@@ -82,7 +82,7 @@ public class SampleDeviceRootLocal extends SampleDeviceRoot {
                 ServiceEventSubscriptionResource.class
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/desc.xml")).getClass(),
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/desc")).getClass(),
                 ServiceDescriptorResource.class
         );
         assertEquals(

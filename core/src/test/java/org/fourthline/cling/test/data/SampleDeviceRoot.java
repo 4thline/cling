@@ -97,7 +97,7 @@ public class SampleDeviceRoot extends SampleDevice {
     }
 
     public static URI getDeviceDescriptorURI() {
-        return URI.create("/dev/MY-DEVICE-123/desc.xml");
+        return URI.create("/dev/MY-DEVICE-123/desc");
     }
 
     public static URL getDeviceDescriptorURL() {
@@ -115,16 +115,16 @@ public class SampleDeviceRoot extends SampleDevice {
 
     public static void assertLocalResourcesMatch(Resource[] resources){
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb.xml")).getClass(),
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-123/svc/upnp-org/MY-SERVICE-123/event/cb")).getClass(),
                 ServiceEventCallbackResource.class
         );
 
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event/cb.xml")).getClass(),
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-456/svc/upnp-org/MY-SERVICE-456/event/cb")).getClass(),
                 ServiceEventCallbackResource.class
         );
         assertEquals(
-                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event/cb.xml")).getClass(),
+                getLocalResource(resources, URI.create("/dev/MY-DEVICE-789/svc/upnp-org/MY-SERVICE-789/event/cb")).getClass(),
                 ServiceEventCallbackResource.class
         );
     }

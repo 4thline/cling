@@ -91,7 +91,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         );
         log.fine("Adding hydrated remote device to registry with "
                          + item.getExpirationDetails().getMaxAgeSeconds() + " seconds expiration: " + device);
-        deviceItems.add(item);
+        getDeviceItems().add(item);
 
         if (log.isLoggable(Level.FINEST)) {
             StringBuilder sb = new StringBuilder();
@@ -145,8 +145,8 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             );
 
             log.fine("Updating expiration of: " + registeredRemoteDevice);
-            deviceItems.remove(item);
-            deviceItems.add(item);
+            getDeviceItems().remove(item);
+            getDeviceItems().add(item);
 
             log.fine("Remote device updated, calling listeners: " + registeredRemoteDevice);
             for (final RegistryListener listener : registry.getListeners()) {
@@ -189,7 +189,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
 
             // Active subscriptions
-            Iterator<RegistryItem<String, RemoteGENASubscription>> it = subscriptionItems.iterator();
+            Iterator<RegistryItem<String, RemoteGENASubscription>> it = getSubscriptionItems().iterator();
             while (it.hasNext()) {
                 final RegistryItem<String, RemoteGENASubscription> outgoingSubscription = it.next();
 
@@ -225,7 +225,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
 
             // Finally, remove the device from the registry
-            deviceItems.remove(new RegistryItem(registeredDevice.getIdentity().getUdn()));
+            getDeviceItems().remove(new RegistryItem(registeredDevice.getIdentity().getUdn()));
 
             return true;
         }
@@ -252,11 +252,11 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
     void maintain() {
 
-        if (deviceItems.isEmpty()) return;
+        if (getDeviceItems().isEmpty()) return;
 
         // Remove expired remote devices
         Map<UDN, RemoteDevice> expiredRemoteDevices = new HashMap();
-        for (RegistryItem<UDN, RemoteDevice> remoteItem : deviceItems) {
+        for (RegistryItem<UDN, RemoteDevice> remoteItem : getDeviceItems()) {
             if (log.isLoggable(Level.FINEST))
                 log.finest("Device '" + remoteItem.getItem() + "' expires in seconds: "
                                    + remoteItem.getExpirationDetails().getSecondsUntilExpiration());
@@ -272,7 +272,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
         // Renew outgoing subscriptions
         Set<RemoteGENASubscription> expiredOutgoingSubscriptions = new HashSet();
-        for (RegistryItem<String, RemoteGENASubscription> item : subscriptionItems) {
+        for (RegistryItem<String, RemoteGENASubscription> item : getSubscriptionItems()) {
             if (item.getExpirationDetails().hasExpired(true)) {
                 expiredOutgoingSubscriptions.add(item.getItem());
             }
@@ -287,7 +287,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
     public void resume() {
         log.fine("Updating remote device expiration timestamps on resume");
         List<RemoteDeviceIdentity> toUpdate = new ArrayList<RemoteDeviceIdentity>();
-        for (RegistryItem<UDN, RemoteDevice> remoteItem : deviceItems) {
+        for (RegistryItem<UDN, RemoteDevice> remoteItem : getDeviceItems()) {
             toUpdate.add(remoteItem.getItem().getIdentity());
         }
         for (RemoteDeviceIdentity identity : toUpdate) {
@@ -298,7 +298,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
     void shutdown() {
         log.fine("Cancelling all outgoing subscriptions to remote devices during shutdown");
         List<RemoteGENASubscription> remoteSubscriptions = new ArrayList();
-        for (RegistryItem<String, RemoteGENASubscription> item : subscriptionItems) {
+        for (RegistryItem<String, RemoteGENASubscription> item : getSubscriptionItems()) {
             remoteSubscriptions.add(item.getItem());
         }
         for (RemoteGENASubscription remoteSubscription : remoteSubscriptions) {

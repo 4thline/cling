@@ -51,8 +51,7 @@ import org.testng.annotations.Test;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import static org.testng.Assert.assertEquals;
-
+import static org.testng.Assert.*;
 
 public class SearchReceivedTest {
 
@@ -101,11 +100,12 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assert upnpService.getOutgoingDatagramMessages().size() == 1;
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 1);
+
         assertSearchResponseBasics(
-                upnpService.getConfiguration().getNamespace(),
-                upnpService.getOutgoingDatagramMessages().get(0),
-                localDevice
+            upnpService.getConfiguration().getNamespace(),
+            upnpService.getOutgoingDatagramMessages().get(0),
+            localDevice
         );
         assertEquals(
                 upnpService.getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.ST).getString(),
@@ -134,8 +134,8 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 1);
 
-        assert upnpService.getOutgoingDatagramMessages().size() == 1;
         assertSearchResponseBasics(
                 upnpService.getConfiguration().getNamespace(),
                 upnpService.getOutgoingDatagramMessages().get(0),
@@ -168,7 +168,8 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assert upnpService.getOutgoingDatagramMessages().size() == 1;
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 1);
+
         assertSearchResponseBasics(
                 upnpService.getConfiguration().getNamespace(),
                 upnpService.getOutgoingDatagramMessages().get(0),
@@ -202,7 +203,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assert upnpService.getOutgoingDatagramMessages().size() == 1;
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 1);
 
         assertSearchResponseBasics(
                 upnpService.getConfiguration().getNamespace(),
@@ -232,7 +233,7 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assert upnpService.getOutgoingDatagramMessages().size() == 0;
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 0);
     }
 
     @Test
@@ -248,7 +249,37 @@ public class SearchReceivedTest {
         ReceivingSearch prot = createProtocol(upnpService, searchMsg);
         prot.run();
 
-        assert upnpService.getOutgoingDatagramMessages().size() == 0;
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 0);
+    }
+
+    @Test
+    public void receivedNonAdvertised() throws Exception {
+
+        MockUpnpService upnpService = new MockUpnpService();
+
+        LocalDevice localDevice = SampleData.createLocalDevice();
+
+        // Disable advertising
+        upnpService.getRegistry().addDevice(localDevice, false);
+
+        IncomingSearchRequest searchMsg = createRequestMessage();
+        searchMsg.getHeaders().add(UpnpHeader.Type.MAN, new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()));
+        searchMsg.getHeaders().add(UpnpHeader.Type.MX, new MXHeader(1));
+        searchMsg.getHeaders().add(UpnpHeader.Type.ST, new STAllHeader());
+        searchMsg.getHeaders().add(UpnpHeader.Type.HOST, new HostHeader());
+
+        ReceivingSearch prot = createProtocol(upnpService, searchMsg);
+        prot.run();
+
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 0);
+
+        // Enable advertising
+        upnpService.getRegistry().addDevice(localDevice, true);
+
+        prot = createProtocol(upnpService, searchMsg);
+        prot.run();
+
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 10);
     }
 
     protected ReceivingSearch createProtocol(UpnpService upnpService, IncomingSearchRequest searchMsg) throws Exception {
@@ -265,7 +296,7 @@ public class SearchReceivedTest {
                 msg.getHeaders().getFirstHeader(UpnpHeader.Type.LOCATION).getString(),
                 URIUtil.createAbsoluteURL(SampleData.getLocalBaseURL(), namespace.getDescriptorPath(rootDevice)).toString()
         );
-        assert msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getString() != null;
+        assertNotNull(msg.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER).getString());
     }
 
     protected IncomingSearchRequest createRequestMessage() throws UnknownHostException {

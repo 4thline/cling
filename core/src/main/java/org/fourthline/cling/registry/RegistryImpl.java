@@ -159,6 +159,14 @@ public class RegistryImpl implements Registry {
         localItems.add(localDevice);
     }
 
+    synchronized public void addDevice(LocalDevice localDevice, boolean advertised) {
+        localItems.add(localDevice, advertised);
+    }
+
+    synchronized public boolean isLocalDeviceAdvertised(LocalDevice localDevice) {
+        return localItems.isAdvertisedDevice(localDevice);
+    }
+
     synchronized public void addDevice(RemoteDevice remoteDevice) {
         remoteItems.add(remoteDevice);
     }

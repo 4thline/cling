@@ -41,7 +41,7 @@ import java.util.Collection;
  * <p>
  * A running UPnP stack has one <code>Registry</code>. Any discovered device is added
  * to this registry, as well as any exposed local device. The registry then maintains
- * these devices continously (see {@link RegistryMaintainer}) and when needed refreshes
+ * these devices continuously (see {@link RegistryMaintainer}) and when needed refreshes
  * their announcements on the network or removes them when they have expired. The registry
  * also keeps track of GENA event subscriptions.
  * </p>
@@ -193,6 +193,25 @@ public interface Registry {
      * @throws RegistrationException If a conflict with an already registered device was detected.
      */
     public void addDevice(LocalDevice localDevice) throws RegistrationException;
+
+    /**
+     * Call this method to add your local device metadata.
+     * <p>
+     * Optionally, disable advertisement of this device. Then no alive notifications will be
+     * announced for this device and it will not appear in search responses. To re-enable
+     * advertisement, add the device again with the switch set to <code>true</code>.
+     * </p>
+     *
+     * @param localDevice The device to add and maintain.
+     * @param advertised Set to <code>false</code> to disable alive notification and search responses
+     * @throws RegistrationException If a conflict with an already registered device was detected.
+     */
+    public void addDevice(LocalDevice localDevice, boolean advertised) throws RegistrationException;
+
+    /**
+     * @return <boolean>true</boolean> if the given device is not advertised with alive messages and search responses
+     */
+    public boolean isLocalDeviceAdvertised(LocalDevice localDevice);
 
     /**
      * Called internally by the UPnP discovery protocol.
@@ -390,7 +409,7 @@ public interface Registry {
     public void removeRemoteSubscription(RemoteGENASubscription subscription);
 
     /**
-     * Called internally by the UPnP stack, during GENA protocol excution.
+     * Called internally by the UPnP stack, during GENA protocol execution.
      * <p>
      * When subscribing with a remote host, the remote host might send the
      * initial event message faster than the response for the subscription

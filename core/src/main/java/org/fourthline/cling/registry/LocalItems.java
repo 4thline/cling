@@ -41,13 +41,32 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     private static Logger log = Logger.getLogger(Registry.class.getName());
 
+    protected Set<LocalDevice> nonAdvertisedDevices = new HashSet<LocalDevice>();
+
     LocalItems(RegistryImpl registry) {
         super(registry);
     }
 
+    void setAdvertisedDevice(LocalDevice localDevice, boolean advertised) {
+        log.fine("Enabling advertising of " + localDevice + " => " + advertised);
+        if (!advertised)
+            nonAdvertisedDevices.add(localDevice);
+        else
+            nonAdvertisedDevices.remove(localDevice);
+    }
+
+    boolean isAdvertisedDevice(LocalDevice localDevice) {
+        return !nonAdvertisedDevices.contains(localDevice);
+    }
+
     void add(LocalDevice localDevice) throws RegistrationException {
+        add(localDevice, true);
+    }
+
+    void add(LocalDevice localDevice, boolean advertised) throws RegistrationException {
 
         if (registry.getDevice(localDevice.getIdentity().getUdn(), false) != null) {
+            setAdvertisedDevice(localDevice, advertised);
             log.fine("Ignoring addition, device already registered: " + localDevice);
             return;
         }
@@ -73,10 +92,12 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
                 localDevice.getIdentity().getMaxAgeSeconds()
         );
 
-        deviceItems.add(localItem);
+        getDeviceItems().add(localItem);
+        setAdvertisedDevice(localDevice, advertised);
         log.fine("Registered local device: " + localItem);
 
-        advertiseAlive(localDevice);
+        if (isAdvertisedDevice(localDevice))
+             advertiseAlive(localDevice);
 
         for (RegistryListener listener : registry.getListeners()) {
             listener.localDeviceAdded(registry, localDevice);
@@ -86,7 +107,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     Collection<LocalDevice> get() {
         Set<LocalDevice> c = new HashSet();
-        for (RegistryItem<UDN, LocalDevice> item : deviceItems) {
+        for (RegistryItem<UDN, LocalDevice> item : getDeviceItems()) {
             c.add(item.getItem());
         }
         return Collections.unmodifiableCollection(c);
@@ -103,7 +124,8 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
             log.fine("Removing local device from registry: " + localDevice);
 
-            deviceItems.remove(new RegistryItem(localDevice.getIdentity().getUdn()));
+            setAdvertisedDevice(localDevice, false);
+            getDeviceItems().remove(new RegistryItem(localDevice.getIdentity().getUdn()));
 
             for (Resource deviceResource : getResources(localDevice)) {
                 if (registry.removeResource(deviceResource)) {
@@ -112,7 +134,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
             }
 
             // Active subscriptions
-            Iterator<RegistryItem<String, LocalGENASubscription>> it = subscriptionItems.iterator();
+            Iterator<RegistryItem<String, LocalGENASubscription>> it = getSubscriptionItems().iterator();
             while (it.hasNext()) {
                 final RegistryItem<String, LocalGENASubscription> incomingSubscription = it.next();
 
@@ -134,7 +156,8 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
                 }
             }
 
-            advertiseByebye(localDevice, !shuttingDown);
+            if (isAdvertisedDevice(localDevice))
+         		advertiseByebye(localDevice, !shuttingDown);
 
             if (!shuttingDown) {
                 for (final RegistryListener listener : registry.getListeners()) {
@@ -169,12 +192,12 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     void maintain() {
 
-    	if(deviceItems.isEmpty()) return ;
+    	if(getDeviceItems().isEmpty()) return ;
 
         // Refresh expired local devices
         Set<RegistryItem<UDN, LocalDevice>> expiredLocalItems = new HashSet();
-        for (RegistryItem<UDN, LocalDevice> localItem : deviceItems) {
-            if (localItem.getExpirationDetails().hasExpired(true)) {
+        for (RegistryItem<UDN, LocalDevice> localItem : getDeviceItems()) {
+            if (isAdvertisedDevice(localItem.getItem()) && localItem.getExpirationDetails().hasExpired(true)) {
                 log.finer("Local item has expired: " + localItem);
                 expiredLocalItems.add(localItem);
             }
@@ -187,7 +210,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
         // Expire incoming subscriptions
         Set<RegistryItem<String, LocalGENASubscription>> expiredIncomingSubscriptions = new HashSet();
-        for (RegistryItem<String, LocalGENASubscription> item : subscriptionItems) {
+        for (RegistryItem<String, LocalGENASubscription> item : getSubscriptionItems()) {
             if (item.getExpirationDetails().hasExpired(false)) {
                 expiredIncomingSubscriptions.add(item);
             }
@@ -202,7 +225,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     void shutdown() {
         log.fine("Clearing all registered subscriptions to local devices during shutdown");
-        subscriptionItems.clear();
+        getSubscriptionItems().clear();
 
         log.fine("Removing all local devices from registry during shutdown");
         removeAll(true);

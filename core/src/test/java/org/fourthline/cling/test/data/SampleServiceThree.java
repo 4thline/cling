@@ -34,7 +34,7 @@ import java.net.URL;
 public class SampleServiceThree extends SampleService {
 
     public static URI getThisDescriptorURI() {
-        return URI.create("service/upnp-org/MY-SERVICE-789/desc.xml");
+        return URI.create("service/upnp-org/MY-SERVICE-789/desc");
     }
 
     public static URL getDescriptorURL() {
