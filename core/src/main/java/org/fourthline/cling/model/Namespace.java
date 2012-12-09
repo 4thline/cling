@@ -65,8 +65,8 @@ public class Namespace {
     public static final String SERVICE = "/svc";
     public static final String CONTROL = "/action";
     public static final String EVENTS = "/event";
-    public static final String DESCRIPTOR_FILE = "/desc.xml";
-    public static final String CALLBACK_FILE = "/cb.xml";
+    public static final String DESCRIPTOR_FILE = "/desc";
+    public static final String CALLBACK_FILE = "/cb";
 
     final protected URI basePath;
 

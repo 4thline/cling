@@ -44,6 +44,12 @@
         </packages>
     </test>
 
+    <test name="Protocol">
+        <packages>
+            <package name="org.fourthline.cling.test.protocol"/>
+        </packages>
+    </test>
+
     <test name="Examples">
         <packages>
             <package name="example.binarylight"/>

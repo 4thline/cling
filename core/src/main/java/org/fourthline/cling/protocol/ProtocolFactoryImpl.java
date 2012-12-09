@@ -18,6 +18,7 @@
 package org.fourthline.cling.protocol;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.model.Namespace;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
 import org.fourthline.cling.model.gena.RemoteGENASubscription;
@@ -50,6 +51,7 @@ import org.fourthline.cling.protocol.sync.SendingUnsubscribe;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -157,6 +159,23 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
 
             if (message.getOperation().getMethod().equals(UpnpRequest.Method.NOTIFY))
                 return new ReceivingEvent(getUpnpService(), message);
+
+        } else {
+
+            // TODO: UPNP VIOLATION: Onkyo devices send event messages with trailing garbage characters
+        	// dev/1234/svc/upnp-org/MyService/event/callback192%2e168%2e10%2e38
+            if (message.getUri().getPath().contains(Namespace.EVENTS + Namespace.CALLBACK_FILE)) {
+                log.warning("Fixing trailing garbage in event message path: " + message.getUri().getPath());
+                String invalid = message.getUri().toString();
+                message.setUri(
+                    URI.create(invalid.substring(
+                        0, invalid.indexOf(Namespace.CALLBACK_FILE) + Namespace.CALLBACK_FILE.length()
+                    ))
+                );
+                if (getUpnpService().getConfiguration().getNamespace().isEventCallbackPath(message.getUri())
+                    && message.getOperation().getMethod().equals(UpnpRequest.Method.NOTIFY))
+                    return new ReceivingEvent(getUpnpService(), message);
+            }
 
         }
 
