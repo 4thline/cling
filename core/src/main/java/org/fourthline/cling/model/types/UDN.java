@@ -71,16 +71,23 @@ public class UDN {
     }
 
     /**
-     * Generates a global unique identifer that is the same every time this method is invoked on the same machine.
+     * Generates a global unique identifier that is the same every time this method is invoked on the same machine.
      * <p>
      * This method discovers various pieces of information about the local system such
      * as hostname, MAC address, OS name and version. It then combines this information with the
-     * given salt to generate a globally unique identifer. In other words, every time you
-     * call this method with the same salt on the same machine, you get the same identifer.
+     * given salt to generate a globally unique identifier. In other words, every time you
+     * call this method with the same salt on the same machine, you get the same identifier.
      * If you use the same salt on a different machine, a different identifier will be generated.
      * </p>
      * <p>
-     * Control points can remember your device's identifer, it will be the same every time
+     * Note for Android users: This method does not generate unique identifiers on Android devices with
+     * the same OS name and version, because the hostname is always "localhost". Instead provide a unique
+     * salt on each device, for example, a <code>UUID.randomUUID()</code>. When your application is first
+     * started, generate all UUIDs needed for your UPnP devices and store them in your Android
+     * preferences. Then, use the stored UUID to seed this function every time your application starts.
+     * </p>
+     * <p>
+     * Control points can remember your device's identifier, it will be the same every time
      * your device is powered up.
      * </p>
      *
@@ -99,7 +106,7 @@ public class UDN {
                 systemSalt.append(new String(ModelUtil.getFirstNetworkInterfaceHardwareAddress()));
             } catch (Throwable ex1) {
                 // Ignore, we did everything we can
-            	// catch Throwable so we catch  java.lang.NoSuchMethodError on Android because NetworkInterface.isLoopback() is'nt implemented 
+            	// catch Throwable so we catch  java.lang.NoSuchMethodError on Android because NetworkInterface.isLoopback() is'nt implemented
             }
 
         }
