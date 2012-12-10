@@ -7,7 +7,7 @@ import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.profile.ControlPointInfo;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.UDAServiceId;
 import org.fourthline.cling.protocol.RetrieveRemoteDescriptors;
 import org.fourthline.cling.registry.DefaultRegistryListener;
@@ -85,7 +85,7 @@ public class RegistryListenerTest {
                     String deviceDescriptorXML =
                             getConfiguration().getDeviceDescriptorBinderUDA10().generate(
                                     hydratedDevice,
-                                    new ControlPointInfo(),
+                                    new ClientInfo(),
                                     getConfiguration().getNamespace()
                             );
                     String serviceOneXML =
@@ -128,7 +128,7 @@ public class RegistryListenerTest {
                     String deviceDescriptorXML =
                             getConfiguration().getDeviceDescriptorBinderUDA10().generate(
                                     hydratedDevice,
-                                    new ControlPointInfo(),
+                                    new ClientInfo(),
                                     getConfiguration().getNamespace()
                             );
                     return new StreamResponseMessage[] {
@@ -210,7 +210,7 @@ public class RegistryListenerTest {
                     String deviceDescriptorXML =
                             getConfiguration().getDeviceDescriptorBinderUDA10().generate(
                                     hydratedDevice,
-                                    new ControlPointInfo(),
+                                    new ClientInfo(),
                                     getConfiguration().getNamespace()
                             );
                     String serviceOneXML =

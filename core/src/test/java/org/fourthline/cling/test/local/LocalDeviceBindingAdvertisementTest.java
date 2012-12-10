@@ -36,7 +36,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.profile.ControlPointInfo;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.NotificationSubtype;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.test.data.SampleData;
@@ -44,6 +44,7 @@ import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class LocalDeviceBindingAdvertisementTest {
 
@@ -58,7 +59,7 @@ public class LocalDeviceBindingAdvertisementTest {
 
         Thread.sleep(2000);
 
-        assert upnpService.getOutgoingDatagramMessages().size() == 12;
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 12);
         for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
             assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, binaryLight, 1800);
         }
@@ -68,7 +69,7 @@ public class LocalDeviceBindingAdvertisementTest {
         DeviceDescriptorBinder dvcBinder = upnpService.getConfiguration().getDeviceDescriptorBinderUDA10();
         String descriptorXml = dvcBinder.generate(
                 binaryLight,
-                new ControlPointInfo(),
+                new ClientInfo(),
                 upnpService.getConfiguration().getNamespace()
          );
 
@@ -110,7 +111,7 @@ public class LocalDeviceBindingAdvertisementTest {
 
         assertEquals(upnpService.getRegistry().getLocalDevices().size(), 1);
 
-        assert upnpService.getOutgoingDatagramMessages().size() >= 60;
+        assertTrue(upnpService.getOutgoingDatagramMessages().size() >= 60);
         for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
             assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 2);
         }
@@ -118,6 +119,20 @@ public class LocalDeviceBindingAdvertisementTest {
         upnpService.shutdown();
     }
 
+    @Test
+    public void registerNonAdvertisedLocalDevice() throws Exception {
+        MockUpnpService upnpService = new MockUpnpService(true, true);
+
+        LocalDevice binaryLight = DemoBinaryLight.createTestDevice();
+
+        upnpService.getRegistry().addDevice(binaryLight, false); // Not advertised
+
+        Thread.sleep(2000);
+
+        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 0);
+
+        upnpService.shutdown();
+    }
 
     protected void assertAliveMsgBasics(Namespace namespace, UpnpMessage msg, LocalDevice device, Integer maxAge) {
         assertEquals(msg.getHeaders().getFirstHeader(UpnpHeader.Type.NTS).getValue(), NotificationSubtype.ALIVE);

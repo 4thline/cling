@@ -19,17 +19,26 @@ package org.fourthline.cling.model.action;
 
 import org.fourthline.cling.model.meta.ActionArgument;
 import org.fourthline.cling.model.meta.LocalService;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.state.StateVariableAccessor;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.seamless.util.Reflections;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
 /**
  * Invokes methods on a service implementation instance with reflection.
+ *
+ * <p>
+ * If the method has an additional last parameter of type {@link ClientInfo}, the details
+ * of the control point client will be provided to the action method. You can use this
+ * to get the client's address and request headers, and to provide extra response headers.
+ * </p>
  *
  * @author Christian Bauer
  */
@@ -122,7 +131,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
         LocalService service = actionInvocation.getAction().getService();
 
-        Object[] values = new Object[actionInvocation.getAction().getInputArguments().length];
+        List values = new ArrayList();
         int i = 0;
         for (ActionArgument<LocalService> argument : actionInvocation.getAction().getInputArguments()) {
 
@@ -139,7 +148,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
             // It's not primitive and we have no value, that's fine too
             if (inputValue == null) {
-                values[i++] = null;
+                values.add(i++, null);
                 continue;
             }
 
@@ -151,19 +160,32 @@ public class MethodActionExecutor extends AbstractActionExecutor {
                     Constructor<String> ctor = methodParameterType.getConstructor(String.class);
                     log.finer("Creating new input argument value instance with String.class constructor of type: " + methodParameterType);
                     Object o = ctor.newInstance(inputCallValueString);
-                    values[i++] = o;
+                    values.add(i++, o);
                 } catch (Exception ex) {
-                    ex.printStackTrace(System.err);
+                    log.warning("Error preparing action method call: " + method);
+                    log.warning("Can't convert input argument string to desired type of '" + argument.getName() + "': " + ex);
                     throw new ActionException(
-                            ErrorCode.ARGUMENT_VALUE_INVALID, "Can't convert input argment string to desired type of '" + argument.getName() + "': " + ex
+                            ErrorCode.ARGUMENT_VALUE_INVALID, "Can't convert input argument string to desired type of '" + argument.getName() + "': " + ex
                     );
                 }
             } else {
                 // Or if it wasn't, just use the value without any conversion
-                values[i++] = inputValue.getValue();
+                values.add(i++, inputValue.getValue());
             }
         }
-        return values;
+
+        if (method.getParameterTypes().length > 0
+            && ClientInfo.class.isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length-1])) {
+            if (actionInvocation.getClientInfo() != null) {
+                log.finer("Providing remote client info as last action method input argument: " + method);
+                values.add(i, actionInvocation.getClientInfo());
+            } else {
+                // Local call, no client info available
+                values.add(i, null);
+            }
+        }
+
+        return values.toArray(new Object[values.size()]);
     }
 
 }

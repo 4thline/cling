@@ -26,6 +26,7 @@ import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.model.meta.ActionArgument;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.StateVariable;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.state.GetterStateVariableAccessor;
 import org.fourthline.cling.model.state.StateVariableAccessor;
 import org.fourthline.cling.model.types.Datatype;
@@ -148,8 +149,9 @@ public class AnnotationActionBinder {
             }
         }
         // A method can't have any parameters that are not annotated with @UpnpInputArgument - we wouldn't know what
-        // value to pass when we invoke it later on...
-        if (annotatedParams < getMethod().getParameterTypes().length) {
+        // value to pass when we invoke it later on... unless the last parameter is of type ClientInfo
+        if (annotatedParams < getMethod().getParameterTypes().length
+            && !ClientInfo.class.isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length-1])) {
             throw new LocalServiceBindingException("Method has parameters that are not input arguments: " + getMethod().getName());
         }
 

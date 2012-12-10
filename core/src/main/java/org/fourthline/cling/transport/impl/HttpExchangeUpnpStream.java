@@ -82,6 +82,12 @@ public class HttpExchangeUpnpStream extends UpnpStream {
 
             log.fine("Created new request message: " + requestMessage);
 
+            // Remote & Local Socket Address
+            if (getHttpExchange().getRemoteAddress() != null)
+                requestMessage.setRemoteAddress(getHttpExchange().getRemoteAddress().getAddress());
+            if (getHttpExchange().getLocalAddress() != null)
+                requestMessage.setLocalAddress(getHttpExchange().getLocalAddress().getAddress());
+
             // Headers
             requestMessage.setHeaders(new UpnpHeaders(getHttpExchange().getRequestHeaders()));
 

@@ -23,7 +23,7 @@ import org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderImpl;
 import org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderSAXImpl;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.profile.ControlPointInfo;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.test.data.SampleDeviceRoot;
 import org.seamless.util.io.IO;
@@ -74,7 +74,7 @@ public class UDA10DeviceDescriptorParsingTest {
         RemoteDevice device = SampleData.createRemoteDevice();
         String descriptorXml = binder.generate(
                 device,
-                new ControlPointInfo(),
+                new ClientInfo(),
                 upnpService.getConfiguration().getNamespace()
         );
 
@@ -104,7 +104,7 @@ public class UDA10DeviceDescriptorParsingTest {
         LocalDevice device = SampleData.createLocalDevice(true);
         String descriptorXml = binder.generate(
                 device,
-                new ControlPointInfo(),
+                new ClientInfo(),
                 upnpService.getConfiguration().getNamespace()
         );
 

@@ -42,7 +42,7 @@ import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.profile.ControlPointInfo;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.DLNACaps;
 import org.fourthline.cling.model.types.DLNADoc;
 import org.fourthline.cling.model.types.InvalidValueException;
@@ -340,7 +340,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
 
     }
 
-    public String generate(Device deviceModel, ControlPointInfo info, Namespace namespace) throws DescriptorBindingException {
+    public String generate(Device deviceModel, ClientInfo info, Namespace namespace) throws DescriptorBindingException {
         try {
             log.fine("Generating XML descriptor from device model: " + deviceModel);
 
@@ -351,7 +351,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
         }
     }
 
-    public Document buildDOM(Device deviceModel, ControlPointInfo info, Namespace namespace) throws DescriptorBindingException {
+    public Document buildDOM(Device deviceModel, ClientInfo info, Namespace namespace) throws DescriptorBindingException {
 
         try {
             log.fine("Generating DOM from device model: " + deviceModel);
@@ -369,7 +369,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
         }
     }
 
-    protected void generateRoot(Namespace namespace, Device deviceModel, Document descriptor, ControlPointInfo info) {
+    protected void generateRoot(Namespace namespace, Device deviceModel, Document descriptor, ClientInfo info) {
 
         Element rootElement = descriptor.createElementNS(Descriptor.Device.NAMESPACE_URI, ELEMENT.root.toString());
         descriptor.appendChild(rootElement);
@@ -391,7 +391,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
         appendNewElementIfNotNull(descriptor, specVersionElement, ELEMENT.minor, deviceModel.getVersion().getMinor());
     }
 
-    protected void generateDevice(Namespace namespace, Device deviceModel, Document descriptor, Element rootElement, ControlPointInfo info) {
+    protected void generateDevice(Namespace namespace, Device deviceModel, Document descriptor, Element rootElement, ClientInfo info) {
 
         Element deviceElement = appendNewElement(descriptor, rootElement, ELEMENT.device);
 
@@ -506,7 +506,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
         }
     }
 
-    protected void generateDeviceList(Namespace namespace, Device deviceModel, Document descriptor, Element deviceElement, ControlPointInfo info) {
+    protected void generateDeviceList(Namespace namespace, Device deviceModel, Document descriptor, Element deviceElement, ClientInfo info) {
         if (!deviceModel.hasEmbeddedDevices()) return;
 
         Element deviceListElement = appendNewElement(descriptor, deviceElement, ELEMENT.deviceList);

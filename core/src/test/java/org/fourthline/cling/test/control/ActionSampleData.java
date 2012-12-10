@@ -27,9 +27,11 @@ import org.fourthline.cling.binding.annotations.UpnpStateVariable;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.UDADeviceType;
-import org.fourthline.cling.protocol.sync.ReceivingAction;
 import org.fourthline.cling.test.data.SampleData;
+
+import static org.testng.Assert.*;
 
 /**
  * @author Christian Bauer
@@ -125,13 +127,41 @@ public class ActionSampleData {
 
     }
     
-    public static class LocalTestServiceExtraHeaders extends LocalTestService {
+    @org.fourthline.cling.binding.annotations.UpnpService(
+            serviceId = @UpnpServiceId("SwitchPower"),
+            serviceType = @UpnpServiceType(value = "SwitchPower", version = 1)
+    )
+    public static class LocalTestServiceWithClientInfo {
 
-        @Override
-        public boolean getTarget() {
-            assert ReceivingAction.getRequestMessage().getHeaders().size() == 2;
-            ReceivingAction.getExtraResponseHeaders().add("X-MY-HEADER", "foobar");
-            return super.getTarget();
+        @UpnpStateVariable(sendEvents = false)
+        private boolean target = false;
+
+        @UpnpStateVariable
+        private boolean status = false;
+
+        @UpnpAction
+        public void setTarget(@UpnpInputArgument(name = "NewTargetValue") boolean newTargetValue) {
+            target = newTargetValue;
+            status = newTargetValue;
+        }
+
+        @UpnpAction(out = @UpnpOutputArgument(name = "RetTargetValue"))
+        public boolean getTarget(ClientInfo clientInfo) {
+            assertNotNull(clientInfo);
+            assertEquals(clientInfo.getRemoteAddress().getHostAddress(), "10.0.0.1");
+            assertEquals(clientInfo.getLocalAddress().getHostAddress(), "10.0.0.2");
+            assertEquals(clientInfo.getRequestUserAgent(), "foo/bar");
+            clientInfo.getExtraResponseHeaders().add("X-MY-HEADER", "foobar");
+            return target;
+        }
+
+        @UpnpAction(name = "GetStatus", out = @UpnpOutputArgument(name = "ResultStatus", getterName = "getStatus"))
+        public void dummyStatus() {
+            // NOOP
+        }
+
+        public boolean getStatus() {
+            return status;
         }
 
     }

@@ -22,7 +22,6 @@ import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
-import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.control.IncomingActionRequestMessage;
 import org.fourthline.cling.model.message.control.OutgoingActionResponseMessage;
@@ -44,29 +43,12 @@ import java.util.logging.Logger;
  * by the registered {@link org.fourthline.cling.model.meta.LocalService#getExecutor(org.fourthline.cling.model.meta.Action)}
  * method.
  * </p>
- * <p>
- * This class offers two shortcut thread-local variables, which providers of UPnP services might
- * find useful in some situations. You can access these methods statically from within your
- * service implementation:
- * </p>
- * <ul>
- * <li>The {@link #getRequestMessage()} static method offers access to the original action request
- * message, including all received HTTP headers, etc.
- * </li>
- * <li>
- * The {@link #getExtraResponseHeaders()} static method offers modifiable HTTP headers which will
- * be added to the action response after the invocation, and returned to the client.
- * </li>
- * </ul>
  *
  * @author Christian Bauer
  */
 public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
     final private static Logger log = Logger.getLogger(ReceivingAction.class.getName());
-
-    final protected static ThreadLocal<IncomingActionRequestMessage> requestThreadLocal = new ThreadLocal();
-    final protected static ThreadLocal<UpnpHeaders> extraResponseHeadersThreadLocal = new ThreadLocal();
 
     public ReceivingAction(UpnpService upnpService, StreamRequestMessage inputMessage) {
         super(upnpService, inputMessage);
@@ -111,12 +93,8 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             IncomingActionRequestMessage requestMessage =
                     new IncomingActionRequestMessage(getInputMessage(), resource.getModel());
 
-            // Preserve message in a TL
-            requestThreadLocal.set(requestMessage);
-            extraResponseHeadersThreadLocal.set(new UpnpHeaders());
-
             log.finer("Created incoming action request message: " + requestMessage);
-            invocation = new ActionInvocation(requestMessage.getAction());
+            invocation = new ActionInvocation(requestMessage.getAction(), getClientInfo());
 
             // Throws UnsupportedDataException if the body can't be read
             log.fine("Reading body of request message");
@@ -141,9 +119,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
         } catch (UnsupportedDataException ex) {
-            if (log.isLoggable(Level.FINER)) {
-                log.log(Level.FINER, "Error reading action request XML body: " + ex.toString(), Exceptions.unwrap(ex));
-            }
+        	log.log(Level.WARNING, "Error reading action request XML body: " + ex.toString(), Exceptions.unwrap(ex));
 
             invocation =
                     new ActionInvocation(
@@ -153,16 +129,6 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
                     );
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
-        } finally {
-
-            if (responseMessage != null && extraResponseHeadersThreadLocal.get() != null) {
-                log.fine("Merging extra headers into action response message: " + extraResponseHeadersThreadLocal.get().size());
-                responseMessage.getHeaders().putAll(extraResponseHeadersThreadLocal.get());
-            }
-
-            // Always clean the TL
-            requestThreadLocal.set(null);
-            extraResponseHeadersThreadLocal.set(null);
         }
 
         try {
@@ -180,11 +146,4 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         }
     }
 
-    public static IncomingActionRequestMessage getRequestMessage() {
-        return requestThreadLocal.get();
-    }
-
-    public static UpnpHeaders getExtraResponseHeaders() {
-        return extraResponseHeadersThreadLocal.get();
-    }
 }

@@ -33,6 +33,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.DefaultConnectionReuseStrategy;
 import org.apache.http.impl.DefaultHttpResponseFactory;
+import org.apache.http.impl.SocketHttpServerConnection;
 import org.apache.http.message.BasicStatusLine;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.DefaultedHttpParams;
@@ -177,6 +178,13 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
             // HTTP version
             int requestHttpMinorVersion = httpRequest.getProtocolVersion().getMinor();
             requestMessage.getOperation().setHttpMinorVersion(requestHttpMinorVersion);
+
+            // Remote Address
+            if (getConnection() instanceof SocketHttpServerConnection) {
+                SocketHttpServerConnection socketConnection = (SocketHttpServerConnection) getConnection();
+                requestMessage.setRemoteAddress(socketConnection.getRemoteAddress());
+                requestMessage.setLocalAddress(socketConnection.getLocalAddress());
+            }
 
             // Headers
             requestMessage.setHeaders(new UpnpHeaders(HeaderUtil.get(httpRequest)));

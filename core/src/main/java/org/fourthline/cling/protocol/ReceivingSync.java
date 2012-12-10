@@ -20,6 +20,9 @@ package org.fourthline.cling.protocol;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
+import org.fourthline.cling.model.profile.ClientInfo;
+
+import java.util.logging.Logger;
 
 /**
  * Supertype for all synchronously executing protocols, handling reception of UPnP messages and return a response.
@@ -43,10 +46,14 @@ import org.fourthline.cling.model.message.StreamResponseMessage;
  */
 public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage> extends ReceivingAsync<IN> {
 
+    final private static Logger log = Logger.getLogger(ReceivingSync.class.getName());
+
+    final protected ClientInfo clientInfo;
     protected OUT outputMessage;
 
     protected ReceivingSync(UpnpService upnpService, IN inputMessage) {
         super(upnpService, inputMessage);
+        this.clientInfo = new ClientInfo(inputMessage);
     }
 
     public OUT getOutputMessage() {
@@ -55,6 +62,11 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
 
     final protected void execute() {
         outputMessage = executeSync();
+
+        if (outputMessage != null && getClientInfo().getExtraResponseHeaders().size() > 0) {
+            log.fine("Merging extra headers into response message: " + getClientInfo().getExtraResponseHeaders().size());
+            outputMessage.getHeaders().putAll(getClientInfo().getExtraResponseHeaders());
+        }
     }
 
     protected abstract OUT executeSync();
@@ -77,6 +89,10 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
      * @param t The reason why the response wasn't delivered.
      */
     public void responseException(Throwable t) {
+    }
+
+    public ClientInfo getClientInfo() {
+        return clientInfo;
     }
 
     @Override

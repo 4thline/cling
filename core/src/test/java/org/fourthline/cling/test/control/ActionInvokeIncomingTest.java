@@ -32,6 +32,7 @@ import org.fourthline.cling.model.message.header.EXTHeader;
 import org.fourthline.cling.model.message.header.ServerHeader;
 import org.fourthline.cling.model.message.header.SoapActionHeader;
 import org.fourthline.cling.model.message.header.UpnpHeader;
+import org.fourthline.cling.model.message.header.UserAgentHeader;
 import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
@@ -43,11 +44,14 @@ import org.fourthline.cling.protocol.sync.ReceivingAction;
 import org.seamless.util.MimeType;
 import org.testng.annotations.Test;
 
+import java.net.InetAddress;
 import java.net.URI;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
-
+/**
+ * @author Christian Bauer
+ */
 public class ActionInvokeIncomingTest {
 
     public static final String SET_REQUEST = "<?xml version=\"1.0\"?>\n" +
@@ -87,9 +91,9 @@ public class ActionInvokeIncomingTest {
     }
 
     @Test
-    public void incomingRemoteCallGetExtraHeaders() throws Exception {
+    public void incomingRemoteCallClientInfo() throws Exception {
         UpnpMessage response =
-                incomingRemoteCallGet(ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtraHeaders.class));
+                incomingRemoteCallGet(ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceWithClientInfo.class));
 
         assertEquals(response.getHeaders().size(), 4);
         assertEquals(response.getHeaders().getFirstHeader("X-MY-HEADER"), "foobar");
@@ -105,6 +109,8 @@ public class ActionInvokeIncomingTest {
 
         URI controlURI = upnpService.getConfiguration().getNamespace().getControlPath(service);
         StreamRequestMessage request = new StreamRequestMessage(UpnpRequest.Method.POST, controlURI);
+        request.setRemoteAddress(InetAddress.getByName("10.0.0.1"));
+        request.setLocalAddress(InetAddress.getByName("10.0.0.2"));
         addMandatoryRequestHeaders(service, action, request);
         request.setBody(UpnpMessage.BodyType.STRING, GET_REQUEST);
 
@@ -114,16 +120,19 @@ public class ActionInvokeIncomingTest {
 
         StreamResponseMessage response = prot.getOutputMessage();
 
-        assert response != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML();
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class) != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().equals(new ServerHeader().getValue());
+        assertNotNull(response);
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
+        assertEquals(
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
+            new ServerHeader().getValue()
+        );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 
-        assert responseInvocation.getOutput("RetTargetValue") != null;
+        assertNotNull(responseInvocation.getOutput("RetTargetValue"));
         return responseMessage;
     }
 
@@ -175,16 +184,19 @@ public class ActionInvokeIncomingTest {
 
             StreamResponseMessage response = prot.getOutputMessage();
 
-            assert response != null;
-            assert response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML();
-            assert response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class) != null;
-            assert response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().equals(new ServerHeader().getValue());
+            assertNotNull(response);
+            assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+            assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
+            assertEquals(
+                response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
+                new ServerHeader().getValue()
+            );
 
             IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
             ActionInvocation responseInvocation = new ActionInvocation(action);
             upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 
-            assert responseInvocation.getOutput("RetTargetValue") != null;
+            assertNotNull(responseInvocation.getOutput("RetTargetValue"));
         }
     }
 
@@ -211,10 +223,13 @@ public class ActionInvokeIncomingTest {
 
         StreamResponseMessage response = prot.getOutputMessage();
 
-        assert response != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML();
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class) != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().equals(new ServerHeader().getValue());
+        assertNotNull(response);
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
+        assertEquals(
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
+            new ServerHeader().getValue()
+        );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -245,7 +260,7 @@ public class ActionInvokeIncomingTest {
 
         UpnpMessage response = prot.getOutputMessage();
 
-        assert response == null;
+        assertNull(response);
         // The StreamServer will send a 404 response
     }
 
@@ -272,17 +287,20 @@ public class ActionInvokeIncomingTest {
 
         StreamResponseMessage response = prot.getOutputMessage();
 
-        assert response != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML();
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class) != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().equals(new ServerHeader().getValue());
+        assertNotNull(response);
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
+        assertEquals(
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
+            new ServerHeader().getValue()
+        );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 
         ActionException ex = responseInvocation.getFailure();
-        assert ex != null;
+        assertNotNull(ex);
 
         assertEquals(ex.getMessage(), ErrorCode.ACTION_FAILED.getDescription() + ". Action method invocation failed: Something is wrong.");
 
@@ -312,16 +330,19 @@ public class ActionInvokeIncomingTest {
 
         StreamResponseMessage response = prot.getOutputMessage();
 
-        assert response != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML();
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class) != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().equals(new ServerHeader().getValue());
+        assertNotNull(response);
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
+        assertEquals(
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
+            new ServerHeader().getValue()
+        );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 
-        assert responseInvocation.getOutput("RetTargetValue") != null;
+        assertNotNull(responseInvocation.getOutput("RetTargetValue"));
 
     }
 
@@ -343,15 +364,14 @@ public class ActionInvokeIncomingTest {
 
         StreamResponseMessage response = prot.getOutputMessage();
 
-        assert response != null;
-
+        assertNotNull(response);
         assertEquals(response.getOperation().getStatusCode(), UpnpResponse.Status.UNSUPPORTED_MEDIA_TYPE.getStatusCode());
     }
 
     @Test
     public void incomingRemoteCallQueryStateVariable() throws Exception {
 
-        // Registery local device and its service
+        // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         LocalDevice ld = ActionSampleData.createTestDevice();
         LocalService service = ld.getServices()[0];
@@ -382,10 +402,13 @@ public class ActionInvokeIncomingTest {
 
         StreamResponseMessage response = prot.getOutputMessage();
 
-        assert response != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML();
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class) != null;
-        assert response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue().equals(new ServerHeader().getValue());
+        assertNotNull(response);
+        assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
+        assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
+        assertEquals(
+            response.getHeaders().getFirstHeader(UpnpHeader.Type.SERVER, ServerHeader.class).getValue(),
+            new ServerHeader().getValue()
+        );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
         ActionInvocation responseInvocation = new ActionInvocation(action);
@@ -404,6 +427,8 @@ public class ActionInvokeIncomingTest {
 
         SoapActionType actionType = new SoapActionType(service.getServiceType(), action.getName());
         request.getHeaders().add(UpnpHeader.Type.SOAPACTION, new SoapActionHeader(actionType));
+        // Not mandatory but only for the tests
+        request.getHeaders().add(UpnpHeader.Type.USER_AGENT, new UserAgentHeader("foo/bar"));
     }
 
 }

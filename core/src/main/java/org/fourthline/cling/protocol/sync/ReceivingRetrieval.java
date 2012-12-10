@@ -30,7 +30,6 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.Icon;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.profile.ControlPointInfo;
 import org.fourthline.cling.model.resource.DeviceDescriptorResource;
 import org.fourthline.cling.model.resource.IconResource;
 import org.fourthline.cling.model.resource.Resource;
@@ -97,7 +96,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
                         getUpnpService().getConfiguration().getDeviceDescriptorBinderUDA10();
                 String deviceDescriptor = deviceDescriptorBinder.generate(
                         device,
-                        createControlPointInfo(),
+                        getClientInfo(),
                         getUpnpService().getConfiguration().getNamespace()
                 );
                 response = new StreamResponseMessage(
@@ -139,10 +138,6 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
         response.getHeaders().add(UpnpHeader.Type.SERVER, new ServerHeader());
 
         return response;
-    }
-
-    protected ControlPointInfo createControlPointInfo() {
-        return new ControlPointInfo(getInputMessage().getHeaders());
     }
 
 }

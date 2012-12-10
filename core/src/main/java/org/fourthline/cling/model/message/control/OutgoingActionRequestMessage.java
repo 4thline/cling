@@ -26,6 +26,7 @@ import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.header.ContentTypeHeader;
 import org.fourthline.cling.model.message.header.SoapActionHeader;
 import org.fourthline.cling.model.message.header.UpnpHeader;
+import org.fourthline.cling.model.message.header.UserAgentHeader;
 import org.fourthline.cling.model.types.SoapActionType;
 
 import java.net.URL;
@@ -41,6 +42,14 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
 
     public OutgoingActionRequestMessage(ActionInvocation actionInvocation, URL controlURL) {
         this(actionInvocation.getAction(), new UpnpRequest(UpnpRequest.Method.POST, controlURL));
+
+        // For proxy remote invocations, pass through the user agent header
+        if (actionInvocation.getClientInfo() != null
+            && actionInvocation.getClientInfo().getRequestUserAgent() != null)
+        	getHeaders().add(
+        			UpnpHeader.Type.USER_AGENT,
+        			new UserAgentHeader(actionInvocation.getClientInfo().getRequestUserAgent())
+            );
     }
 
     public OutgoingActionRequestMessage(Action action, UpnpRequest operation) {

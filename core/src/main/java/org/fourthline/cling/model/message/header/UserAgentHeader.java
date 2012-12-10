@@ -18,8 +18,27 @@
 package org.fourthline.cling.model.message.header;
 
 /**
+ * A simple string, not validated (everyone gets this wrong)
+ *
  * @author Christian Bauer
+ * @author Michael Pujos
  */
-public class UserAgentHeader extends ServerHeader {
+public class UserAgentHeader extends UpnpHeader<String> {
+	
+	public UserAgentHeader() {
+    }
+	
+	public UserAgentHeader(String s) {
+        setValue(s);
+    }
 
+	@Override
+	public void setString(String s) throws InvalidHeaderException {
+		setValue(s);
+	}
+
+	@Override
+	public String getString() {
+		return getValue();
+	}
 }

@@ -20,6 +20,7 @@ package org.fourthline.cling.model.action;
 import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.model.meta.ActionArgument;
 import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.InvalidValueException;
 
 import java.util.Collections;
@@ -34,6 +35,7 @@ import java.util.Map;
 public class ActionInvocation<S extends Service> {
 
     final protected Action<S> action;
+    final protected ClientInfo clientInfo;
 
     // We don't necessarily have to preserve insertion order but it's nicer if the arrays returned
     // by the getters are reliable
@@ -43,14 +45,35 @@ public class ActionInvocation<S extends Service> {
     protected ActionException failure = null;
 
     public ActionInvocation(Action<S> action) {
-        this(action, null, null);
+        this(action, null, null, null);
     }
 
-    public ActionInvocation(Action<S> action, ActionArgumentValue<S>[] input) {
-        this(action, input, null);
+    public ActionInvocation(Action<S> action,
+                            ClientInfo clientInfo) {
+        this(action, null, null, clientInfo);
     }
 
-    public ActionInvocation(Action<S> action, ActionArgumentValue<S>[] input, ActionArgumentValue<S>[] output) {
+    public ActionInvocation(Action<S> action,
+                            ActionArgumentValue<S>[] input) {
+        this(action, input, null, null);
+    }
+
+    public ActionInvocation(Action<S> action,
+                            ActionArgumentValue<S>[] input,
+                            ClientInfo clientInfo) {
+        this(action, input, null, clientInfo);
+    }
+
+    public ActionInvocation(Action<S> action,
+                            ActionArgumentValue<S>[] input,
+                            ActionArgumentValue<S>[] output) {
+        this(action, input, output, null);
+    }
+
+    public ActionInvocation(Action<S> action,
+                            ActionArgumentValue<S>[] input,
+                            ActionArgumentValue<S>[] output,
+                            ClientInfo clientInfo) {
         if (action == null) {
             throw new IllegalArgumentException("Action can not be null");
         }
@@ -58,6 +81,8 @@ public class ActionInvocation<S extends Service> {
 
         setInput(input);
         setOutput(output);
+
+        this.clientInfo = clientInfo;
     }
 
     public ActionInvocation(ActionException failure) {
@@ -65,6 +90,7 @@ public class ActionInvocation<S extends Service> {
         this.input = null;
         this.output = null;
         this.failure = failure;
+        this.clientInfo = null;
     }
 
     public Action<S> getAction() {
@@ -155,6 +181,13 @@ public class ActionInvocation<S extends Service> {
 
     public void setFailure(ActionException failure) {
         this.failure = failure;
+    }
+
+    /**
+     * @return <code>null</code> if this is a local action invocation.
+     */
+    public ClientInfo getClientInfo() {
+        return clientInfo;
     }
 
     @Override

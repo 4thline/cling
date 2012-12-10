@@ -31,7 +31,7 @@ import org.fourthline.cling.model.meta.Icon;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.profile.ControlPointInfo;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.UDN;
 import org.w3c.dom.Document;
@@ -109,7 +109,7 @@ public class CombinedDescriptorBinder {
 
             Document rootDescriptor = getConfiguration().getDeviceDescriptorBinderUDA10().buildDOM(
                     device.getRoot(),
-                    new ControlPointInfo(),
+                    new ClientInfo(),
                     getConfiguration().getNamespace()
             );
             deviceModelEl.appendChild(dom.importNode(rootDescriptor.getDocumentElement(), true));

@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * Selects device details based on a regex and the control points HTTP headers.
+ * Selects device details based on a regex and the client's HTTP headers.
  * <p>
  * This provider will lookup and match a {@link DeviceDetails} entry in a
  * given map that is keyed by HTTP header name and a regular expression pattern.
@@ -86,12 +86,12 @@ public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
         return headerDetails;
     }
 
-    public DeviceDetails provide(ControlPointInfo info) {
-        if (info == null || info.getHeaders().isEmpty()) return getDefaultDeviceDetails();
+    public DeviceDetails provide(ClientInfo info) {
+        if (info == null || info.getRequestHeaders().isEmpty()) return getDefaultDeviceDetails();
 
         for (Key key : getHeaderDetails().keySet()) {
             List<String> headerValues;
-            if ((headerValues = info.getHeaders().get(key.getHeaderName())) == null) continue;
+            if ((headerValues = info.getRequestHeaders().get(key.getHeaderName())) == null) continue;
             for (String headerValue : headerValues) {
                 if (key.isValuePatternMatch(headerValue))
                     return getHeaderDetails().get(key);

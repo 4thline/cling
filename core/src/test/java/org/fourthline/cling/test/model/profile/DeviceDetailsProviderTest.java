@@ -17,7 +17,7 @@
 package org.fourthline.cling.test.model.profile;
 
 import org.fourthline.cling.model.meta.DeviceDetails;
-import org.fourthline.cling.model.profile.ControlPointInfo;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.profile.HeaderDeviceDetailsProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -25,12 +25,15 @@ import org.testng.annotations.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Mario Franco
+ */
 public class DeviceDetailsProviderTest {
 
     @Test
     public void headerRegexMatch() throws Exception {
 
-        ControlPointInfo controlPointInfo = new ControlPointInfo();
+        ClientInfo clientInfo = new ClientInfo();
 
         DeviceDetails dd1 = new DeviceDetails("My Testdevice 1");
         DeviceDetails dd2 = new DeviceDetails("My Testdevice 2");
@@ -43,29 +46,29 @@ public class DeviceDetailsProviderTest {
         HeaderDeviceDetailsProvider provider = new HeaderDeviceDetailsProvider(dd1, headerDetails);
 
         // No match, test default behavior
-        controlPointInfo.getHeaders().clear();
-        controlPointInfo.getHeaders().add(
+        clientInfo.getRequestHeaders().clear();
+        clientInfo.getRequestHeaders().add(
                 "User-Agent",
                 "Microsoft-Windows/6.1 UPnP/1.0 Windows-Media-Player-DMS/12.0.7600.16385 DLNADOC/1.50"
         );
-        Assert.assertEquals(provider.provide(controlPointInfo), dd1);
+        Assert.assertEquals(provider.provide(clientInfo), dd1);
 
-        controlPointInfo.getHeaders().clear();
-        controlPointInfo.getHeaders().add(
+        clientInfo.getRequestHeaders().clear();
+        clientInfo.getRequestHeaders().add(
                 "User-Agent",
                 "UPnP/1.0"
         );
-        controlPointInfo.getHeaders().add(
+        clientInfo.getRequestHeaders().add(
                 "X-AV-Client-Info",
                 "av=5.0; cn=\"Sony Computer Entertainment Inc.\"; mn=\"PLAYSTATION 3\"; mv=\"1.0\";"
         );
-        Assert.assertEquals(provider.provide(controlPointInfo), dd2);
+        Assert.assertEquals(provider.provide(clientInfo), dd2);
 
-        controlPointInfo.getHeaders().clear();
-        controlPointInfo.getHeaders().add(
+        clientInfo.getRequestHeaders().clear();
+        clientInfo.getRequestHeaders().add(
                 "User-Agent",
                 "Xbox/2.0.4548.0 UPnP/1.0 Xbox/2.0.4548.0"
         );
-        Assert.assertEquals(provider.provide(controlPointInfo), dd1);
+        Assert.assertEquals(provider.provide(clientInfo), dd1);
     }
 }

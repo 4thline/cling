@@ -17,6 +17,7 @@
 
 package org.fourthline.cling.model.message;
 
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 
@@ -27,8 +28,12 @@ import java.net.URL;
  */
 public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
 
+    protected InetAddress remoteAddress;
+    protected InetAddress localAddress;
+
     public StreamRequestMessage(StreamRequestMessage source) {
         super(source);
+        this.remoteAddress = source.getRemoteAddress();
     }
 
     public StreamRequestMessage(UpnpRequest operation) {
@@ -42,7 +47,6 @@ public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
     public StreamRequestMessage(UpnpRequest.Method method, URL url) {
         super(new UpnpRequest(method, url));
     }
-
 
     public StreamRequestMessage(UpnpRequest operation, String body) {
         super(operation, BodyType.STRING, body);
@@ -73,4 +77,23 @@ public class StreamRequestMessage extends UpnpMessage<UpnpRequest> {
         return getOperation().getURI();
     }
     
+    public void setUri(URI uri) {
+        getOperation().setUri(uri);
+    }
+
+    public InetAddress getRemoteAddress() {
+        return remoteAddress;
+    }
+
+    public void setRemoteAddress(InetAddress remoteAddress) {
+        this.remoteAddress = remoteAddress;
+    }
+
+    public InetAddress getLocalAddress() {
+        return localAddress;
+    }
+
+    public void setLocalAddress(InetAddress localAddress) {
+        this.localAddress = localAddress;
+    }
 }

@@ -43,7 +43,7 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
     }
 
     /**
-     * Defaults to 5 seconds;
+     * Defaults to 5 seconds.
      */
     public int getConnectionTimeoutSeconds() {
         return connectionTimeoutSeconds;
@@ -65,7 +65,7 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
     }
 
     /**
-     * Defaults to the values defined in {@link org.fourthline.cling.model.Constants}.
+     * Defaults to string value of {@link ServerClientTokens}.
      */
     public String getUserAgentValue(int majorVersion, int minorVersion) {
         return new ServerClientTokens(majorVersion, minorVersion).toString();
