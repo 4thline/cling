@@ -34,9 +34,6 @@ public interface Constants {
     public static final String IPV6_UPNP_SITE_LOCAL_ADDRESS = "FF05::C";
     public static final String IPV6_UPNP_GLOBAL_ADDRESS = "FF0E::C";
 
-    public static final String PRODUCT_TOKEN_NAME = "4thLine-Cling";
-    public static final String PRODUCT_TOKEN_VERSION = "1.1";
-
     public static final int MIN_ADVERTISEMENT_AGE_SECONDS = 1800;
     public static final int DEFAULT_SUBSCRIPTION_DURATION_SECONDS = 1800;
 

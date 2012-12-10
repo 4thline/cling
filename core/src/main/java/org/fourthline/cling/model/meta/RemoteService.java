@@ -108,4 +108,9 @@ public class RemoteService extends Service<RemoteDevice, RemoteService> {
         return errors;
     }
 
+    @Override
+    public String toString() {
+        return "(" + getClass().getSimpleName() + ") Descriptor: " + getDescriptorURI();
+    }
+
 }

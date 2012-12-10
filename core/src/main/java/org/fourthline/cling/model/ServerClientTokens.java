@@ -20,7 +20,7 @@ package org.fourthline.cling.model;
 /**
  * The agent string of the UPnP stack in network messages, either as a server or client.
  * <p>
- * Tries to detect the operating system name and version, defaults to {@link Constants}
+ * Tries to detect the operating system name and version, defaults to {@link UserConstants}
  * for product name and version.
  * </p>
  *
@@ -36,8 +36,8 @@ public class ServerClientTokens {
 
     private String osName  =  System.getProperty("os.name").replaceAll("[^a-zA-Z0-9\\.\\-_]", "");
     private String osVersion = System.getProperty("os.version").replaceAll("[^a-zA-Z0-9\\.\\-_]", "");
-    private String productName = Constants.PRODUCT_TOKEN_NAME;
-    private String productVersion = Constants.PRODUCT_TOKEN_VERSION;
+    private String productName = UserConstants.PRODUCT_TOKEN_NAME;
+    private String productVersion = UserConstants.PRODUCT_TOKEN_VERSION;
 
     public ServerClientTokens() {
     }
@@ -45,6 +45,11 @@ public class ServerClientTokens {
     public ServerClientTokens(int majorVersion, int minorVersion) {
         this.majorVersion = majorVersion;
         this.minorVersion = minorVersion;
+    }
+
+    public ServerClientTokens(String productName, String productVersion) {
+        this.productName = productName;
+        this.productVersion = productVersion;
     }
 
     public ServerClientTokens(int majorVersion, int minorVersion, String osName, String osVersion, String productName, String productVersion) {

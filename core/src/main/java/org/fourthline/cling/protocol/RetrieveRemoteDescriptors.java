@@ -92,7 +92,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
             return;
         }
 
-        // Exit if it has been discovered already, could be have been waiting in the executor queue too long
+        // Exit if it has been discovered already, could be we have been waiting in the executor queue too long
         if (getUpnpService().getRegistry().getRemoteDevice(rd.getIdentity().getUdn(), true) != null) {
             log.finer("Exiting early, already discovered: " + deviceURL);
             return;
@@ -131,14 +131,19 @@ public class RetrieveRemoteDescriptors implements Runnable {
             
     	} catch(IllegalArgumentException e) {
     		// UpnpRequest constructor can throw IllegalArgumentException on invalid URI
-    		// IllegalArgumentException can also be thrown by Appache HttpClient on blank URI in send()
-            log.warning("Device descriptor retrieval failed: " + e.getMessage());
+    		// IllegalArgumentException can also be thrown by Apache HttpClient on blank URI in send()
+            log.warning(
+                "Device descriptor retrieval failed: "
+                + rd.getIdentity().getDescriptorURL()
+                + ", possibly invalid URL: " + e);
             return ;
     	}
 
-
         if (deviceDescMsg == null) {
-            log.warning("Device descriptor retrieval failed, no response: " + rd.getIdentity().getDescriptorURL());
+            log.warning(
+                "Device descriptor retrieval failed, no response for descriptor URL of: "
+                + rd.getIdentity().getDescriptorURL()
+            );
             return;
         }
 
@@ -281,7 +286,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         StreamResponseMessage serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
 
         if (serviceDescMsg == null) {
-            log.warning("Could not retrieve service descriptor: " + service);
+            log.warning("Could not retrieve service descriptor, no response: " + service);
             return null;
         }
 

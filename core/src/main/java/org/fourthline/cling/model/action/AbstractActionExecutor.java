@@ -87,15 +87,19 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
             log.fine("ActionException thrown by service method, wrapping in invocation and returning: " + ex);
             log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
             actionInvocation.setFailure(ex);
-        } catch (Exception ex) {
-            log.fine("Exception thrown by execution, wrapping in ActionException and returning: " + ex);
-            log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
+        } catch (Throwable t) {
+            Throwable rootCause = Exceptions.unwrap(t);
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Execution has thrown, wrapping root cause in ActionException and returning: " + t);
+                log.log(Level.FINE, "Exception root cause: ", rootCause);
+            }
             actionInvocation.setFailure(
-                    new ActionException(
-                            ErrorCode.ACTION_FAILED,
-                            "Action method invocation failed: " + (ex.getMessage() != null ? ex.getMessage() : ex.toString()),
-                            ex
-                    )
+                new ActionException(
+                    ErrorCode.ACTION_FAILED,
+                    "Action method invocation failed: "
+                        + (rootCause.getMessage() != null ? rootCause.getMessage() : rootCause.toString()),
+                    rootCause
+                )
             );
         }
     }
