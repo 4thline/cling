@@ -32,15 +32,16 @@ import org.fourthline.cling.model.resource.ServiceEventCallbackResource;
 import org.fourthline.cling.model.types.DLNADoc;
 import org.fourthline.cling.model.types.Datatype;
 import org.fourthline.cling.model.types.DeviceType;
+import org.fourthline.cling.model.types.IntegerDatatype;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.test.data.SampleDeviceRoot;
-import static org.testng.Assert.assertEquals;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.*;
 
 public class IncompatibilityTest {
 
@@ -175,7 +176,7 @@ public class IncompatibilityTest {
             }
             if (resource.getPathQuery().toString().length() < 100) test = true;
         }
-        assert test;
+        assertTrue(test);
     }
 
     // TODO: UPNP VIOLATION: Some devices use non-integer service/device type versions
@@ -236,6 +237,15 @@ public class IncompatibilityTest {
         assertEquals(stateVariable.validate().size(), 0);
         assertEquals(stateVariable.getTypeDetails().getAllowedValueRange().getMinimum(), 0);
         assertEquals(stateVariable.getTypeDetails().getAllowedValueRange().getMaximum(), 100);
+    }
+
+    // TODO: UPNP VIOLATION: Some renderers (like PacketVideo TMM Player) send
+    // RelCount and AbsCount as "NOT_IMPLEMENTED" in GetPositionInfoResponse action.
+    @Test
+    public void invalidIntegerValue() {
+        assertEquals(new IntegerDatatype(1).valueOf("NOT_IMPLEMENTED").intValue(), Byte.MAX_VALUE);
+        assertEquals(new IntegerDatatype(2).valueOf("NOT_IMPLEMENTED").intValue(), Short.MAX_VALUE);
+        assertEquals(new IntegerDatatype(4).valueOf("NOT_IMPLEMENTED").intValue(), Integer.MAX_VALUE);
     }
 
 }

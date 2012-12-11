@@ -45,7 +45,14 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
             }
             return value;
         } catch (NumberFormatException ex) {
-            throw new InvalidValueException("Can't convert string to number: " + s, ex);
+            // TODO: UPNP VIOLATION: Some renderers (like PacketVideo TMM Player) send
+            // RelCount and AbsCount as "NOT_IMPLEMENTED" in GetPositionInfoResponse action.
+            // The spec says: If not implemented the value shall be Max Integer value.
+        	if(s.equals("NOT_IMPLEMENTED")) {
+        		return getMaxValue();
+        	} else {
+            	throw new InvalidValueException("Can't convert string to number: " + s, ex);
+        	}
         }
     }
 
