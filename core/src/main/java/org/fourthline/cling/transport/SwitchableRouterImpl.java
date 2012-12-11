@@ -170,8 +170,12 @@ public class SwitchableRouterImpl implements SwitchableRouter {
         }
     }
 
-    public void shutdown() throws RouterLockAcquisitionException {
-        disable();
+    public void shutdown()  {
+    	try {
+        	disable();
+    	} catch(RouterLockAcquisitionException ex) {
+    		log.warning("Could not disable router on shutdown: " + ex);
+    	}
     }
 
     public void received(IncomingDatagramMessage msg) throws RouterLockAcquisitionException {
@@ -284,6 +288,13 @@ public class SwitchableRouterImpl implements SwitchableRouter {
                                            InetAddress remoteAddress)
                 throws IllegalStateException {
             return null;
+        }
+
+		public Short getAddressNetworkPrefixLength(InetAddress inetAddress) {
+			return null;
+		}
+
+        public void logInterfaceInformation() {
         }
     }
 

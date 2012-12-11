@@ -51,7 +51,7 @@ public class AndroidNetworkAddressFactory implements NetworkAddressFactory {
 
 
     protected NetworkInterface wifiInterface;
-    protected List<InetAddress> bindAddresses = new ArrayList();
+    protected List<InetAddress> bindAddresses = new ArrayList<InetAddress>();
 
     /**
      * Defaults to an ephemeral port.
@@ -125,6 +125,10 @@ public class AndroidNetworkAddressFactory implements NetworkAddressFactory {
     public InetAddress[] getBindAddresses() {
         return bindAddresses.toArray(new InetAddress[bindAddresses.size()]);
     }
+    
+	public Short getAddressNetworkPrefixLength(InetAddress inetAddress) {
+		return null;
+	}
 
     public byte[] getHardwareAddress(InetAddress inetAddress) {
         return null; // TODO: Get this from WifiInfo from WifiManager
@@ -143,6 +147,11 @@ public class AndroidNetworkAddressFactory implements NetworkAddressFactory {
                 return localAddress;
         }
         throw new IllegalStateException("Can't find any IPv4 or IPv6 address on interface: " + networkInterface.getDisplayName());
+    }
+
+    // TODO Implement this
+    public void logInterfaceInformation() {
+        log.warning("TODO: Logging of interfaces not implemented here!");
     }
 
     // Code from: http://www.gubatron.com/blog/2010/09/19/android-programming-how-to-obtain-the-wifis-corresponding-networkinterface/

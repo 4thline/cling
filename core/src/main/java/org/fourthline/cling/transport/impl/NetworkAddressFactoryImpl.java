@@ -20,7 +20,6 @@ package org.fourthline.cling.transport.impl;
 import org.fourthline.cling.model.Constants;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
-import org.seamless.util.OS;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -36,8 +35,8 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Properties;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -86,11 +85,14 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         }
 
         // TODO: Linux issue: http://mail.openjdk.java.net/pipermail/net-dev/2008-December/000497.html
+        // TODO: Is this no longer needed?
+        /*
         if (OS.checkForLinux()) {
             Properties props = System.getProperties();
             props.setProperty("java.net.preferIPv6Stack", "true");
             System.setProperties(props);
         }
+        */
 
         discoverNetworkInterfaces();
         discoverBindAddresses();
@@ -100,6 +102,16 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         }
 
         this.streamListenPort = streamListenPort;
+    }
+
+    public void logInterfaceInformation() {
+    	for(NetworkInterface networkInterface : networkInterfaces) {
+        	try {
+				logInterfaceInformation(networkInterface);
+			} catch (SocketException ex) {
+                log.log(Level.WARNING, "Exception while logging network interface information", ex);
+			}
+        }
     }
 
     public InetAddress getMulticastGroup() {
@@ -147,6 +159,19 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         return null;
     }
 
+    public Short getAddressNetworkPrefixLength(InetAddress inetAddress) {
+        for (NetworkInterface iface : networkInterfaces) {
+            for (InterfaceAddress interfaceAddress : getInterfaceAddresses(iface)) {
+                if (interfaceAddress != null && interfaceAddress.getAddress().equals(inetAddress)) {
+                    short prefix = interfaceAddress.getNetworkPrefixLength();
+                    if(prefix > 0 && prefix < 32) return prefix; // some network cards return -1
+                    return null;
+                }
+            }
+        }
+        return null;
+    }
+
     public InetAddress getLocalAddress(NetworkInterface networkInterface, boolean isIPv6, InetAddress remoteAddress) {
 
         // First try to find a local IP that is in the same subnet as the remote IP
@@ -185,7 +210,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         for (NetworkInterface iface : networkInterfaces) {
             for (InterfaceAddress ifaceAddress : getInterfaceAddresses(iface)) {
 
-                if (!bindAddresses.contains(ifaceAddress.getAddress())) {
+                if (ifaceAddress == null || !bindAddresses.contains(ifaceAddress.getAddress())) {
                     continue;
                 }
 
@@ -377,7 +402,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             log.finer("Skipping loopback address: " + address);
             return false;
         }
-        
+
         if (address.isLinkLocalAddress()) {
         	log.finer("Skipping link-local address: " + address);
         	return false;
@@ -391,44 +416,47 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         return true;
     }
 
-    static void displayInterfaceInformation(NetworkInterface netint) throws SocketException {
-        System.out.printf("Parent Info:%s\n", netint.getParent());
-        System.out.printf("Display name: %s\n", netint.getDisplayName());
-        System.out.printf("Name: %s\n", netint.getName());
+    protected void logInterfaceInformation(NetworkInterface networkInterface) throws SocketException {
+        log.info("---------------------------------------------------------------------------------");
+        log.info(String.format("Interface display name: %s", networkInterface.getDisplayName()));
+        log.info(String.format("Parent Info: %s", networkInterface.getParent()));
+        log.info(String.format("Name: %s", networkInterface.getName()));
 
-        Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
+        Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
 
         for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-            System.out.printf("InetAddress: %s\n", inetAddress);
+            log.info(String.format("InetAddress: %s", inetAddress));
         }
 
-        List<InterfaceAddress> ias = netint.getInterfaceAddresses();
+        List<InterfaceAddress> interfaceAddresses = networkInterface.getInterfaceAddresses();
 
-        Iterator<InterfaceAddress> iias = ias.iterator();
-        while (iias.hasNext()) {
-            InterfaceAddress ia = iias.next();
-
-            System.out.println(" Interface Address");
-            System.out.println("  Address: " + ia.getAddress());
-            System.out.println("  Broadcast: " + ia.getBroadcast());
-            System.out.println("  Prefix length: " + ia.getNetworkPrefixLength());
+        for (InterfaceAddress interfaceAddress : interfaceAddresses) {
+            if (interfaceAddress == null) {
+                log.warning("Skipping null InterfaceAddress!");
+                continue;
+            }
+            log.info(" Interface Address");
+            log.info("  Address: " + interfaceAddress.getAddress());
+            log.info("  Broadcast: " + interfaceAddress.getBroadcast());
+            log.info("  Prefix length: " + interfaceAddress.getNetworkPrefixLength());
         }
 
-        Enumeration<NetworkInterface> subIfs = netint.getSubInterfaces();
+        Enumeration<NetworkInterface> subIfs = networkInterface.getSubInterfaces();
 
         for (NetworkInterface subIf : Collections.list(subIfs)) {
-            System.out.printf("\tSub Interface Display name: %s\n", subIf.getDisplayName());
-            System.out.printf("\tSub Interface Name: %s\n", subIf.getName());
+            if (subIf == null) {
+                log.warning("Skipping null NetworkInterface sub-interface");
+                continue;
+            }
+            log.info(String.format("\tSub Interface Display name: %s", subIf.getDisplayName()));
+            log.info(String.format("\tSub Interface Name: %s", subIf.getName()));
         }
-        System.out.printf("Up? %s\n", netint.isUp());
-        System.out.printf("Loopback? %s\n", netint.isLoopback());
-        System.out.printf("PointToPoint? %s\n", netint.isPointToPoint());
-        System.out.printf("Supports multicast? %s\n", netint.supportsMulticast());
-        System.out.printf("Virtual? %s\n", netint.isVirtual());
-        System.out.printf("Hardware address: %s\n", Arrays.toString(netint.getHardwareAddress()));
-        System.out.printf("MTU: %s\n", netint.getMTU());
-        System.out.printf("\n");
-
+        log.info(String.format("Up? %s", networkInterface.isUp()));
+        log.info(String.format("Loopback? %s", networkInterface.isLoopback()));
+        log.info(String.format("PointToPoint? %s", networkInterface.isPointToPoint()));
+        log.info(String.format("Supports multicast? %s", networkInterface.supportsMulticast()));
+        log.info(String.format("Virtual? %s", networkInterface.isVirtual()));
+        log.info(String.format("Hardware address: %s", Arrays.toString(networkInterface.getHardwareAddress())));
+        log.info(String.format("MTU: %s", networkInterface.getMTU()));
     }
-
 }

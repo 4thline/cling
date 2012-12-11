@@ -59,6 +59,11 @@ public interface NetworkAddressFactory {
      *         sockets listening for unicast datagrams and TCP requests.
      */
     public InetAddress[] getBindAddresses();
+    
+    /**
+     * @return The network prefix length of this address or <code>null</code>.
+     */
+    public Short getAddressNetworkPrefixLength(InetAddress inetAddress);
 
     /**
      * @param inetAddress An address of a local network interface.
@@ -92,4 +97,9 @@ public interface NetworkAddressFactory {
     public InetAddress getLocalAddress(NetworkInterface networkInterface,
                                        boolean isIPv6,
                                        InetAddress remoteAddress) throws IllegalStateException;
+
+    /**
+     * For debugging, logs all "usable" network interface(s) details with INFO level.
+     */
+    public void logInterfaceInformation();
 }
