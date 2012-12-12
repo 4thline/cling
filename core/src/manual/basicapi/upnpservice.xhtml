@@ -153,13 +153,19 @@
                             implementation bundled with Cling Core that does not require any particular Sun
                             JDK classes.
                         </p>
+                        <p>
+                            SOAP action and event messages are handled by configurable processors, you can provide
+                            alternative implementations if necessary, see
+                            <a href="#section.SwitchingXMLProcessors">Switching XML processors</a>.
+
+                        </p>
                     </dd>
 
                     <dt>Descriptors</dt>
                     <dd>
                         <p>
-                            Reading and writing UPnP XML descriptors is handled by binders, you can provide
-                            alternative implementations if necessary.
+                            Reading and writing UPnP XML device and service descriptors is handled by dedicated
+                            binders, see <a href="#section.SwitchingXMLDescriptorBinders">Switching descriptor XML binders</a>.
                         </p>
                     </dd>
 

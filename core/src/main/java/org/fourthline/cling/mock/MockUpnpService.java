@@ -17,7 +17,6 @@
 
 package org.fourthline.cling.mock;
 
-import org.fourthline.cling.DefaultUpnpServiceConfiguration;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.controlpoint.ControlPoint;
@@ -43,14 +42,11 @@ import org.fourthline.cling.transport.spi.StreamClient;
 import org.fourthline.cling.transport.spi.UpnpStream;
 
 import javax.enterprise.inject.Alternative;
-import java.net.Inet4Address;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Executor;
 
 /**
  * Simplifies testing of core and non-core modules.
@@ -88,68 +84,37 @@ public class MockUpnpService implements UpnpService {
      * Single-thread of execution for the whole UPnP stack, no ALIVE messages or registry maintenance.
      */
     public MockUpnpService() {
-        this(false, false, false);
+        this(false, new MockUpnpServiceConfiguration(false, false));
+    }
+
+    /**
+     * No ALIVE messages.
+     */
+    public MockUpnpService(MockUpnpServiceConfiguration configuration) {
+        this(false, configuration);
     }
 
     /**
      * Single-thread of execution for the whole UPnP stack, except one background registry maintenance thread.
      */
     public MockUpnpService(final boolean sendsAlive, final boolean maintainsRegistry) {
-        this(sendsAlive, maintainsRegistry, false);
+        this(sendsAlive, new MockUpnpServiceConfiguration(maintainsRegistry, false));
     }
 
     public MockUpnpService(final boolean sendsAlive, final boolean maintainsRegistry, final boolean multiThreaded) {
+        this(sendsAlive, new MockUpnpServiceConfiguration(maintainsRegistry, multiThreaded));
+    }
 
-        this.configuration = new DefaultUpnpServiceConfiguration(false) {
-            @Override
-            protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort) {
-                // We are only interested in 127.0.0.1
-                return new NetworkAddressFactoryImpl(streamListenPort) {
-                    @Override
-                    protected boolean isUsableNetworkInterface(NetworkInterface iface) throws Exception {
-                        return (iface.isLoopback());
-                    }
+    public MockUpnpService(final boolean sendsAlive, final MockUpnpServiceConfiguration configuration) {
 
-                    @Override
-                    protected boolean isUsableAddress(NetworkInterface networkInterface, InetAddress address) {
-                        return (address.isLoopbackAddress() && address instanceof Inet4Address);
-                    }
-
-                };
-            }
-
-            @Override
-            public Executor getRegistryMaintainerExecutor() {
-                if (maintainsRegistry) {
-                    return new Executor() {
-                        public void execute(Runnable runnable) {
-                            new Thread(runnable).start();
-                        }
-                    };
-                }
-                return createDefaultExecutor();
-            }
-
-            @Override
-            protected Executor createDefaultExecutor() {
-                return multiThreaded
-                        ?
-                        super.createDefaultExecutor()
-                        :
-                        new Executor() {
-                            public void execute(Runnable runnable) {
-                                runnable.run();
-                            }
-                        };
-            }
-        };
+        this.configuration = configuration;
 
         this.protocolFactory = createProtocolFactory(this, sendsAlive);
 
         this.registry = new RegistryImpl(this) {
             @Override
             protected RegistryMaintainer createRegistryMaintainer() {
-                return maintainsRegistry ? super.createRegistryMaintainer() : null;
+                return configuration.isMaintainsRegistry() ? super.createRegistryMaintainer() : null;
             }
         };
 

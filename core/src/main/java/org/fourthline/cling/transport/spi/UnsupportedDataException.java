@@ -18,7 +18,7 @@
 package org.fourthline.cling.transport.spi;
 
 /**
- * Thrown by processors/converters when errors occured.
+ * Thrown by processors/converters when errors occurred.
  * <p>
  * This exception indicates that received data was in an invalid format and/or could
  * not be parsed or converted. You typically can recover from this failure after
@@ -29,6 +29,10 @@ package org.fourthline.cling.transport.spi;
  */
 public class UnsupportedDataException extends RuntimeException {
 
+    private static final long serialVersionUID = 661795454401413339L;
+
+    protected Object data;
+	
     public UnsupportedDataException(String s) {
         super(s);
     }
@@ -36,4 +40,14 @@ public class UnsupportedDataException extends RuntimeException {
     public UnsupportedDataException(String s, Throwable throwable) {
         super(s, throwable);
     }
+    
+    public UnsupportedDataException(String s, Throwable throwable, Object data) {
+        super(s, throwable);
+        this.data = data;
+    }
+    
+    public Object getData() {
+    	return data;
+    }
+
 }

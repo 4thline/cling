@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<s:Body xmlns:s="invalid">
+        <SetSomeValue>
+            <SomeValue>foo&amp;bar</SomeValue>
+        </SetSomeValue>
+</s:Body>

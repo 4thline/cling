@@ -99,6 +99,11 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
         return body;
     }
 
+    public void setBody(String string) {
+        this.bodyType = BodyType.STRING;
+        this.body = string;
+    }
+
     public void setBody(BodyType bodyType, Object body) {
         this.bodyType = bodyType;
         this.body = body;
@@ -188,6 +193,12 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
 
     public boolean hasHostHeader() {
         return getHeaders().getFirstHeader(UpnpHeader.Type.HOST) != null;
+    }
+
+    public boolean isBodyNonEmptyString() {
+        return hasBody()
+            && getBodyType().equals(UpnpMessage.BodyType.STRING)
+            && getBodyString().length() > 0;
     }
 
     @Override

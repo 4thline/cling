@@ -121,6 +121,7 @@ public class ActionInvokeIncomingTest {
         StreamResponseMessage response = prot.getOutputMessage();
 
         assertNotNull(response);
+        assertFalse(response.getOperation().isFailed());
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
@@ -139,12 +140,13 @@ public class ActionInvokeIncomingTest {
     @Test
     public void incomingRemoteCallGetConcurrent() throws Exception {
 
-        // Registery local device and its service
+        // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService(false, false, true);
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceThrowsException.class);
         LocalService service = ld.getServices()[0];
         upnpService.getRegistry().addDevice(ld);
 
+        // TODO: Use a latch instead of waiting
         int i = 0;
         while (i < 10) {
             new Thread(new ConcurrentGetTest(upnpService, service)).start();
@@ -185,6 +187,7 @@ public class ActionInvokeIncomingTest {
             StreamResponseMessage response = prot.getOutputMessage();
 
             assertNotNull(response);
+            assertFalse(response.getOperation().isFailed());
             assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
             assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
             assertEquals(
@@ -204,7 +207,7 @@ public class ActionInvokeIncomingTest {
     @Test
     public void incomingRemoteCallSet() throws Exception {
 
-        // Registery local device and its service
+        // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         LocalDevice ld = ActionSampleData.createTestDevice();
         LocalService service = ld.getServices()[0];
@@ -224,6 +227,7 @@ public class ActionInvokeIncomingTest {
         StreamResponseMessage response = prot.getOutputMessage();
 
         assertNotNull(response);
+        assertFalse(response.getOperation().isFailed());
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
@@ -242,7 +246,7 @@ public class ActionInvokeIncomingTest {
     @Test
     public void incomingRemoteCallControlURINotFound() throws Exception {
 
-        // Registery local device and its service
+        // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         LocalDevice ld = ActionSampleData.createTestDevice();
         LocalService service = ld.getServices()[0];
@@ -267,7 +271,7 @@ public class ActionInvokeIncomingTest {
     @Test
     public void incomingRemoteCallMethodException() throws Exception {
 
-        // Registery local device and its service
+        // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceThrowsException.class);
         LocalService service = ld.getServices()[0];
@@ -288,6 +292,7 @@ public class ActionInvokeIncomingTest {
         StreamResponseMessage response = prot.getOutputMessage();
 
         assertNotNull(response);
+        assertTrue(response.getOperation().isFailed());
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
@@ -309,7 +314,7 @@ public class ActionInvokeIncomingTest {
     @Test
     public void incomingRemoteCallNoContentType() throws Exception {
 
-        // Registery local device and its service
+        // Register local device and its service
         MockUpnpService upnpService = new MockUpnpService();
         LocalDevice ld = ActionSampleData.createTestDevice();
         LocalService service = ld.getServices()[0];
@@ -331,6 +336,7 @@ public class ActionInvokeIncomingTest {
         StreamResponseMessage response = prot.getOutputMessage();
 
         assertNotNull(response);
+        assertFalse(response.getOperation().isFailed());
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(
@@ -403,6 +409,7 @@ public class ActionInvokeIncomingTest {
         StreamResponseMessage response = prot.getOutputMessage();
 
         assertNotNull(response);
+        assertFalse(response.getOperation().isFailed());
         assertTrue(response.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).isUDACompliantXML());
         assertNotNull(response.getHeaders().getFirstHeader(UpnpHeader.Type.EXT, EXTHeader.class));
         assertEquals(

@@ -17,8 +17,6 @@
 
 package org.fourthline.cling.model.message.control;
 
-import org.fourthline.cling.model.message.UpnpMessage;
-
 /**
  * A narrowing interface for action request/response messages.
  *
@@ -28,11 +26,8 @@ public interface ActionMessage {
 
     public String getActionNamespace();
 
-    public Object getBody();
-    public UpnpMessage.BodyType getBodyType();
+    public boolean isBodyNonEmptyString();
     public String getBodyString();
-    public byte[] getBodyBytes();
-
-    public void setBody(UpnpMessage.BodyType bodyType, Object body);
+    public void setBody(String string);
     
 }

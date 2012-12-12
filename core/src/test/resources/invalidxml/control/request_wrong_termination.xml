@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"
+            s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+    <s:Body>
+        <u:SetSomeValue xmlns:u="urn:schemas-upnp-org:service:SwitchPower:1">
+            <SomeValue>foo&amp;bar</SomeValue>
+        </u:SetSomeValue>
+    </s:Body>
+</s:Envelop

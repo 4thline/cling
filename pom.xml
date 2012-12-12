@@ -89,6 +89,7 @@
         <commons.logging.version>1.1.1</commons.logging.version>
         <paxexam.version>1.2.4</paxexam.version>
         <felix.version>1.4.0</felix.version>
+        <kxml.version>2.3.0</kxml.version>
 
     </properties>
 

@@ -22,7 +22,7 @@ import org.fourthline.cling.model.XMLUtil;
 import org.fourthline.cling.model.action.ActionArgumentValue;
 import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
-import org.fourthline.cling.model.message.UpnpMessage;
+import org.fourthline.cling.model.message.control.ActionMessage;
 import org.fourthline.cling.model.message.control.ActionRequestMessage;
 import org.fourthline.cling.model.message.control.ActionResponseMessage;
 import org.fourthline.cling.model.meta.ActionArgument;
@@ -36,7 +36,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
@@ -76,14 +75,13 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
 
             if (log.isLoggable(Level.FINER)) {
                 log.finer("===================================== SOAP BODY BEGIN ============================================");
-                log.finer(requestMessage.getBody().toString());
+                log.finer(requestMessage.getBodyString());
                 log.finer("-===================================== SOAP BODY END ============================================");
             }
 
         } catch (Exception ex) {
             throw new UnsupportedDataException("Can't transform message payload: " + ex, ex);
         }
-
     }
 
     public void writeBody(ActionResponseMessage responseMessage, ActionInvocation actionInvocation) throws UnsupportedDataException {
@@ -105,7 +103,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
 
             if (log.isLoggable(Level.FINER)) {
                 log.finer("===================================== SOAP BODY BEGIN ============================================");
-                log.finer(responseMessage.getBody().toString());
+                log.finer(responseMessage.getBodyString());
                 log.finer("-===================================== SOAP BODY END ============================================");
             }
 
@@ -113,96 +111,29 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
             throw new UnsupportedDataException("Can't transform message payload: " + ex, ex);
         }
     }
-    
-	private  String fixXMLEntities(String xml) {
-		
-    	StringBuilder fixedXml = new StringBuilder(xml.length());
-    	
-    	for(int i = 0; i < xml.length() ; i++) {
-    		
-    		char c = xml.charAt(i);
-    		if(c == '&') {
-    			// will not detect all possibly valid entities but should be sufficient for the purpose
-    			String sub = xml.substring(i, Math.min(i+10, xml.length()));
-    			if(!sub.startsWith("&#") && !sub.startsWith("&lt;") && !sub.startsWith("&gt;") && !sub.startsWith("&amp;") &&
-    			   !sub.startsWith("&apos;") && !sub.startsWith("&quot;")) {
-    				log.warning("fixed badly encoded entity in XML");
-    				fixedXml.append("&amp;");	
-    			} else {
-    				fixedXml.append(c);
-    			}
-    		} else {
-    			fixedXml.append(c);
-    		}
-    	}
-    	
-    	return fixedXml.toString();
-    }
-
 
     public void readBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation) throws UnsupportedDataException {
 
         log.fine("Reading body of " + requestMessage + " for: " + actionInvocation);
         if (log.isLoggable(Level.FINER)) {
             log.finer("===================================== SOAP BODY BEGIN ============================================");
-            log.finer(requestMessage.getBody().toString());
+            log.finer(requestMessage.getBodyString());
             log.finer("-===================================== SOAP BODY END ============================================");
         }
 
-        if (requestMessage.getBody() == null
-                || !requestMessage.getBodyType().equals(UpnpMessage.BodyType.STRING)
-                || requestMessage.getBodyString().length() == 0) {
-            throw new UnsupportedDataException("Can't transform empty or non-string body of: " + requestMessage);
-        }
-
+        String body = getMessageBody(requestMessage);
         try {
 
             DocumentBuilderFactory factory = createDocumentBuilderFactory();
             factory.setNamespaceAware(true);
-            Document d;
-            try {
-            	d = factory.newDocumentBuilder().parse(
-            			new InputSource(
-            					// Trim may not be needed, do it anyway
-            					new StringReader(requestMessage.getBodyString().trim())
-            			)
-            	);
-            } catch(SAXException e) {
-            	
-            	// There's many broken XML out there sent by various software failing to properly encode it
-            	// This simple fix will detect '&' characters in the body that are not XML entities and will encode it 
-            	// properly if necessary
-            	
-            	// This fix was done initially to workaround a TwonkyMobile bug:
-            	// TwonkyMobile sends unencoded URL as the first parameter of SetAVTransportURI, and this gives unparsable XML
-            	// if the URL has a query with parameters
-            	//
-            	// Here's the broken XML sent by TwonkyMobile:
-            	//
-            	// <s:Envelope
-            	// ...
-            	//	<u:SetAVTransportURI
-            	//	    ...
-            	//		<CurrentURI>http://192.168.1.14:56923/content/12a470d854dbc6887e4103e3140783fd.wav?profile_id=0&convert=wav</CurrentURI>
-            	//			
-            	
-            	
-            	log.warning("Got unparsable SOAP XML: trying to fix possibly badly encoded special chars (entities)");
-            	String fixedBodyString = fixXMLEntities(requestMessage.getBodyString().trim());
-            	
-               	d = factory.newDocumentBuilder().parse(
-                 			new InputSource(
-                 					new StringReader(fixedBodyString)
-                 			)
-               	);
-            }
+            Document d = factory.newDocumentBuilder().parse(new InputSource(new StringReader(body)));
 
             Element bodyElement = readBodyElement(d);
 
             readBodyRequest(d, bodyElement, requestMessage, actionInvocation);
 
         } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload: " + ex, ex);
+            throw new UnsupportedDataException("Can't transform message payload: " + ex, ex, body);
         }
     }
 
@@ -215,37 +146,25 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
             log.finer("-===================================== SOAP BODY END ============================================");
         }
 
-        if (responseMsg.getBody() == null
-                || !responseMsg.getBodyType().equals(UpnpMessage.BodyType.STRING)
-                || responseMsg.getBodyString().length() == 0) {
-            throw new UnsupportedDataException("Can't transform empty or non-string body of: " + responseMsg);
-        }
-
+        String body = getMessageBody(responseMsg);
         try {
 
             DocumentBuilderFactory factory = createDocumentBuilderFactory();
             factory.setNamespaceAware(true);
-
-            Document d = factory.newDocumentBuilder().parse(
-                    new InputSource(
-                            // Trim may not be needed, do it anyway
-                            new StringReader(responseMsg.getBodyString().trim())
-                    )
-            );
+            Document d = factory.newDocumentBuilder().parse(new InputSource(new StringReader(body)));
 
             Element bodyElement = readBodyElement(d);
 
-            ActionException ex = readBodyFailure(d, bodyElement);
-            
+            ActionException failure = readBodyFailure(d, bodyElement);
 
-            if (ex == null) {
+            if (failure == null) {
                 readBodyResponse(d, bodyElement, responseMsg, actionInvocation);
             } else {
-                actionInvocation.setFailure(ex);
+                actionInvocation.setFailure(failure);
             }
 
         } catch (Exception ex) {
-            throw new UnsupportedDataException("Can't transform message payload: " + ex, ex);
+    		throw new UnsupportedDataException("Can't transform message payload: " + ex, ex, body);
         }
     }
 
@@ -257,7 +176,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
                                     ActionInvocation actionInvocation) throws Exception {
 
         writeFaultElement(d, bodyElement, actionInvocation);
-        message.setBody(UpnpMessage.BodyType.STRING, toString(d));
+        message.setBody(toString(d));
     }
 
     protected void writeBodyRequest(Document d,
@@ -267,7 +186,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
 
         Element actionRequestElement = writeActionRequestElement(d, bodyElement, message, actionInvocation);
         writeActionInputArguments(d, actionRequestElement, actionInvocation);
-        message.setBody(UpnpMessage.BodyType.STRING, toString(d));
+        message.setBody(toString(d));
 
     }
 
@@ -278,7 +197,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
 
         Element actionResponseElement = writeActionResponseElement(d, bodyElement, message, actionInvocation);
         writeActionOutputArguments(d, actionResponseElement, actionInvocation);
-        message.setBody(UpnpMessage.BodyType.STRING, toString(d));
+        message.setBody(toString(d));
     }
 
     protected ActionException readBodyFailure(Document d, Element bodyElement) throws Exception {
@@ -373,14 +292,20 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
             if (bodyChild.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
-            if (getUnprefixedNodeName(bodyChild).equals(actionInvocation.getAction().getName()) &&
-                    bodyChild.getNamespaceURI().equals(message.getActionNamespace())) {
-                log.fine("Reading action request element: " + getUnprefixedNodeName(bodyChild));
+            String unprefixedName = getUnprefixedNodeName(bodyChild);
+            if (unprefixedName.equals(actionInvocation.getAction().getName())) {
+                if (bodyChild.getNamespaceURI() == null
+                    || !bodyChild.getNamespaceURI().equals(message.getActionNamespace()))
+                    throw new UnsupportedDataException(
+                        "Illegal or missing namespace on action request element: " + bodyChild
+                    );
+                log.fine("Reading action request element: " + unprefixedName);
                 return (Element) bodyChild;
             }
         }
-        log.info("Could not read action request element matching namespace: " + message.getActionNamespace());
-        return null;
+        throw new UnsupportedDataException(
+            "Could not read action request element matching namespace: " + message.getActionNamespace()
+        );
     }
 
     /* ##################################################################################################### */
@@ -572,6 +497,14 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
 
     /* ##################################################################################################### */
 
+    protected String getMessageBody(ActionMessage message) throws UnsupportedDataException {
+        if (!message.isBodyNonEmptyString())
+            throw new UnsupportedDataException(
+                "Can't transform null or non-string/zero-length body of: " + message
+            );
+        return message.getBodyString().trim();
+    }
+
     protected String toString(Document d) throws Exception {
         // Just to be safe, no newline at the end
         String output = XMLUtil.documentToString(d);
@@ -588,6 +521,12 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
                 : node.getNodeName();
     }
 
+    /**
+     * The UPnP spec says that action arguments must be in the order as declared
+     * by the service. This method however is lenient, the action argument nodes
+     * in the XML can be in any order, as long as they are all there everything
+     * is OK.
+     */
     protected ActionArgumentValue[] readArgumentValues(NodeList nodeList, ActionArgument[] args)
             throws ActionException {
 
@@ -596,14 +535,13 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
         ActionArgumentValue[] values = new ActionArgumentValue[args.length];
 
         for (int i = 0; i < args.length; i++) {
-            Node node = nodes.get(i);
+        	
             ActionArgument arg = args[i];
-            String nodeName = getUnprefixedNodeName(node);
-            if (!arg.isNameOrAlias(nodeName)) {
+            Node node = findActionArgumentNode(nodes, arg);
+            if(node == null) {
                 throw new ActionException(
                         ErrorCode.ARGUMENT_VALUE_INVALID,
-                        "Wrong order of arguments, expected '" + arg.getName() + "' not: " + nodeName
-                );
+                        "Could not find argument '" + arg.getName() + "' node");
             }
             log.fine("Reading action argument: " + arg.getName());
             String value = XMLUtil.getTextContent(node);
@@ -612,6 +550,10 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
         return values;
     }
 
+    /**
+     * Finds all element nodes in the list that match any argument name or argument
+     * alias, throws {@link ActionException} if not all arguments were found.
+     */
     protected List<Node> getMatchingNodes(NodeList nodeList, ActionArgument[] args) throws ActionException {
 
         List<String> names = new ArrayList();
@@ -640,6 +582,11 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
         return matches;
     }
 
+    /**
+     * Creates an instance of {@link ActionArgumentValue} and wraps an
+     * {@link InvalidValueException} as an {@link ActionException} with the
+     * appropriate {@link ErrorCode}.
+     */
     protected ActionArgumentValue createValue(ActionArgument arg, String value) throws ActionException {
         try {
             return new ActionArgumentValue(arg, value);
@@ -652,4 +599,14 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
         }
     }
 
+    /**
+     * Returns the node with the same unprefixed name as the action argument
+     * name/alias or <code>null</code>.
+     */
+    protected Node findActionArgumentNode(List<Node> nodes, ActionArgument arg) {
+    	for(Node node : nodes) {
+    		if(arg.isNameOrAlias(getUnprefixedNodeName(node))) return node;
+    	}
+    	return null;
+    }
 }
