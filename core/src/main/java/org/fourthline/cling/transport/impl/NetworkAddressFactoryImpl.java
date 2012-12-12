@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -306,18 +307,18 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             return false;
         }
 
-        if (iface.getName().toLowerCase().startsWith("vmnet") ||
-        		(iface.getDisplayName() != null &&  iface.getDisplayName().toLowerCase().contains("vmnet"))) {
+        if (iface.getName().toLowerCase(Locale.ENGLISH).startsWith("vmnet") ||
+        		(iface.getDisplayName() != null &&  iface.getDisplayName().toLowerCase(Locale.ENGLISH).contains("vmnet"))) {
             log.finer("Skipping network interface (VMWare): " + iface.getDisplayName());
             return false;
         }
 
-        if (iface.getName().toLowerCase().startsWith("vnic")) {
+        if (iface.getName().toLowerCase(Locale.ENGLISH).startsWith("vnic")) {
             log.finer("Skipping network interface (Parallels): " + iface.getDisplayName());
             return false;
         }
 
-        if (iface.getName().toLowerCase().startsWith("ppp")) {
+        if (iface.getName().toLowerCase(Locale.ENGLISH).startsWith("ppp")) {
             log.finer("Skipping network interface (PPP): " + iface.getDisplayName());
             return false;
         }

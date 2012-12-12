@@ -22,6 +22,7 @@ import java.net.URL;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * A request message, with a method (GET, POST, NOTIFY, etc).
@@ -58,7 +59,7 @@ public class UpnpRequest extends UpnpOperation {
 
         public static Method getByHttpName(String httpName) {
             if (httpName == null) return UNKNOWN;
-        	Method m = byName.get(httpName.toUpperCase());
+        	Method m = byName.get(httpName.toUpperCase(Locale.ENGLISH));
             return m != null ? m : UNKNOWN;
         }
     }
