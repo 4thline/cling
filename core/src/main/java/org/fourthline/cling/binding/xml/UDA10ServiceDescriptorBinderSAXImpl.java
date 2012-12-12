@@ -36,6 +36,7 @@ import org.xml.sax.SAXException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import static org.fourthline.cling.binding.xml.Descriptor.Service.ATTRIBUTE;
@@ -238,7 +239,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                     getInstance().name = getCharacters();
                     break;
                 case direction:
-                    getInstance().direction = ActionArgument.Direction.valueOf(getCharacters().toUpperCase());
+                    getInstance().direction = ActionArgument.Direction.valueOf(getCharacters().toUpperCase(Locale.ENGLISH));
                     break;
                 case relatedStateVariable:
                     getInstance().relatedStateVariable = getCharacters();
@@ -270,7 +271,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
 
                 String sendEventsAttributeValue = attributes.getValue(ATTRIBUTE.sendEvents.toString());
                 stateVariable.eventDetails = new StateVariableEventDetails(
-                        sendEventsAttributeValue != null && sendEventsAttributeValue.toUpperCase().equals("YES")
+                        sendEventsAttributeValue != null && sendEventsAttributeValue.toUpperCase(Locale.ENGLISH).equals("YES")
                 );
 
                 getInstance().add(stateVariable);

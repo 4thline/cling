@@ -17,6 +17,8 @@
 
 package org.fourthline.cling.model.message.header;
 
+import java.util.Locale;
+
 /**
  * @author Christian Bauer
  */
@@ -27,7 +29,7 @@ public class RootDeviceHeader extends UpnpHeader<String> {
     }
 
     public void setString(String s) throws InvalidHeaderException {
-        if (!s.toLowerCase().equals(getValue())) {
+        if (!s.toLowerCase(Locale.ENGLISH).equals(getValue())) {
             throw new InvalidHeaderException("Invalid root device NT header value: " + s);
         }
     }

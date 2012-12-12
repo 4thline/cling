@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -77,7 +78,7 @@ public class HttpExchangeUpnpStream extends UpnpStream {
 
             // Protocol
             requestMessage.getOperation().setHttpMinorVersion(
-                    getHttpExchange().getProtocol().toUpperCase().equals("HTTP/1.1") ? 1 : 0
+                    getHttpExchange().getProtocol().toUpperCase(Locale.ENGLISH).equals("HTTP/1.1") ? 1 : 0
             );
 
             log.fine("Created new request message: " + requestMessage);

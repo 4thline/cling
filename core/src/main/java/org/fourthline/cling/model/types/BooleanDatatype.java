@@ -17,6 +17,8 @@
 
 package org.fourthline.cling.model.types;
 
+import java.util.Locale;
+
 /**
  * @author Christian Bauer
  */
@@ -32,9 +34,9 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
 
     public Boolean valueOf(String s) throws InvalidValueException {
         if (s.equals("")) return null;
-        if (s.equals("1") || s.toUpperCase().equals("YES") || s.toUpperCase().equals("TRUE")) {
+        if (s.equals("1") || s.toUpperCase(Locale.ENGLISH).equals("YES") || s.toUpperCase(Locale.ENGLISH).equals("TRUE")) {
             return true;
-        } else if (s.equals("0") || s.toUpperCase().equals("NO") || s.toUpperCase().equals("FALSE")) {
+        } else if (s.equals("0") || s.toUpperCase(Locale.ENGLISH).equals("NO") || s.toUpperCase(Locale.ENGLISH).equals("FALSE")) {
             return false;
         } else {
             throw new InvalidValueException("Invalid boolean value string: " + s);

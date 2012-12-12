@@ -43,6 +43,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import static org.fourthline.cling.binding.xml.Descriptor.Service.ATTRIBUTE;
@@ -236,7 +237,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
             if (ELEMENT.name.equals(argumentNodeChild)) {
                 actionArgument.name = XMLUtil.getTextContent(argumentNodeChild);
             } else if (ELEMENT.direction.equals(argumentNodeChild)) {
-                actionArgument.direction = ActionArgument.Direction.valueOf(XMLUtil.getTextContent(argumentNodeChild).toUpperCase());
+                actionArgument.direction = ActionArgument.Direction.valueOf(XMLUtil.getTextContent(argumentNodeChild).toUpperCase(Locale.ENGLISH));
             } else if (ELEMENT.relatedStateVariable.equals(argumentNodeChild)) {
                 actionArgument.relatedStateVariable = XMLUtil.getTextContent(argumentNodeChild);
             } else if (ELEMENT.retval.equals(argumentNodeChild)) {
@@ -266,7 +267,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
         stateVariable.eventDetails = new StateVariableEventDetails(
                 stateVariableElement.getAttribute("sendEvents") != null &&
-                        stateVariableElement.getAttribute(ATTRIBUTE.sendEvents.toString()).toUpperCase().equals("YES")
+                        stateVariableElement.getAttribute(ATTRIBUTE.sendEvents.toString()).toUpperCase(Locale.ENGLISH).equals("YES")
         );
 
         NodeList stateVariableChildren = stateVariableElement.getChildNodes();
@@ -411,7 +412,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         Element actionArgumentElement = appendNewElement(descriptor, actionElement, ELEMENT.argument);
 
         appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.name, actionArgument.getName());
-        appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.direction, actionArgument.getDirection().toString().toLowerCase());
+        appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.direction, actionArgument.getDirection().toString().toLowerCase(Locale.ENGLISH));
         if (actionArgument.isReturnValue()) {
             appendNewElement(descriptor, actionArgumentElement, ELEMENT.retval);
         }

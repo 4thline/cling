@@ -22,6 +22,7 @@ import java.net.NetworkInterface;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Set;
+import java.util.Locale;
 
 /**
  * Shared trivial procedures.
@@ -86,7 +87,7 @@ public class ModelUtil {
         if (ANDROID_RUNTIME) {
             return name != null && name.length() != 0;
         }
-        return name != null && name.length() != 0 && !name.toLowerCase().startsWith("xml") && name.matches(Constants.REGEX_UDA_NAME);
+        return name != null && name.length() != 0 && !name.toLowerCase(Locale.ENGLISH).startsWith("xml") && name.matches(Constants.REGEX_UDA_NAME);
     }
 
     /**
