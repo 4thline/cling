@@ -26,6 +26,8 @@ import org.fourthline.cling.transport.spi.SOAPActionProcessor;
 import org.fourthline.cling.transport.spi.UnsupportedDataException;
 import org.seamless.xml.XmlPullParserUtils;
 
+import javax.enterprise.inject.Alternative;
+
 /**
  * Implementation based on the <em>Xml Pull Parser</em> XML processing API.
  * <p>
@@ -49,6 +51,7 @@ import org.seamless.xml.XmlPullParserUtils;
  *
  * @author Michael Pujos
  */
+@Alternative
 public class RecoveringSOAPActionProcessorImpl extends PullSOAPActionProcessorImpl {
 
     private static Logger log = Logger.getLogger(SOAPActionProcessor.class.getName());

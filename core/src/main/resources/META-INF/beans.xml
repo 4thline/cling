@@ -9,7 +9,18 @@
     <weld:scan>
         <weld:exclude name="android.**"/>
         <weld:exclude name="org.fourthline.cling.android.**"/>
-        <weld:exclude name="org.fourthline.cling.transport.impl.apache.**"/>
+
+        <weld:exclude name="org.fourthline.cling.transport.impl.apache.**">
+            <weld:if-class-available name="!org.apache.http.HttpVersion"/>
+        </weld:exclude>
+
+        <weld:exclude name="org.fourthline.cling.transport.impl.*Pull*">
+            <weld:if-class-available name="!org.xmlpull.v1.XmlPullParser"/>
+        </weld:exclude>
+        <weld:exclude name="org.fourthline.cling.transport.impl.Recovering*">
+            <weld:if-class-available name="!org.xmlpull.v1.XmlPullParser"/>
+        </weld:exclude>
+
     </weld:scan>
 
 </beans>
