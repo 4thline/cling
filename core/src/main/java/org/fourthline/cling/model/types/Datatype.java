@@ -20,6 +20,7 @@ package org.fourthline.cling.model.types;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 
 /**
  * The type of a state variable value, able to convert to/from string representation.
@@ -142,9 +143,9 @@ public interface Datatype<V> {
         private static Map<String, Builtin> byName = new HashMap<String, Builtin>() {{
             for (Builtin b : Builtin.values()) {
                 // Lowercase descriptor name!
-                if (containsKey(b.getDescriptorName().toLowerCase()))
+                if (containsKey(b.getDescriptorName().toLowerCase(Locale.ENGLISH)))
                     continue; // Ignore double-declarations, take first one only
-                put(b.getDescriptorName().toLowerCase(), b);
+                put(b.getDescriptorName().toLowerCase(Locale.ENGLISH), b);
             }
         }};
 
@@ -170,7 +171,7 @@ public interface Datatype<V> {
             // they are case sensitive. But we want to work with broken devices, which of
             // course produce mixed upper/lowercase values.
             if (descriptorName == null) return null;
-            return byName.get(descriptorName.toLowerCase());
+            return byName.get(descriptorName.toLowerCase(Locale.ENGLISH));
         }
 
         public static boolean isNumeric(Builtin builtin) {

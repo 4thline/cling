@@ -21,6 +21,7 @@ import org.fourthline.cling.model.Constants;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Locale;
 
 /**
  * @author Christian Bauer
@@ -40,7 +41,7 @@ public class MaxAgeHeader extends UpnpHeader<Integer> {
 
     public void setString(String s) throws InvalidHeaderException {
 
-        Matcher matcher = MAX_AGE_REGEX.matcher(s.toLowerCase());
+        Matcher matcher = MAX_AGE_REGEX.matcher(s.toLowerCase(Locale.ENGLISH));
         if (!matcher.matches()){
             throw new InvalidHeaderException("Invalid cache-control value, can't parse max-age seconds: " + s);
         }

@@ -21,6 +21,7 @@ import org.seamless.util.Exceptions;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -123,7 +124,7 @@ public abstract class UpnpHeader<T> {
          */
         public static Type getByHttpName(String httpName) {
             if (httpName == null) return null;
-        	return byName.get(httpName.toUpperCase());
+        	return byName.get(httpName.toUpperCase(Locale.ENGLISH));
         }
     }
 

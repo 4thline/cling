@@ -30,6 +30,7 @@ import org.seamless.util.MimeType;
 import org.testng.annotations.Test;
 
 import java.net.URI;
+import java.util.Locale;
 
 import static org.testng.Assert.assertEquals;
 
@@ -473,7 +474,7 @@ public class HeaderParsingTest {
     public void parseInterfaceMacAddress() {
         InterfaceMacHeader header = new InterfaceMacHeader("00:17:ab:e9:65:a0");
         assertEquals(header.getValue().length, 6);
-        assertEquals(header.getString().toUpperCase(), "00:17:AB:E9:65:A0");
+        assertEquals(header.getString().toUpperCase(Locale.ENGLISH), "00:17:AB:E9:65:A0");
     }
 
     @Test
