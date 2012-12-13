@@ -291,7 +291,6 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
      * <li>named "vnic*" (OS X Parallels interfaces should be ignored as well)</li>
      * <li>named "*virtual*" (VirtualBox interfaces, for example</li>
      * <li>named "ppp*"</li>
-     * <li>not supporting multicast</li>
      * </ul>
      *
      * @param iface The interface to validate.
@@ -330,11 +329,6 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             return false;
         }
 
-        if (!iface.supportsMulticast()) {
-            log.finer("Skipping network interface (no multicast support): " + iface.getDisplayName());
-            return false;
-        }
-
         if (iface.isLoopback()) {
             log.finer("Skipping network interface (ignoring loopback): " + iface.getDisplayName());
             return false;
@@ -344,6 +338,9 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             log.finer("Skipping unwanted network interface (-D" + SYSTEM_PROPERTY_NET_IFACES + "): " + iface.getName());
             return false;
         }
+
+        if (!iface.supportsMulticast())
+            log.warning("Network interface may not be multicast capable: "  + iface.getDisplayName());
 
         return true;
     }
