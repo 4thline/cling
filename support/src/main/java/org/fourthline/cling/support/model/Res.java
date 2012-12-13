@@ -43,6 +43,10 @@ public class Res {
     public Res() {
     }
 
+    public Res(String httpGetMimeType, Long size, String duration, Long bitrate, String value) {
+        this(new ProtocolInfo(Protocol.HTTP_GET, ProtocolInfo.WILDCARD, httpGetMimeType, ProtocolInfo.WILDCARD), size, duration, bitrate, value);
+    }
+    
     public Res(MimeType httpGetMimeType, Long size, String duration, Long bitrate, String value) {
         this(new ProtocolInfo(httpGetMimeType), size, duration, bitrate, value);
     }
