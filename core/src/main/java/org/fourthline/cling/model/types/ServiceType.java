@@ -76,6 +76,9 @@ public class ServiceType {
      */
     public static ServiceType valueOf(String s) throws InvalidValueException {
 
+        if (s == null)
+            throw new InvalidValueException("Can't parse null string");
+
         ServiceType serviceType = null;
 
         // Sometimes crazy UPnP devices deliver spaces in a URN, don't ask...
