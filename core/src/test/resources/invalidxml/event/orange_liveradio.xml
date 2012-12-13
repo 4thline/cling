@@ -1,0 +1,18 @@
+<!-- device exception: org.xmlpull.v1.XmlPullParserException: Unexpected token (position:TEXT Event xmlns="urn...@1:117 in java.io.StringReader@40b4cfb8)  -->
+<!-- context: LastChangeSubscriptionCallback -->
+<!-- Manufacturer: Orange -->
+<!-- Model Description: Digital Media Renderer -->
+<!-- Model Name: liveradio -->
+<!-- Model Number: 2.5.2 -->
+
+
+<!-- LastChange not XML encoded -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<e:propertyset xmlns:e="urn:schemas-upnp-org:event-1-0">
+	<e:property>
+		<LastChange>
+			<Event xmlns="urn:schemas-upnp-org:metadata-1-0/AVT/"><InstanceID val="0"><TransportState val="STOPPED"/></InstanceID></Event>
+		</LastChange>
+	</e:property>
+</e:propertyset>

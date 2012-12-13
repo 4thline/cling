@@ -18,6 +18,7 @@
 package org.fourthline.cling.transport.impl;
 
 import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.model.XMLUtil;
 import org.fourthline.cling.model.message.gena.IncomingEventRequestMessage;
 import org.fourthline.cling.transport.spi.GENAEventProcessor;
 import org.seamless.xml.XmlPullParserUtils;
@@ -94,22 +95,35 @@ public class RecoveringGENAEventProcessorImpl extends PullGENAEventProcessorImpl
 
         if (matcher.find() && matcher.groupCount() == 1) {
 
-            String xmlEncodedLastChange = matcher.group(1);
+            String lastChange = matcher.group(1);
 
-            // TODO: UPNP VIOLATION: Philips NP2900 inserts garbage HTML, try to fix it
-            String fixedXmlEncodedLastChange = xmlEncodedLastChange.replaceAll("<>", "");
-
-            if (fixedXmlEncodedLastChange.equals(xmlEncodedLastChange)) {
+            if (XmlPullParserUtils.isNullOrEmpty(lastChange))
                 return xml;
+
+            lastChange = lastChange.trim();
+
+            String fixedLastChange = lastChange;
+
+            if (lastChange.charAt(0) == '<') {
+            // TODO: UPNP VIOLATION: Orange Liveradio does not encode LastChange XML properly
+                fixedLastChange = XMLUtil.encodeText(fixedLastChange);
+            } else {
+                /* Doesn't work for Philips NP2900, there is complete garbage after the HTML
+                // TODO: UPNP VIOLATION: Philips NP2900 inserts garbage HTML, try to fix it
+                fixedLastChange = fixedLastChange.replaceAll("<", "");
+                fixedLastChange = fixedLastChange.replaceAll(">", "");
+                */
             }
 
-            log.warning("Deleted invalid characters in LastChange event");
+            if (fixedLastChange.equals(lastChange)) {
+                return xml;
+            }
 
             return "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<e:propertyset xmlns:e=\"urn:schemas-upnp-org:event-1-0\">" +
                 "<e:property>" +
                 "<LastChange>" +
-                fixedXmlEncodedLastChange +
+                fixedLastChange +
                 "</LastChange>" +
                 "</e:property>" +
                 "</e:propertyset>";

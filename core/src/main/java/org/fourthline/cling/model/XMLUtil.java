@@ -145,7 +145,7 @@ public class XMLUtil {
         return b.toString();
     }
 
-    protected static String encodeText(String s) {
+    public static String encodeText(String s) {
         s = s.replaceAll("&", "&amp;");
         s = s.replaceAll("<", "&lt;");
         s = s.replaceAll(">", "&gt;");

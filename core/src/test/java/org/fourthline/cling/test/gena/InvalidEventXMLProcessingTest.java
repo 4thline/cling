@@ -63,6 +63,7 @@ public class InvalidEventXMLProcessingTest {
     public String[][] getInvalidRecoverableXMLFile() throws Exception {
         return new String[][]{
             {"/invalidxml/event/truncated.xml"},
+            {"/invalidxml/event/orange_liveradio.xml"},
         };
     }
 
