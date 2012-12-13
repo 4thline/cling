@@ -142,6 +142,40 @@
                 </dl>
 
                 <p>
+                    For the <code>GENAEventProcessor</code>, the following implementations are bundled
+                    with Cling Core:
+                </p>
+
+                <dl>
+                    <dt><code>org.fourthline.cling.transport.impl.GENAEventProcessorImpl</code> (default)</dt>
+                    <dd>
+                        This implementation reads and writes XML with the JAXP-provided DOM API provided by JDK 6.
+                        You do not need any additional libraries to use this processor. However, its strict compliance
+                        with the UPnP specification can cause problems in real-world UPnP applications. This processor
+                        will produce errors during reading when XML messages violate the UPnP specification. Use it
+                        to test a UPnP stack or application for strict specification compliance.
+                    </dd>
+                    <dt><code>org.fourthline.cling.transport.impl.PullGENAEventProcessorImpl</code></dt>
+                    <dd>
+                        This processor uses the XML Pull API to read messages, and the JAXP DOM API to write messages.
+                        You need an implementation of the XML Pull API on your classpath to use this processor, for
+                        example, <a href="http://www.extreme.indiana.edu/xgws/xsoap/xpp/mxp1/index.html">XPP3</a>
+                        or <a href="http://kxml.sourceforge.net/kxml2/">kXML 2</a>. Compared with the default processor,
+                        this processor is much more lenient when reading action message XML. It can deal with broken
+                        namespacing, missing root element, and other problems. In UPnP applications where
+                        compatibility is more important than specification compliance, you should use this parser.
+                    </dd>
+                    <dt><code>org.fourthline.cling.transport.impl.RecoveringGENAEventProcessorImpl</code></dt>
+                    <dd>
+                        This processor extends the <code>PullGENAEventProcessorImpl</code> and additionally will
+                        work around known bugs of UPnP stacks in the wild and try to recover from parsing failures by
+                        modifying the XML text in different ways. This is the processor you should use for maximum
+                        compatibility in your application. Furthermore, it will return partial results, when at least
+                        one single state variable value was successfully read from the event XML.
+                    </dd>
+                </dl>
+
+                <p>
                     You can switch XML processors by overriding the <code>UpnpServiceConfiguration</code>:
                 </p>
 
@@ -153,19 +187,14 @@
             return new PullSOAPActionProcessorImpl();
         }
 
+        @Override
+        public GENAEventProcessor getGenaEventProcessor() {
+            return new PullGENAEventProcessorImpl();
+        }
     }
 );]]></pre>
-
-                <!--
-                @Override
-                public GENAEventProcessor getGenaEventProcessor() {
-                    return super.getGenaEventProcessor();
-                }
-                -->
-
             </div>
         </div>
-
 
     </div>
 </div>
