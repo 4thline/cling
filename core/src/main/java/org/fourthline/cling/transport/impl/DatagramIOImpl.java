@@ -22,7 +22,7 @@ import org.fourthline.cling.transport.Router;
 import org.fourthline.cling.transport.spi.DatagramIO;
 import org.fourthline.cling.transport.spi.DatagramProcessor;
 import org.fourthline.cling.transport.spi.InitializationException;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;

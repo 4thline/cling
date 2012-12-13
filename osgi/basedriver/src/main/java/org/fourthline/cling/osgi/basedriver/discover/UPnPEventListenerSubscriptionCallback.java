@@ -17,6 +17,8 @@
 
 package org.fourthline.cling.osgi.basedriver.discover;
 
+import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.model.gena.RemoteGENASubscription;
 import org.osgi.service.upnp.UPnPDevice;
 import org.osgi.service.upnp.UPnPEventListener;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
@@ -152,4 +154,16 @@ public class UPnPEventListenerSubscriptionCallback extends SubscriptionCallback 
         ));
     }
 
+
+    @Override
+    protected void invalidMessage(RemoteGENASubscription subscription,
+                                  UnsupportedDataException ex) {
+        log.finer(String.format(
+            "Subscription %s for device %s service %s received invalid XML message causing exception %s.",
+            subscription.getSubscriptionId(),
+            getDeviceId(),
+            getServiceId(),
+            ex.toString()
+        ));
+    }
 }

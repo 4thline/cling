@@ -18,6 +18,7 @@
 package org.fourthline.cling.transport.spi;
 
 
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.message.IncomingDatagramMessage;
 import org.fourthline.cling.model.message.OutgoingDatagramMessage;
 
@@ -44,7 +45,7 @@ public interface DatagramProcessor {
      * @param receivedOnAddress The address of the socket on which this datagram was received.
      * @param datagram The received UDP datagram.
      * @return The populated instance.
-     * @throws UnsupportedDataException If the datagram could not be read, or didn't contain required data.
+     * @throws org.fourthline.cling.model.UnsupportedDataException If the datagram could not be read, or didn't contain required data.
      */
     public IncomingDatagramMessage read(InetAddress receivedOnAddress, DatagramPacket datagram) throws UnsupportedDataException;
 

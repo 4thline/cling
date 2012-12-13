@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- device exception: net.sf.saxon.u.p: Error reported by XML parser processing null: At line 8, column 1198: not well-formed (invalid token) -->
+<!-- context: AVTransportService event -->
+<!-- Manufacturer: Royal Philips Electronics -->
+<!-- Model Description: Philips Streamium HiFi Player -->
+<!-- Model Name: NP -->
+<!-- Model Number: 2900 -->
+
+<!-- garbage HTML into XML -->
+<e:propertyset xmlns:e="urn:schemas-upnp-org:event-1-0">
+	<e:property>
+		<LastChange>
+			&lt;Event
+			xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+			&lt;InstanceID val=&quot;0&quot;&gt;
+			&lt;TransportState val=&quot;PLAYING&quot;/&gt;
+			&lt;CurrentTrackURI
+			val=&quot;http://192.168.1.72:62894/%2525/CE519FD5175DFFE5B341A5EB24EEE38C%252FStephane%2520Pompougnac-H%25C3%25B4tel%2520Costes4,%2520Quatre-03-Thunderball%2520-%2520Solar.mp3&quot;/&gt;
+			&lt;CurrentTrackMetaData val=&quot;&amp;lt;DIDL-Lite
+			xmlns=&amp;quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&amp;quot;
+			xmlns:upnp=&amp;quot;urn:schemas-upnp-org:metadata-1-0/upnp/&amp;quot;
+			xmlns:dc=&amp;quot;http://purl.org/dc/elements/1.1/&amp;quot;
+			xmlns:dlna=&amp;quot;urn:schemas-dlna-org:metadata-1-0/&amp;quot;&amp;gt;&amp;lt;item
+			parentID=&amp;quot;musicdb://3/492/&amp;quot;
+			id=&amp;quot;musicdb://3/492/5249.mp3&amp;quot;&amp;gt;&amp;lt;upnp:albumArtURI
+			dlna:profileID=&amp;quot;JPEG_TN&amp;quot;&amp;gt;http://192.168.1.72:62894/%2525/E2A2E4055FB9C4AE7DAD96B5B57DDC0C%252Fc2385cf6.tbn&amp;lt;/upnp:albumArtURI&amp;gt;&amp;lt;upnp:artist&amp;gt;Stephane
+			Pompougnac&amp;lt;/upnp:artist&amp;gt;&amp;lt;upnp:artist
+			role=&amp;quot;Performer&amp;quot;&amp;gt;Stephane
+			Pompougnac&amp;lt;/upnp:artist&amp;gt;&amp;lt;upnp:artist
+			role=&amp;quot;AlbumArtist&amp;quot;&amp;gt;Stephane
+			Pompougnac&amp;lt;/upnp:artist&amp;gt;&amp;lt;dc:creator&amp;gt;Stephane
+			Pompougnac&amp;lt;/dc:creator&amp;gt;&amp;lt;upnp:class&amp;gt;object.item.audioItem.musicTrack&amp;lt;/upnp:class&amp;gt;&amp;lt;dc:title&amp;gt;Thunderball
+			- Solar&amp;lt;/dc:title&amp;gt;&amp;lt;upnp:album&amp;gt;H height=
+			<font size=tel Costes4 , Quatre & amp ; lt ; upnp:album & amp ;
+				gt ; amp ; lt ; upnp:genre & amp ; gt ; Lounge & amp ; lt ;
+				upnp:genre & amp ; gt ; amp ; lt ; ownerUdn & amp ; gt ;
+				a25af5-b53a-4913-e3b6-5a4e6ab4c3fe & amp ; lt ; ownerUdn & amp ; gt ;
+				amp ; lt ; res
+				protocolInfo=&amp;quot;http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0&amp;quot;&amp;gt;http://192.168.1.72:62894/%2525/CE519FD5175DFFE5B341A5EB24EEE38C%252FStephane%2520Pompougnac-H%25C3%25B4tel%2520Costes4,%2520Quatre-03-Thunderball%2520-%2520Solar.mp3&amp;lt;/res&amp;gt;&amp;lt;upnp:originalTrackNumber&amp;gt;3&amp;lt;/upnp:originalTrackNumber&amp;gt;&amp;lt;/item&amp;gt;&amp;lt;/DIDL-Lite&amp;gt;&quot;/&gt; &
+				lt ; InstanceID & gt ; lt ; Event & gt ;
+		</LastChange>
+	</e:property>
+</e:propertyset>

@@ -30,7 +30,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.resource.ServiceControlResource;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.protocol.ReceivingSync;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.seamless.util.Exceptions;
 
 import java.util.logging.Level;

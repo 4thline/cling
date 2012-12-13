@@ -1,0 +1,26 @@
+<!-- device exception: org.xml.sax.SAXParseException: Illegal: "<" inside attribute value (position:START_TAG <CurrentTrackMetaData val='0:02:42'>@8:32 in java.io.InputStreamReader@4062e650)  -->
+<!-- context: LastChangeSubscriptionCallback.eventReceived() after fix -->
+<!-- Manufacturer: Royal Philips Electronics -->
+<!-- Model Description: Philips Wireless Music Adapter -->
+<!-- Model Name: Philips SLA5520 -->
+<!-- Model Number: 1 -->
+
+<!-- CurrentTrackMetaData not XML encoded -->
+
+<e:propertyset xmlns:e="urn:schemas-upnp-org:event-1-0">
+  <e:property>
+      <LastChange>
+&lt;Event xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+  &lt;InstanceID val=&quot;0&quot;&gt;
+    &lt;TransportState val=&quot;PLAYING&quot;/&gt;
+    &lt;NumberOfTracks val=&quot;1&quot;/&gt;
+    &lt;CurrentTrack val=&quot;1&quot;/&gt;
+    &lt;CurrentTrackDuration val=&quot;0:02:42&quot;/&gt;
+    &lt;CurrentMediaDuration val=&quot;0:02:42&quot;/&gt;
+    &lt;CurrentTrackMetaData val=&quot;&lt;DIDL-Lite xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite&quot; xmlns:dc=&quot;http://purl.org/dc/elements/1.1/&quot; xmlns:upnp=&quot;urn:schemas-upnp-org:metadata-1-0/upnp/&quot;&gt;&lt;item&gt;&lt;dc:title&gt;Ist das ein sch��ner Tag&lt;/dc:title&gt;&lt;res duration=&quot;0:02:42.000&quot;&gt;http://192.168.178.1:49200/mediapath/ST950032-5AS-01/Music/Kinderlieder/Sommerhits/01%20Ist%20das%20ein%20sch%f6ner%20Tag.mp3&lt;/res&gt;&lt;upnp:artist&gt;Detlev J��kerDetlev J��ker&lt;/upnp:artist&gt;&lt;upnp:album&gt;Sommer Hits&lt;/upnp:album&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;&quot;/&gt;
+    &lt;CurrentTransportActions val=&quot;Pause,Stop,Next,Previous&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt;
+    </LastChange>
+  </e:property>
+</e:propertyset>

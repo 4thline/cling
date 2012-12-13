@@ -23,7 +23,7 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.control.ActionRequestMessage;
 import org.fourthline.cling.model.message.control.ActionResponseMessage;
 import org.fourthline.cling.transport.spi.SOAPActionProcessor;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.seamless.xml.XmlPullParserUtils;
 
 import javax.enterprise.inject.Alternative;
@@ -44,7 +44,7 @@ import javax.enterprise.inject.Alternative;
  * <p>
  * Additionally any {@link UnsupportedDataException} thrown while reading an
  * XML message will be passed on to the
- * {@link #handleInvalidMessage(org.fourthline.cling.model.action.ActionInvocation, org.fourthline.cling.transport.spi.UnsupportedDataException, org.fourthline.cling.transport.spi.UnsupportedDataException)}
+ * {@link #handleInvalidMessage(org.fourthline.cling.model.action.ActionInvocation, org.fourthline.cling.model.UnsupportedDataException, org.fourthline.cling.model.UnsupportedDataException)}
  * method for you to handle. The default implementation will simply throw the
  * original exception from the first processing attempt.
  * </p>
@@ -123,7 +123,7 @@ public class RecoveringSOAPActionProcessorImpl extends PullSOAPActionProcessorIm
      * </p>
      * <p>
      * You can access the invalid XML with
-     * {@link org.fourthline.cling.transport.spi.UnsupportedDataException#getData()}.
+     * {@link org.fourthline.cling.model.UnsupportedDataException#getData()}.
      * </p>
      *
      * @param originalException   The original exception throw by the first parsing attempt

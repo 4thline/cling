@@ -27,7 +27,7 @@ import org.fourthline.cling.model.message.UpnpOperation;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.transport.spi.DatagramProcessor;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.seamless.http.Headers;
 
 import java.io.ByteArrayInputStream;

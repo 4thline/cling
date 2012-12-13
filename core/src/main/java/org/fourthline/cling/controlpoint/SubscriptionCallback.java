@@ -18,6 +18,7 @@
 package org.fourthline.cling.controlpoint;
 
 import org.fourthline.cling.model.Constants;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
@@ -228,6 +229,12 @@ public abstract class SubscriptionCallback implements Runnable {
                             SubscriptionCallback.this.eventsMissed(this, numberOfMissedEvents);
                         }
                     }
+
+					public void invalidMessage(UnsupportedDataException ex) {
+						synchronized (SubscriptionCallback.this) {
+							SubscriptionCallback.this.invalidMessage(this, ex);
+						}
+					}
                 };
 
         getControlPoint().getProtocolFactory()
@@ -328,6 +335,30 @@ public abstract class SubscriptionCallback implements Runnable {
         return message;
     }
 
+    /**
+     * Called when a received event message could not be parsed successfully.
+     * <p>
+     * This typically indicates a broken device which is not UPnP compliant. You can
+     * react to this failure in any way you like, for example, you could terminate
+     * the subscription or simply create an error report/log.
+     * </p>
+     * <p>
+     * The default implementation will log the exception at <code>INFO</code> level, and
+     * the invalid XML at <code>FINE</code> level.
+     * </p>
+     *
+     * @param remoteGENASubscription The established subscription.
+     * @param ex Call {@link org.fourthline.cling.model.UnsupportedDataException#getData()} to access the invalid XML.
+     */
+	protected void invalidMessage(RemoteGENASubscription remoteGENASubscription,
+                                  UnsupportedDataException ex) {
+        log.info("Invalid event message received, causing: " + ex);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("------------------------------------------------------------------------------");
+            log.fine(ex.getData().toString());
+            log.fine("------------------------------------------------------------------------------");
+        }
+    }
 
     @Override
     public String toString() {

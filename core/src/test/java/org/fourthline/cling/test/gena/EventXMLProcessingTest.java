@@ -18,6 +18,7 @@
 package org.fourthline.cling.test.gena;
 
 import org.fourthline.cling.mock.MockUpnpService;
+import org.fourthline.cling.mock.MockUpnpServiceConfiguration;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
 import org.fourthline.cling.model.message.StreamRequestMessage;
@@ -29,6 +30,10 @@ import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.test.data.SampleData;
+import org.fourthline.cling.transport.impl.GENAEventProcessorImpl;
+import org.fourthline.cling.transport.impl.PullGENAEventProcessorImpl;
+import org.fourthline.cling.transport.impl.RecoveringGENAEventProcessorImpl;
+import org.fourthline.cling.transport.spi.GENAEventProcessor;
 import org.testng.annotations.Test;
 
 import java.net.URL;
@@ -36,12 +41,56 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 
 public class EventXMLProcessingTest {
 
+    public static final String EVENT_MSG =
+        "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" +
+            "<e:propertyset xmlns:e=\"urn:schemas-upnp-org:event-1-0\">" +
+            "<e:property>" +
+            "<Status>0</Status>" +
+            "</e:property>" +
+            "<e:property>" +
+            "<SomeVar></SomeVar>" +
+            "</e:property>" +
+            "</e:propertyset>";
+
     @Test
     public void writeReadRequest() throws Exception {
+        MockUpnpService upnpService = new MockUpnpService(new MockUpnpServiceConfiguration(){
+            @Override
+            public GENAEventProcessor getGenaEventProcessor() {
+                return new GENAEventProcessorImpl();
+            }
+        });
+        writeReadRequest(upnpService);
+    }
+
+    @Test
+    public void writeReadRequestPull() throws Exception {
+        MockUpnpService upnpService = new MockUpnpService(new MockUpnpServiceConfiguration(){
+            @Override
+            public GENAEventProcessor getGenaEventProcessor() {
+                return new PullGENAEventProcessorImpl();
+            }
+        });
+        writeReadRequest(upnpService);
+    }
+
+    @Test
+    public void writeReadRequestRecovering() throws Exception {
+        MockUpnpService upnpService = new MockUpnpService(new MockUpnpServiceConfiguration(){
+            @Override
+            public GENAEventProcessor getGenaEventProcessor() {
+                return new RecoveringGENAEventProcessorImpl();
+            }
+        });
+        writeReadRequest(upnpService);
+    }
+
+    public void writeReadRequest(MockUpnpService upnpService) throws Exception {
 
         LocalDevice localDevice = GenaSampleData.createTestDevice(GenaSampleData.LocalTestService.class);
         LocalService localService = localDevice.getServices()[0];
@@ -72,8 +121,9 @@ public class EventXMLProcessingTest {
         OutgoingEventRequestMessage outgoingCall =
                 new OutgoingEventRequestMessage(subscription, subscription.getCallbackURLs().get(0));
 
-        MockUpnpService upnpService = new MockUpnpService();
         upnpService.getConfiguration().getGenaEventProcessor().writeBody(outgoingCall);
+
+        assertEquals(outgoingCall.getBody(), EVENT_MSG);
 
         StreamRequestMessage incomingStream = new StreamRequestMessage(outgoingCall);
 
@@ -90,14 +140,14 @@ public class EventXMLProcessingTest {
         boolean gotValueTwo = false;
         for (StateVariableValue stateVariableValue : incomingCall.getStateVariableValues()) {
             if (stateVariableValue.getStateVariable().getName().equals("Status")) {
-                gotValueOne = ((Boolean) stateVariableValue.getValue() == false);
+                gotValueOne = (!(Boolean) stateVariableValue.getValue());
             }
             if (stateVariableValue.getStateVariable().getName().equals("SomeVar")) {
                 // TODO: So... can it be null at all? It has a default value...
                 gotValueTwo = stateVariableValue.getValue() == null;
             }
         }
-        assert gotValueOne && gotValueTwo;
+        assertTrue(gotValueOne && gotValueTwo);
     }
 
 

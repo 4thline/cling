@@ -32,7 +32,7 @@ import org.fourthline.cling.model.message.control.ActionResponseMessage;
 import org.fourthline.cling.model.meta.ActionArgument;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.transport.spi.SOAPActionProcessor;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.seamless.xml.XmlPullParserUtils;
 import org.xmlpull.v1.XmlPullParser;
 

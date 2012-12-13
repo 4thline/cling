@@ -54,7 +54,7 @@ import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.UpnpOperation;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.protocol.ProtocolFactory;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.transport.spi.UpnpStream;
 import org.seamless.util.Exceptions;
 

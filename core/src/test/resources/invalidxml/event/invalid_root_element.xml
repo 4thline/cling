@@ -1,0 +1,9 @@
+<e:invalid xmlns:e="urn:schemas-upnp-org:event-1-0">
+  <e:property>
+    <LastChange>&lt;Event xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+  &lt;InstanceID val=&quot;0&quot;&gt;
+    &lt;TransportStatus val=&quot;OK&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt;</LastChange>
+  </e:property>
+</e:invalid>

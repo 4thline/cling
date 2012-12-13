@@ -1,0 +1,44 @@
+<!-- device exception: net.sf.saxon.u.p: Error reported by XML parser processing null: At line 13, column 14: not well-formed (invalid token) -->
+<!-- context: AVTransportService event -->
+<!-- Manufacturer: DENON -->
+<!-- Model Description: AV SURROUND RECEIVER -->
+<!-- Model Name: AVR-4306 -->
+<!-- Model Number: 4306 -->
+
+<!-- '>' characher in LastChange   -->
+
+<e:propertyset xmlns:e="urn:schemas-upnp-org:event-1-0">
+  <e:property>
+    <LastChange>&lt;Event xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+  &lt;InstanceID val=&quot;0&quot;&gt;
+    &lt;TransportState val=&quot;PLAYING&quot;/&gt;
+    &lt;PlaybackStorageMedium val=&quot;NETWORK&quot;/&gt;
+    &lt;AVTransportURIMetaData val=&quot;&quot;/&gt;
+    &lt;CurrentTransportActions val=&quot;Stop,Next,Previous&quot;/&gt;
+    &lt;CurrentTrackURI val=&quot;http://192.168.1.2:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3277578.mp3&quot;/&gt;
+    &lt;NumberOfTracks val=&quot;1&quot;/&gt;
+    &lt;CurrentTrack val=&quot;1&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt;k val=&quot;0&quot;/&gt;
+    &lt;CurrentTrackDuration val=&quot;0:00:00&quot;/&amp;gt4Vx#�`�@2ntMediaDuration val=&quot;0:00:00&quot;/&gt;
+    &lt;CurrentTrackMetaData val=&quot;&quot;/&gt;
+    &amp;l4Vx#�`@@2I val=&quot;&quot;/&gt;
+    &lt;AVTransportURI val=&quot;&quot;/&gt;
+    &lt;A4Vx#�`�?2aData val=&quot;&quot;/&gt;
+    &lt;CurrentTransportActions val=&quot;&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt;quot;/&gt;
+    &lt;TransportStatus val=&quot;OK&quot;/&gt;
+    &lt;PlaybackStorageMedium val=&quot;N4Vx#�`�>2    &lt;RecordStorageMedium val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;PossiblePlaybackStorageMedia val=&quot;NETWORK&quot;/&gt;
+    &lt;PossibleRecordStorageMedia val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;CurrentPlayMode val=&quot;NORMAL&quot;/&gt;
+    &lt;TransportPlaySpeed val=&quot;1&quot;/&gt;
+    &lt;RecordMediumWriteStatus val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;CurrentRecordQualityMode val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;PossibleRecordQualityModes val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;NumberOfTracks val=&quot;0&quot;/&gt;
+    &lt;CurrentTrack val=&quot;0&quot;/&gt;
+    &amp;lt</LastChange>
+  </e:property>
+</e:propertyset>

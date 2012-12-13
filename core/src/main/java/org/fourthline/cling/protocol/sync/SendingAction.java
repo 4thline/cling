@@ -27,7 +27,7 @@ import org.fourthline.cling.model.message.control.OutgoingActionRequestMessage;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.protocol.SendingSync;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.seamless.util.Exceptions;
 
 import java.net.URL;

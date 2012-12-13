@@ -1,0 +1,14 @@
+<!-- device exception: org.xml.sax.SAXParseException: Illegal: "<" inside attribute value (position:START_TAG <AVTransportURIMetaData val='http://192.168.0.3:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I332043.mp3'>@5:30 in java.io.InputStreamReader@406dfd00)  -->
+<!-- context: LastChangeSubscriptionCallback.eventReceived(): cannot find </Event> in LastChange -->
+<!-- Manufacturer: TEAC(R) Media Systems  -->
+<!-- Model Description:  -->
+<!-- Model Name: WAP-4500 -->
+<!-- Model Number: X1 -->
+
+<!-- truncated XML -->
+
+<Event xmlms="urn:schemas-upnp-org:metadata-1-0/AVTransport/">
+<InstanceID val="0">
+<CurrentTrackURI val="http://192.168.0.3:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I332043.mp3"/>
+<AVTransportURI val="http://192.168.0.3:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I332043.mp3"/>
+<AVTransportURIMetaData val="<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dlna="urn:schemas-dlna-org:metadata-1-0/"><item parentID="0$1$9$4777" id="0$1$9$4777R332043"><upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.0.3:9000/disk/defaultalbumart/nocover_audio.jpg/O0$1$8I332043.jpg?scale=160x160</upnp:albumArtURI><upnp:artist>Buddha-Bar (CD Series)</upnp:artist><upnp:artist role="Composer">Declan Flynn/Shabnam Khan</upnp:artist><upnp:artist role="AlbumArtist">Various Artists</upnp:artist><upnp:author role="Composer">Declan Flynn/Shabnam Khan</upnp:author><dc:creator>Buddha-Bar (CD Series)</dc:cr

@@ -34,7 +34,6 @@ import org.fourthline.cling.model.types.SoapActionType;
 import org.fourthline.cling.transport.impl.PullSOAPActionProcessorImpl;
 import org.fourthline.cling.transport.impl.RecoveringSOAPActionProcessorImpl;
 import org.fourthline.cling.transport.spi.SOAPActionProcessor;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
 import org.seamless.util.io.IO;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

@@ -1,0 +1,28 @@
+<!-- device exception: net.sf.saxon.u.p: Error reported by XML parser processing null: At line 11, column 14: not well-formed (invalid token) -->
+<!-- context: AVTransportService event -->
+<!-- Manufacturer: TerraTec Electronic GmbH -->
+<!-- Model Description: Digital Media Player -->
+<!-- Model Name: NOXON 2 audio -->
+<!-- Model Number: 2.0 -->
+
+<e:propertyset xmlns:e="urn:schemas-upnp-org:event-1-0">
+  <e:property>
+    <LastChange>&lt;Event xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+  &lt;InstanceID val=&quot;0&quot;&gt;
+    &lt;AVTransportURI val=&quot;http://192.168.1.102:50002/m/NDLNA/11504.mp3&quot;/&gt;
+    &lt;AVTransportURIMetaData val=&quot;&quot;/&gt;
+    &lt;TransportState val=&quot;STOPPED&quot;/&gt;
+    &lt;CurrentTransportActions val=&quot;Play,Next,Previous&quot;/&gt;
+    &lt;CurrentTrackURI val=&quot;http://192.168.1.102:50002/m/NDLNA/11504.mp3&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt;s&gt;&lt;upnp:originalTrackNumber&gt;1&lt;/upnp:originalTrackNumber&gt;&lt;/item&gt;&lt;/4Vx��`P�-`�&lt;Event xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+  &lt;InstanceID val=&quot;0&quot;&gt;
+    &lt;TransportState val=&quot;STOPPED&quot;/&gt;
+    &lt;CurrentTransportActions val=&quot;Play,Next,Previous&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt; standalone"yes><sEnvelopesencodingStyle"http://schemas.xmlsoap.org/soap/encoding/ xmlnss"4Vx�
+`P�-`
+i�QR>\z�ڼ�Wr�L�2���C���Ib"1�0�@I4������d�U5����EY�`�������b�83p�L�Ri�n�GNl<��#1�
+���Ǆ�)<v�E�W/s��p���<7Y�<�}{1ǎ�VǇZ��g����uSz���Q\ۭ��|"5�	w,�U'Ξ��X��Y��$�P�T�S�	1N�ګ��XQ*</LastChange>
+  </e:property>
+</e:propertyset>

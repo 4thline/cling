@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<!-- device exception: net.sf.saxon.u.p: Error reported by XML parser processing null: At line 24, column 0: unclosed token -->
+<!-- context: AVTransportService event -->
+<!-- Manufacturer: Sony Corporation -->
+<!-- Model Description: Network Speaker -->
+<!-- Model Name: SA-NS300 -->
+<!-- Model Number: null -->
+
+<e:propertyset xmlns:e="urn:schemas-upnp-org:event-1-0">
+  <e:property>
+    <LastChange>&lt;Event xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+  &lt;InstanceID val=&quot;0&quot;&gt;
+    &lt;TransportState val=&quot;PLAYING&quot;/&gt;
+    &lt;CurrentTransportActions val=&quot;Pause,Stop,Next,Previous&quot;/&gt;
+    &lt;CurrentTrackDuration val=&quot;0:03:35&quot;/&gt;
+    &lt;CurrentMediaDuration val=&quot;0:03:35&quot;/&gt;
+    &lt;AVTransportURI val=&quot;http://192.168.1.2:8080/%2Fmnt%2Fsdcard%2Fmp3download%2Fsongs%2FMadcon-Beggin.mp3&quot;/&gt;
+    &lt;AVTransportURIMetaData val=&quot;&amp;lt;DIDL-Lite xmlns=&amp;quot;urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/&amp;quot; xmlns:dc=&amp;quot;http://purl.org/dc/elements/1.1/&amp;quot; xmlns:upnp=&amp;quot;urn:schemas-upnp-org:metadata-1-0/upnp/&amp;quot;&amp;gt;&amp;lt;item id=&amp;quot;2981&amp;quot;&amp;gt;
+   &amp;lt;dc:title&amp;gt;Beggin&amp;lt;/dc:title&amp;gt;
+   &amp;lt;res protocolInfo=&amp;quot;http-get:*:audio/mpeg:*&amp;quot; duration=&amp;quot;0:03:35&amp;quot;&amp;gt;http://192.168.1.2:8080/%2Fmnt%2Fsdcard%2Fmp3download%2Fsongs%2FMadcon-Beggin.mp3&amp;lt;/res&amp;gt;
+   &amp;lt;upnp:album&amp;gt;Hits and Dance 2009&amp;lt;/upnp:album&amp;gt;
+   &amp;lt;upnp:artist&amp;gt;Madcon&amp;lt;/upnp:artist&amp;gt;
+   &amp;lt;upnp:originalTrackNumber&amp;gt;1009&amp;lt;/upnp:originalTrackNumber&amp;gt;
+   &amp;lt;dc:date&amp;gt;2008&amp;lt;/dc:date&amp;gt;
+   &amp;lt;upnp:class&amp;gt;object.item.audioItem.musicTrack&amp;lt;/upnp:class&amp;gt;
+&amp;lt;/item&amp;gt;
+&amp;lt;/DIDL-Lite&amp;gt;&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt;</LastChange>
+  </e:property>
+</e

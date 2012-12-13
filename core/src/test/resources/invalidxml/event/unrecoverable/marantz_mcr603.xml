@@ -1,0 +1,39 @@
+<!-- device exception: net.sf.saxon.u.p: Error reported by XML parser processing null: At line 21, column 135: not well-formed (invalid token) -->
+<!-- context: AVTransportService event -->
+<!-- Manufacturer: Marantz -->
+<!-- Model Description: MARANTZ CD RECEIVER -->
+<!-- Model Name: M-CR603 -->
+<!-- Model Number: 603 -->
+
+<!-- & not encoded in CurrentTrackURI URL (double encode missing !) -->
+
+<e:propertyset xmlns:e="urn:schemas-upnp-org:event-1-0">
+  <e:property>
+    <LastChange>&lt;Event xmlns=&quot;urn:schemas-upnp-org:metadata-1-0/AVT/&quot;&gt;
+  &lt;InstanceID val=&quot;0&quot;&gt;
+    &lt;TransportState val=&quot;STOPPED&quot;/&gt;
+    &lt;TransportStatus val=&quot;OK&quot;/&gt;
+    &lt;PlaybackStorageMedium val=&quot;NONE&quot;/&gt;
+    &lt;RecordStorageMedium val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;PossiblePlaybackStorageMedia val=&quot;NONE,NETWORK&quot;/&gt;
+    &lt;PossibleRecordStorageMedia val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;CurrentPlayMode val=&quot;NORMAL&quot;/&gt;
+    &lt;TransportPlaySpeed val=&quot;1&quot;/&gt;
+    &lt;RecordMediumWriteStatus val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;CurrentRecordQualityMode val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;PossibleRecordQualityModes val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;NumberOfTracks val=&quot;1&quot;/&gt;
+    &lt;CurrentTrack val=&quot;1&quot;/&gt;
+    &lt;CurrentTrackDuration val=&quot;0:00:00&quot;/&gt;
+    &lt;CurrentMediaDuration val=&quot;0:00:00&quot;/&gt;
+    &lt;CurrentTrackMetaData val=&quot;&quot;/&gt;
+    &lt;CurrentTrackURI val=&quot;http://denon.vtuner.com/setupapp/denon/asp/func/dynamOD.asp?ex45v=E9C9F41C0C450447FF6B71610F3B6B6E&id=36894&quot;/&gt;
+    &lt;AVTransportURI val=&quot;http://denon.vtuner.com/setupapp/denon/asp/func/dynamOD.asp?ex45v=E9C9F41C0C450447FF6B71610F3B6B6E&id=36894&quot;/&gt;
+    &lt;AVTransportURIMetaData val=&quot;&quot;/&gt;
+    &lt;NextAVTransportURI val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;NextAVTransportURIMetaData val=&quot;NOT_IMPLEMENTED&quot;/&gt;
+    &lt;CurrentTransportActions val=&quot;Play,Next,Previous,Seek,X_DLNA_SeekTime&quot;/&gt;
+  &lt;/InstanceID&gt;
+&lt;/Event&gt;</LastChange>
+  </e:property>
+</e:propertyset>

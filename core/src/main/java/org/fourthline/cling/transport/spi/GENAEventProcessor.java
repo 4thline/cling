@@ -17,6 +17,7 @@
 
 package org.fourthline.cling.transport.spi;
 
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.message.gena.IncomingEventRequestMessage;
 import org.fourthline.cling.model.message.gena.OutgoingEventRequestMessage;
 
@@ -31,7 +32,7 @@ public interface GENAEventProcessor {
      * Transforms a collection of {@link org.fourthline.cling.model.state.StateVariableValue}s into an XML message body.
      *
      * @param requestMessage The message to transform.
-     * @throws UnsupportedDataException
+     * @throws org.fourthline.cling.model.UnsupportedDataException
      */
     public void writeBody(OutgoingEventRequestMessage requestMessage) throws UnsupportedDataException;
 

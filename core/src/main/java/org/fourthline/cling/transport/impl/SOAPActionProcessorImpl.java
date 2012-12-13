@@ -29,7 +29,7 @@ import org.fourthline.cling.model.meta.ActionArgument;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.model.types.InvalidValueException;
 import org.fourthline.cling.transport.spi.SOAPActionProcessor;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

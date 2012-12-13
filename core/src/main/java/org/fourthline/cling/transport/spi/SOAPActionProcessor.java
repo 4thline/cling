@@ -17,6 +17,7 @@
 
 package org.fourthline.cling.transport.spi;
 
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.control.ActionRequestMessage;
 import org.fourthline.cling.model.message.control.ActionResponseMessage;
@@ -39,7 +40,7 @@ public interface SOAPActionProcessor {
      *
      * @param requestMessage The request message on which the SOAP content is set.
      * @param actionInvocation The action invocation from which input argument values are read.
-     * @throws UnsupportedDataException
+     * @throws org.fourthline.cling.model.UnsupportedDataException
      */
     public void writeBody(ActionRequestMessage requestMessage, ActionInvocation actionInvocation) throws UnsupportedDataException;
 

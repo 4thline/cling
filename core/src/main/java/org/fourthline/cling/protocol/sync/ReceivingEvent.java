@@ -25,7 +25,7 @@ import org.fourthline.cling.model.message.gena.IncomingEventRequestMessage;
 import org.fourthline.cling.model.message.gena.OutgoingEventResponseMessage;
 import org.fourthline.cling.model.resource.ServiceEventCallbackResource;
 import org.fourthline.cling.protocol.ReceivingSync;
-import org.fourthline.cling.transport.spi.UnsupportedDataException;
+import org.fourthline.cling.model.UnsupportedDataException;
 
 import java.util.logging.Logger;
 
@@ -96,8 +96,22 @@ public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, Outgoing
 
             getUpnpService().getConfiguration().getGenaEventProcessor().readBody(requestMessage);
 
-        } catch (UnsupportedDataException ex) {
-            log.fine("Can't read request body, " + ex);
+		} catch (final UnsupportedDataException ex) {
+            log.fine("Can't read event message request body, " + ex);
+
+            // Pass the parsing failure on to any listeners, so they can take action if necessary
+            final RemoteGENASubscription subscription =
+                getUpnpService().getRegistry().getRemoteSubscription(requestMessage.getSubscrptionId());
+            if (subscription != null) {
+                getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                    new Runnable() {
+                        public void run() {
+                            subscription.invalidMessage(ex);
+                        }
+                    }
+                );
+            }
+
             return new OutgoingEventResponseMessage(new UpnpResponse(UpnpResponse.Status.INTERNAL_SERVER_ERROR));
         }
 

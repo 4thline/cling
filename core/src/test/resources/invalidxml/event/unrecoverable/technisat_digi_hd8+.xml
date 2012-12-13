@@ -1,0 +1,14 @@
+<!-- device exception: org.xml.sax.SAXParseException: Attr.value missing f. urn:schemas-upnp-org:metadata-1-0 (position:START_TAG <CurrentTrackMetaData val='<DIDL-Lite xmlns=' urn:schemas-upnp-org:metadata-1-0='null'>@1:280 in java.io.InputStreamReader@40c7b678)  -->
+<!-- context: LastChangeSubscriptionCallback.eventReceived() after fix -->
+<!-- Manufacturer: TechniSat -->
+<!-- Model Description: TechniSat -->
+<!-- Model Name: Digit HD8 + -->
+<!-- Model Number:  -->
+
+<!-- invalid charachers in val attribute -->
+
+<Event xmlns="urn:schemas-upnp-org:metadata-1-0/AVT/">
+  <InstanceID val="0">
+    <CurrentTrackURI val="http://192.168.1.100:9000/disk/photo/DLNA-PNJPEG_LRG-OP01-FLAGS00f00000/O2$805306398$1610613443.jpg"/><CurrentTrackMetaData val="&lt;DIDL-Lite" xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/"&gt;&lt;item id="2$805306398$1610613443" parentID="2$805306398"&gt;&#10;   &lt;dc:title&gt;img_0113&lt;/dc:title&gt;&#10;   &lt;upnp:album&gt;2004-05-27_begräbnis_oma&lt;/upnp:album&gt;&#10;   &lt;dc:date&gt;2004-05-27&lt;/dc:date&gt;&#10;   &lt;res resolution="2048x1536" size="1420188" protocolInfo="http-get:*:image/jpeg:DLNA.ORG_PN=JPEG_LRG;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=00f00000000000000000000000000000"&gt;http://192.168.1.100:9000/disk/photo/DLNA-PNJPEG_LRG-OP01-FLAGS00f00000/O2$805306398$1610613443.jpg&lt;/res&gt;&#10;   &lt;upnp:class&gt;object.item.imageItem.photo&lt;/upnp:class&gt;&#10;&lt;/item&gt;&#10;&lt;/DIDL-Lite&gt;"/><AVTransportURI val="http://192.168.1.100:9000/disk/photo/DLNA-PNJPEG_LRG-OP01-FLAGS00f00000/O2$805306398$1610613443.jpg"/><AVTransportURIMetaData val="&lt;DIDL-Lite" xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/"&gt;&lt;item id="2$805306398$1610613443" parentID="2$805306398"&gt;&#10;   &lt;dc:title&gt;img_0113&lt;/dc:title&gt;&#10;   &lt;upnp:album&gt;2004-05-27_begräbnis_oma&lt;/upnp:album&gt;&#10;   &lt;dc:date&gt;2004-05-27&lt;/dc:date&gt;&#10;   &lt;res resolution="2048x1536" size="1420188" protocolInfo="http-get:*:image/jpeg:DLNA.ORG_PN=JPEG_LRG;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=00f00000000000000000000000000000"&gt;http://192.168.1.100:9000/disk/photo/DLNA-PNJPEG_LRG-OP01-FLAGS00f00000/O2$805306398$1610613443.jpg&lt;/res&gt;&#10;   &lt;upnp:class&gt;object.item.imageItem.photo&lt;/upnp:class&gt;&#10;&lt;/item&gt;&#10;&lt;/DIDL-Lite&gt;"/><TransportState val="PLAYING"/><TransportStatus val="OK"/>
+  </InstanceID>
+</Event>
