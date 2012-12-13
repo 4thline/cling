@@ -32,7 +32,7 @@ import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.test.data.SampleDeviceRoot;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 
 public class DeviceDescriptorRetrievalTest {
@@ -83,7 +83,7 @@ public class DeviceDescriptorRetrievalTest {
         prot.run();
         StreamResponseMessage descriptorMessage = prot.getOutputMessage();
 
-        assert descriptorMessage == null;
+        assertNull(descriptorMessage);
     }
 
 }

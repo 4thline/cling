@@ -36,7 +36,7 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 
 public class ServiceDescriptorRetrievalTest {
@@ -92,7 +92,7 @@ public class ServiceDescriptorRetrievalTest {
         StreamResponseMessage descriptorMessage = prot.getOutputMessage();
 
         // Should be null because it can't be found
-        assert descriptorMessage == null;
+        assertNull(descriptorMessage);
 
     }
 

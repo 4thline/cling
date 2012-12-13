@@ -111,8 +111,11 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
             switch (element) {
                 case URLBase:
                     try {
-                        // We hope it's  RFC 2396 and RFC 2732 compliant
-                        getInstance().baseURL = new URL(getCharacters());
+                        String urlString = getCharacters();
+                        if (urlString != null && urlString.length() > 0) {
+                            // We hope it's  RFC 2396 and RFC 2732 compliant
+                            getInstance().baseURL = new URL(urlString);
+                        }
                     } catch (Exception ex) {
                         throw new SAXException("Invalid URLBase: " + ex.toString());
                     }

@@ -37,7 +37,7 @@ public class UDA10ServiceDescriptorParsingTest {
 
         RemoteService service = SampleData.createUndescribedRemoteService();
 
-        service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/test-svc-uda10-one.xml")));
+        service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
 
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(SampleData.createRemoteDevice()));
     }
@@ -49,7 +49,7 @@ public class UDA10ServiceDescriptorParsingTest {
 
         RemoteService service = SampleData.createUndescribedRemoteService();
 
-        service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/test-svc-uda10-one.xml")));
+        service = binder.describe(service, IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10.xml")));
 
         SampleServiceOne.assertMatch(service, SampleData.getFirstService(SampleData.createRemoteDevice()));
     }

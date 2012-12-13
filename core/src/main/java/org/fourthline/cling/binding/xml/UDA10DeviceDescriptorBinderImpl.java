@@ -147,8 +147,11 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
                 hydrateSpecVersion(descriptor, rootChild);
             } else if (ELEMENT.URLBase.equals(rootChild)) {
                 try {
-                    // We hope it's  RFC 2396 and RFC 2732 compliant
-                    descriptor.baseURL = new URL(XMLUtil.getTextContent(rootChild));
+                    String urlString = XMLUtil.getTextContent(rootChild);
+                    if (urlString != null && urlString.length() > 0) {
+                        // We hope it's  RFC 2396 and RFC 2732 compliant
+                        descriptor.baseURL = new URL(urlString);
+                    }
                 } catch (Exception ex) {
                     throw new DescriptorBindingException("Invalid URLBase: " + ex.getMessage());
                 }

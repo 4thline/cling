@@ -41,7 +41,7 @@ public class UDA10DeviceDescriptorParsingTest {
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
 
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
-        device = binder.describe(device, IO.readLines(getClass().getResourceAsStream("/test-dvc-uda10.xml")));
+        device = binder.describe(device, IO.readLines(getClass().getResourceAsStream("/descriptors/device/uda10.xml")));
 
         SampleDeviceRoot.assertLocalResourcesMatch(
                 new MockUpnpService().getConfiguration().getNamespace().getResources(device)
@@ -56,7 +56,7 @@ public class UDA10DeviceDescriptorParsingTest {
         DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderSAXImpl();
 
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
-        device = binder.describe(device, IO.readLines(getClass().getResourceAsStream("/test-dvc-uda10.xml")));
+        device = binder.describe(device, IO.readLines(getClass().getResourceAsStream("/descriptors/device/uda10.xml")));
 
         SampleDeviceRoot.assertLocalResourcesMatch(
                 new MockUpnpService().getConfiguration().getNamespace().getResources(device)
@@ -133,7 +133,7 @@ public class UDA10DeviceDescriptorParsingTest {
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         device = binder.describe(
                 device,
-                IO.readLines(getClass().getResourceAsStream("/test-dvc-uda10-withbase.xml"))
+                IO.readLines(getClass().getResourceAsStream("/descriptors/device/uda10_withbase.xml"))
         );
 
         assertEquals(
@@ -178,7 +178,7 @@ public class UDA10DeviceDescriptorParsingTest {
         RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
         device = binder.describe(
                 device,
-                IO.readLines(getClass().getResourceAsStream("/test-dvc-uda10-withbase2.xml"))
+                IO.readLines(getClass().getResourceAsStream("/descriptors/device/uda10_withbase2.xml"))
         );
 
         assertEquals(
@@ -216,5 +216,16 @@ public class UDA10DeviceDescriptorParsingTest {
         assertTrue(device.isRoot());
     }
 
+    @Test
+    public void readUDA10DescriptorWithEmptyURLBase() throws Exception {
+        DeviceDescriptorBinder binder = new UDA10DeviceDescriptorBinderImpl();
+
+        RemoteDevice device = new RemoteDevice(SampleData.createRemoteDeviceIdentity());
+        device = binder.describe(device, IO.readLines(getClass().getResourceAsStream("/descriptors/device/uda10_emptybase.xml")));
+
+        SampleDeviceRoot.assertLocalResourcesMatch(
+                new MockUpnpService().getConfiguration().getNamespace().getResources(device)
+        );
+        SampleDeviceRoot.assertMatch(device, SampleData.createRemoteDevice());    }
 }
 
