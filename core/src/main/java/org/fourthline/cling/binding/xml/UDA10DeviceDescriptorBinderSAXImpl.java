@@ -22,6 +22,7 @@ import org.fourthline.cling.binding.staging.MutableIcon;
 import org.fourthline.cling.binding.staging.MutableService;
 import org.fourthline.cling.binding.staging.MutableUDAVersion;
 import org.fourthline.cling.model.ValidationException;
+import org.fourthline.cling.model.XMLUtil;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.types.DLNACaps;
 import org.fourthline.cling.model.types.DLNADoc;
@@ -136,10 +137,20 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         public void endElement(ELEMENT element) throws SAXException {
             switch (element) {
                 case major:
-                    getInstance().major = Integer.valueOf(getCharacters());
+                    String majorVersion = getCharacters();
+                    if (!majorVersion.equals("1")) {
+                        log.warning("Unsupported UDA major version, ignoring: " + majorVersion);
+                        majorVersion = "1";
+                    }
+                    getInstance().major = Integer.valueOf(majorVersion);
                     break;
                 case minor:
-                    getInstance().minor = Integer.valueOf(getCharacters());
+                    String minorVersion = getCharacters();
+                    if (!minorVersion.equals("0")) {
+                        log.warning("Unsupported UDA minor version, ignoring: " + minorVersion);
+                        minorVersion = "0";
+                    }
+                    getInstance().minor = Integer.valueOf(minorVersion);
                     break;
             }
         }

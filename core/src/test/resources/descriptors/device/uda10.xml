@@ -1,7 +1,8 @@
 <root xmlns="urn:schemas-upnp-org:device-1-0">
     <specVersion>
-        <major>1</major>
-        <minor>0</minor>
+        <!-- Unsupported versions will be ignored, default to 1.0 -->
+        <major>1234</major>
+        <minor>456</minor>
     </specVersion>
     <bar>baaar</bar>
     <foo xmlns="urn:foo:bar">bar</foo>
