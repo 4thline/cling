@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 /**
  * Sending search request messages using the supplied search type.
  * <p>
- * Sends all search messages 10 times, waits 0 to 100
+ * Sends all search messages 5 times, waits 0 to 500
  * milliseconds between each sending procedure.
  * </p>
  *
@@ -101,11 +101,11 @@ public class SendingSearch extends SendingAsync {
     }
 
     public int getBulkRepeat() {
-        return 10; // UDA 1.0 says "repeat more than once"
+        return 5; // UDA 1.0 says "repeat more than once"
     }
 
     public int getBulkIntervalMilliseconds() {
-        return 100; // That should be plenty on an ethernet LAN
+        return 500; // That should be plenty on an ethernet LAN
     }
 
 }

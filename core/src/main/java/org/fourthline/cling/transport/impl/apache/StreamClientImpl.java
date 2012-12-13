@@ -18,6 +18,7 @@
 package org.fourthline.cling.transport.impl.apache;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.http.HttpEntity;
@@ -133,7 +134,15 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
             HeaderUtil.add(httpRequest, requestMessage.getHeaders());
 
             log.fine("Sending HTTP request: " + httpRequest.getURI());
-            return httpClient.execute(httpRequest, createResponseHandler());
+            long start = System.currentTimeMillis();
+            StreamResponseMessage response = httpClient.execute(httpRequest, createResponseHandler());
+            long elapsed = System.currentTimeMillis() - start;
+            if (log.isLoggable(Level.FINEST))
+                log.finest("Sent HTTP request, got response (" + elapsed + "ms) :" + httpRequest.getURI());
+            if(elapsed > 5000) {
+                log.warning("HTTP request took a long time: " + elapsed + "ms: " + httpRequest.getURI());
+            }
+            return response;
 
         } catch (MethodNotSupportedException ex) {
             log.warning("Request aborted: " + ex.toString());
