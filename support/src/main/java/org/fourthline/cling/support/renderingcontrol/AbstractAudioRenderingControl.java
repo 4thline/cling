@@ -64,11 +64,13 @@ import java.beans.PropertyChangeSupport;
                 sendEvents = false,
                 datatype = "ui2",
                 allowedValueMinimum = 0,
-                allowedValueMaximum = 100),
+                allowedValueMaximum = 15),
         @UpnpStateVariable(
                 name = "VolumeDB",
                 sendEvents = false,
-                datatype = "i2"),
+                datatype = "i2",
+                allowedValueMinimum = -36864,
+                allowedValueMaximum = 32767),
         @UpnpStateVariable(
                 name = "Loudness",
                 sendEvents = false,
@@ -129,7 +131,7 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
                     new RenderingControlVariable.Loudness(new ChannelLoudness(channel, getLoudness(instanceId, channelString))),
                     new RenderingControlVariable.Volume(new ChannelVolume(channel, getVolume(instanceId, channelString).getValue().intValue())),
                     new RenderingControlVariable.VolumeDB(new ChannelVolumeDB(channel, getVolumeDB(instanceId, channelString))),
-                    new RenderingControlVariable.PresetNameList(PresetName.FactoryDefault.name())
+                    new RenderingControlVariable.PresetNameList(PresetName.FactoryDefaults.name())
             );
         }
     }
@@ -144,7 +146,7 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
 
     @UpnpAction(out = @UpnpOutputArgument(name = "CurrentPresetNameList", stateVariable = "PresetNameList"))
     public String listPresets(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId) throws RenderingControlException {
-        return PresetName.FactoryDefault.toString();
+        return PresetName.FactoryDefaults.toString();
     }
 
     @UpnpAction
