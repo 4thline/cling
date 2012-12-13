@@ -74,8 +74,11 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
         Resource foundResource = getUpnpService().getRegistry().getResource(requestedURI);
 
         if (foundResource == null) {
-            log.fine("No local resource found: " + getInputMessage());
-            return null;
+            foundResource = onResourceNotFound(requestedURI);
+            if (foundResource == null) {
+                log.fine("No local resource found: " + getInputMessage());
+                return null;
+            }
         }
 
         return createResponse(requestedURI, foundResource);
@@ -140,4 +143,13 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
         return response;
     }
 
+    /**
+     * Called if the {@link org.fourthline.cling.registry.Registry} had no result.
+     *
+     * @param requestedURIPath The requested URI path
+     * @return <code>null</code> or your own {@link Resource}
+     */
+    protected Resource onResourceNotFound(URI requestedURIPath) {
+        return null;
+    }
 }
