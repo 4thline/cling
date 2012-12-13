@@ -80,9 +80,9 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     public boolean isNameOrAlias(String name) {
-        if (getName().equals(name)) return true;
+        if (getName().equalsIgnoreCase(name)) return true;
         for (String alias : aliases) {
-            if (alias.equals(name)) return true;
+            if (alias.equalsIgnoreCase(name)) return true;
         }
         return false;
     }

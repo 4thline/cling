@@ -18,19 +18,25 @@
 package org.fourthline.cling.test.control;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.binding.xml.ServiceDescriptorBinder;
+import org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderImpl;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.mock.MockUpnpServiceConfiguration;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.StreamRequestMessage;
+import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.control.IncomingActionRequestMessage;
+import org.fourthline.cling.model.message.control.IncomingActionResponseMessage;
 import org.fourthline.cling.model.message.header.ContentTypeHeader;
 import org.fourthline.cling.model.message.header.SoapActionHeader;
 import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
+import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.SoapActionType;
+import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.transport.impl.PullSOAPActionProcessorImpl;
 import org.fourthline.cling.transport.impl.RecoveringSOAPActionProcessorImpl;
 import org.fourthline.cling.transport.spi.SOAPActionProcessor;
@@ -97,6 +103,27 @@ public class InvalidActionXMLProcessingTest {
             })
         );
     }
+
+    @Test
+   	public void uppercaseOutputArguments() throws Exception {
+   		SOAPActionProcessor processor = new RecoveringSOAPActionProcessorImpl();
+   		ServiceDescriptorBinder binder = new UDA10ServiceDescriptorBinderImpl();
+
+   		RemoteService service = SampleData.createUndescribedRemoteService();
+   		service = binder.describe(
+               service,
+               IO.readLines(getClass().getResourceAsStream("/descriptors/service/uda10_connectionmanager.xml"))
+           );
+
+   		Action action = service.getAction("GetProtocolInfo");
+
+   		ActionInvocation actionInvocation = new ActionInvocation(action);
+   		StreamResponseMessage response = new StreamResponseMessage(
+               IO.readLines(getClass().getResourceAsStream("/invalidxml/control/response_uppercase_args.xml"))
+           );
+
+   		processor.readBody(new IncomingActionResponseMessage(response), actionInvocation);
+   	}
 
     protected void readRequest(String invalidXMLFile, UpnpService upnpService) throws Exception {
         LocalDevice ld = ActionSampleData.createTestDevice(ActionSampleData.LocalTestServiceExtended.class);

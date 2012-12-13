@@ -116,10 +116,13 @@ public class PullSOAPActionProcessorImpl extends SOAPActionProcessorImpl {
 
     protected Map<String, String> getMatchingNodes(XmlPullParser xpp, ActionArgument[] args) throws Exception {
 
+        // This is a case-insensitive search!
         List<String> names = new ArrayList<String>();
         for (ActionArgument argument : args) {
-            names.add(argument.getName());
-            names.addAll(Arrays.asList(argument.getAliases()));
+            names.add(argument.getName().toUpperCase());
+            for (String alias : Arrays.asList(argument.getAliases())) {
+                names.add(alias.toUpperCase());
+            }
         }
 
         Map<String, String> matches = new HashMap<String, String>();
@@ -129,10 +132,8 @@ public class PullSOAPActionProcessorImpl extends SOAPActionProcessorImpl {
         int event;
         do {
             event = xpp.next();
-            if (event == XmlPullParser.START_TAG && names.contains(xpp.getName())) {
-                if (names.contains(xpp.getName())) {
-                    matches.put(xpp.getName(), xpp.nextText());
-                }
+            if(event == XmlPullParser.START_TAG && names.contains(xpp.getName().toUpperCase())) {
+                matches.put(xpp.getName(), xpp.nextText());
             }
 
         }

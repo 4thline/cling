@@ -1,0 +1,13 @@
+<!-- device exception: org.fourthline.cling.g.b.j: Can't transform message payload: org.fourthline.cling.d.a.d: The argument value is invalid. Invalid number of input or output arguments in XML message, expected 2 but found 0. -->
+<!-- context: GetProtocolInfo -->
+<!-- Manufacturer: Oskar Liljeblad -->
+<!-- Model Description:  -->
+<!-- Model Name: gmediaserver -->
+<!-- Model Number: 0.12.0 -->
+
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><s:Body>
+<u:GetProtocolInfoResponse xmlns:u="urn:schemas-upnp-org:service:ConnectionManager:1">
+<SOURCE>http-get:*:*:*</SOURCE>
+<SINK></SINK>
+</u:GetProtocolInfoResponse>
+</s:Body> </s:Envelope>
