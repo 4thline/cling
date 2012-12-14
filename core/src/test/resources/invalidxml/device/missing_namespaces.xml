@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+    <friendlyName>uShare: 1</friendlyName>
+    <manufacturer>GeeXboX Team</manufacturer>
+    <manufacturerURL>http://ushare.geexbox.org/</manufacturerURL>
+    <modelDescription>uShare : DLNA Media Server</modelDescription>
+    <modelName>uShare</modelName>
+    <modelNumber>001</modelNumber>
+    <modelURL>http://ushare.geexbox.org/</modelURL>
+    <serialNumber>USHARE-01</serialNumber>
+    <UDN>uuid:898f9738-d930-4db4-a3cf-00112fda1b23</UDN>
+    <presentationURL>/web/ushare.html</presentationURL>
+    <dlna:X_DLNADOC>DMS-1.00</dlna:X_DLNADOC>
+    <pv:extension>proxy</pv:extension>
+    <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+    <serviceList>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+        <SCPDURL>/web/cms.xml</SCPDURL>
+        <controlURL>/web/cms_control</controlURL>
+        <eventSubURL>/web/cms_event</eventSubURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+        <SCPDURL>/web/cds.xml</SCPDURL>
+        <controlURL>/web/cds_control</controlURL>
+        <eventSubURL>/web/cds_event</eventSubURL>
+      </service>
+    </serviceList>
+  </device>
+  <URLBase>http://192.168.55.10:49152/</URLBase>
+</root>

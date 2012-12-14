@@ -10,26 +10,22 @@
                 <p>
                     UPnP utilizes XML documents to transport device and service information between the provider and
                     any control points. These XML documents have to be parsed by Cling to produce the
-                    <code>Device</code>
-                    metamodel graph, and of course generated from a <code>Device</code> graph. This is the job
-                    of the <code>org.fourthline.cling.binding.xml.DeviceDescriptorBinder</code> and the
+                    <code>Device</code> model, and of course generated from a <code>Device</code> model.
+                    The same approach is used for the <code>Service</code> model. This parsing, generating, and binding
+                    is the job of the <code>org.fourthline.cling.binding.xml.DeviceDescriptorBinder</code> and the
                     <code>org.fourthline.cling.binding.xml.ServiceDescriptorBinder</code>.
                 </p>
 
                 <p>
-                    The following implementations are bundled with Cling Core:
+                    The following implementations are bundled with Cling Core for device descriptor binding:
                 </p>
 
                 <dl>
                     <dt><code>org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderImpl</code> (default)</dt>
                     <dd>
                         This implementation reads and writes UDA 1.0 descriptor XML with the JAXP-provided DOM API
-                        provided by JDK 6. You do not need any additional libraries to use this binder.
-                    </dd>
-                    <dt><code>org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderImpl</code> (default)</dt>
-                    <dd>
-                        This implementation reads and writes UDA 1.0 descriptor XML with the JAXP-provided DOM API
-                        provided by JDK 6. You do not need any additional libraries to use this binder.
+                        provided by JDK 6. You do not need any additional libraries to use this binder. Use this binder
+                        to validate strict specification compliance of your applications.
                     </dd>
                     <dt><code>org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderSAXImpl</code></dt>
                     <dd>
@@ -37,6 +33,28 @@
                         don't have to install additional libraries to use it. This binder may consume less memory when
                         reading XML descriptors and perform better than the DOM-based parser. In practice, the
                         difference is usually insignificant, even on very slow machines.
+                    </dd>
+                    <dt><code>org.fourthline.cling.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl</code></dt>
+                    <dd>
+                        This implementation extends <code>UDA10DeviceDescriptorBinderImpl</code> and tries to recover
+                        from parsing failures, and works around known problems of other UPnP stacks. This is the binder
+                        you want for best interoperability in real-world UPnP applications. Furthermore, you can
+                        override the <code>handleInvalidDescriptor()</code> and <code>handleInvalidDevice()</code>
+                        methods to customize error handling, or if you want to repair invalid device information
+                        manually.
+                    </dd>
+                </dl>
+
+                <p>
+                    The following implementations are bundled with Cling Core for service descriptor binding:
+                </p>
+
+                <dl>
+                    <dt><code>org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderImpl</code> (default)</dt>
+                    <dd>
+                        This implementation reads and writes UDA 1.0 descriptor XML with the JAXP-provided DOM API
+                        provided by JDK 6. You do not need any additional libraries to use this binder. Use this binder
+                        to validate strict specification compliance of your applications.
                     </dd>
                     <dt><code>org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderSAXImpl</code></dt>
                     <dd>
@@ -48,7 +66,7 @@
                 </dl>
 
                 <p>
-                    You can switch XML binders by overriding the <code>UpnpServiceConfiguration</code>:
+                    You can switch descriptor binders by overriding the <code>UpnpServiceConfiguration</code>:
                 </p>
 
                 <pre><![CDATA[UpnpService upnpService = new UpnpServiceImpl(
@@ -56,12 +74,13 @@
 
             @Override
             public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
-                return super.getDeviceDescriptorBinderUDA10();
+                // Recommended for best interoperability with broken UPnP stacks!
+                return new RecoveringUDA10DeviceDescriptorBinderImpl();
             }
 
             @Override
             public ServiceDescriptorBinder getServiceDescriptorBinderUDA10() {
-                return super.getServiceDescriptorBinderUDA10();
+                return new UDA10ServiceDescriptorBinderSAXImpl();
             }
 
     }
@@ -128,16 +147,16 @@
                         or <a href="http://kxml.sourceforge.net/kxml2/">kXML 2</a>. Compared with the default processor,
                         this processor is much more lenient when reading action message XML. It can deal with broken
                         namespacing, missing SOAP envelopes, and other problems. In UPnP applications where
-                        compatibility is more important than specification compliance, you should use this parser.
+                        interoperability is more important than specification compliance, you should use this parser.
                     </dd>
                     <dt><code>org.fourthline.cling.transport.impl.RecoveringSOAPActionProcessorImpl</code></dt>
                     <dd>
                         This processor extends the <code>PullSOAPActionProcessorImpl</code> and additionally will
                         work around known bugs of UPnP stacks in the wild and try to recover from parsing failures by
-                        modifying the XML text in different ways. This is the processor you should use for maximum
-                        compatibility in your application. Furthermore, it let's you handle a failure when reading
-                        an XML message easily by overriding the <code>handleInvalidMessage()</code> method, e.g. to
-                        create or log an error report.
+                        modifying the XML text in different ways. This is the processor you should use for best
+                        interoperability with other (broken) UPnP stacks. Furthermore, it let's you handle a failure
+                        when reading an XML message easily by overriding the <code>handleInvalidMessage()</code> method,
+                        e.g. to create or log an error report.
                     </dd>
                 </dl>
 
@@ -169,9 +188,9 @@
                     <dd>
                         This processor extends the <code>PullGENAEventProcessorImpl</code> and additionally will
                         work around known bugs of UPnP stacks in the wild and try to recover from parsing failures by
-                        modifying the XML text in different ways. This is the processor you should use for maximum
-                        compatibility in your application. Furthermore, it will return partial results, when at least
-                        one single state variable value was successfully read from the event XML.
+                        modifying the XML text in different ways. This is the processor you should use for best
+                        interoperability with other (broken) UPnP stacks. Furthermore, it will return partial results,
+                        when at least one single state variable value was successfully read from the event XML.
                     </dd>
                 </dl>
 
@@ -184,12 +203,14 @@
 
         @Override
         public SOAPActionProcessor getSoapActionProcessor() {
-            return new PullSOAPActionProcessorImpl();
+            // Recommended for best interoperability with broken UPnP stacks!
+            return new RecoveringSOAPActionProcessorImpl();
         }
 
         @Override
         public GENAEventProcessor getGenaEventProcessor() {
-            return new PullGENAEventProcessorImpl();
+            // Recommended for best interoperability with broken UPnP stacks!
+            return new RecoveringGENAEventProcessorImpl();
         }
     }
 );]]></pre>

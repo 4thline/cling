@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.logging.Logger;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.fourthline.cling.binding.staging.MutableDevice;
@@ -54,14 +55,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Implementation based on JAXP DOM.
  *
  * @author Christian Bauer
  */
-public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
+public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, ErrorHandler {
 
     private static Logger log = Logger.getLogger(DeviceDescriptorBinder.class.getName());
 
@@ -83,8 +87,10 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
+            DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+            documentBuilder.setErrorHandler(this);
 
-            Document d = factory.newDocumentBuilder().parse(
+            Document d = documentBuilder.parse(
                     new InputSource(
                             // TODO: UPNP VIOLATION: Virgin Media Superhub sends trailing spaces/newlines after last XML element, need to trim()
                             new StringReader(descriptorXml.trim())
@@ -527,6 +533,18 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder {
         for (Device device : deviceModel.getEmbeddedDevices()) {
             generateDevice(namespace, device, descriptor, deviceListElement, info);
         }
+    }
+
+    public void warning(SAXParseException e) throws SAXException {
+        log.warning(e.toString());
+    }
+
+    public void error(SAXParseException e) throws SAXException {
+        throw e;
+    }
+
+    public void fatalError(SAXParseException e) throws SAXException {
+        throw e;
     }
 
     static protected URI parseURI(String uri) {

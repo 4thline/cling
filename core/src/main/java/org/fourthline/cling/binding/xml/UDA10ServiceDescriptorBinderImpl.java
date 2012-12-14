@@ -37,8 +37,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -56,7 +60,7 @@ import static org.fourthline.cling.model.XMLUtil.appendNewElementIfNotNull;
  *
  * @author Christian Bauer
  */
-public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder {
+public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder, ErrorHandler {
 
     private static Logger log = Logger.getLogger(ServiceDescriptorBinder.class.getName());
 
@@ -70,12 +74,14 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
+            DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+            documentBuilder.setErrorHandler(this);
 
-            Document d = factory.newDocumentBuilder().parse(
-                    new InputSource(
-                            // TODO: UPNP VIOLATION: Virgin Media Superhub sends trailing spaces/newlines after last XML element, need to trim()
-                            new StringReader(descriptorXml.trim())
-                    )
+            Document d = documentBuilder.parse(
+                new InputSource(
+                    // TODO: UPNP VIOLATION: Virgin Media Superhub sends trailing spaces/newlines after last XML element, need to trim()
+                    new StringReader(descriptorXml.trim())
+                )
             );
 
             return describe(undescribedService, d);
@@ -478,5 +484,16 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
 
     }
 
+    public void warning(SAXParseException e) throws SAXException {
+        log.warning(e.toString());
+    }
+
+    public void error(SAXParseException e) throws SAXException {
+        throw e;
+    }
+
+    public void fatalError(SAXParseException e) throws SAXException {
+        throw e;
+    }
 }
 

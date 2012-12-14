@@ -156,8 +156,9 @@
                         <p>
                             SOAP action and event messages are handled by configurable processors, you can provide
                             alternative implementations if necessary, see
-                            <a href="#section.SwitchingXMLProcessors">Switching XML processors</a>.
-
+                            <a href="#section.SwitchingXMLProcessors">Switching XML processors</a>. For best
+                            interoperability with other (broken) UPnP stacks, consider switching from the strictly
+                            specification-compliant default processors to the more lenient alternatives.
                         </p>
                     </dd>
 
@@ -165,7 +166,9 @@
                     <dd>
                         <p>
                             Reading and writing UPnP XML device and service descriptors is handled by dedicated
-                            binders, see <a href="#section.SwitchingXMLDescriptorBinders">Switching descriptor XML binders</a>.
+                            binders, see <a href="#section.SwitchingXMLDescriptorBinders">Switching descriptor XML
+                            binders</a>. For best interoperability with other (broken) UPnP stacks, consider switching
+                            from the strictly specification-compliant default binders to the more lenient alternatives.
                         </p>
                     </dd>
 
