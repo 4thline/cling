@@ -87,28 +87,34 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             useAddresses.addAll(Arrays.asList(useAddressesStrings));
         }
 
-        // TODO: Linux issue: http://mail.openjdk.java.net/pipermail/net-dev/2008-December/000497.html
-        // TODO: Is this no longer needed?
-        /*
-        if (OS.checkForLinux()) {
-            Properties props = System.getProperties();
-            props.setProperty("java.net.preferIPv6Stack", "true");
-            System.setProperties(props);
-        }
-        */
-
         discoverNetworkInterfaces();
         discoverBindAddresses();
 
-        if (networkInterfaces.size() == 0 || bindAddresses.size() == 0) {
-            throw new InitializationException("Could not discover any bindable network interfaces and/or addresses");
+        if ((networkInterfaces.size() == 0 || bindAddresses.size() == 0)) {
+            log.warning("No usable network interface or addresses found");
+        	if(requiresNetworkInterface()) {
+        		throw new MissingNetworkInterfaceException(
+                    "Could not discover any usable network interfaces and/or addresses"
+                );
+        	}
         }
 
         this.streamListenPort = streamListenPort;
     }
 
+    /**
+     * @return <code>true</code> (the default) if a {@link MissingNetworkInterfaceException} should be thrown
+     */
+    protected boolean requiresNetworkInterface() {
+    	return true;
+    }
+
     public void logInterfaceInformation() {
-    	for(NetworkInterface networkInterface : networkInterfaces) {
+    	if(networkInterfaces.isEmpty()) {
+    		log.info("No network interface to display!");
+    		return ;
+    	}
+        for(NetworkInterface networkInterface : networkInterfaces) {
         	try {
 				logInterfaceInformation(networkInterface);
 			} catch (SocketException ex) {

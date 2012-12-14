@@ -35,6 +35,16 @@ public interface NetworkAddressFactory {
     public static final String SYSTEM_PROPERTY_NET_ADDRESSES = "org.fourthline.cling.network.useAddresses";
 
     /**
+     * Might be thrown by the constructor of {@link NetworkAddressFactory} if no usable
+     * network interfaces/addresses were discovered.
+     */
+    public static class MissingNetworkInterfaceException extends InitializationException {
+		public MissingNetworkInterfaceException(String s) {
+			super(s);
+		}
+    }
+
+    /**
      * @return The UDP multicast group to join.
      */
     public InetAddress getMulticastGroup();
