@@ -35,8 +35,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 
@@ -52,7 +56,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
-public class SOAPActionProcessorImpl implements SOAPActionProcessor {
+public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandler {
 
     private static Logger log = Logger.getLogger(SOAPActionProcessor.class.getName());
     
@@ -126,7 +130,10 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
 
             DocumentBuilderFactory factory = createDocumentBuilderFactory();
             factory.setNamespaceAware(true);
-            Document d = factory.newDocumentBuilder().parse(new InputSource(new StringReader(body)));
+            DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+            documentBuilder.setErrorHandler(this);
+
+            Document d = documentBuilder.parse(new InputSource(new StringReader(body)));
 
             Element bodyElement = readBodyElement(d);
 
@@ -151,7 +158,10 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
 
             DocumentBuilderFactory factory = createDocumentBuilderFactory();
             factory.setNamespaceAware(true);
-            Document d = factory.newDocumentBuilder().parse(new InputSource(new StringReader(body)));
+            DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+            documentBuilder.setErrorHandler(this);
+
+            Document d = documentBuilder.parse(new InputSource(new StringReader(body)));
 
             Element bodyElement = readBodyElement(d);
 
@@ -608,5 +618,17 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor {
     		if(arg.isNameOrAlias(getUnprefixedNodeName(node))) return node;
     	}
     	return null;
+    }
+
+    public void warning(SAXParseException e) throws SAXException {
+        log.warning(e.toString());
+    }
+
+    public void error(SAXParseException e) throws SAXException {
+        throw e;
+    }
+
+    public void fatalError(SAXParseException e) throws SAXException {
+        throw e;
     }
 }

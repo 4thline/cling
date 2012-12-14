@@ -30,8 +30,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.FactoryConfigurationError;
 
@@ -44,7 +48,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
-public class GENAEventProcessorImpl implements GENAEventProcessor {
+public class GENAEventProcessorImpl implements GENAEventProcessor, ErrorHandler {
 
     private static Logger log = Logger.getLogger(GENAEventProcessor.class.getName());
 
@@ -91,8 +95,10 @@ public class GENAEventProcessorImpl implements GENAEventProcessor {
 
             DocumentBuilderFactory factory = createDocumentBuilderFactory();
             factory.setNamespaceAware(true);
+            DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+            documentBuilder.setErrorHandler(this);
 
-            Document d = factory.newDocumentBuilder().parse(
+            Document d = documentBuilder.parse(
                 new InputSource(new StringReader(body))
             );
 
@@ -199,6 +205,18 @@ public class GENAEventProcessorImpl implements GENAEventProcessor {
         return node.getPrefix() != null
                 ? node.getNodeName().substring(node.getPrefix().length() + 1)
                 : node.getNodeName();
+    }
+
+    public void warning(SAXParseException e) throws SAXException {
+        log.warning(e.toString());
+    }
+
+    public void error(SAXParseException e) throws SAXException {
+        throw e;
+    }
+
+    public void fatalError(SAXParseException e) throws SAXException {
+        throw e;
     }
 }
 
