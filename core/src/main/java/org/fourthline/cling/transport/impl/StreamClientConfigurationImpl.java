@@ -28,8 +28,8 @@ import org.fourthline.cling.model.ServerClientTokens;
 public class StreamClientConfigurationImpl implements StreamClientConfiguration {
 
     private boolean usePersistentConnections = false;
-    private int connectionTimeoutSeconds = 5;
-    private int dataReadTimeoutSeconds = 5;
+    private int connectionTimeoutSeconds = 20; // WMP can be very slow to connect
+    private int dataReadTimeoutSeconds = 60; // WMP can be very slow sending the initial data after connection
 
     /**
      * Defaults to <code>false</code>, avoiding obscure bugs in the JDK.
@@ -43,7 +43,7 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
     }
 
     /**
-     * Defaults to 5 seconds.
+     * Defaults to 20 seconds.
      */
     public int getConnectionTimeoutSeconds() {
         return connectionTimeoutSeconds;
@@ -54,7 +54,7 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
     }
 
     /**
-     * Defaults to 5 seconds.
+     * Defaults to 60 seconds.
      */
     public int getDataReadTimeoutSeconds() {
         return dataReadTimeoutSeconds;
