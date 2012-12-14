@@ -103,7 +103,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
     }
 
     /**
-     * @return <code>true</code> (the default) if a {@link MissingNetworkInterfaceException} should be thrown
+     * @return <code>true</code> (the default) if a <code>MissingNetworkInterfaceException</code> should be thrown
      */
     protected boolean requiresNetworkInterface() {
     	return true;

@@ -80,7 +80,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         long currentTime = new Date().getTime();
         this.currentValues.clear();
 
-        Collection<StateVariableValue> values = getService().getManager().readEventedStateVariableValues(true);
+        Collection<StateVariableValue> values = getService().getManager().getCurrentState();
 
         log.finer("Got evented state variable values: " + values.size());
 

@@ -37,7 +37,7 @@ public class SwitchPowerWithPropertyChangeSupport {
         getPropertyChangeSupport().firePropertyChange("target", targetOldValue, target);
         getPropertyChangeSupport().firePropertyChange("status", statusOldValue, status);
 
-        // This will send a UPnP event, it's the name of a state variable that sends events
+        // This will send a UPnP event, it's the name of a state variable that triggers events
         getPropertyChangeSupport().firePropertyChange("Status", statusOldValue, status);
     }
 

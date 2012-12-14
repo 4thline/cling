@@ -129,11 +129,10 @@ public interface ServiceManager<T> {
     /**
      * Reading the state of a service manually.
      *
-     * @param isNewSubscription <code>true</code> if the values are required for the initial event of a new GENA subscription.
      * @return A <code>Collection</code> of {@link org.fourthline.cling.model.state.StateVariableValue}, representing
-     *         the current state of the service.
-     * @throws Exception Any error that occured when the service's state was accessed.
+     *         the current state of the service, that is, all evented state variable values.
+     * @throws Exception Any error that occurred when the service's state was accessed.
      */
-    public Collection<StateVariableValue> readEventedStateVariableValues(boolean isNewSubscription) throws Exception;
+    public Collection<StateVariableValue> getCurrentState() throws Exception;
 
 }

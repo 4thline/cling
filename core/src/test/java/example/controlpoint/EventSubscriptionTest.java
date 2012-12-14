@@ -4,8 +4,10 @@ import example.binarylight.BinaryLightSampleData;
 import example.binarylight.SwitchPower;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
 import org.fourthline.cling.mock.MockUpnpService;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
+import org.fourthline.cling.model.gena.RemoteGENASubscription;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.header.SubscriptionIdHeader;
@@ -23,13 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 /**
  * Receiving events from services
  * <p>
- * The UPnP specification defines a general event notification system (GENA) which is based on a
- * publish/subscribe paradigm. Your control point subscribes with a service in order to receive
+ * The UPnP specification defines a general event notification architecture (GENA) which is based
+ * on a publish/subscribe paradigm. Your control point subscribes with a service in order to receive
  * events. When the service state changes, an event message will be delivered to the callback
  * of your control point. Subscriptions are periodically refreshed until you unsubscribe from
  * the service. If you do not unsubscribe and if a refresh of the subscription fails, maybe
@@ -50,10 +52,11 @@ import static org.testng.Assert.assertEquals;
  * </p>
  * <p>
  * Every event message from the service will be passed to the <code>eventReceived()</code> method,
- * and every message will carry a sequence number. Variable values are not transmitted individually,
- * each message contains <code>StateVariableValue</code> instances for <em>all</em> evented
- * variables of a service. You'll receive a snapshot of the state of the service at the time the
- * event was triggered.
+ * and every message will carry a sequence number. You can access the changed state variable values
+ * in this method, note that only state variables which changed are included in the event messages.
+ * A special event message called the "initial event" will be send by the service once, when you
+ * subscribe. This message contains values for <em>all</em> evented state variables of the service;
+ * you'll receive an initial snapshot of the state of the service at subscription time.
  * </p>
  * <p>
  * Whenever the receiving UPnP stack detects an event message that is out of sequence, e.g. because
@@ -61,6 +64,12 @@ import static org.testng.Assert.assertEquals;
  * before you receive the event. You then decide if missing events is important for the correct
  * behavior of your application, or if you can silently ignore it and continue processing events
  * with non-consecutive sequence numbers.
+ * </p>
+ * <p>
+ * You can optionally override the <code>invalidMessage()</code> method and react to message parsing
+ * errors, if your subscription is with a remote service. Most of the time all you can do here is
+ * log or report an error to developers, so they can work around the broken remote service (UPnP
+ * interoperability is frequently very poor).
  * </p>
  * <p>
  * You end a subscription regularly by calling <code>callback.end()</code>, which will unsubscribe
@@ -103,12 +112,13 @@ public class EventSubscriptionTest {
             public void ended(GENASubscription sub,
                               CancelReason reason,
                               UpnpResponse response) {
-                assert reason == null;
-                assert sub != null;  // DOC: EXC3
-                assert response == null;
+                assertNull(reason);
+                assertNotNull(sub); // DOC: EXC3
+                assertNull(response);
                 testAssertions.add(true);     // DOC: EXC3
             }
 
+            @Override
             public void eventReceived(GENASubscription sub) {
 
                 System.out.println("Event: " + sub.getCurrentSequence().getValue());
@@ -132,11 +142,17 @@ public class EventSubscriptionTest {
                 }                                                                           // DOC: EXC4
             }
 
+            @Override
             public void eventsMissed(GENASubscription sub, int numberOfMissedEvents) {
                 System.out.println("Missed events: " + numberOfMissedEvents);
                 testAssertions.add(false);                                                  // DOC: EXC5
             }
 
+            @Override
+            protected void invalidMessage(RemoteGENASubscription sub,
+                                          UnsupportedDataException ex) {
+                // Log/send an error report?
+            }
         };
 
         upnpService.getControlPoint().execute(callback);                                    // DOC: SUBSCRIBE
