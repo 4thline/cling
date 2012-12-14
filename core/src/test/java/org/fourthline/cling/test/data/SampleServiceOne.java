@@ -160,7 +160,8 @@ public class SampleServiceOne extends SampleService {
         assertEquals(a.getAction("SetTarget").getArguments()[0].getRelatedStateVariableName(), b.getAction("SetTarget").getArguments()[0].getRelatedStateVariableName());
 
         assertEquals(a.getAction("GetTarget").getArguments()[0].getName(), b.getAction("GetTarget").getArguments()[0].getName());
-        assertEquals(a.getAction("GetTarget").getArguments()[0].isReturnValue(), b.getAction("GetTarget").getArguments()[0].isReturnValue());
+        // TODO: UPNP VIOLATION: WMP12 will discard RenderingControl service if it contains <retval> tags
+        // assertEquals(a.getAction("GetTarget").getArguments()[0].isReturnValue(), b.getAction("GetTarget").getArguments()[0].isReturnValue());
 
         assertEquals(a.getStateVariables().length, b.getStateVariables().length);
         assertTrue(a.getStateVariable("Target") != null);

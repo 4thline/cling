@@ -414,7 +414,9 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
         appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.name, actionArgument.getName());
         appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.direction, actionArgument.getDirection().toString().toLowerCase(Locale.ENGLISH));
         if (actionArgument.isReturnValue()) {
-            appendNewElement(descriptor, actionArgumentElement, ELEMENT.retval);
+            // TODO: UPNP VIOLATION: WMP12 will discard RenderingControl service if it contains <retval> tags
+            log.warning("UPnP specification violation: Not producing <retval> element to be compatible with WMP12: " + actionArgument);
+            // appendNewElement(descriptor, actionArgumentElement, ELEMENT.retval);
         }
         appendNewElementIfNotNull(descriptor, actionArgumentElement, ELEMENT.relatedStateVariable, actionArgument.getRelatedStateVariableName());
     }
@@ -467,7 +469,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
             appendNewElementIfNotNull(
                     descriptor, allowedValueRangeElement, ELEMENT.maximum, stateVariable.getTypeDetails().getAllowedValueRange().getMaximum()
             );
-            if (stateVariable.getTypeDetails().getAllowedValueRange().getStep() > 1l) {
+            if (stateVariable.getTypeDetails().getAllowedValueRange().getStep() >= 1l) {
                 appendNewElementIfNotNull(
                         descriptor, allowedValueRangeElement, ELEMENT.step, stateVariable.getTypeDetails().getAllowedValueRange().getStep()
                 );
