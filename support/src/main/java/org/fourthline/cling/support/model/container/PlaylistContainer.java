@@ -31,7 +31,7 @@ import static org.fourthline.cling.support.model.DIDLObject.Property.UPNP;
  */
 public class PlaylistContainer extends Container {
 
-    public static final Class CLASS = new Class("object.container.playlistContainer");
+    public static final Class CLASS = new Class("object.container.playlist");
 
     public PlaylistContainer() {
         setClazz(CLASS);
