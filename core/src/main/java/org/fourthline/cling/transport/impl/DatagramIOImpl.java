@@ -155,6 +155,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
+            log.warning("Exception sending datagram to: " + datagram.getAddress() + ": " + ex);
             throw new RuntimeException(ex);
         }
     }
