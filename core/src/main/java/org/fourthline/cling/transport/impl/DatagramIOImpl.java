@@ -29,6 +29,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.SocketException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -155,8 +156,7 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
         } catch (RuntimeException ex) {
             throw ex;
         } catch (Exception ex) {
-            log.warning("Exception sending datagram to: " + datagram.getAddress() + ": " + ex);
-            throw new RuntimeException(ex);
+            log.log(Level.SEVERE, "Exception sending datagram to: " + datagram.getAddress() + ": " + ex, ex);
         }
     }
 }
