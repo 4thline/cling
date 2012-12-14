@@ -430,7 +430,8 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
     protected void logInterfaceInformation(NetworkInterface networkInterface) throws SocketException {
         log.info("---------------------------------------------------------------------------------");
         log.info(String.format("Interface display name: %s", networkInterface.getDisplayName()));
-        log.info(String.format("Parent Info: %s", networkInterface.getParent()));
+        if (networkInterface.getParent() != null)
+            log.info(String.format("Parent Info: %s", networkInterface.getParent()));
         log.info(String.format("Name: %s", networkInterface.getName()));
 
         Enumeration<InetAddress> inetAddresses = networkInterface.getInetAddresses();
