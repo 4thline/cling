@@ -22,6 +22,7 @@ import org.fourthline.cling.binding.xml.ServiceDescriptorBinder;
 import org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderImpl;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.mock.MockUpnpServiceConfiguration;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
@@ -70,17 +71,50 @@ public class InvalidActionXMLProcessingTest {
         };
     }
 
-    @Test(dataProvider = "invalidXMLFile")
-    public void readRequest(String invalidXMLFile) throws Exception {
+    @DataProvider(name = "invalidUnrecoverableXMLFile")
+    public String[][] getInvalidUnrecoverableXMLFile() throws Exception {
+        return new String[][]{
+            {"/invalidxml/control/unrecoverable/naim_unity.xml"},
+        };
+    }
+
+    /* ############################## TEST FAILURE ############################ */
+
+    @Test(dataProvider = "invalidXMLFile", expectedExceptions = UnsupportedDataException.class)
+    public void readRequestDefaultFailure(String invalidXMLFile) throws Exception {
+        // This should always fail!
+        readRequest(invalidXMLFile, new MockUpnpService());
+    }
+
+    @Test(dataProvider = "invalidRecoverableXMLFile", expectedExceptions = UnsupportedDataException.class)
+    public void readRequestRecoverableFailure(String invalidXMLFile) throws Exception {
+        // This should always fail!
+        readRequest(invalidXMLFile, new MockUpnpService());
+    }
+
+    @Test(dataProvider = "invalidUnrecoverableXMLFile", expectedExceptions = Exception.class)
+    public void readRequestRecoveringFailure(String invalidXMLFile) throws Exception {
+        // This should always fail!
         readRequest(
             invalidXMLFile,
             new MockUpnpService(new MockUpnpServiceConfiguration() {
                 @Override
                 public SOAPActionProcessor getSoapActionProcessor() {
-                    // Tests should fail with this:
-                    //return new SOAPActionProcessorImpl();
+                    return new RecoveringSOAPActionProcessorImpl();
+                }
+            })
+        );
+    }
 
-                    // But work with this:
+    /* ############################## TEST SUCCESS ############################ */
+
+    @Test(dataProvider = "invalidXMLFile")
+    public void readRequestPull(String invalidXMLFile) throws Exception {
+        readRequest(
+            invalidXMLFile,
+            new MockUpnpService(new MockUpnpServiceConfiguration() {
+                @Override
+                public SOAPActionProcessor getSoapActionProcessor() {
                     return new PullSOAPActionProcessorImpl();
                 }
             })
@@ -88,16 +122,12 @@ public class InvalidActionXMLProcessingTest {
     }
 
     @Test(dataProvider = "invalidRecoverableXMLFile")
-    public void readRequestRecoverable(String invalidXMLFile) throws Exception {
+    public void readRequestRecovering(String invalidXMLFile) throws Exception {
         readRequest(
             invalidXMLFile,
             new MockUpnpService(new MockUpnpServiceConfiguration() {
                 @Override
                 public SOAPActionProcessor getSoapActionProcessor() {
-                    // Tests should fail with this:
-                    //return new PullSOAPActionProcessorImpl();
-
-                    // But work with this:
                     return new RecoveringSOAPActionProcessorImpl();
                 }
             })

@@ -1,0 +1,24 @@
+<!-- device exception: org.fourthline.cling.g.b.j: Can't transform message payload: org.xmlpull.v1.XmlPullParserException: processing instructions must not start with xml (position:unknown @8:19 in java.io.StringReader@411fbc70)  -->
+<!-- context: GetPositionInfo -->
+<!-- Manufacturer: Naim Audio Ltd. -->
+<!-- Model Description: naimuniti -->
+<!-- Model Name: naimuniti -->
+<!-- Model Number: 1.0 -->
+
+
+<s:Envelope
+		xmlns:s="http://schemas.xmlsoap.org/soap/envelope/"
+		s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+	<s:Body>
+		<u:GetPositionInfoResponse xmlns:u="urn:schemas-upnp-org:service:AVTransport:1">
+			<Track>1</Track>
+			<TrackDuration>0:03:12</TrackDuration>
+			<TrackMetaData><?xml version='1.0' encoding='UTF-8' ?><DIDL-Lite xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dlna="urn:schemas-dlna-org:metadata-1-0/" xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"><item id="64$1$2$1"><upnp:class>object.item.audioItem</upnp:class><dc:title>My Gun Go Off (Produced By Adam Deitch &amp; Eric Krasno)</dc:title><dc:creator>50 Cent</dc:creator><upnp:artist>50 Cent</upnp:artist><upnp:albumArtURI>http://192.168.5.11:8200/AlbumArt/28-83.jpg</upnp:albumArtURI><upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.5.11:8200/AlbumArt/28-83.jpg</upnp:albumArtURI><upnp:album>Curtis (Special Edition)</upnp:album><upnp:genre>Rap</upnp:genre><upnp:originalTrackNumber>2</upnp:originalTrackNumber><dc:date>2007-01-01</dc:date><ownerUdn>4d696e69-444c-164e-9d41-002202001c06</ownerUdn><res protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0" bitrate="128000" sampleFrequency="44100" duration="0:03:12.000">http://192.168.5.11:8200/MediaItems/83.mp3</res></item></DIDL-Lite>lt;/ownerUdn&gt;&lt;res protocolInfo=&quot;http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_CI=0&quot; bitrate=&quot;128000&quot; sampleFrequency=&quot;44100&quot; duration=&quot;0:03:12.000&quot;&gt;http://192.168.5.11:8200/MediaItems/83.mp3&lt;/res&gt;&lt;/item&gt;&lt;/DIDL-Lite&gt;</TrackMetaData>
+			<TrackURI>http://192.168.5.11:8200/MediaItems/83.mp3</TrackURI>
+			<RelTime>0:00:03</RelTime>
+			<AbsTime>0:00:03</AbsTime>
+			<RelCount>3000</RelCount>
+			<AbsCount>3000</AbsCount>
+		</u:GetPositionInfoResponse>
+	</s:Body>
+</s:Envelope>
