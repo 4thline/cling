@@ -104,6 +104,13 @@ public class PullSOAPActionProcessorImpl extends SOAPActionProcessorImpl {
 
         }
         while (event != XmlPullParser.END_DOCUMENT && (event != XmlPullParser.END_TAG || !xpp.getName().equals("Body")));
+
+        throw new ActionException(
+            ErrorCode.ACTION_FAILED,
+            String.format("Action SOAP response do not contain %s element",
+                actionInvocation.getAction().getName() + "Response"
+            )
+        );
     }
 
     protected void readActionInputArguments(XmlPullParser xpp, ActionInvocation actionInvocation) throws Exception {
