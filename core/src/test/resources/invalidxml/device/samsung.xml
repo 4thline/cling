@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0"
+xmlns:dlna="urn:schemas-dlna-org:device-1-0"
+xmlns:sec="http://www.sec.co.kr">
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<device>
+<deviceType>urn:schemas-opencable-com:device:OCAP_HOST:1</deviceType>
+<friendlyName>Samsung OCAP_HOST DMS</friendlyName>
+<manufacturer>Samsung</manufacturer>
+<manufacturerURL>http://www.samsung.com</manufacturerURL>
+<modelDescription>H3272 OCAP Box</modelDescription>
+<modelName>SMT-H3272</modelName>
+<modelNumber>3272</modelNumber>
+<modelURL>http://www.samsung.com/</modelURL>
+<serialNumber>1234567890</serialNumber>
+<UDN>uuid:13ab6680-00ea-1000-9b5a-00214cc35bca</UDN>
+<iconList>
+<icon>
+</icon>
+<mimetype>image/png</mimetype>
+<width>48</width>
+<height>48</height>
+<depth>24</depth>
+<url>http://10.70.128.14:8080/rui/image/allshare/twc_logo_green_allshare_small.png</url>
+</iconList>
+<deviceList>
+<device>
+<deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+<ocap:X_OCAPHN xmlns:ocap="urn:schemas-cablelabs-com:device-1-0">OC-DMS-1.0</ocap:X_OCAPHN>
+<dlna:X_DLNADOC xmlns:dlna="urn:schemas-dlna-org:device-1-0">DMS-1.50</dlna:X_DLNADOC>
+<ocap:X_PacingSupported xmlns:ocap="urn:schemas-cablelabs-com">YES</ocap:X_PacingSupported>
+<friendlyName>DMS</friendlyName>
+<manufacturer>Samsung-Electronics</manufacturer>
+<manufacturerURL>http://www.samsung.com</manufacturerURL>
+<modelDescription>Provides content through UPnP ContentDirectory service</modelDescription>
+<modelName>WM Media Server</modelName>
+<modelNumber>0.765</modelNumber>
+<modelURL>http://www.samsung.com</modelURL>
+<UDN>uuid:13ab6681-00ea-1000-b881-00214cc35bca</UDN>
+<ocap:X_MiddlewareProfile xmlns:ocap="urn:schemas-cablelabs-com:device-1-0">1.0.2</ocap:X_MiddlewareProfile>
+<ocap:X_MiddlewareVersion xmlns:ocap="urn:schemas-cablelabs-com:device-1-0">1a.2.3</ocap:X_MiddlewareVersion>
+<serviceList>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ConnectionManager:2</serviceType>
+<serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+<SCPDURL>/ConnectionManager_SECDescURL</SCPDURL>
+<controlURL>/ConnectionManager_SECCntURL</controlURL>
+<eventSubURL>/ConnectionManager_SECSubURL</eventSubURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ContentDirectory:3</serviceType>
+<serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+<SCPDURL>/ContentDirectory_SECDescURL</SCPDURL>
+<controlURL>/ContentDirectory_SECCntURL</controlURL>
+<eventSubURL>/ContentDirectory_SECSubURL</eventSubURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ScheduledRecording:1</serviceType>
+<serviceId>urn:upnp-org:serviceId:ScheduledRecording</serviceId>
+<controlURL>/ScheduledRecording_SECCntURL</controlURL>
+<eventSubURL>/ScheduledRecording_SECSubURL</eventSubURL>
+<SCPDURL>/ScheduledRecording_SECDescURL</SCPDURL>
+</service>
+</serviceList>
+</device>
+</deviceList>
+</device>
+</root>

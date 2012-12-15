@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+    <friendlyName>Windows Media Player Streamer: iPad (iPad)</friendlyName>
+    <manufacturer>Plutinosoft LLC</manufacturer>
+    <manufacturerURL>http://www.plutinosoft.com</manufacturerURL>
+    <modelDescription></modelDescription>
+    <modelName></modelName>
+    <modelURL></modelURL>
+    <modelNumber></modelNumber>
+    <serialNumber></serialNumber>
+    <UDN>uuid:ff5a3023-15c8-83a7-7b9a-882fe779fa49</UDN>
+    <iconList>
+      <icon>
+        <mimetype>image/jpeg</mimetype>
+        <width>114</width>
+        <height>114</height>
+        <depth>8</depth>
+        <url>/var/mobile/Applications/71367E68-F30F-460B-A2D2-331509441D13/Windows Media Player Streamer.app/Icon-ps3.jpg</url>
+      </icon>
+    </iconList>
+    <serviceList>
+      <service>
+        <serviceType>urn:microsoft.com:service:X_MS_MediaReceiverRegistrar:1</serviceType>
+        <serviceId>urn:microsoft.com:serviceId:X_MS_MediaReceiverRegistrar</serviceId>
+        <SCPDURL>/X_MS_MediaReceiverRegistrar/ff5a3023-15c8-83a7-7b9a-882fe779fa49/scpd.xml</SCPDURL>
+        <controlURL>/X_MS_MediaReceiverRegistrar/ff5a3023-15c8-83a7-7b9a-882fe779fa49/control.xml</controlURL>
+        <eventSubURL>/X_MS_MediaReceiverRegistrar/ff5a3023-15c8-83a7-7b9a-882fe779fa49/event.xml</eventSubURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+        <SCPDURL>/ContentDirectory/ff5a3023-15c8-83a7-7b9a-882fe779fa49/scpd.xml</SCPDURL>
+        <controlURL>/ContentDirectory/ff5a3023-15c8-83a7-7b9a-882fe779fa49/control.xml</controlURL>
+        <eventSubURL>/ContentDirectory/ff5a3023-15c8-83a7-7b9a-882fe779fa49/event.xml</eventSubURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+        <SCPDURL>/ConnectionManager/ff5a3023-15c8-83a7-7b9a-882fe779fa49/scpd.xml</SCPDURL>
+        <controlURL>/ConnectionManager/ff5a3023-15c8-83a7-7b9a-882fe779fa49/control.xml</controlURL>
+        <eventSubURL>/ConnectionManager/ff5a3023-15c8-83a7-7b9a-882fe779fa49/event.xml</eventSubURL>
+      </service>
+    </serviceList>
+  </device>
+</root>

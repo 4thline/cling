@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<root xmlns:dlna="urn:schemas-dlna-org:device-1-0" xmlns="urn:schemas-upnp-org:device-1-0">
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<device>
+<deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+<friendlyName>TPG DLNA Server</friendlyName>
+<manufacturer>tpg</manufacturer>
+<manufacturerURL>http://www.tpg.com.au</manufacturerURL>
+<modelDescription>Proxied IPTV Multicast Stream</modelDescription>
+<modelName>Proxied IPTV Multicast Stream</modelName>
+<modelNumber>01</modelNumber>
+<modelURL>http://www.tpg.com.au</modelURL>
+<serialNumber></serialNumber>
+<UPC></UPC>
+<UDN>uuid:1287-a000-9273-e000</UDN>
+<presentationURL>/presentation.html</presentationURL>
+<iconList>
+<icon>
+<mimetype>image/png</mimetype>
+<width>48</width>
+<height>48</height>
+<depth>32</depth>
+<url>/icons/tpg_48.png</url>
+</icon>
+<icon>
+<mimetype>image/png</mimetype>
+<width>120</width>
+<height>120</height>
+<depth>32</depth>
+<url>/icons/tpg_120.png</url>
+</icon>
+</iconList>
+<serviceList>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+<serviceId>ContentDirectory</serviceId>
+<controlURL>/ContentDirectory/control</controlURL>
+<eventSubURL>/ContentDirectory/event</eventSubURL>
+<SCPDURL>/ContentDirectory.xml</SCPDURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+<serviceId>ConnectionManager</serviceId>
+<controlURL>/ConnectionManager/control</controlURL>
+<eventSubURL>/ConnectionManager/event</eventSubURL>
+<SCPDURL>/ConnectionManager.xml</SCPDURL>
+</service>
+</serviceList>
+</device>
+<URLBase>http://192.168.1.100:1238</URLBase>
+</root>

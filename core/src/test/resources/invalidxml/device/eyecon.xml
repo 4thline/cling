@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <URLBase>http://192.168.1.55:8888</URLBase>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device:MediaRenderer:1</deviceType>
+    <friendlyName>HTC Desire HD A9191 (192.168.1.55)</friendlyName>
+    <manufacturer>Eyecon Technologies</manufacturer>
+    <manufacturerURL>http://www.eyecontec.com</manufacturerURL>
+    <modelDescription>EyeconMobileRenderer for HTC Desire HD A9191 (HTC)</modelDescription>
+    <modelName>EyeconMobileRenderer - HTC Desire HD A9191 (HTC)</modelName>
+    <modelNumber>1.0</modelNumber>
+    <modelURL>http://www.eyecontec.com</modelURL>
+    <UDN>uuid:90:21:55:CE:6F:4D</UDN>
+    <serviceList>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType>
+        <serviceId>urn:upnp-orgerviceId:urnchemas-upnp-orgervice:RenderingControl</serviceId>
+        <SCPDURL>/RenderingControl/scpd.xml</SCPDURL>
+        <controlURL>/RenderingControl/control</controlURL>
+        <eventSubURL>/RenderingControl/eventSub</eventSubURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+        <serviceId>urn:upnp-orgerviceId:urnchemas-upnp-orgervice:ConnectionManager</serviceId>
+        <SCPDURL>/ConnectionManager/scpd.xml</SCPDURL>
+        <controlURL>/ConnectionManager/control</controlURL>
+        <eventSubURL>/ConnectionManager/eventSub</eventSubURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType>
+        <serviceId>urn:upnp-orgerviceId:urnchemas-upnp-orgervice:AVTransport</serviceId>
+        <SCPDURL>/AVTransport/scpd.xml</SCPDURL>
+        <controlURL>/AVTransport/control</controlURL>
+        <eventSubURL>/AVTransport/eventSub</eventSubURL>
+      </service>
+    </serviceList>
+    <iconList>
+      <icon>
+        <mimeType>image/png</mimeType>
+        <width>64</width>
+        <height>64</height>
+        <depth>32</depth>
+        <url>android.png</url>
+      </icon>
+    </iconList>
+  </device>
+</root>

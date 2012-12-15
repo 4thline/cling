@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0" xmlns:pnpx="http://schemas.microsoft.com/windows/pnpx/2005/11" xmlns:df="http://schemas.microsoft.com/windows/2008/09/devicefoundation">
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<device>
+<presentationURL>http://192.168.0.6/</presentationURL>
+<deviceType>urn:schemas-upnp-org:device:MediaRenderer:1</deviceType>
+<friendlyName>PerfectWave DAC010B7D</friendlyName>
+<manufacturer>PSAudio</manufacturer>
+<manufacturerURL>http://www.psaudio.com</manufacturerURL>
+<modelName>PSAudio Bridge</modelName>
+<modelNumber>1.0</modelNumber>
+<modelDescription>PSAudio Bridge</modelDescription>
+<modelURL>http://www.psaudio.com</modelURL>
+<UDN>uuid:310b489f-cf8a-4a76-b514-417246a818c0</UDN>
+<serviceList><service><serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType><serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId><SCPDURL>xml/ConnectionManager.xml</SCPDURL><eventSubURL>GstRenderer/RygelGstConnectionManager/Event</eventSubURL><controlURL>GstRenderer/RygelGstConnectionManager/Control</controlURL></service><service><serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType><serviceId>urn:upnp-org:serviceId:AVTransport</serviceId><SCPDURL>xml/AVTransport.xml</SCPDURL><eventSubURL>GstRenderer/RygelGstAVTransport/Event</eventSubURL><controlURL>GstRenderer/RygelGstAVTransport/Control</controlURL></service><service><serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType><serviceId>urn:upnp-org:serviceId:RenderingControl</serviceId><SCPDURL>xml/RenderingControl.xml</SCPDURL><eventSubURL>GstRenderer/RygelGstRenderingControl/Event</eventSubURL><controlURL>GstRenderer/RygelGstRenderingControl/Control</controlURL></service><service><serviceType>urn:linn-co-uk:service:Playlist:1</serviceType><serviceId>urn:linn-co-uk:service:Playlist</serviceId><SCPDURL>xml/PlayList.xml</SCPDURL><eventSubURL>GstRenderer/RygelPlaylistService/Event</eventSubURL><controlURL>GstRenderer/RygelPlaylistService/Control</controlURL></service><service><serviceType>urn:linn-co-uk:service:Ds:1</serviceType><serviceId>urn:linn-co-uk:service:Ds</serviceId><SCPDURL>xml/Ds1.xml</SCPDURL><eventSubURL>GstRenderer/RygelGstDsService/Event</eventSubURL><controlURL>GstRenderer/RygelGstDsService/Control</controlURL></service><service><serviceType>urn:linn-co-uk:service:MediaTime:1</serviceType><serviceId>urn:linn-co-uk:service:MediaTime</serviceId><SCPDURL>xml/MediaTime1.xml</SCPDURL><eventSubURL>GstRenderer/RygelGstMediaTimeService/Event</eventSubURL><controlURL>GstRenderer/RygelGstMediaTimeService/Control</controlURL></service></serviceList>
+<dlna:X_DLNADOC>DMR-1.50</dlna:X_DLNADOC>
+<dlna:X_DLNACAP/>
+<pnpx:X_compatibleId>MS_DigitalMediaDeviceClass_DMR_V001</pnpx:X_compatibleId>
+<pnpx:X_deviceCategory>MediaDevices.Speakers</pnpx:X_deviceCategory>
+<pnpx:X_hardwareId>urn:www-ubicom-com:device:Ubicom_Renderer:0_1 VEN_0033&amp;DEV_0003&amp;REV_01</pnpx:X_hardwareId>
+<df:X_deviceCategory>Multimedia.DMR</df:X_deviceCategory>
+<iconList>
+<icon>
+<mimetype>image/jpeg</mimetype>
+<width>48</width>
+<height>48</height>
+<depth>24</depth>
+<url>xml/psaudio_icon_SM.jpg</url>
+</icon>
+<icon>
+<mimetype>image/jpeg</mimetype>
+<width>120</width>
+<height>120</height>
+<depth>24</depth>
+<url>xml/psaudio_icon_LRG.jpg</url>
+</icon>
+<icon>
+<mimetype>image/png</mimetype>
+<width>48</width>
+<height>48</height>
+<depth>24</depth>
+<url>xml/psaudio_icon_SM.png</url>
+</icon>
+<icon>
+<mimetype>image/png</mimetype>
+<width>120</width>
+<height>120</height>
+<depth>24</depth>
+<url>xml/psaudio_icon_LRG.png</url>
+</icon>
+</iconList>
+</device>
+</root>

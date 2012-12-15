@@ -19,6 +19,7 @@ package org.fourthline.cling.model.types;
 
 import org.fourthline.cling.model.Constants;
 
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,13 +27,17 @@ import java.util.regex.Pattern;
  * Represents a device type, for example <code>urn:my-domain-namespace:device:MyDevice:1</code>.
  * <p>
  * Although decimal versions are accepted and parsed, the version used for
- * comparison is only the integer withou the fraction.
+ * comparison is only the integer without the fraction.
  * </p>
  *
  * @author Christian Bauer
  */
 public class DeviceType {
-    
+
+    final private static Logger log = Logger.getLogger(DeviceType.class.getName());
+
+    public static final String UNKNOWN = "UNKNOWN";
+
     public static final Pattern PATTERN =
             Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
 
@@ -87,16 +92,36 @@ public class DeviceType {
             // Ignore
         }
 
+        if (deviceType != null)
+            return deviceType;
+
         // Now try a generic DeviceType parse
-        if (deviceType == null) {
-            Matcher matcher = PATTERN.matcher(s);
-            if (matcher.matches()) {
-                return new DeviceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
-            } else {
-                throw new InvalidValueException("Can't parse device type string (namespace/type/version): " + s);
-            }
+        Matcher matcher = PATTERN.matcher(s);
+        if (matcher.matches()) {
+            return new DeviceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
         }
-        return deviceType;
+
+        log.warning("UPnP specification violation, trying to read invalid device type: " + s);
+
+        // TODO: UPNP VIOLATION: Escient doesn't provide any device type token
+        // urn:schemas-upnp-org:device::1
+        matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device::([0-9]+).*").matcher(s);
+        if (matcher.matches() && matcher.groupCount() >= 2) {
+            log.warning("No device type token, defaulting to " + UNKNOWN + ": " + s);
+            return new DeviceType(matcher.group(1), UNKNOWN, Integer.valueOf(matcher.group(2)));
+        }
+
+        // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in device type token
+        // urn:schemas-microsoft-com:service:pbda:tuner:1
+
+        matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device:(.+?):([0-9]+).*").matcher(s);
+        if (matcher.matches() && matcher.groupCount() >= 3) {
+            String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
+            log.warning("Replacing invalid device type token '" + matcher.group(2) + "' with: " + cleanToken);
+            return new DeviceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
+        }
+
+        throw new InvalidValueException("Can't parse device type string (namespace/type/version): " + s);
     }
 
     public boolean implementsVersion(DeviceType that) {

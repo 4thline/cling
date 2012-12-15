@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root configId="50704" xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>1</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device:KodakMediaServer:1</deviceType>
+    <friendlyName>Kodak Picture Transfer Service - TOMS-PC</friendlyName>
+    <manufacturer>Kodak</manufacturer>
+    <manufacturerURL>http://www.kodak.com</manufacturerURL>
+    <modelDescription>Image Archiva Service</modelDescription>
+    <modelName>Image Archive Service</modelName>
+    <modelNumber>MODELNAMEHERE</modelNumber>
+    <serialNumber>0000001</serialNumber>
+    <UDN>uuid:4a9490f6-60a7-4c25-965f-a64a5c0dcbfb</UDN>
+    <serviceList>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:</serviceId>
+        <SCPDURL>ContentDirectoryService/scpd.xml</SCPDURL>
+        <controlURL>ContentDirectoryService/control</controlURL>
+        <eventSubURL>ContentDirectoryService/event</eventSubURL>
+      </service>
+    </serviceList>
+  </device>
+</root>

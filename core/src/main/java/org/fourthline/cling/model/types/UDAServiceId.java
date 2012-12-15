@@ -53,22 +53,30 @@ public class UDAServiceId extends ServiceId {
         Matcher matcher = UDAServiceId.PATTERN.matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 1) {
             return new UDAServiceId(matcher.group(1));
-        } else {
-            log.warning("UPnP specification violation, trying to read invalid UDA Service ID: " + s);
-            matcher = UDAServiceId.BROKEN_PATTERN.matcher(s);
-            if (matcher.matches() && matcher.groupCount() >= 1) {
-                return new UDAServiceId(matcher.group(1));
-            } else {
-				// Some devices just set the last token of the Service ID: ContentDirectory
-            	if("ContentDirectory".equals(s) || 
-            	   "ConnectionManager".equals(s) ||
-            	   "RenderingControl".equals(s) ||
-            	   "AVTransport".equals(s)) {
-            		log.warning("UPnP specification violation, fixing broken Service ID: " + s);
-            		return new UDAServiceId(s);
-            	}
-            }
         }
+
+        log.warning("UPnP specification violation, trying to read invalid UDA Service ID: " + s);
+
+        matcher = UDAServiceId.BROKEN_PATTERN.matcher(s);
+        if (matcher.matches() && matcher.groupCount() >= 1) {
+            return new UDAServiceId(matcher.group(1));
+        }
+
+        // TODO: UPNP VIOLATION: Handle garbage sent by Eyecon Android app
+        matcher = Pattern.compile("urn:upnp-orgerviceId:urnchemas-upnp-orgervice:(" + Constants.REGEX_ID + ")").matcher(s);
+        if (matcher.matches()) {
+            return new UDAServiceId(matcher.group(1));
+        }
+
+        // Some devices just set the last token of the Service ID, e.g. 'ContentDirectory'
+        if("ContentDirectory".equals(s) ||
+           "ConnectionManager".equals(s) ||
+           "RenderingControl".equals(s) ||
+           "AVTransport".equals(s)) {
+            log.warning("UPnP specification violation, fixing broken Service ID: " + s);
+            return new UDAServiceId(s);
+        }
+
         throw new InvalidValueException("Can't parse UDA service ID string (upnp-org/id): " + s);
     }
 

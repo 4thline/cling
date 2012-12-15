@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:ms="urn:microsoft-com:wmc-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0"><specVersion><major>1</major><minor>0</minor></specVersion><device ms:X_MS_SupportsWMDRM="false"><deviceType></deviceType><dlna:X_DLNADOC xmlns:dlna="urn:schemas-dlna-org:device-1-0">DMR-1.50</dlna:X_DLNADOC><friendlyName>Awox Media Renderer (RAIATEA)</friendlyName><manufacturer>Awox</manufacturer><manufacturerURL>http://www.awox.com</manufacturerURL><modelDescription>Awox Media Renderer 2.1</modelDescription><modelName>mediaCTRL</modelName><modelNumber>2.1</modelNumber><modelURL>http://www.awox.com</modelURL><serialNumber>0000001</serialNumber><UDN>uuid:4b8c7f3c-3301-11e1-8bf1-d067e536fdac</UDN><UPC>000000000000</UPC><presentationURL>/web</presentationURL><iconList><icon>
+<mimetype>image/jpeg</mimetype>
+<width>48</width>
+<height>48</height>
+<depth>24</depth>
+<url>/web/file/smallIco.jpg</url>
+</icon><icon>
+<mimetype>image/jpeg</mimetype>
+<width>120</width>
+<height>120</height>
+<depth>24</depth>
+<url>/web/file/largeIco.jpg</url>
+</icon><icon>
+<mimetype>image/png</mimetype>
+<width>48</width>
+<height>48</height>
+<depth>24</depth>
+<url>/web/file/smallIco.png</url>
+</icon><icon>
+<mimetype>image/png</mimetype>
+<width>120</width>
+<height>120</height>
+<depth>24</depth>
+<url>/web/file/largeIco.png</url>
+</icon>
+</iconList><serviceList><service><serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType><serviceId>urn:upnp-org:serviceId:AVTransport</serviceId><SCPDURL>/MediaRenderer_AVTransport/scpd.xml</SCPDURL><controlURL>/MediaRenderer_AVTransport/control</controlURL><eventSubURL>/MediaRenderer_AVTransport/event</eventSubURL></service><service><serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType><serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId><SCPDURL>/MediaRenderer_ConnectionManager/scpd.xml</SCPDURL><controlURL>/MediaRenderer_ConnectionManager/control</controlURL><eventSubURL>/MediaRenderer_ConnectionManager/event</eventSubURL></service><service><serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType><serviceId>urn:upnp-org:serviceId:RenderingControl</serviceId><SCPDURL>/MediaRenderer_RenderingControl/scpd.xml</SCPDURL><controlURL>/MediaRenderer_RenderingControl/control</controlURL><eventSubURL>/MediaRenderer_RenderingControl/event</eventSubURL></service><service><serviceType>urn:schemas-awox-com:service:X_ServiceManager:1</serviceType><serviceId>urn:schemas-awox-com:serviceId:X_ServiceManager</serviceId><SCPDURL>/MediaRenderer_X_ServiceManager/scpd.xml</SCPDURL><controlURL>/MediaRenderer_X_ServiceManager/control</controlURL><eventSubURL>/MediaRenderer_X_ServiceManager/event</eventSubURL></service></serviceList></device></root>

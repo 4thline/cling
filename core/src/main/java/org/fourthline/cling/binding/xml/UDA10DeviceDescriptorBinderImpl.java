@@ -560,6 +560,15 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
              uri = "http://" + uri;
         }
 
+        // TODO: UPNP VIOLATION: Plutinosoft uses unencoded relative URIs
+        // /var/mobile/Applications/71367E68-F30F-460B-A2D2-331509441D13/Windows Media Player Streamer.app/Icon-ps3.jpg
+        if (uri.contains(" ")) {
+            // We don't want to split/encode individual parts of the URI, too much work
+            // TODO: But we probably should do this? Because browsers do it, everyone
+            // seems to think that spaces in URLs are somehow OK...
+            uri = uri.replaceAll(" ", "%20");
+        }
+
         try {
             return URI.create(uri);
         } catch (Throwable ex) {

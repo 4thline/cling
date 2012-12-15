@@ -1,0 +1,58 @@
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0">
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<device>
+<deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+<friendlyName>fumanschuh007 (doubleTwist)</friendlyName>
+<manufacturer>Microsoft Corporation</manufacturer>
+<manufacturerURL>http://www.doubletwist.com</manufacturerURL>
+<modelDescription>doubleTwist UPnP Media Server</modelDescription>
+<modelName>doubleTwist</modelName>
+<modelURL>http://www.doubletwist.com</modelURL>
+<modelNumber>3.0</modelNumber>
+<serialNumber></serialNumber>
+<UDN>uuid:446f7562-6c65-5477-6973-00376de1e5fb</UDN>
+<dlna:X_DLNADOC xmlns:dlna="urn:schemas-dlna-org:device-1-0">DMS-1.50</dlna:X_DLNADOC>
+<iconList>
+<icon>
+<mimetype>image/jpeg</mimetype>
+<width>72</width>
+<height>72</height>
+<depth>24</depth>
+<url>content://airtwist/thumb/root/1</url>
+</icon>
+<icon>
+<mimetype>image/png</mimetype>
+<width>72</width>
+<height>72</height>
+<depth>24</depth>
+<url>content://airtwist/thumb/root/2</url>
+</icon>
+</iconList>
+<serviceList>
+<service>
+<serviceType>urn:microsoft.com:service:X_MS_MediaReceiverRegistrar:1</serviceType>
+<serviceId>urn:microsoft.com:serviceId:X_MS_MediaReceiverRegistrar</serviceId>
+<SCPDURL>/X_MS_MediaReceiverRegistrar/446f7562-6c65-5477-6973-00376de1e5fb/scpd.xml</SCPDURL>
+<controlURL>/X_MS_MediaReceiverRegistrar/446f7562-6c65-5477-6973-00376de1e5fb/control.xml</controlURL>
+<eventSubURL>/X_MS_MediaReceiverRegistrar/446f7562-6c65-5477-6973-00376de1e5fb/event.xml</eventSubURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+<serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+<SCPDURL>/ContentDirectory/446f7562-6c65-5477-6973-00376de1e5fb/scpd.xml</SCPDURL>
+<controlURL>/ContentDirectory/446f7562-6c65-5477-6973-00376de1e5fb/control.xml</controlURL>
+<eventSubURL>/ContentDirectory/446f7562-6c65-5477-6973-00376de1e5fb/event.xml</eventSubURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+<serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+<SCPDURL>/ConnectionManager/446f7562-6c65-5477-6973-00376de1e5fb/scpd.xml</SCPDURL>
+<controlURL>/ConnectionManager/446f7562-6c65-5477-6973-00376de1e5fb/control.xml</controlURL>
+<eventSubURL>/ConnectionManager/446f7562-6c65-5477-6973-00376de1e5fb/event.xml</eventSubURL>
+</service>
+</serviceList>
+</device>
+</root>

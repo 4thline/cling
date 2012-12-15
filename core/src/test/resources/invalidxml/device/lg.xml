@@ -1,0 +1,50 @@
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:pnpx="http://schemas.microsoft.com/windows/pnpx/2005/11" xmlns:df="http://schemas.microsoft.com/windows/2008/09/devicefoundation">
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<device>
+<pnpx:X_hardwareId>VEN_0033&amp;DEV_0006&amp;REV_01</pnpx:X_hardwareId>
+<pnpx:X_compatibleId>MS_DigitalMediaDeviceClass_DMR_V001</pnpx:X_compatibleId>
+<pnpx:X_deviceCategory>MediaDevices</pnpx:X_deviceCategory>
+<df:X_deviceCategory> Multimedia.DMR</df:X_deviceCategory>
+<df:X_modelId>Lex9</df:X_modelId>
+<deviceType>urn:schemas-upnp-org:device:MediaRenderer:1</deviceType>
+<friendlyName>LG HT DMR-6945</friendlyName>
+<manufacturer>LG Electronics</manufacturer>
+<manufacturerURL>http://www.lge.com</manufacturerURL>
+<modelDescription>UPnP Media Renderer 1.0</modelDescription>
+<modelName>MediaRenderer</modelName>
+<modelNumber>1.0</modelNumber>
+<modelURL>http://www.lge.com/</modelURL>
+<serialNumber>123456789001</serialNumber>
+<UDN>uuid:384196f9-6b4b-cfbb-dcbc-9f3feacc67a9</UDN>
+<UPC>123456789012</UPC>
+<dlna:X_DLNADOC xmlns:dlna="urn:schemas-dlna-org:device-1-0">DMR-1.50</dlna:X_DLNADOC>
+<serviceList>
+<service>
+<serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType>
+<serviceId>urn:upnp-org:serviceId:RenderingControl</serviceId>
+<SCPDURL>/RenderingControl1.xml</SCPDURL>
+<controlURL>/upnp/control/RenderingControl1</controlURL>
+<eventSubURL>/upnp/event/RenderingControl1</eventSubURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+<serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+<SCPDURL>/ConnectionManager1.xml</SCPDURL>
+<controlURL>/upnp/control/ConnectionManager1</controlURL>
+<eventSubURL>/upnp/event/ConnectionManager1</eventSubURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType>
+<serviceId>urn:upnp-org:serviceId:AVTransport</serviceId>
+<SCPDURL>/AVTransport1.xml</SCPDURL>
+<controlURL>/upnp/control/AVTransport1</controlURL>
+<eventSubURL>/upnp/event/AVTransport1</eventSubURL>
+</service>
+</serviceList>
+<presentationURL>/Presentation.html</presentationURL>
+</device>
+</root>
+��`(

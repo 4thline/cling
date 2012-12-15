@@ -32,6 +32,8 @@ public class ServiceId {
 
     final private static Logger log = Logger.getLogger(ServiceId.class.getName());
 
+    public static final String UNKNOWN = "UNKNOWN";
+
     public static final Pattern PATTERN =
         Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_ID + ")");
 
@@ -73,27 +75,37 @@ public class ServiceId {
             // Ignore
         }
 
+        if (serviceId != null)
+            return serviceId;
+
         // Now try a generic ServiceId parse
-        if (serviceId == null) {
-            Matcher matcher = ServiceId.PATTERN.matcher(s);
-            if (matcher.matches() && matcher.groupCount() >= 2) {
-                return new ServiceId(matcher.group(1), matcher.group(2));
-            } else {
-                log.warning("UPnP specification violation, trying to read invalid Service ID: " + s);
-                matcher = ServiceId.BROKEN_PATTERN.matcher(s);
-                if (matcher.matches() && matcher.groupCount() >= 2) {
-                    return new ServiceId(matcher.group(1), matcher.group(2));
-                } else {
-                    // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
-                    String tokens[] = s.split("[:]");
-                    if (tokens.length == 4) {
-                        return new ServiceId(tokens[1], tokens[3]);
-                    }
-                }
-            }
-            throw new InvalidValueException("Can't parse Service ID string (namespace/id): " + s);
+        Matcher matcher = ServiceId.PATTERN.matcher(s);
+        if (matcher.matches() && matcher.groupCount() >= 2) {
+            return new ServiceId(matcher.group(1), matcher.group(2));
         }
-        return serviceId;
+
+        log.warning("UPnP specification violation, trying to read invalid service ID: " + s);
+
+        matcher = ServiceId.BROKEN_PATTERN.matcher(s);
+        if (matcher.matches() && matcher.groupCount() >= 2) {
+            return new ServiceId(matcher.group(1), matcher.group(2));
+        }
+
+        // TODO: UPNP VIOLATION: Kodak Media Server doesn't provide any service ID token
+        // urn:upnp-org:serviceId:
+        matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:").matcher(s);
+        if (matcher.matches() && matcher.groupCount() >= 1) {
+            log.warning("No service ID token, defaulting to " + UNKNOWN + ": " + s);
+            return new ServiceId(matcher.group(1), UNKNOWN);
+        }
+
+        // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
+        String tokens[] = s.split("[:]");
+        if (tokens.length == 4) {
+            return new ServiceId(tokens[1], tokens[3]);
+        }
+
+        throw new InvalidValueException("Can't parse service ID string (namespace/id): " + s);
     }
 
     @Override

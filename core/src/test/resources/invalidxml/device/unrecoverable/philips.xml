@@ -1,0 +1,36 @@
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0"><specVersion><major>1</major><minor>0</minor></specVersion><device><deviceType>urn:philips-com:device:PhilipsMediaServer:1</deviceType><friendlyName>PMM (Bozydar)</friendlyName><manufacturer>Royal Philips Electronics</manufacturer><manufacturerURL>http://www.philips.com</manufacturerURL><modelDescription>Philips Media Manager and Media Server</modelDescription><modelName>Philips Media Manager</modelName><modelNumber>3.3.12.0004</modelNumber><modelURL>http://my.philips.com</modelURL><UDN>uuid:61d5c223-6167-11e1-a81d-e6aa5f3986c0</UDN><iconList><icon>
+<mimetype>image/png</mimetype>
+<height>48</height>
+<width>48</width>
+<depth>24</depth>
+<url>/upnp/icons/61d5c223-6167-11e1-a81d-e6aa5f3986c0/0</url>
+</icon>
+<icon>
+<mimetype>image/png</mimetype>
+<height>120</height>
+<width>120</width>
+<depth>24</depth>
+<url>/upnp/icons/61d5c223-6167-11e1-a81d-e6aa5f3986c0/1</url>
+</icon>
+<icon>
+<mimetype>image/jpeg</mimetype>
+<height>48</height>
+<width>48</width>
+<depth>24</depth>
+<url>/upnp/icons/61d5c223-6167-11e1-a81d-e6aa5f3986c0/2</url>
+</icon>
+<icon>
+<mimetype>image/jpeg</mimetype>
+<height>120</height>
+<width>120</width>
+<depth>24</depth>
+<url>/upnp/icons/61d5c223-6167-11e1-a81d-e6aa5f3986c0/3</url>
+</icon>
+</iconList><deviceList><device><deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType><friendlyName>PMM (Bozydar)</friendlyName><manufacturer>Royal Philips Electronics</manufacturer><manufacturerURL>http://www.philips.com</manufacturerURL><modelDescription>Philips Media Manager and Media Server</modelDescription><modelName>Philips Media Manager</modelName><modelNumber>3.3.12.0004</modelNumber><modelURL>http://my.philips.com</modelURL><UDN>uuid:627843b4-6167-11e1-a81d-e6aa5f3986c0</UDN><dlna:X_DLNACAP>audio-upload,av-upload,image-upload</dlna:X_DLNACAP><iconList><icon>
+<mimetype>image/jpeg</mimetype>
+<height>120</height>
+<width>120</width>
+<depth>24</depth>
+<url>/upnp/icons/627843b4-6167-11e1-a81d-e6aa5f3986c0/0</url>
+</icon>
+</iconList><serviceList><service><serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType><serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId><SCPDURL>/upnp/description/83701de6-b20c-11e1-885c-d46f45d34789</SCPDURL><controlURL>/upnp/control/83701de6-b20c-11e1-885c-d46f45d34789</controlURL><eventSubURL>/upnp/events/83701de6-b20c-11e1-885c-d46f45d34789</eventSubURL></service><service><serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType><serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId><SCPDURL>/upnp/description/83e37927-b20c-11e1-885c-d46f45d34789</SCPDURL><controlURL>/upnp/control/83e37927-b20c-11e1-885c-d46f45d34789</controlURL><eventSubURL>/upnp/events/83e37927-b20c-11e1-885c-d46f45d34789</eventSubURL></service><service><serviceType>urn:microsoft.com:service:X_MS_MediaReceiverRegistrar:1</serviceType><serviceId>840ea7d8-b20c-11e1-885c-d46f45d34789</serviceId><SCPDURL>/upnp/description/628d0437-6167-11e1-a81d-e6aa5f3986c0</SCPDURL><controlURL>/upnp/control/628d0437-6167-11e1-a81d-e6aa5f3986c0</controlURL><eventSubURL>/upnp/events/628d0437-6167-11e1-a81d-e6aa5f3986c0</eventSubURL></service></serviceList></device></deviceList></device></root>

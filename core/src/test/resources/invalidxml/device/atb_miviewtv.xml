@@ -1,0 +1,55 @@
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+<specVersion>
+<major>1</major>
+<minor>0</minor>
+</specVersion>
+<device>
+<deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+<friendlyName>MiViewTV STB 10.213.63.98</friendlyName>
+<manufacturer>adb</manufacturer>
+<manufacturerURL>http://...</manufacturerURL>
+<modelDescription></modelDescription>
+<modelName>TLF5810TWX-77.1</modelName>
+<!-- modelNumber is used for kernel version -->
+<modelNumber>2011.11.29.11.16.18</modelNumber>
+<modelURL>http://...</modelURL>
+<serialNumber>00:03:91:ab:13:97</serialNumber>
+<UDN>uuid:MiViewTVSTB-00:03:91:ab:13:97</UDN>
+<UPC>0</UPC>
+<iconList>
+<icon>
+<mimetype>image/jpeg</mimetype>
+<width>350</width>
+<height>386</height>
+<depth></depth>
+<url>pikachu.jpg</url>
+</icon>
+<icon>
+<mimetype>image/jpeg</mimetype>
+<width>48</width>
+<height>48</height>
+<depth></depth>
+<url>sheep.jpg</url>
+</icon>
+</iconList>
+<serviceList>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ContentDirectory:2</serviceType>
+<serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+<SCPDURL>http://10.213.63.98:49152/ContentDirectory2.xml</SCPDURL>
+<controlURL>http://10.213.63.98:49152/control/ContentDirectory2</controlURL>
+<eventSubURL>http://10.213.63.98:49152/event/ContentDirectory2</eventSubURL>
+</service>
+<service>
+<serviceType>urn:schemas-upnp-org:service:ConnectionManager:2</serviceType>
+<serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+<SCPDURL>http://10.213.63.98:49152/ConnectionManager2.xml</SCPDURL>
+<controlURL>http://10.213.63.98:49152/control/ConnectionManager2</controlURL>
+<eventSubURL>http://10.213.63.98:49152/event/ConnectionManager2</eventSubURL>
+</service>
+</serviceList>
+<!--deviceList>
+</deviceList-->
+<!--presentationURL>URL for presentation</presentationURL-->
+</device>
+</root>

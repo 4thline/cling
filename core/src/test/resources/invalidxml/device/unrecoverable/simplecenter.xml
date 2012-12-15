@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+    <friendlyName>SimpleCenter (tu-d10b8a8ae0a6)</friendlyName>
+    <manufacturer>Universal Electronics, Inc.</manufacturer>
+    <manufacturerURL>http://www.simpledevices.com</manufacturerURL>
+    <modelDescription>SimpleCenter Server is a UPnP Media Server implementation giving your UPnP compliant devices access to your SimpleCenter Media Library.</modelDescription>
+    <modelName>SimpleCenter Server</modelName>
+    <modelNumber>4.1.4.0067</modelNumber>
+    <modelURL>http://www.simplecenter.com</modelURL>
+    <UDN>uuid:4290223a-ba69-11e1-8eb5-e7d226d1aa20</UDN>
+    <dlna:X_DLNACAP>create-child-container,audio-upload,image-upload,av-upload</dlna:X_DLNACAP>
+    <dlna:X_DLNADOC>DMS-1.50</dlna:X_DLNADOC>
+    <iconList>
+      <icon>
+        <mimetype>image/png</mimetype>
+        <height>48</height>
+        <width>48</width>
+        <depth>24</depth>
+        <url>icons/4290223a-ba69-11e1-8eb5-e7d226d1aa20/0</url>
+      </icon>
+      <icon>
+        <mimetype>image/png</mimetype>
+        <height>120</height>
+        <width>120</width>
+        <depth>24</depth>
+        <url>icons/4290223a-ba69-11e1-8eb5-e7d226d1aa20/1</url>
+      </icon>
+      <icon>
+        <mimetype>image/jpeg</mimetype>
+        <height>48</height>
+        <width>48</width>
+        <depth>24</depth>
+        <url>icons/4290223a-ba69-11e1-8eb5-e7d226d1aa20/2</url>
+      </icon>
+      <icon>
+        <mimetype>image/jpeg</mimetype>
+        <height>120</height>
+        <width>120</width>
+        <depth>24</depth>
+        <url>icons/4290223a-ba69-11e1-8eb5-e7d226d1aa20/3</url>
+      </icon>
+    </iconList>
+    <serviceList>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:ConnectionManager</serviceId>
+        <SCPDURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/3c4a2585-ca1d-11e1-8166-9a9e4e7e9d2c</SCPDURL>
+        <controlURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/control/3c4a2585-ca1d-11e1-8166-9a9e4e7e9d2c</controlURL>
+        <eventSubURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/events/3c4a2585-ca1d-11e1-8166-9a9e4e7e9d2c</eventSubURL>
+      </service>
+      <service>
+        <serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+        <serviceId>urn:upnp-org:serviceId:ContentDirectory</serviceId>
+        <SCPDURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/3c47db94-ca1d-11e1-8166-9a9e4e7e9d2c</SCPDURL>
+        <controlURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/control/3c47db94-ca1d-11e1-8166-9a9e4e7e9d2c</controlURL>
+        <eventSubURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/events/3c47db94-ca1d-11e1-8166-9a9e4e7e9d2c</eventSubURL>
+      </service>
+      <service>
+        <serviceType>urn:microsoft.com:service:X_MS_MediaReceiverRegistrar:1</serviceType>
+        <serviceId>3c4a2586-ca1d-11e1-8166-9a9e4e7e9d2c</serviceId>
+        <SCPDURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/4292933d-ba69-11e1-8eb5-e7d226d1aa20</SCPDURL>
+        <controlURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/control/4292933d-ba69-11e1-8eb5-e7d226d1aa20</controlURL>
+        <eventSubURL>/upnp/4290223a-ba69-11e1-8eb5-e7d226d1aa20/events/4292933d-ba69-11e1-8eb5-e7d226d1aa20</eventSubURL>
+      </service>
+    </serviceList>
+  </device>
+</root>

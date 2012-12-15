@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+  <specVersion>
+    <major>1</major>
+    <minor>0</minor>
+  </specVersion>
+  <device>
+    <deviceType>urn:schemas-upnp-org:device::1</deviceType>
+    <friendlyName>iPod Dock</friendlyName>
+    <manufacturer>Escient</manufacturer>
+    <manufacturerURL>http://www.escient.com/</manufacturerURL>
+    <modelDescription>Eureka UPnP Client/Server</modelDescription>
+    <modelName>Eureka UPnP Client/Server</modelName>
+    <modelNumber />
+    <serialNumber>0000001</serialNumber>
+    <UDN>uuid:iPod Dock</UDN>
+    <deviceList>
+      <device>
+        <deviceType>urn:schemas-upnp-org:device:MediaRenderer:1</deviceType>
+        <presentationURL />
+        <friendlyName>iPod Dock</friendlyName>
+        <manufacturer>Escient</manufacturer>
+        <manufacturerURL>http://www.escient.com/</manufacturerURL>
+        <modelDescription>Eureka Media Renderer</modelDescription>
+        <modelName>Eureka Media Renderer</modelName>
+        <modelNumber />
+        <serialNumber>0000001</serialNumber>
+        <UDN>uuid:iPod Dock_1</UDN>
+        <serviceList>
+          <service>
+            <serviceType>urn:schemas-upnp-org:service:AVTransport:1</serviceType>
+            <serviceId>urn:upnp-org:serviceId:urn:schemas-upnp-org:service:AVTransport</serviceId>
+            <SCPDURL>MediaRenderer_AVTransport/scpd.xml</SCPDURL>
+            <controlURL>MediaRenderer_AVTransport/control</controlURL>
+            <eventSubURL>MediaRenderer_AVTransport/event</eventSubURL>
+          </service>
+          <service>
+            <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+            <serviceId>urn:upnp-org:serviceId:urn:schemas-upnp-org:service:ConnectionManager</serviceId>
+            <SCPDURL>MediaRenderer_ConnectionManager/scpd.xml</SCPDURL>
+            <controlURL>MediaRenderer_ConnectionManager/control</controlURL>
+            <eventSubURL>MediaRenderer_ConnectionManager/event</eventSubURL>
+          </service>
+          <service>
+            <serviceType>urn:schemas-upnp-org:service:RenderingControl:1</serviceType>
+            <serviceId>urn:upnp-org:serviceId:urn:schemas-upnp-org:service:RenderingControl</serviceId>
+            <SCPDURL>MediaRenderer_RenderingControl/scpd.xml</SCPDURL>
+            <controlURL>MediaRenderer_RenderingControl/control</controlURL>
+            <eventSubURL>MediaRenderer_RenderingControl/event</eventSubURL>
+          </service>
+        </serviceList>
+      </device>
+      <device>
+        <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
+        <presentationURL />
+        <friendlyName>iPod Dock</friendlyName>
+        <manufacturer>Escient</manufacturer>
+        <manufacturerURL>http://www.escient.com/</manufacturerURL>
+        <modelDescription>Eureka Media Server</modelDescription>
+        <modelName>Eureka Media Server</modelName>
+        <modelNumber />
+        <serialNumber>0000001</serialNumber>
+        <UDN>uuid:iPod Dock_2</UDN>
+        <serviceList>
+          <service>
+            <serviceType>urn:schemas-upnp-org:service:ConnectionManager:1</serviceType>
+            <serviceId>urn:upnp-org:serviceId:urn:schemas-upnp-org:service:ConnectionManager</serviceId>
+            <SCPDURL>MediaServer_ConnectionManager/scpd.xml</SCPDURL>
+            <controlURL>MediaServer_ConnectionManager/control</controlURL>
+            <eventSubURL>MediaServer_ConnectionManager/event</eventSubURL>
+          </service>
+          <service>
+            <serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
+            <serviceId>urn:upnp-org:serviceId:urn:schemas-upnp-org:service:ContentDirectory</serviceId>
+            <SCPDURL>MediaServer_ContentDirectory/scpd.xml</SCPDURL>
+            <controlURL>MediaServer_ContentDirectory/control</controlURL>
+            <eventSubURL>MediaServer_ContentDirectory/event</eventSubURL>
+          </service>
+        </serviceList>
+      </device>
+    </deviceList>
+  </device>
+</root>

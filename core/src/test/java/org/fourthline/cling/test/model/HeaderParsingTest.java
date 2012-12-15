@@ -58,10 +58,14 @@ public class HeaderParsingTest {
         assertEquals(deviceType.getVersion(), 123);
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
+    @Test
     public void parseInvalidDeviceTypeHeader() {
         DeviceTypeHeader header = new DeviceTypeHeader();
         header.setString("urn:foo-bar:device:!@#:123");
+        assertEquals(header.getValue().getNamespace(), "foo-bar");
+        assertEquals(header.getValue().getType(), "---");
+        assertEquals(header.getValue().getVersion(), 123);
+        assertEquals(header.getString(), "urn:foo-bar:device:---:123");
     }
 
     @Test
@@ -284,10 +288,14 @@ public class HeaderParsingTest {
         assertEquals(serviceType.getVersion(), 123);
     }
 
-    @Test(expectedExceptions = InvalidHeaderException.class)
+    @Test
     public void parseInvalidServiceTypeHeader() {
         ServiceTypeHeader header = new ServiceTypeHeader();
         header.setString("urn:foo-bar:service:!@#:123");
+        assertEquals(header.getValue().getNamespace(), "foo-bar");
+        assertEquals(header.getValue().getType(), "---");
+        assertEquals(header.getValue().getVersion(), 123);
+        assertEquals(header.getString(), "urn:foo-bar:service:---:123");
     }
 
     @Test
@@ -297,7 +305,6 @@ public class HeaderParsingTest {
         assertEquals(header.getValue().getType(), "MyServiceType");
         assertEquals(header.getValue().getVersion(), 123);
         assertEquals(header.getString(), "urn:schemas-upnp-org:service:MyServiceType:123");
-
     }
 
     @Test
