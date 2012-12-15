@@ -30,6 +30,8 @@ import org.fourthline.cling.model.resource.ServiceEventSubscriptionResource;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.seamless.util.Exceptions;
 
+import java.net.URL;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -121,8 +123,10 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
     protected OutgoingSubscribeResponseMessage processNewSubscription(LocalService service,
                                                                       IncomingSubscribeRequestMessage requestMessage) {
+        List<URL> callbackURLs = requestMessage.getCallbackURLs();
+
         // Error conditions UDA 1.0 section 4.1.1 and 4.1.2
-        if (requestMessage.getCallbackURLs() == null) {
+        if (callbackURLs == null || callbackURLs.size() == 0) {
             log.fine("Missing or invalid Callback URLs in subscribe request: " + getInputMessage());
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
@@ -135,7 +139,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         Integer timeoutSeconds = requestMessage.getRequestedTimeoutSeconds();
 
         try {
-            subscription = new LocalGENASubscription(service, timeoutSeconds, requestMessage.getCallbackURLs()) {
+            subscription = new LocalGENASubscription(service, timeoutSeconds, callbackURLs) {
                 public void established() {
                 }
 

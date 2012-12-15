@@ -458,6 +458,21 @@ public class HeaderParsingTest {
     }
 
     @Test
+    public void parseInvalidCallbackHeaderString() {
+        CallbackHeader header = new CallbackHeader();
+        header.setString("<http://127.0.0.1/foo> <ftp://127.0.0.1/bar>");
+        assertEquals(header.getValue().size(), 1);
+        assertEquals(header.getValue().get(0).toString(), "http://127.0.0.1/foo");
+
+        /* TODO: I'm having trouble finding a valid URL that is
+           an invalid URI in the standard JDK...
+        header.setString("<http://127.0.0.1/foo> <http://we_need_a_valid_URL_but_invalid_URI>");
+        assertEquals(header.getValue().size(), 1);
+        assertEquals(header.getValue().get(0).toString(), "http://127.0.0.1/foo");
+        */
+    }
+
+    @Test
     public void parseSubscriptionIdHeaderString() {
         SubscriptionIdHeader header = new SubscriptionIdHeader();
         header.setString("uuid:123-123-123-123");
