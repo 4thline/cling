@@ -93,6 +93,21 @@ public class ClientInfo {
         setResponseUserAgent(new UserAgentHeader(userAgent));
     }
 
+    // TODO: Remove this once we know how ClientProfile will look like
+    public boolean isWMPRequest() {
+   		String userAgent = getRequestHeaders().getFirstHeader("User-Agent");
+        return userAgent != null
+            && userAgent.contains("Windows-Media-Player")
+            && !userAgent.contains("J-River");
+    }
+
+    public boolean isXbox360Request() {
+        String userAgent = getRequestHeaders().getFirstHeader("User-Agent");
+        String server = getRequestHeaders().getFirstHeader("Server");
+        return (userAgent != null && (userAgent.contains("Xbox") || userAgent.contains("Xenon")))
+            || (server != null && server.contains("Xbox"));
+    }
+
     @Override
     public String toString() {
         return "(" + getClass().getSimpleName() + ") Address: " + getRemoteAddress();
