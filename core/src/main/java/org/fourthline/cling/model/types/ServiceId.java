@@ -84,8 +84,6 @@ public class ServiceId {
             return new ServiceId(matcher.group(1), matcher.group(2));
         }
 
-        log.warning("UPnP specification violation, trying to read invalid service ID: " + s);
-
         matcher = ServiceId.BROKEN_PATTERN.matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 2) {
             return new ServiceId(matcher.group(1), matcher.group(2));
@@ -95,13 +93,14 @@ public class ServiceId {
         // urn:upnp-org:serviceId:
         matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:").matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 1) {
-            log.warning("No service ID token, defaulting to " + UNKNOWN + ": " + s);
+            log.warning("UPnP specification violation, no service ID token, defaulting to " + UNKNOWN + ": " + s);
             return new ServiceId(matcher.group(1), UNKNOWN);
         }
 
         // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
         String tokens[] = s.split("[:]");
         if (tokens.length == 4) {
+            log.warning("UPnP specification violation, trying a simple colon-split of: " + s);
             return new ServiceId(tokens[1], tokens[3]);
         }
 

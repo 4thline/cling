@@ -107,8 +107,6 @@ public class ServiceType {
             return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
         }
 
-        log.warning("UPnP specification violation, trying to read invalid service type: " + s);
-
         matcher = ServiceType.BROKEN_PATTERN.matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 3) {
             return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
@@ -119,7 +117,12 @@ public class ServiceType {
         matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(.+?):([0-9]+).*").matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 3) {
             String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-            log.warning("Replacing invalid service type token '" + matcher.group(2) + "' with: " + cleanToken);
+            log.warning(
+                "UPnP specification violation, replacing invalid service type token '"
+                    + matcher.group(2)
+                    + "' with: "
+                    + cleanToken
+            );
             return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
         }
 
@@ -128,7 +131,12 @@ public class ServiceType {
         matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(.+?):([0-9]+).*").matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 3) {
             String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-            log.warning("Replacing invalid service type token '" + matcher.group(2) + "' with: " + cleanToken);
+            log.warning(
+                "UPnP specification violation, replacing invalid service type token '"
+                + matcher.group(2)
+                + "' with: "
+                + cleanToken
+            );
             return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
         }
 

@@ -55,8 +55,6 @@ public class UDAServiceId extends ServiceId {
             return new UDAServiceId(matcher.group(1));
         }
 
-        log.warning("UPnP specification violation, trying to read invalid UDA Service ID: " + s);
-
         matcher = UDAServiceId.BROKEN_PATTERN.matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 1) {
             return new UDAServiceId(matcher.group(1));
@@ -65,6 +63,7 @@ public class UDAServiceId extends ServiceId {
         // TODO: UPNP VIOLATION: Handle garbage sent by Eyecon Android app
         matcher = Pattern.compile("urn:upnp-orgerviceId:urnchemas-upnp-orgervice:(" + Constants.REGEX_ID + ")").matcher(s);
         if (matcher.matches()) {
+            log.warning("UPnP specification violation, recovering from Eyecon garbage: " + s);
             return new UDAServiceId(matcher.group(1));
         }
 

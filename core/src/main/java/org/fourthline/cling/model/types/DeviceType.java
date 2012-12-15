@@ -101,23 +101,25 @@ public class DeviceType {
             return new DeviceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
         }
 
-        log.warning("UPnP specification violation, trying to read invalid device type: " + s);
-
         // TODO: UPNP VIOLATION: Escient doesn't provide any device type token
         // urn:schemas-upnp-org:device::1
         matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device::([0-9]+).*").matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 2) {
-            log.warning("No device type token, defaulting to " + UNKNOWN + ": " + s);
+            log.warning("UPnP specification violation, no device type token, defaulting to " + UNKNOWN + ": " + s);
             return new DeviceType(matcher.group(1), UNKNOWN, Integer.valueOf(matcher.group(2)));
         }
 
         // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in device type token
         // urn:schemas-microsoft-com:service:pbda:tuner:1
-
         matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):device:(.+?):([0-9]+).*").matcher(s);
         if (matcher.matches() && matcher.groupCount() >= 3) {
             String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-            log.warning("Replacing invalid device type token '" + matcher.group(2) + "' with: " + cleanToken);
+            log.warning(
+                "UPnP specification violation, replacing invalid device type token '"
+                + matcher.group(2)
+                + "' with: "
+                + cleanToken
+            );
             return new DeviceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
         }
 
