@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 /**
- * Represents a service identifer, for example <code>urn:my-domain-namespace:serviceId:MyService123</code>
+ * Represents a service identifier, for example <code>urn:my-domain-namespace:serviceId:MyService123</code>
  *
  * @author Christian Bauer
  */
@@ -34,6 +34,10 @@ public class ServiceId {
 
     public static final Pattern PATTERN =
         Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_ID + ")");
+
+    // Note: 'service' vs. 'serviceId'
+    public static final Pattern BROKEN_PATTERN =
+               Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(" + Constants.REGEX_ID+ ")");
 
     private String namespace;
     private String id;
@@ -72,14 +76,19 @@ public class ServiceId {
         // Now try a generic ServiceId parse
         if (serviceId == null) {
             Matcher matcher = ServiceId.PATTERN.matcher(s);
-            if (matcher.matches()) {
+            if (matcher.matches() && matcher.groupCount() >= 2) {
                 return new ServiceId(matcher.group(1), matcher.group(2));
             } else {
-                // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
-                String tokens[] = s.split("[:]");
-                if (tokens.length == 4) {
-                    log.warning("UPnP specification violation, trying to read invalid Service ID: " + s);
-                    return new ServiceId(tokens[1], tokens[3]);
+                log.warning("UPnP specification violation, trying to read invalid Service ID: " + s);
+                matcher = ServiceId.BROKEN_PATTERN.matcher(s);
+                if (matcher.matches() && matcher.groupCount() >= 2) {
+                    return new ServiceId(matcher.group(1), matcher.group(2));
+                } else {
+                    // TODO: UPNP VIOLATION: PS Audio Bridge has invalid service IDs
+                    String tokens[] = s.split("[:]");
+                    if (tokens.length == 4) {
+                        return new ServiceId(tokens[1], tokens[3]);
+                    }
                 }
             }
             throw new InvalidValueException("Can't parse Service ID string (namespace/id): " + s);

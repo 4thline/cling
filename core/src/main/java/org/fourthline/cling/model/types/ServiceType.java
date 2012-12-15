@@ -19,6 +19,7 @@ package org.fourthline.cling.model.types;
 
 import org.fourthline.cling.model.Constants;
 
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -33,8 +34,14 @@ import java.util.regex.Matcher;
  */
 public class ServiceType {
 
+    final private static Logger log = Logger.getLogger(ServiceType.class.getName());
+
     public static final Pattern PATTERN =
             Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
+
+    // Note: 'serviceId' vs. 'service'
+    public static final Pattern BROKEN_PATTERN =
+            Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(" + Constants.REGEX_TYPE + "):([0-9]+).*");
 
     private String namespace;
     private String type;
@@ -94,10 +101,16 @@ public class ServiceType {
         // Now try a generic ServiceType parse
         if (serviceType == null) {
             Matcher matcher = ServiceType.PATTERN.matcher(s);
-            if (matcher.matches()) {
+            if (matcher.matches() && matcher.groupCount() >= 3) {
                 return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
             } else {
-                throw new InvalidValueException("Can't parse service type string (namespace/type/version): " + s);
+                log.warning("UPnP specification violation, trying to read invalid Service Type: " + s);
+            	matcher = ServiceType.BROKEN_PATTERN.matcher(s);
+            	if (matcher.matches() && matcher.groupCount() >= 3) {
+                    return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
+                } else {
+                	throw new InvalidValueException("Can't parse service type string (namespace/type/version): " + s);
+                }
             }
         }
         return serviceType;

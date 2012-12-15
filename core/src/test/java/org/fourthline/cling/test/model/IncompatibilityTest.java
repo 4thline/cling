@@ -36,6 +36,7 @@ import org.fourthline.cling.model.types.IntegerDatatype;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDADeviceType;
+import org.fourthline.cling.model.types.UDAServiceId;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.test.data.SampleDeviceRoot;
@@ -246,6 +247,47 @@ public class IncompatibilityTest {
         assertEquals(new IntegerDatatype(1).valueOf("NOT_IMPLEMENTED").intValue(), Byte.MAX_VALUE);
         assertEquals(new IntegerDatatype(2).valueOf("NOT_IMPLEMENTED").intValue(), Short.MAX_VALUE);
         assertEquals(new IntegerDatatype(4).valueOf("NOT_IMPLEMENTED").intValue(), Integer.MAX_VALUE);
+    }
+
+    @Test
+    public void validateBrokenServiceType() {
+        String st = "urn:schemas-upnp-org:serviceId:Foo:1";
+        ServiceType serviceType = ServiceType.valueOf(st);
+        assertEquals(serviceType.getNamespace(), "schemas-upnp-org");
+        assertEquals(serviceType.getType(), "Foo");
+        assertEquals(serviceType.getVersion(), 1);
+    }
+
+    @Test
+    public void validateBrokenServiceId() {
+        String st = "urn:my-domain-namespace:service:MyService123";
+        ServiceId serviceId = ServiceId.valueOf(st);
+        assertEquals(serviceId.getNamespace(), "my-domain-namespace");
+        assertEquals(serviceId.getId(), "MyService123");
+        assertEquals(serviceId.toString(), "urn:my-domain-namespace:serviceId:MyService123");
+    }
+
+    @Test
+    public void validateServiceNameAsServiceId() {
+        UDAServiceId serviceId = UDAServiceId.valueOf("ContentDirectory");
+        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
+        assertEquals(serviceId.getId(), "ContentDirectory");
+        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:ContentDirectory");
+
+        serviceId = UDAServiceId.valueOf("ConnectionManager");
+        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
+        assertEquals(serviceId.getId(), "ConnectionManager");
+        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:ConnectionManager");
+
+        serviceId = UDAServiceId.valueOf("RenderingControl");
+        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
+        assertEquals(serviceId.getId(), "RenderingControl");
+        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:RenderingControl");
+
+        serviceId = UDAServiceId.valueOf("AVTransport");
+        assertEquals(serviceId.getNamespace(), UDAServiceId.DEFAULT_NAMESPACE);
+        assertEquals(serviceId.getId(), "AVTransport");
+        assertEquals(serviceId.toString(), "urn:" + UDAServiceId.DEFAULT_NAMESPACE + ":serviceId:AVTransport");
     }
 
 }
