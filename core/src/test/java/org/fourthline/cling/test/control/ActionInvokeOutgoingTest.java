@@ -190,7 +190,7 @@ public class ActionInvokeOutgoingTest {
         assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
         assertEquals(
                 actionInvocation.getFailure().getMessage(),
-                ErrorCode.ACTION_FAILED.getDescription() + ". Action method invocation failed: Something is wrong."
+                ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong."
         );
     }
 
