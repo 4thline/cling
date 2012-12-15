@@ -286,7 +286,13 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     } else if (ELEMENT.height.equals(iconChild)) {
                         icon.height = (Integer.valueOf(XMLUtil.getTextContent(iconChild)));
                     } else if (ELEMENT.depth.equals(iconChild)) {
-                        icon.depth = (Integer.valueOf(XMLUtil.getTextContent(iconChild)));
+                        String depth = XMLUtil.getTextContent(iconChild);
+                        try {
+                            icon.depth = (Integer.valueOf(depth));
+                       	} catch(NumberFormatException ex) {
+                       		log.warning("Invalid icon depth '" + depth + "', using 16 as default: " + ex);
+                       		icon.depth = 16;
+                       	}
                     } else if (ELEMENT.url.equals(iconChild)) {
                         icon.uri = parseURI(XMLUtil.getTextContent(iconChild));
                     } else if (ELEMENT.mimetype.equals(iconChild)) {
@@ -556,7 +562,18 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
         try {
             return URI.create(uri);
-        } catch (IllegalArgumentException ex) {
+        } catch (Throwable ex) {
+            /*
+        	catch Throwable because on Android 2.2, parsing some invalid URI like "http://..."  gives:
+        	        	java.lang.NullPointerException
+        	        	 	at java.net.URI$Helper.isValidDomainName(URI.java:631)
+        	        	 	at java.net.URI$Helper.isValidHost(URI.java:595)
+        	        	 	at java.net.URI$Helper.parseAuthority(URI.java:544)
+        	        	 	at java.net.URI$Helper.parseURI(URI.java:404)
+        	        	 	at java.net.URI$Helper.access$100(URI.java:302)
+        	        	 	at java.net.URI.<init>(URI.java:87)
+        	        		at java.net.URI.create(URI.java:968)
+            */
             log.fine("Illegal URI, trying with ./ prefix: " + Exceptions.unwrap(ex));
             // Ignore
         }
