@@ -80,16 +80,24 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         this.type = type;
         this.details = details;
 
-        boolean allNullIcons = true;
+        // We don't fail device validation if icons were invalid, only log a warning. To
+        // comply with mutability rules (can't set icons field in validate() method), we
+        // validate the icons here before we set the field value
+        List<Icon> validIcons = new ArrayList<Icon>();
         if (icons != null) {
             for (Icon icon : icons) {
                 if (icon != null) {
-                    allNullIcons = false;
-                    icon.setDevice(this);
+                    icon.setDevice(this); // Set before validate()!
+                    List<ValidationError> iconErrors = icon.validate();
+                    if(iconErrors.isEmpty()) {
+                        validIcons.add(icon);
+                    } else {
+                        log.warning("Discarding invalid '" + icon + "': " + iconErrors);
+                    }
                 }
             }
         }
-        this.icons = icons == null || allNullIcons ? new Icon[0] : icons;
+        this.icons = validIcons.toArray(new Icon[validIcons.size()]);
 
         boolean allNullServices = true;
         if (services != null) {
@@ -381,13 +389,6 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
             if (getDetails() != null) {
                 errors.addAll(getDetails().validate());
-            }
-
-            if (hasIcons()) {
-                for (Icon icon : getIcons()) {
-                    if (icon != null)
-                        errors.addAll(icon.validate());
-                }
             }
 
             if (hasServices()) {

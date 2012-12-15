@@ -38,6 +38,13 @@ import java.util.logging.Logger;
 /**
  * The metadata of a device icon, might include the actual image data of a local icon.
  *
+ * <p>
+ * Note that validation of icons is lax on purpose, a valid <code>Icon</code> might still
+ * return <code>null</code> from {@link #getMimeType()}, {@link #getWidth()},
+ * {@link #getHeight()}, and {@link #getDepth()}. However, {@link #getUri()} will return
+ * a valid URI for a valid <code>Icon</code>.
+ * </p>
+ *
  * @author Christian Bauer
  */
 public class Icon implements Validatable {
