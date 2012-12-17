@@ -17,8 +17,8 @@
 
 package org.fourthline.cling.controlpoint;
 
-import org.fourthline.cling.model.Constants;
 import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.model.UserConstants;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
@@ -84,7 +84,7 @@ public abstract class SubscriptionCallback implements Runnable {
 
     protected SubscriptionCallback(Service service) {
         this.service = service;
-        this.requestedDurationSeconds = Constants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS;
+        this.requestedDurationSeconds = UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS;
     }
 
     protected SubscriptionCallback(Service service, int requestedDurationSeconds) {

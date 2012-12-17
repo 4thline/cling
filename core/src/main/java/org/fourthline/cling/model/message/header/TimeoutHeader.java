@@ -17,7 +17,7 @@
 
 package org.fourthline.cling.model.message.header;
 
-import org.fourthline.cling.model.Constants;
+import org.fourthline.cling.model.UserConstants;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -32,8 +32,11 @@ public class TimeoutHeader extends UpnpHeader<Integer> {
 
     public static final Pattern PATTERN = Pattern.compile("Second-(?:([0-9]+)|infinite)");
 
+    /**
+     * Defaults to {@link org.fourthline.cling.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}.
+     */
     public TimeoutHeader() {
-        setValue(Constants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS);
+        setValue(UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS);
     }
 
     public TimeoutHeader(int timeoutSeconds) {

@@ -17,8 +17,8 @@
 
 package org.fourthline.cling.model.gena;
 
-import org.fourthline.cling.model.Constants;
 import org.fourthline.cling.model.ServiceManager;
+import org.fourthline.cling.model.UserConstants;
 import org.fourthline.cling.model.message.header.SubscriptionIdHeader;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.StateVariable;
@@ -144,7 +144,6 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         Collection<StateVariableValue> newValues = (Collection) e.getNewValue();
         Set<String> excludedVariables = moderateStateVariables(currentTime, newValues);
 
-        // Map<String, StateVariableValue> oldValues = currentValues;
         currentValues.clear();
         for (StateVariableValue newValue : newValues) {
             String name = newValue.getStateVariable().getName();
@@ -236,10 +235,14 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         this.currentSequence.increment(true);
     }
 
+    /**
+     * @param requestedDurationSeconds If <code>null</code> defaults to
+     *                                 {@link org.fourthline.cling.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}
+     */
     synchronized public void setSubscriptionDuration(Integer requestedDurationSeconds) {
         this.requestedDurationSeconds =
                 requestedDurationSeconds == null
-                        ? Constants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS
+                        ? UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS
                         : requestedDurationSeconds;
 
         setActualSubscriptionDurationSeconds(this.requestedDurationSeconds);

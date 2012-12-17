@@ -17,13 +17,13 @@
 
 package org.fourthline.cling.model.gena;
 
-import org.fourthline.cling.model.Constants;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import org.fourthline.cling.model.UserConstants;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 /**
  * An established subscription, with identifer, expiration duration, sequence handling, and state variable values.
@@ -39,13 +39,13 @@ public abstract class GENASubscription<S extends Service> {
 
     protected S service;
     protected String subscriptionId;
-    protected int requestedDurationSeconds = Constants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS;
+    protected int requestedDurationSeconds = UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS;
     protected int actualDurationSeconds;
     protected UnsignedIntegerFourBytes currentSequence;
     protected Map<String, StateVariableValue<S>> currentValues = new LinkedHashMap();
 
     /**
-     * Defaults to {@link org.fourthline.cling.model.Constants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}.
+     * Defaults to {@link org.fourthline.cling.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}.
      */
     protected GENASubscription(S  service) {
         this.service = service;

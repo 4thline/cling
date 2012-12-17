@@ -18,9 +18,16 @@
 package org.fourthline.cling.model;
 
 /**
+ * Settings you can modify if you know what you are doing.
+ *
  * @author Michael Pujos
  */
 public class UserConstants {
-    static public String PRODUCT_TOKEN_NAME = "Cling";
-    static public String PRODUCT_TOKEN_VERSION = "2.0";
+
+    public static final String PRODUCT_TOKEN_NAME = "Cling";
+
+    public static final String PRODUCT_TOKEN_VERSION = "2.0";
+
+    public static final int DEFAULT_SUBSCRIPTION_DURATION_SECONDS = 1800;
+
 }
