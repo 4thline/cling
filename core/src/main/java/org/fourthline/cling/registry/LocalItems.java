@@ -17,6 +17,7 @@
 
 package org.fourthline.cling.registry;
 
+import org.fourthline.cling.model.DiscoveryOptions;
 import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
@@ -26,8 +27,10 @@ import org.fourthline.cling.protocol.SendingAsync;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -40,33 +43,45 @@ import java.util.logging.Logger;
 class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     private static Logger log = Logger.getLogger(Registry.class.getName());
-
-    protected Set<LocalDevice> nonAdvertisedDevices = new HashSet<LocalDevice>();
+    
+    protected Map<UDN, DiscoveryOptions> discoveryOptions = new HashMap<UDN, DiscoveryOptions>();
+    protected long lastAliveIntervalTimestamp = 0;
 
     LocalItems(RegistryImpl registry) {
         super(registry);
     }
 
-    void setAdvertisedDevice(LocalDevice localDevice, boolean advertised) {
-        log.fine("Enabling advertising of " + localDevice + " => " + advertised);
-        if (!advertised)
-            nonAdvertisedDevices.add(localDevice);
+    protected void setDiscoveryOptions(UDN udn, DiscoveryOptions options) {
+        if (options != null)
+            this.discoveryOptions.put(udn, options);
         else
-            nonAdvertisedDevices.remove(localDevice);
+            this.discoveryOptions.remove(udn);
     }
 
-    boolean isAdvertisedDevice(LocalDevice localDevice) {
-        return !nonAdvertisedDevices.contains(localDevice);
+    protected DiscoveryOptions getDiscoveryOptions(UDN udn) {
+        return this.discoveryOptions.get(udn);
+    }
+
+    protected boolean isAdvertised(UDN udn) {
+        // Defaults to true
+        return getDiscoveryOptions(udn) == null || getDiscoveryOptions(udn).isAdvertised();
+    }
+
+    protected boolean isByeByeBeforeFirstAlive(UDN udn) {
+        // Defaults to false
+        return getDiscoveryOptions(udn) != null && getDiscoveryOptions(udn).isByeByeBeforeFirstAlive();
     }
 
     void add(LocalDevice localDevice) throws RegistrationException {
-        add(localDevice, true);
+        add(localDevice, null);
     }
 
-    void add(LocalDevice localDevice, boolean advertised) throws RegistrationException {
+    void add(final LocalDevice localDevice, DiscoveryOptions options) throws RegistrationException {
+
+        // Always set/override the options, even if we don't end up adding the device
+        setDiscoveryOptions(localDevice.getIdentity().getUdn(), options);
 
         if (registry.getDevice(localDevice.getIdentity().getUdn(), false) != null) {
-            setAdvertisedDevice(localDevice, advertised);
             log.fine("Ignoring addition, device already registered: " + localDevice);
             return;
         }
@@ -93,14 +108,22 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
         );
 
         getDeviceItems().add(localItem);
-        setAdvertisedDevice(localDevice, advertised);
         log.fine("Registered local device: " + localItem);
 
-        if (isAdvertisedDevice(localDevice))
+        if (isByeByeBeforeFirstAlive(localItem.getKey()))
+            advertiseByebye(localDevice, true);
+
+        if (isAdvertised(localItem.getKey()))
              advertiseAlive(localDevice);
 
-        for (RegistryListener listener : registry.getListeners()) {
-            listener.localDeviceAdded(registry, localDevice);
+        for (final RegistryListener listener : registry.getListeners()) {
+            registry.getConfiguration().getRegistryListenerExecutor().execute(
+                new Runnable() {
+                    public void run() {
+                        listener.localDeviceAdded(registry, localDevice);
+                    }
+                }
+            );
         }
 
     }
@@ -124,7 +147,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
             log.fine("Removing local device from registry: " + localDevice);
 
-            setAdvertisedDevice(localDevice, false);
+            setDiscoveryOptions(localDevice.getIdentity().getUdn(), null);
             getDeviceItems().remove(new RegistryItem(localDevice.getIdentity().getUdn()));
 
             for (Resource deviceResource : getResources(localDevice)) {
@@ -156,7 +179,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
                 }
             }
 
-            if (isAdvertisedDevice(localDevice))
+            if (isAdvertised(localDevice.getIdentity().getUdn()))
          		advertiseByebye(localDevice, !shuttingDown);
 
             if (!shuttingDown) {
@@ -190,18 +213,48 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     /* ############################################################################################################ */
 
+    public void advertiseLocalDevices() {
+        for (RegistryItem<UDN, LocalDevice> localItem : deviceItems) {
+            if (isAdvertised(localItem.getKey()))
+                advertiseAlive(localItem.getItem());
+        }
+    }
+
+    /* ############################################################################################################ */
+    
     void maintain() {
 
     	if(getDeviceItems().isEmpty()) return ;
 
-        // Refresh expired local devices
         Set<RegistryItem<UDN, LocalDevice>> expiredLocalItems = new HashSet();
-        for (RegistryItem<UDN, LocalDevice> localItem : getDeviceItems()) {
-            if (isAdvertisedDevice(localItem.getItem()) && localItem.getExpirationDetails().hasExpired(true)) {
-                log.finer("Local item has expired: " + localItem);
-                expiredLocalItems.add(localItem);
+
+        // "Flooding" is enabled, check if we need to send advertisements for all devices
+        int aliveIntervalMillis = registry.getConfiguration().getAliveIntervalMillis();
+        if(aliveIntervalMillis > 0) {
+        	long now = System.currentTimeMillis();
+        	if(now - lastAliveIntervalTimestamp > aliveIntervalMillis) {
+        		lastAliveIntervalTimestamp = now;
+                for (RegistryItem<UDN, LocalDevice> localItem : getDeviceItems()) {
+                    if (isAdvertised(localItem.getKey())) {
+                        log.finer("Flooding advertisement of local item: " + localItem);
+                        expiredLocalItems.add(localItem);
+                    }
+                }
+        	}
+        } else {
+            // Reset, the configuration might dynamically switch the alive interval
+            lastAliveIntervalTimestamp = 0;
+
+            // Alive interval is not enabled, regular expiration check of all devices
+            for (RegistryItem<UDN, LocalDevice> localItem : getDeviceItems()) {
+                if (isAdvertised(localItem.getKey()) && localItem.getExpirationDetails().hasExpired(true)) {
+                    log.finer("Local item has expired: " + localItem);
+                    expiredLocalItems.add(localItem);
+                }
             }
         }
+
+        // Now execute the advertisements
         for (RegistryItem<UDN, LocalDevice> expiredLocalItem : expiredLocalItems) {
             log.fine("Refreshing local device advertisement: " + expiredLocalItem.getItem());
             advertiseAlive(expiredLocalItem.getItem());

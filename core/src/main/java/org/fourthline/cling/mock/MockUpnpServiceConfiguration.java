@@ -43,6 +43,13 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
         this(false, false);
     }
 
+    /**
+     * Single threaded execution.
+     */
+    public MockUpnpServiceConfiguration(boolean maintainsRegistry) {
+        this(maintainsRegistry, false);
+    }
+
     public MockUpnpServiceConfiguration(boolean maintainsRegistry, boolean multiThreaded) {
         super(false);
         this.maintainsRegistry = maintainsRegistry;

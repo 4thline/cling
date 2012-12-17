@@ -19,6 +19,7 @@ package org.fourthline.cling.test.ssdp;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.Constants;
+import org.fourthline.cling.model.DiscoveryOptions;
 import org.fourthline.cling.model.Namespace;
 import org.fourthline.cling.model.message.IncomingDatagramMessage;
 import org.fourthline.cling.model.message.OutgoingDatagramMessage;
@@ -260,7 +261,7 @@ public class SearchReceivedTest {
         LocalDevice localDevice = SampleData.createLocalDevice();
 
         // Disable advertising
-        upnpService.getRegistry().addDevice(localDevice, false);
+        upnpService.getRegistry().addDevice(localDevice, new DiscoveryOptions(false));
 
         IncomingSearchRequest searchMsg = createRequestMessage();
         searchMsg.getHeaders().add(UpnpHeader.Type.MAN, new MANHeader(NotificationSubtype.DISCOVER.getHeaderString()));
@@ -274,7 +275,10 @@ public class SearchReceivedTest {
         assertEquals(upnpService.getOutgoingDatagramMessages().size(), 0);
 
         // Enable advertising
-        upnpService.getRegistry().addDevice(localDevice, true);
+        upnpService.getRegistry().setDiscoveryOptions(
+            localDevice.getIdentity().getUdn(),
+            new DiscoveryOptions(true)
+        );
 
         prot = createProtocol(upnpService, searchMsg);
         prot.run();

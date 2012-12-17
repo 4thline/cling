@@ -585,19 +585,6 @@ public boolean onOptionsItemSelected(MenuItem item) {
                             dropped as soon as they are received.
                         </p>
 
-                        <p>
-                            Another problem with UPnP discovery are bad quality Android devices (HTC) which
-                            might not support multicast networking. If you see a discovered remote device
-                            disappear from the Cling registry after a short time (a few minutes), but the
-                            device is cleary still connected to the network, you most likely have this issue.
-                            Your control point does not receive the periodic multicast heartbeat alive messages
-                            from remote devices. You have to disable remote device expiration in the Cling
-                            configuration and manually remove remote devices from the registry whenever you
-                            think they are expired. Read the Javadoc of the method
-                            <code>UpnpServiceConfiguration#getRemoteDeviceMaxAgeSeconds()</code> and override
-                            it accordingly as shown in the previous example.
-                        </p>
-
                     </div>
                 </div>
 

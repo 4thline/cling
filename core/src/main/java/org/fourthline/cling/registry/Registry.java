@@ -19,6 +19,7 @@ package org.fourthline.cling.registry;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceConfiguration;
+import org.fourthline.cling.model.DiscoveryOptions;
 import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.ServiceReference;
 import org.fourthline.cling.model.meta.Device;
@@ -55,9 +56,6 @@ import java.util.Collection;
  * GENA subscriptions.
  * <p>
  * An implementation has to be thread-safe.
- * </p>
- * <p>
- * TODO: Unify all "items" the registry is keeping track of, this API should be narrowed.
  * </p>
  *
  * @author Christian Bauer
@@ -196,22 +194,26 @@ public interface Registry {
 
     /**
      * Call this method to add your local device metadata.
-     * <p>
-     * Optionally, disable advertisement of this device. Then no alive notifications will be
-     * announced for this device and it will not appear in search responses. To re-enable
-     * advertisement, add the device again with the switch set to <code>true</code>.
-     * </p>
      *
      * @param localDevice The device to add and maintain.
-     * @param advertised Set to <code>false</code> to disable alive notification and search responses
+     * @param options Immediately effective when this device is registered.
      * @throws RegistrationException If a conflict with an already registered device was detected.
      */
-    public void addDevice(LocalDevice localDevice, boolean advertised) throws RegistrationException;
+    public void addDevice(LocalDevice localDevice, DiscoveryOptions options) throws RegistrationException;
 
     /**
-     * @return <boolean>true</boolean> if the given device is not advertised with alive messages and search responses
+     * Change the active {@link DiscoveryOptions} for the given (local device) UDN.
+     *
+     * @param options Set to <code>null</code> to disable any options.
      */
-    public boolean isLocalDeviceAdvertised(LocalDevice localDevice);
+    public void setDiscoveryOptions(UDN udn, DiscoveryOptions options);
+
+    /**
+     * Get the currently active {@link DiscoveryOptions} for the given (local device) UDN.
+     *
+     * @return <code>null</code> if there are no active discovery options for the given UDN.
+     */
+    public DiscoveryOptions getDiscoveryOptions(UDN udn);
 
     /**
      * Called internally by the UPnP discovery protocol.
@@ -426,5 +428,14 @@ public interface Registry {
     public void unlockRemoteSubscriptions();
 
     // #################################################################################################
+
+    /**
+     * Manually trigger advertisement messages for all local devices.
+     * <p>
+     * No messages will be send for devices with disabled advertisements, see
+     * {@link DiscoveryOptions}!
+     * </p>
+     */
+    public void advertiseLocalDevices();
 
 }

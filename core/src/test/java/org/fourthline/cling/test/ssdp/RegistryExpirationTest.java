@@ -17,30 +17,18 @@
 
 package org.fourthline.cling.test.ssdp;
 
-import org.fourthline.cling.UpnpServiceConfiguration;
-import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
-import org.fourthline.cling.binding.xml.ServiceDescriptorBinder;
 import org.fourthline.cling.mock.MockUpnpService;
+import org.fourthline.cling.mock.MockUpnpServiceConfiguration;
 import org.fourthline.cling.model.ExpirationDetails;
-import org.fourthline.cling.model.Namespace;
-import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.types.ServiceType;
+import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.test.data.SampleData;
-import org.fourthline.cling.transport.spi.DatagramIO;
-import org.fourthline.cling.transport.spi.DatagramProcessor;
-import org.fourthline.cling.transport.spi.GENAEventProcessor;
-import org.fourthline.cling.transport.spi.MulticastReceiver;
-import org.fourthline.cling.transport.spi.NetworkAddressFactory;
-import org.fourthline.cling.transport.spi.SOAPActionProcessor;
-import org.fourthline.cling.transport.spi.StreamClient;
-import org.fourthline.cling.transport.spi.StreamServer;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.net.URI;
 import java.util.List;
-import java.util.concurrent.Executor;
+
+import static org.testng.Assert.assertEquals;
 
 public class RegistryExpirationTest {
 
@@ -54,11 +42,11 @@ public class RegistryExpirationTest {
         );
         upnpService.getRegistry().addDevice(rd);
         
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         Thread.sleep(3000);
 
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
 
         upnpService.shutdown();
     }
@@ -66,135 +54,27 @@ public class RegistryExpirationTest {
     @Test
     public void overrideAgeThenAddAndExpire() throws Exception {
 
-        MockUpnpService upnpService = new MockUpnpService(false, true) {
-            @Override
-            public UpnpServiceConfiguration getConfiguration() {
-                final UpnpServiceConfiguration wrapped = super.getConfiguration();
-                return new UpnpServiceConfiguration() {
-                    @Override
-                    public NetworkAddressFactory createNetworkAddressFactory() {
-                        return wrapped.createNetworkAddressFactory();
-                    }
+        MockUpnpService upnpService = new MockUpnpService(
+            new MockUpnpServiceConfiguration(true) {
 
-                    @Override
-                    public DatagramProcessor getDatagramProcessor() {
-                        return wrapped.getDatagramProcessor();
-                    }
-
-                    @Override
-                    public SOAPActionProcessor getSoapActionProcessor() {
-                        return wrapped.getSoapActionProcessor();
-                    }
-
-                    @Override
-                    public GENAEventProcessor getGenaEventProcessor() {
-                        return wrapped.getGenaEventProcessor();
-                    }
-
-                    @Override
-                    public StreamClient createStreamClient() {
-                        return wrapped.createStreamClient();
-                    }
-
-                    @Override
-                    public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
-                        return wrapped.createMulticastReceiver(networkAddressFactory);
-                    }
-
-                    @Override
-                    public DatagramIO createDatagramIO(NetworkAddressFactory networkAddressFactory) {
-                        return wrapped.createDatagramIO(networkAddressFactory);
-                    }
-
-                    @Override
-                    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-                        return wrapped.createStreamServer(networkAddressFactory);
-                    }
-
-                    @Override
-                    public Executor getMulticastReceiverExecutor() {
-                        return wrapped.getMulticastReceiverExecutor();
-                    }
-
-                    @Override
-                    public Executor getDatagramIOExecutor() {
-                        return wrapped.getDatagramIOExecutor();
-                    }
-
-                    @Override
-                    public Executor getStreamServerExecutor() {
-                        return wrapped.getStreamServerExecutor();
-                    }
-
-                    @Override
-                    public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
-                        return wrapped.getDeviceDescriptorBinderUDA10();
-                    }
-
-                    @Override
-                    public ServiceDescriptorBinder getServiceDescriptorBinderUDA10() {
-                        return wrapped.getServiceDescriptorBinderUDA10();
-                    }
-
-                    @Override
-                    public ServiceType[] getExclusiveServiceTypes() {
-                        return wrapped.getExclusiveServiceTypes();
-                    }
-
-                    @Override
-                    public int getRegistryMaintenanceIntervalMillis() {
-                        return wrapped.getRegistryMaintenanceIntervalMillis();
-                    }
-
-                    @Override
-                    public Integer getRemoteDeviceMaxAgeSeconds() {
-                        return 0; // Override the expiration timeout!
-                    }
-
-                    @Override
-                    public Executor getAsyncProtocolExecutor() {
-                        return wrapped.getAsyncProtocolExecutor();
-                    }
-
-                    @Override
-                    public Executor getSyncProtocolExecutor() {
-                        return wrapped.getSyncProtocolExecutor();
-                    }
-
-                    @Override
-                    public Namespace getNamespace() {
-                        return wrapped.getNamespace();
-                    }
-
-                    @Override
-                    public Executor getRegistryMaintainerExecutor() {
-                        return wrapped.getRegistryMaintainerExecutor();
-                    }
-
-                    @Override
-                    public Executor getRegistryListenerExecutor() {
-                        return wrapped.getRegistryListenerExecutor();
-                    }
-
-                    @Override
-                    public void shutdown() {
-                        wrapped.shutdown();
-                    }
-                };
+                @Override
+                public Integer getRemoteDeviceMaxAgeSeconds() {
+                    return 0;
+                }
             }
-        };
+        );
 
         RemoteDevice rd = SampleData.createRemoteDevice(
                 SampleData.createRemoteDeviceIdentity(1)
         );
         upnpService.getRegistry().addDevice(rd);
 
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         Thread.sleep(3000);
 
         // Still registered!
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         // Update should not change the expiration time
         upnpService.getRegistry().update(rd.getIdentity());
@@ -202,7 +82,7 @@ public class RegistryExpirationTest {
         Thread.sleep(3000);
 
         // Still registered!
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         upnpService.shutdown();
     }
@@ -219,21 +99,21 @@ public class RegistryExpirationTest {
         // Add it to registry
         upnpService.getRegistry().addDevice(rd);
         Thread.sleep(1000);
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         // Update it in registry
         upnpService.getRegistry().addDevice(rd);
         Thread.sleep(1000);
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         // Update again
         upnpService.getRegistry().update(rd.getIdentity());
         Thread.sleep(1000);
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 1);
 
         // Wait for expiration
         Thread.sleep(3000);
-        Assert.assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
+        assertEquals(upnpService.getRegistry().getRemoteDevices().size(), 0);
 
 
         upnpService.shutdown();
@@ -247,11 +127,11 @@ public class RegistryExpirationTest {
         Resource resource = new Resource(URI.create("/this/is/a/test"), "foo");
         upnpService.getRegistry().addResource(resource, 2);
 
-        Assert.assertEquals(upnpService.getRegistry().getResources().size(), 1);
+        assertEquals(upnpService.getRegistry().getResources().size(), 1);
 
         Thread.sleep(4000);
 
-        Assert.assertEquals(upnpService.getRegistry().getResources().size(), 0);
+        assertEquals(upnpService.getRegistry().getResources().size(), 0);
 
         upnpService.shutdown();
     }
@@ -273,11 +153,11 @@ public class RegistryExpirationTest {
         };
         upnpService.getRegistry().addResource(resource, 2);
 
-        Assert.assertEquals(upnpService.getRegistry().getResources().size(), 1);
+        assertEquals(upnpService.getRegistry().getResources().size(), 1);
 
         Thread.sleep(2000);
 
-        Assert.assertEquals(testRunnable.wasExecuted, true);
+        assertEquals(testRunnable.wasExecuted, true);
 
         upnpService.shutdown();
     }

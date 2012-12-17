@@ -158,9 +158,19 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     public ServiceType[] getExclusiveServiceTypes() {
         return new ServiceType[0];
     }
-
+    
+    /**
+     * @return Defaults to 1000 milliseconds.
+     */
     public int getRegistryMaintenanceIntervalMillis() {
         return 1000;
+    }
+
+    /**
+     * @return Defaults to zero, disabling ALIVE flooding.
+     */
+    public int getAliveIntervalMillis() {
+    	return 0;
     }
 
     public Integer getRemoteDeviceMaxAgeSeconds() {

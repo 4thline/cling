@@ -141,6 +141,23 @@ public interface UpnpServiceConfiguration {
      * @return The time in milliseconds to wait between each registry maintenance operation.
      */
     public int getRegistryMaintenanceIntervalMillis();
+    
+    /**
+     * Optional setting for flooding alive NOTIFY messages for local devices.
+     * <p>
+     * Use this to advertise local devices at the specified interval, independent of its
+     * {@link org.fourthline.cling.model.meta.DeviceIdentity#maxAgeSeconds} value. Note
+     * that this will increase network traffic.
+     * </p>
+     * <p>
+     * Some control points (XBMC and other Platinum UPnP SDK based devices, OPPO-93) seem
+     * to not properly receive SSDP M-SEARCH replies sent by Cling, but will handle NOTIFY
+     * alive messages just fine.
+     * </p>
+     *
+     * @return The time in milliseconds for ALIVE message intervals, set to <code>0</code> to disable
+     */
+    public int getAliveIntervalMillis();
 
     /**
      * Returns the time in seconds a remote device will be registered until it is expired.

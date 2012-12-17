@@ -19,6 +19,7 @@ package org.fourthline.cling.registry;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceConfiguration;
+import org.fourthline.cling.model.DiscoveryOptions;
 import org.fourthline.cling.model.ExpirationDetails;
 import org.fourthline.cling.model.ServiceReference;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
@@ -159,12 +160,16 @@ public class RegistryImpl implements Registry {
         localItems.add(localDevice);
     }
 
-    synchronized public void addDevice(LocalDevice localDevice, boolean advertised) {
-        localItems.add(localDevice, advertised);
+    synchronized public void addDevice(LocalDevice localDevice, DiscoveryOptions options) {
+        localItems.add(localDevice, options);
     }
 
-    synchronized public boolean isLocalDeviceAdvertised(LocalDevice localDevice) {
-        return localItems.isAdvertisedDevice(localDevice);
+    synchronized public void setDiscoveryOptions(UDN udn, DiscoveryOptions options) {
+        localItems.setDiscoveryOptions(udn, options);
+    }
+
+    synchronized public DiscoveryOptions getDiscoveryOptions(UDN udn) {
+        return localItems.getDiscoveryOptions(udn);
     }
 
     synchronized public void addDevice(RemoteDevice remoteDevice) {
@@ -360,6 +365,12 @@ public class RegistryImpl implements Registry {
     synchronized public void removeRemoteSubscription(RemoteGENASubscription subscription) {
         remoteItems.removeSubscription(subscription);
     }
+
+    /* ############################################################################################################ */
+
+   	synchronized public void advertiseLocalDevices() {
+   		localItems.advertiseLocalDevices();
+   	}
 
     /* ############################################################################################################ */
 

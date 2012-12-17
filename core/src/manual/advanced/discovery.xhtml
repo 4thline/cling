@@ -1,0 +1,148 @@
+<div class="section" id="section.DiscoveryProblems"
+     xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Solving discovery problems</div>
+    <div class="content">
+
+        <p>
+            Device discovery in UPnP is the job of SSDP, the Simple Service Discovery Protocol. Of course, this
+            protocol is not simple at all and many device manufacturers and UPnP stacks get it wrong. Cling has
+            some extra settings to deal with such environments; if you want best interoperability for your
+            application, you have to read the following sections.
+        </p>
+
+        <div class="section" id="section.RemoteMaxAge">
+            <div class="title">Maximum age of remote devices</div>
+            <div class="content">
+
+                <p>
+                    If you are writing a control point and remote devices seem to randomly disappear from
+                    your <code>Registry</code>, you are probably dealing with a remote device that doesn't
+                    send regular alive NOTIFY heartbeats through multicast. Or, your control point runs on
+                    a device that doesn't properly receive multicast messages. (Android devices from HTC
+                    are known to have this issue.)
+                </p>
+
+                <p>
+                    Cling will usually expire remote devices once their initially advertised "maximum age"
+                    has been reached and there was no ALIVE message to refresh the advertisement. You can
+                    change this behavior with <code>UpnpServiceConfiguration</code>:
+                </p>
+
+                <pre><![CDATA[UpnpService upnpService = new UpnpServiceImpl(
+    new DefaultUpnpServiceConfiguration() {
+
+        @Override
+        public Integer getRemoteDeviceMaxAgeSeconds() {
+            return 0;
+        }
+    }
+);]]></pre>
+
+                <p>
+                    If you return zero maximum age, all remote devices will forever stay in your
+                    <code>Registry</code> once they have been discovered, Cling will not expire them. You have
+                    to manually remove them from the <code>Registry</code> if you know they are gone (e.g. once
+                    an action request fails with "no response").
+                </p>
+
+                <p>
+                    Alternatively, you can return the number of seconds Cling should keep a remote device
+                    in the <code>Registry</code>, ignoring the device's advertised maximum age.
+                </p>
+
+            </div>
+        </div>
+
+        <div class="section" id="section.AliveInterval">
+            <div class="title">Alive messages at regular intervals</div>
+            <div class="content">
+
+                <p>
+                    Some control points have difficulties with M-SEARCH responses. They search for
+                    your device, then can't process the (specification-compliant) response made by Cling and
+                    therefore don't discover your device when they search. However, such control points
+                    typically have no problem with alive NOTIFY messages, only with search responses.
+                </p>
+
+                <p>
+                    The solution then is to repeat alive NOTIFY messages for all your local devices on the
+                    network very frequently, let's say every 5 seconds:
+                </p>
+
+                <pre><![CDATA[UpnpService upnpService = new UpnpServiceImpl(
+    new DefaultUpnpServiceConfiguration() {
+
+        @Override
+        public int getAliveIntervalMillis() {
+            return 5000;
+        }
+    }
+);]]></pre>
+                <p>
+                    By default this method returns <code>0</code>, disabling alive message flooding and relying
+                    on the regular triggering of local device advertisements (which depends on the maximum age of
+                    each <code>LocalDeviceIdentity</code>).
+                </p>
+
+                <p>
+                    If you return a non-zero value, Cling will send alive NOTIFY messages repeatedly with the
+                    given interval, and remote control points should be able to discover your device within
+                    that period. The downside is of course more traffic on your network.
+                </p>
+
+            </div>
+        </div>
+
+        <div class="section" id="section.DiscoveryOptions">
+            <div class="title">Using discovery options for local devices</div>
+            <div class="content">
+
+                <p>
+                    If you create a <code>LocalDevice</code> that you don't want to announce to
+                    remote control points, add it to the <code>Registry</code> with
+                    <code>addDevice(localDevice, new DiscoveryOptions(false))</code>.
+                </p>
+
+                <p>
+                    The <code>DiscoveryOptions</code> class offers several parameters to influence
+                    how Cling handles device discovery.
+                </p>
+
+                <p>
+                    With disabled advertising, Cling will then not send <em>any</em> NOTIFY messages for
+                    a device; you can enable advertisement again with
+                    <code>Registry#setDiscoveryOptions(UDN, null)</code>, or by providing different options.
+                </p>
+
+                <p>
+                    Note that remote control points will still be able to discover your device if they
+                    know your device descriptor URL. They will also be able to call actions and
+                    subscribe to services. This is not a switch to make a <code>LocalDevice</code>
+                    "private", it only disables (multicast) advertising.
+                </p>
+
+                <p>
+                    A rarely used setting of <code>DiscoveryOptions</code> is <code>byeByeBeforeFirstAlive</code>:
+                    If enabled, Cling will send a byebye NOTIFY message before sending the first alive NOTIFY
+                    message. This happens only once, when a <code>LocalDevice</code> is added to the
+                    <code>Registry</code>, and it wasn't registered before.
+                </p>
+
+            </div>
+        </div>
+
+        <div class="section" id="section.ManualAdvertisement">
+            <div class="title">Manual advertisement of local devices</div>
+            <div class="content">
+
+                <p>
+                    You can force immediate advertisement of all registered <code>LocalDevice</code>s
+                    with <code>Registry#advertiseLocalDevices()</code>. Note that no announcements
+                    will be made for any device with disabled advertising (see previous section).
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>

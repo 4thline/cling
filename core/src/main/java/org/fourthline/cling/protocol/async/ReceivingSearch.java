@@ -18,6 +18,7 @@
 package org.fourthline.cling.protocol.async;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.model.DiscoveryOptions;
 import org.fourthline.cling.model.Location;
 import org.fourthline.cling.model.NetworkAddress;
 import org.fourthline.cling.model.message.IncomingDatagramMessage;
@@ -159,8 +160,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         log.fine("Responding to 'all' search with advertisement messages for all local devices");
         for (LocalDevice localDevice : getUpnpService().getRegistry().getLocalDevices()) {
 
-        	if(!getUpnpService().getRegistry().isLocalDeviceAdvertised(localDevice))
-        		continue;
+            if (isAdvertisementDisabled(localDevice))
+                continue;
 
             // We are re-using the regular notification messages here but override the NT with the ST header
             log.finer("Sending root device messages: " + localDevice);
@@ -248,8 +249,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         log.fine("Responding to root device search with advertisement messages for all local root devices");
         for (LocalDevice device : getUpnpService().getRegistry().getLocalDevices()) {
 
-            if(!getUpnpService().getRegistry().isLocalDeviceAdvertised(device))
-           		continue;
+            if (isAdvertisementDisabled(device))
+                continue;
 
             getUpnpService().getRouter().send(
                     new OutgoingSearchResponseRootDeviceUDN(
@@ -265,8 +266,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         Device device = getUpnpService().getRegistry().getDevice(udn, false);
         if (device != null && device instanceof LocalDevice) {
 
-            if(!getUpnpService().getRegistry().isLocalDeviceAdvertised((LocalDevice)device))
-           		return;
+            if (isAdvertisementDisabled((LocalDevice)device))
+                return;
 
             log.fine("Responding to UDN device search: " + udn);
             getUpnpService().getRouter().send(
@@ -285,8 +286,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
 
-                if(!getUpnpService().getRegistry().isLocalDeviceAdvertised((LocalDevice)device))
-               		continue;
+                if (isAdvertisementDisabled((LocalDevice)device))
+                    continue;
 
                 log.finer("Sending matching device type search result for: " + device);
                 getUpnpService().getRouter().send(
@@ -306,8 +307,8 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         for (Device device : devices) {
             if (device instanceof LocalDevice) {
 
-                if(!getUpnpService().getRegistry().isLocalDeviceAdvertised((LocalDevice)device))
-               		continue;
+                if (isAdvertisementDisabled((LocalDevice)device))
+                    continue;
 
                 log.finer("Sending matching service type search result: " + device);
                 getUpnpService().getRouter().send(
@@ -327,6 +328,12 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
                 activeStreamServer,
                 getUpnpService().getConfiguration().getNamespace().getDescriptorPath(device)
         );
+    }
+
+    protected boolean isAdvertisementDisabled(LocalDevice device) {
+        DiscoveryOptions options =
+            getUpnpService().getRegistry().getDiscoveryOptions(device.getIdentity().getUdn());
+        return options != null && !options.isAdvertised();
     }
 
 }

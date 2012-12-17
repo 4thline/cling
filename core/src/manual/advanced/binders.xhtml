@@ -1,0 +1,93 @@
+<div class="section" id="section.SwitchingXMLDescriptorBinders"
+     xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Switching XML descriptor binders</div>
+    <div class="content">
+
+        <p>
+            UPnP utilizes XML documents to transport device and service information between the provider and
+            any control points. These XML documents have to be parsed by Cling to produce the
+            <code>Device</code> model, and of course generated from a <code>Device</code> model.
+            The same approach is used for the <code>Service</code> model. This parsing, generating, and binding
+            is the job of the <code>org.fourthline.cling.binding.xml.DeviceDescriptorBinder</code> and the
+            <code>org.fourthline.cling.binding.xml.ServiceDescriptorBinder</code>.
+        </p>
+
+        <p>
+            The following implementations are bundled with Cling Core for device descriptor binding:
+        </p>
+
+        <dl>
+            <dt><code>org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderImpl</code> (default)</dt>
+            <dd>
+                This implementation reads and writes UDA 1.0 descriptor XML with the JAXP-provided DOM API
+                provided by JDK 6. You do not need any additional libraries to use this binder. Use this binder
+                to validate strict specification compliance of your applications.
+            </dd>
+            <dt><code>org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderSAXImpl</code></dt>
+            <dd>
+                This implementation reads and writes UDA 1.0 descriptor XML with the JAXP-provided SAX API, you
+                don't have to install additional libraries to use it. This binder may consume less memory when
+                reading XML descriptors and perform better than the DOM-based parser. In practice, the
+                difference is usually insignificant, even on very slow machines.
+            </dd>
+            <dt><code>org.fourthline.cling.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl</code></dt>
+            <dd>
+                This implementation extends <code>UDA10DeviceDescriptorBinderImpl</code> and tries to recover
+                from parsing failures, and works around known problems of other UPnP stacks. This is the binder
+                you want for best interoperability in real-world UPnP applications. Furthermore, you can
+                override the <code>handleInvalidDescriptor()</code> and <code>handleInvalidDevice()</code>
+                methods to customize error handling, or if you want to repair invalid device information
+                manually.
+            </dd>
+        </dl>
+
+        <p>
+            The following implementations are bundled with Cling Core for service descriptor binding:
+        </p>
+
+        <dl>
+            <dt><code>org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderImpl</code> (default)</dt>
+            <dd>
+                This implementation reads and writes UDA 1.0 descriptor XML with the JAXP-provided DOM API
+                provided by JDK 6. You do not need any additional libraries to use this binder. Use this binder
+                to validate strict specification compliance of your applications.
+            </dd>
+            <dt><code>org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderSAXImpl</code></dt>
+            <dd>
+                This implementation reads and writes UDA 1.0 descriptor XML with the JAXP-provided SAX API, you
+                don't have to install additional libraries to use it. This binder may consume less memory when
+                reading XML descriptors and perform better than the DOM-based parser. In practice, the
+                difference is usually insignificant, even on very slow machines.
+            </dd>
+        </dl>
+
+        <p>
+            You can switch descriptor binders by overriding the <code>UpnpServiceConfiguration</code>:
+        </p>
+
+        <pre><![CDATA[UpnpService upnpService = new UpnpServiceImpl(
+    new DefaultUpnpServiceConfiguration() {
+    
+        @Override
+        public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
+            // Recommended for best interoperability with broken UPnP stacks!
+            return new RecoveringUDA10DeviceDescriptorBinderImpl();
+        }
+    
+        @Override
+        public ServiceDescriptorBinder getServiceDescriptorBinderUDA10() {
+            return new UDA10ServiceDescriptorBinderSAXImpl();
+        }
+    
+    }
+);]]></pre>
+
+        <p>
+            Performance problems with UPnP discovery are usually caused by too many XML descriptors, not
+            by their size. This is inherent in the bad design of UPnP; each device may expose many individual
+            service descriptors, and Cling will always retrieve all device metadata. The HTTP requests
+            necessary to retrieve dozens of descriptor files usually outweighs the cost of parsing each.
+        </p>
+
+    </div>
+</div>
