@@ -257,6 +257,12 @@
                     <groupId>org.fourthline.lemma</groupId>
                     <artifactId>lemma-maven-plugin</artifactId>
                     <version>1.1-SNAPSHOT</version>
+                    <configuration>
+                        <!-- Generate unique identifiers for all citations
+                        TODO: Docs cleanup necessary for this
+                        <processXRefs>false</processXRefs>
+                        -->
+                    </configuration>
                 </plugin>
 
             </plugins>

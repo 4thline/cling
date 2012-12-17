@@ -41,6 +41,10 @@ public @interface UpnpStateVariable {
     long allowedValueMaximum() default 0;
     long allowedValueStep() default 1;
 
+    // Dynamic
+    Class allowedValueProvider() default void.class;
+    Class allowedValueRangeProvider() default void.class;
+
     boolean sendEvents() default true;
     int eventMaximumRateMilliseconds() default 0;
     int eventMinimumDelta() default 0;
