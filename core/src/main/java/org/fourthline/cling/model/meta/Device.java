@@ -18,7 +18,7 @@
 package org.fourthline.cling.model.meta;
 
 import org.fourthline.cling.model.Namespace;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.Validatable;
 import org.fourthline.cling.model.ValidationError;
@@ -148,7 +148,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         return details;
     }
 
-    public DeviceDetails getDetails(ClientInfo info) {
+    public DeviceDetails getDetails(RemoteClientInfo info) {
         return this.getDetails();
     }
 

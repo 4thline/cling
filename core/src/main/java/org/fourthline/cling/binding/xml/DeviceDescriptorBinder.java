@@ -20,7 +20,7 @@ package org.fourthline.cling.binding.xml;
 import org.fourthline.cling.model.Namespace;
 import org.fourthline.cling.model.ValidationException;
 import org.fourthline.cling.model.meta.Device;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.w3c.dom.Document;
 
 /**
@@ -36,8 +36,8 @@ public interface DeviceDescriptorBinder {
     public <T extends Device> T describe(T undescribedDevice, Document dom)
             throws DescriptorBindingException, ValidationException;
 
-    public String generate(Device device, ClientInfo info, Namespace namespace) throws DescriptorBindingException;
+    public String generate(Device device, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException;
 
-    public Document buildDOM(Device device, ClientInfo info, Namespace namespace) throws DescriptorBindingException;
+    public Document buildDOM(Device device, RemoteClientInfo info, Namespace namespace) throws DescriptorBindingException;
 
 }

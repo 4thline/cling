@@ -19,7 +19,7 @@ package org.fourthline.cling.model.action;
 
 import org.fourthline.cling.model.meta.ActionArgument;
 import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.state.StateVariableAccessor;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.seamless.util.Reflections;
@@ -35,7 +35,8 @@ import java.util.logging.Logger;
  * Invokes methods on a service implementation instance with reflection.
  *
  * <p>
- * If the method has an additional last parameter of type {@link ClientInfo}, the details
+ * If the method has an additional last parameter of type
+ * {@link org.fourthline.cling.model.profile.RemoteClientInfo}, the details
  * of the control point client will be provided to the action method. You can use this
  * to get the client's address and request headers, and to provide extra response headers.
  * </p>
@@ -175,10 +176,11 @@ public class MethodActionExecutor extends AbstractActionExecutor {
         }
 
         if (method.getParameterTypes().length > 0
-            && ClientInfo.class.isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length-1])) {
-            if (actionInvocation.getClientInfo() != null) {
+            && RemoteClientInfo.class.isAssignableFrom(method.getParameterTypes()[method.getParameterTypes().length-1])) {
+            if (actionInvocation instanceof RemoteActionInvocation &&
+                ((RemoteActionInvocation)actionInvocation).getRemoteClientInfo() != null) {
                 log.finer("Providing remote client info as last action method input argument: " + method);
-                values.add(i, actionInvocation.getClientInfo());
+                values.add(i, ((RemoteActionInvocation)actionInvocation).getRemoteClientInfo());
             } else {
                 // Local call, no client info available
                 values.add(i, null);

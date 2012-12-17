@@ -39,5 +39,5 @@ import org.fourthline.cling.model.meta.DeviceDetails;
  * @author Christian Bauer
  */
 public interface DeviceDetailsProvider {
-    DeviceDetails provide(ClientInfo info);
+    DeviceDetails provide(RemoteClientInfo info);
 }

@@ -23,6 +23,9 @@ import org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderImpl;
 import org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderImpl;
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.model.Namespace;
+import org.fourthline.cling.model.message.UpnpHeaders;
+import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
+import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.transport.impl.DatagramIOConfigurationImpl;
 import org.fourthline.cling.transport.impl.DatagramIOImpl;
@@ -200,6 +203,14 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 	public boolean isReceivedSubscriptionTimeoutIgnored() {
 		return false;
 	}
+
+    public UpnpHeaders getDescriptorRetrievalHeaders(RemoteDeviceIdentity identity) {
+        return null;
+    }
+
+    public UpnpHeaders getEventSubscriptionHeaders(RemoteService service) {
+        return null;
+    }
 
     /**
      * @return Defaults to 1000 milliseconds.

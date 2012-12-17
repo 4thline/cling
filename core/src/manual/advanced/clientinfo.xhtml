@@ -1,0 +1,94 @@
+<div class="chapter" id="chapter.ClientInfo"
+     xmlns="http://www.w3.org/1999/xhtml"
+     xmlns:xi="http://www.w3.org/2001/XInclude">
+    <div class="title">Custom client/server information</div>
+    <div class="content">
+
+        <p>
+            Sometimes your service has to implement different procedures depending on the client who
+            makes the action request, or you want to send a request with some identifying information
+            about your client.
+        </p>
+
+        <div class="section" id="section.ExtraRequestHeaders">
+            <div class="title">Adding extra request headers</div>
+            <div class="content">
+
+                <p>
+                    By default, Cling will add all necessary headers to all outbound requeset messages.
+                    For HTTP-based messages such as descriptor retrieval, action invocation, and GENA
+                    messages, the <code>User-Agent</code> HTTP header will be set to a default value,
+                    obtained from your <code>StreamClientConfiguration</code>.
+                </p>
+
+                <p>
+                    You can override this behavior for descriptor retrieval and GENA subscription messages
+                    with a custom configuration. For example, this configuration will send extra HTTP headers
+                    when device and service descriptors have to be retrieved for a particular UDN:
+                </p>
+
+                <pre><![CDATA[UpnpService upnpService = new UpnpServiceImpl(
+    new DefaultUpnpServiceConfiguration() {
+
+        @Override
+        public UpnpHeaders getDescriptorRetrievalHeaders(RemoteDeviceIdentity identity) {
+            if (identity.getUdn().getIdentifierString().equals("aa-bb-cc-dd-ee-ff")) {
+                UpnpHeaders headers = new UpnpHeaders();
+                headers.add(UpnpHeader.Type.USER_AGENT.getHttpName(), "MyCustom/Agent");
+                headers.add("X-Custom-Header", "foo");
+                return headers;
+            }
+            return null;
+        }
+    }
+);]]></pre>
+                <p>
+                    For GENA subscription, renewal, and unsubscribe messages, you can set extra headers
+                    depending on the service you are subscribing to:
+                </p>
+
+                <pre><![CDATA[UpnpService upnpService = new UpnpServiceImpl(
+    new DefaultUpnpServiceConfiguration() {
+
+        @Override
+        public UpnpHeaders getEventSubscriptionHeaders(RemoteService service) {
+            if (service.getServiceType().implementsVersion(new UDAServiceType("Foo", 1))) {
+                UpnpHeaders headers = new UpnpHeaders();
+                headers.add("X-Custom-Header", "bar");
+                return headers;
+            }
+            return null;
+        }
+    }
+);]]></pre>
+                <p>
+                    For action invocations to remote services, you can set custom headers when
+                    constructing the <code>ActionInvocation</code>:
+                </p>
+
+                <pre><![CDATA[UpnpHeaders extraHeaders = new UpnpHeaders();
+extraHeaders.add(UpnpHeader.Type.USER_AGENT.getHttpName(), "MyCustom/Agent");
+extraHeaders.add("X-Custom-Header", "foo");
+
+ActionInvocation actionInvocation =
+    new ActionInvocation(
+        action,
+        new ClientInfo(extraHeaders)
+    );]]></pre>
+
+                <p>
+                    Any of these settings only affect outbound request messages! Any outbound
+                    response to a remote request will have only headers required by the UPnP protocols.
+                    See the next section on how to customize response headers for remote action requests.
+                </p>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <a class="citation" href="javadoc://example.localservice.RemoteClientInfoTest"/>
+        </div>
+
+    </div>
+</div>
+

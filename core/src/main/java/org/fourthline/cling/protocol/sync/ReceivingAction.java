@@ -19,7 +19,7 @@ package org.fourthline.cling.protocol.sync;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.action.ActionException;
-import org.fourthline.cling.model.action.ActionInvocation;
+import org.fourthline.cling.model.action.RemoteActionInvocation;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpResponse;
@@ -84,7 +84,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
 
         log.fine("Found local action resource matching relative request URI: " + getInputMessage().getUri());
 
-        ActionInvocation invocation;
+        RemoteActionInvocation invocation;
         OutgoingActionResponseMessage responseMessage = null;
 
         try {
@@ -94,7 +94,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
                     new IncomingActionRequestMessage(getInputMessage(), resource.getModel());
 
             log.finer("Created incoming action request message: " + requestMessage);
-            invocation = new ActionInvocation(requestMessage.getAction(), getClientInfo());
+            invocation = new RemoteActionInvocation(requestMessage.getAction(), getRemoteClientInfo());
 
             // Throws UnsupportedDataException if the body can't be read
             log.fine("Reading body of request message");
@@ -115,17 +115,18 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         } catch (ActionException ex) {
             log.finer("Error executing local action: " + ex);
 
-            invocation = new ActionInvocation(ex);
+            invocation = new RemoteActionInvocation(ex, getRemoteClientInfo());
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 
         } catch (UnsupportedDataException ex) {
         	log.log(Level.WARNING, "Error reading action request XML body: " + ex.toString(), Exceptions.unwrap(ex));
 
             invocation =
-                    new ActionInvocation(
-                            Exceptions.unwrap(ex) instanceof ActionException
-                                    ? (ActionException)Exceptions.unwrap(ex)
-                                    : new ActionException(ErrorCode.ACTION_FAILED, ex.getMessage())
+                    new RemoteActionInvocation(
+                        Exceptions.unwrap(ex) instanceof ActionException
+                                ? (ActionException)Exceptions.unwrap(ex)
+                                : new ActionException(ErrorCode.ACTION_FAILED, ex.getMessage()),
+                        getRemoteClientInfo()
                     );
             responseMessage = new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR);
 

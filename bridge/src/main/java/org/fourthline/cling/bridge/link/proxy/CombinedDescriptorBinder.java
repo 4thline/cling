@@ -17,6 +17,7 @@
 
 package org.fourthline.cling.bridge.link.proxy;
 
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.seamless.util.io.Base64Coder;
 import org.fourthline.cling.binding.staging.MutableService;
 import org.fourthline.cling.binding.xml.DescriptorBindingException;
@@ -31,7 +32,6 @@ import org.fourthline.cling.model.meta.Icon;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.UDN;
 import org.w3c.dom.Document;
@@ -109,7 +109,7 @@ public class CombinedDescriptorBinder {
 
             Document rootDescriptor = getConfiguration().getDeviceDescriptorBinderUDA10().buildDOM(
                     device.getRoot(),
-                    new ClientInfo(),
+                    new RemoteClientInfo(),
                     getConfiguration().getNamespace()
             );
             deviceModelEl.appendChild(dom.importNode(rootDescriptor.getDocumentElement(), true));

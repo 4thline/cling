@@ -33,6 +33,7 @@ import org.fourthline.cling.model.ValidationError;
 import org.fourthline.cling.model.ValidationException;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
+import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.meta.Icon;
 import org.fourthline.cling.model.meta.RemoteDevice;
@@ -127,6 +128,12 @@ public class RetrieveRemoteDescriptors implements Runnable {
     		
     		deviceDescRetrievalMsg =
                 new StreamRequestMessage(UpnpRequest.Method.GET, rd.getIdentity().getDescriptorURL());
+
+            // Extra headers
+            UpnpHeaders headers =
+                getUpnpService().getConfiguration().getDescriptorRetrievalHeaders(rd.getIdentity());
+            if (headers != null)
+                deviceDescRetrievalMsg.getHeaders().putAll(headers);
 
     		log.fine("Sending device descriptor retrieval message: " + deviceDescRetrievalMsg);
             deviceDescMsg = getUpnpService().getRouter().send(deviceDescRetrievalMsg);
@@ -291,6 +298,12 @@ public class RetrieveRemoteDescriptors implements Runnable {
     	
         StreamRequestMessage serviceDescRetrievalMsg = new StreamRequestMessage(UpnpRequest.Method.GET, descriptorURL);
 
+        // Extra headers
+        UpnpHeaders headers =
+            getUpnpService().getConfiguration().getDescriptorRetrievalHeaders(service.getDevice().getIdentity());
+        if (headers != null)
+            serviceDescRetrievalMsg.getHeaders().putAll(headers);
+
         log.fine("Sending service descriptor retrieval message: " + serviceDescRetrievalMsg);
         StreamResponseMessage serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
 
@@ -335,7 +348,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         for (RemoteService discoveredService : services) {
             for (ServiceType exclusiveType : exclusiveTypes) {
                 if (discoveredService.getServiceType().implementsVersion(exclusiveType)) {
-                    log.fine("Including exlusive service: " + discoveredService);
+                    log.fine("Including exclusive service: " + discoveredService);
                     exclusiveServices.add(discoveredService);
                 } else {
                     log.fine("Excluding unwanted service: " + exclusiveType);

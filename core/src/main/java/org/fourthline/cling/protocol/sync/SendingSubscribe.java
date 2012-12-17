@@ -50,16 +50,18 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
     final protected RemoteGENASubscription subscription;
 
     public SendingSubscribe(UpnpService upnpService, RemoteGENASubscription subscription) {
-        super(upnpService,
-              new OutgoingSubscribeRequestMessage(
-                      subscription,
-                      subscription.getEventCallbackURLs(
-                              upnpService.getRouter().getActiveStreamServers(
-                                      subscription.getService().getDevice().getIdentity().getDiscoveredOnLocalAddress()
-                              ),
-                              upnpService.getConfiguration().getNamespace()
-                      )
-              )
+        super(
+            upnpService,
+            new OutgoingSubscribeRequestMessage(
+                subscription,
+                subscription.getEventCallbackURLs(
+                    upnpService.getRouter().getActiveStreamServers(
+                        subscription.getService().getDevice().getIdentity().getDiscoveredOnLocalAddress()
+                    ),
+                    upnpService.getConfiguration().getNamespace()
+                ),
+                upnpService.getConfiguration().getEventSubscriptionHeaders(subscription.getService())
+            )
         );
 
         this.subscription = subscription;

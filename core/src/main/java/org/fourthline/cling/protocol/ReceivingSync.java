@@ -20,7 +20,7 @@ package org.fourthline.cling.protocol;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 
 import java.util.logging.Logger;
 
@@ -48,12 +48,12 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
 
     final private static Logger log = Logger.getLogger(ReceivingSync.class.getName());
 
-    final protected ClientInfo clientInfo;
+    final protected RemoteClientInfo remoteClientInfo;
     protected OUT outputMessage;
 
     protected ReceivingSync(UpnpService upnpService, IN inputMessage) {
         super(upnpService, inputMessage);
-        this.clientInfo = new ClientInfo(inputMessage);
+        this.remoteClientInfo = new RemoteClientInfo(inputMessage);
     }
 
     public OUT getOutputMessage() {
@@ -63,9 +63,9 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
     final protected void execute() {
         outputMessage = executeSync();
 
-        if (outputMessage != null && getClientInfo().getExtraResponseHeaders().size() > 0) {
-            log.fine("Merging extra headers into response message: " + getClientInfo().getExtraResponseHeaders().size());
-            outputMessage.getHeaders().putAll(getClientInfo().getExtraResponseHeaders());
+        if (outputMessage != null && getRemoteClientInfo().getExtraResponseHeaders().size() > 0) {
+            log.fine("Setting extra headers on response message: " + getRemoteClientInfo().getExtraResponseHeaders().size());
+            outputMessage.getHeaders().putAll(getRemoteClientInfo().getExtraResponseHeaders());
         }
     }
 
@@ -91,8 +91,8 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
     public void responseException(Throwable t) {
     }
 
-    public ClientInfo getClientInfo() {
-        return clientInfo;
+    public RemoteClientInfo getRemoteClientInfo() {
+        return remoteClientInfo;
     }
 
     @Override

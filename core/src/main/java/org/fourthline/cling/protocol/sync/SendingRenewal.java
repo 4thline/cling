@@ -46,7 +46,13 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
     final protected RemoteGENASubscription subscription;
 
     public SendingRenewal(UpnpService upnpService, RemoteGENASubscription subscription) {
-        super(upnpService, new OutgoingRenewalRequestMessage(subscription));
+        super(
+            upnpService,
+            new OutgoingRenewalRequestMessage(
+                subscription,
+                upnpService.getConfiguration().getEventSubscriptionHeaders(subscription.getService())
+            )
+        );
         this.subscription = subscription;
     }
 

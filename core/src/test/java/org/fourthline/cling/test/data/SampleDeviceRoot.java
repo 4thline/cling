@@ -26,7 +26,7 @@ import org.fourthline.cling.model.meta.ModelDetails;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.profile.DeviceDetailsProvider;
 import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.resource.ServiceEventCallbackResource;
@@ -78,7 +78,7 @@ public class SampleDeviceRoot extends SampleDevice {
 
     public DeviceDetailsProvider getDeviceDetailsProvider() {
         return new DeviceDetailsProvider() {
-            public DeviceDetails provide(ClientInfo info) {
+            public DeviceDetails provide(RemoteClientInfo info) {
                 return getDeviceDetails();
             }
         };

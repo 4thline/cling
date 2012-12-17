@@ -54,6 +54,7 @@ import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.UpnpResponse;
+import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.seamless.util.Exceptions;
@@ -266,11 +267,13 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
 
         // DefaultHttpClient adds HOST header automatically in its default processor
 
-        // Let's add the user-agent header on every request
-        HttpProtocolParams.setUserAgent(
-            localParams,
-            getConfiguration().getUserAgentValue(requestMessage.getUdaMajorVersion(), requestMessage.getUdaMinorVersion())
-        );
+        // Add the default user agent if not already set on the message
+        if (!requestMessage.getHeaders().containsKey(UpnpHeader.Type.USER_AGENT)) {
+            HttpProtocolParams.setUserAgent(
+                localParams,
+                getConfiguration().getUserAgentValue(requestMessage.getUdaMajorVersion(), requestMessage.getUdaMinorVersion())
+            );
+        }
 
         return new DefaultedHttpParams(localParams, globalParams);
     }

@@ -19,6 +19,7 @@ package org.fourthline.cling.model.message.gena;
 
 import org.fourthline.cling.model.gena.RemoteGENASubscription;
 import org.fourthline.cling.model.message.StreamRequestMessage;
+import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.header.CallbackHeader;
 import org.fourthline.cling.model.message.header.NTEventHeader;
@@ -33,7 +34,9 @@ import java.util.List;
  */
 public class OutgoingSubscribeRequestMessage extends StreamRequestMessage {
 
-    public OutgoingSubscribeRequestMessage(RemoteGENASubscription subscription, List<URL> callbackURLs) {
+    public OutgoingSubscribeRequestMessage(RemoteGENASubscription subscription,
+                                           List<URL> callbackURLs,
+                                           UpnpHeaders extraHeaders) {
 
         super(UpnpRequest.Method.SUBSCRIBE, subscription.getEventSubscriptionURL());
 
@@ -51,6 +54,9 @@ public class OutgoingSubscribeRequestMessage extends StreamRequestMessage {
                 UpnpHeader.Type.TIMEOUT,
                 new TimeoutHeader(subscription.getRequestedDurationSeconds())
         );
+
+        if (extraHeaders != null)
+            getHeaders().putAll(extraHeaders);
     }
 
     public boolean hasCallbackURLs() {

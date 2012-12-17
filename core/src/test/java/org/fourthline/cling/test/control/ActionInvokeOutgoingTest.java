@@ -20,7 +20,9 @@ package org.fourthline.cling.test.control;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.model.action.ActionInvocation;
+import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
+import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.header.ContentTypeHeader;
 import org.fourthline.cling.model.message.header.SoapActionHeader;
@@ -36,6 +38,7 @@ import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.meta.StateVariable;
 import org.fourthline.cling.model.meta.StateVariableEventDetails;
 import org.fourthline.cling.model.meta.StateVariableTypeDetails;
+import org.fourthline.cling.model.profile.ClientInfo;
 import org.fourthline.cling.model.types.Datatype;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.model.types.UDADeviceType;
@@ -206,14 +209,23 @@ public class ActionInvokeOutgoingTest {
             }
         };
 
-        // Registery remote device and its service
+        // Register remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
         Service service = SampleData.getFirstService(device);
         upnpService.getRegistry().addDevice(device);
 
         Action action = service.getAction("GetTarget");
 
-        ActionInvocation actionInvocation = new ActionInvocation(action);
+        UpnpHeaders extraHeaders = new UpnpHeaders();
+        extraHeaders.add(UpnpHeader.Type.USER_AGENT.getHttpName(), "MyCustom/Agent");
+        extraHeaders.add("X-Custom-Header", "foo");
+
+        ActionInvocation actionInvocation =
+            new ActionInvocation(
+                action,
+                new ClientInfo(extraHeaders)
+            );
+
         final boolean[] assertions = new boolean[1];
         ActionCallback callback = new ActionCallback(actionInvocation) {
             @Override
@@ -232,13 +244,27 @@ public class ActionInvokeOutgoingTest {
         assert actionInvocation.getFailure() == null;
         assertEquals(upnpService.getSentStreamRequestMessages().size(), 1);
         assertEquals(assertions[0], true);
+
+        StreamRequestMessage request = upnpService.getSentStreamRequestMessages().get(0);
+
+        // Mandatory headers
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.CONTENT_TYPE),
+            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class).getString(),
-                "\"" + SampleServiceOne.getThisServiceType().toString() + "#GetTarget\""
+            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.SOAPACTION),
+            "\"" + SampleServiceOne.getThisServiceType().toString() + "#GetTarget\""
+        );
+
+        // The extra headers
+        assertEquals(
+            request.getHeaders().getFirstHeaderString(UpnpHeader.Type.USER_AGENT),
+            "MyCustom/Agent"
+        );
+        assertEquals(
+            request.getHeaders().getFirstHeader("X-CUSTOM-HEADER"),
+            "foo"
         );
 
         assertEquals(actionInvocation.getOutput().length, 1);

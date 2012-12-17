@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 4th Line GmbH, Switzerland
+ * Copyright (C) 2012 4th Line GmbH, Switzerland
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -15,22 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.transport.spi;
+package org.fourthline.cling.model.message.header;
 
 /**
- * Collection of typically needed configuration settings.
+ * A simple string, not validated, used only by Sony Playstation3.
  *
  * @author Christian Bauer
  */
-public interface StreamClientConfiguration {
+public class AVClientInfoHeader extends UpnpHeader<String> {
 
-    /**
-     * Used for outgoing HTTP requests if no other value was already set on messages.
-     *
-     * @param majorVersion The UPnP UDA major version.
-     * @param minorVersion The UPnP UDA minor version.
-     * @return The HTTP user agent value.
-     */
-    public String getUserAgentValue(int majorVersion, int minorVersion);
+	public AVClientInfoHeader() {
+    }
 
+	public AVClientInfoHeader(String s) {
+        setValue(s);
+    }
+
+	@Override
+	public void setString(String s) throws InvalidHeaderException {
+		setValue(s);
+	}
+
+	@Override
+	public String getString() {
+		return getValue();
+	}
 }

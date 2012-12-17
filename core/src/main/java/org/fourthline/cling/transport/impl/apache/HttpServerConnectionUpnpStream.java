@@ -47,6 +47,7 @@ import org.apache.http.protocol.ResponseConnControl;
 import org.apache.http.protocol.ResponseContent;
 import org.apache.http.protocol.ResponseDate;
 import org.apache.http.util.EntityUtils;
+import org.fourthline.cling.model.message.Connection;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpHeaders;
@@ -59,6 +60,7 @@ import org.fourthline.cling.transport.spi.UpnpStream;
 import org.seamless.util.Exceptions;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.util.logging.Level;
@@ -179,11 +181,25 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
             int requestHttpMinorVersion = httpRequest.getProtocolVersion().getMinor();
             requestMessage.getOperation().setHttpMinorVersion(requestHttpMinorVersion);
 
-            // Remote Address
+            // Connection wrapper
             if (getConnection() instanceof SocketHttpServerConnection) {
-                SocketHttpServerConnection socketConnection = (SocketHttpServerConnection) getConnection();
-                requestMessage.setRemoteAddress(socketConnection.getRemoteAddress());
-                requestMessage.setLocalAddress(socketConnection.getLocalAddress());
+                final SocketHttpServerConnection socketConnection = (SocketHttpServerConnection) getConnection();
+                requestMessage.setConnection(new Connection() {
+                    @Override
+                    public boolean isOpen() {
+                        return socketConnection.isOpen();
+                    }
+
+                    @Override
+                    public InetAddress getRemoteAddress() {
+                        return socketConnection.getRemoteAddress();
+                    }
+
+                    @Override
+                    public InetAddress getLocalAddress() {
+                        return socketConnection.getLocalAddress();
+                    }
+                });
             }
 
             // Headers

@@ -25,7 +25,7 @@ import org.fourthline.cling.binding.annotations.UpnpServiceId;
 import org.fourthline.cling.binding.annotations.UpnpServiceType;
 import org.fourthline.cling.binding.annotations.UpnpStateVariable;
 import org.fourthline.cling.binding.annotations.UpnpStateVariables;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 
 @UpnpService(
     serviceId = @UpnpServiceId("SwitchPower"),
@@ -52,7 +52,7 @@ public class SwitchPowerWithClientInfo {
     @UpnpAction
     public void setTarget(@UpnpInputArgument(name = "NewTargetValue")
                           boolean newTargetValue,
-                          ClientInfo clientInfo) {
+                          RemoteClientInfo clientInfo) {
         power = newTargetValue;
         System.out.println("Switch is: " + power);
 
@@ -73,6 +73,11 @@ public class SwitchPowerWithClientInfo {
 
             // Return some extra headers in the response
             clientInfo.getExtraResponseHeaders().add("X-MY-HEADER", "foobar");
+
+            // In potentially long-running action methods, regularly check if you
+            // should continue processing, e.g. if the client connection was closed...
+            if (!clientInfo.isRequestCancelled())
+                System.out.println("Connection/thread still active, continuing...");
         }
     }
     // DOC:CLIENT_INFO

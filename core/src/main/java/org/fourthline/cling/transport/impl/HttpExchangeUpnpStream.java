@@ -18,6 +18,7 @@
 package org.fourthline.cling.transport.impl;
 
 import com.sun.net.httpserver.HttpExchange;
+import org.fourthline.cling.model.message.Connection;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpHeaders;
@@ -32,6 +33,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,11 +85,28 @@ public class HttpExchangeUpnpStream extends UpnpStream {
 
             log.fine("Created new request message: " + requestMessage);
 
-            // Remote & Local Socket Address
-            if (getHttpExchange().getRemoteAddress() != null)
-                requestMessage.setRemoteAddress(getHttpExchange().getRemoteAddress().getAddress());
-            if (getHttpExchange().getLocalAddress() != null)
-                requestMessage.setLocalAddress(getHttpExchange().getLocalAddress().getAddress());
+            // Connection wrapper
+            requestMessage.setConnection(new Connection() {
+                @Override
+                public boolean isOpen() {
+                    log.info("Can't check connection state with this transport, returning true");
+                    return true;
+                }
+
+                @Override
+                public InetAddress getRemoteAddress() {
+                    return getHttpExchange().getRemoteAddress() != null
+                        ? getHttpExchange().getRemoteAddress().getAddress()
+                        : null;
+                }
+
+                @Override
+                public InetAddress getLocalAddress() {
+                    return getHttpExchange().getLocalAddress() != null
+                        ? getHttpExchange().getLocalAddress().getAddress()
+                        : null;
+                }
+            });
 
             // Headers
             requestMessage.setHeaders(new UpnpHeaders(getHttpExchange().getRequestHeaders()));

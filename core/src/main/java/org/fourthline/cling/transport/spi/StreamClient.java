@@ -46,7 +46,9 @@ public interface StreamClient<C extends StreamClientConfiguration> {
      * {@link org.fourthline.cling.model.message.StreamRequestMessage} does not contain such a header.
      * </p>
      * <p>
-     * This method might add a <code>User-Agent</code> HTTP header to the outgoing HTTP request.
+     * This method will add the <code>User-Agent</code> HTTP header to the outgoing HTTP request if
+     * the given message did not already contain such a header. You can set this default value in your
+     * {@link StreamClientConfiguration}.
      * </p>
      *
      * @param message The message to send.

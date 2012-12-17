@@ -44,7 +44,13 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
     final protected RemoteGENASubscription subscription;
 
     public SendingUnsubscribe(UpnpService upnpService, RemoteGENASubscription subscription) {
-        super(upnpService, new OutgoingUnsubscribeRequestMessage(subscription));
+        super(
+            upnpService,
+            new OutgoingUnsubscribeRequestMessage(
+                subscription,
+                upnpService.getConfiguration().getEventSubscriptionHeaders(subscription.getService())
+            )
+        );
         this.subscription = subscription;
     }
 

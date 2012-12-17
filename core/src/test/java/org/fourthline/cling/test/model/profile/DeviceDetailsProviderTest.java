@@ -17,7 +17,7 @@
 package org.fourthline.cling.test.model.profile;
 
 import org.fourthline.cling.model.meta.DeviceDetails;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.profile.HeaderDeviceDetailsProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -33,7 +33,7 @@ public class DeviceDetailsProviderTest {
     @Test
     public void headerRegexMatch() throws Exception {
 
-        ClientInfo clientInfo = new ClientInfo();
+        RemoteClientInfo clientInfo = new RemoteClientInfo();
 
         DeviceDetails dd1 = new DeviceDetails("My Testdevice 1");
         DeviceDetails dd2 = new DeviceDetails("My Testdevice 2");

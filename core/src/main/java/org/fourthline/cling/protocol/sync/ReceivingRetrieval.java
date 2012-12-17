@@ -99,7 +99,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
                         getUpnpService().getConfiguration().getDeviceDescriptorBinderUDA10();
                 String deviceDescriptor = deviceDescriptorBinder.generate(
                         device,
-                        getClientInfo(),
+                        getRemoteClientInfo(),
                         getUpnpService().getConfiguration().getNamespace()
                 );
                 response = new StreamResponseMessage(

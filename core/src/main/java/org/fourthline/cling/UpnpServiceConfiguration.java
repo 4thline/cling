@@ -20,6 +20,9 @@ package org.fourthline.cling;
 import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
 import org.fourthline.cling.binding.xml.ServiceDescriptorBinder;
 import org.fourthline.cling.model.Namespace;
+import org.fourthline.cling.model.message.UpnpHeaders;
+import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
+import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.transport.spi.DatagramIO;
 import org.fourthline.cling.transport.spi.DatagramProcessor;
@@ -194,6 +197,32 @@ public interface UpnpServiceConfiguration {
      *         <code>0</code> for unlimited age, or a value in seconds.
      */
     public Integer getRemoteDeviceMaxAgeSeconds();
+
+    /**
+     * Optional extra headers for device descriptor retrieval HTTP requests.
+     * <p>
+     * Some devices might require extra headers to recognize your control point, use this
+     * method to set these headers. They will be used for every descriptor (XML) retrieval
+     * HTTP request by Cling. See {@link org.fourthline.cling.model.profile.ClientInfo} for
+     * action request messages.
+     * </p>
+     *
+     * @param identity The (so far) discovered identity of the remote device.
+     * @return <code>null</code> or extra HTTP headers.
+     */
+    public UpnpHeaders getDescriptorRetrievalHeaders(RemoteDeviceIdentity identity);
+
+    /**
+     * Optional extra headers for event subscription (almost HTTP) messages.
+     * <p>
+     * Some devices might require extra headers to recognize your control point, use this
+     * method to set these headers for GENA subscriptions. Note that the headers will
+     * not be applied to actual event messages, only subscribe, unsubscribe, and renewal.
+     * </p>
+     *
+     * @return <code>null</code> or extra HTTP headers.
+     */
+    public UpnpHeaders getEventSubscriptionHeaders(RemoteService service);
 
     /**
      * @return The executor which runs the processing of asynchronous aspects of the UPnP stack (discovery).

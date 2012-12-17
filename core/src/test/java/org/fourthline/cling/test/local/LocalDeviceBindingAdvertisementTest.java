@@ -38,7 +38,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.types.NotificationSubtype;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.test.data.SampleData;
@@ -74,7 +74,7 @@ public class LocalDeviceBindingAdvertisementTest {
         DeviceDescriptorBinder dvcBinder = upnpService.getConfiguration().getDeviceDescriptorBinderUDA10();
         String descriptorXml = dvcBinder.generate(
             binaryLight,
-            new ClientInfo(),
+            new RemoteClientInfo(),
             upnpService.getConfiguration().getNamespace()
         );
 

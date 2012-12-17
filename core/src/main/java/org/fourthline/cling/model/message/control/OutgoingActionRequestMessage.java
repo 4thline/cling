@@ -19,6 +19,7 @@ package org.fourthline.cling.model.message.control;
 
 import java.util.logging.Logger;
 import org.fourthline.cling.model.action.ActionInvocation;
+import org.fourthline.cling.model.action.RemoteActionInvocation;
 import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.model.meta.QueryStateVariableAction;
 import org.fourthline.cling.model.message.StreamRequestMessage;
@@ -44,12 +45,18 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
         this(actionInvocation.getAction(), new UpnpRequest(UpnpRequest.Method.POST, controlURL));
 
         // For proxy remote invocations, pass through the user agent header
-        if (actionInvocation.getClientInfo() != null
-            && actionInvocation.getClientInfo().getRequestUserAgent() != null)
-        	getHeaders().add(
-        			UpnpHeader.Type.USER_AGENT,
-        			new UserAgentHeader(actionInvocation.getClientInfo().getRequestUserAgent())
-            );
+        if (actionInvocation instanceof RemoteActionInvocation) {
+            RemoteActionInvocation remoteActionInvocation = (RemoteActionInvocation) actionInvocation;
+            if (remoteActionInvocation.getRemoteClientInfo() != null
+                && remoteActionInvocation.getRemoteClientInfo().getRequestUserAgent() != null) {
+                getHeaders().add(
+                    UpnpHeader.Type.USER_AGENT,
+                    new UserAgentHeader(remoteActionInvocation.getRemoteClientInfo().getRequestUserAgent())
+                );
+            }
+        } else if (actionInvocation.getClientInfo() != null) {
+            getHeaders().putAll(actionInvocation.getClientInfo().getRequestHeaders());
+        }
     }
 
     public OutgoingActionRequestMessage(Action action, UpnpRequest operation) {
@@ -83,7 +90,7 @@ public class OutgoingActionRequestMessage extends StreamRequestMessage implement
         if (getOperation().getMethod().equals(UpnpRequest.Method.POST)) {
 
             getHeaders().add(UpnpHeader.Type.SOAPACTION, soapActionHeader);
-            log.fine("Added SOAP action header: " + getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION).getString());
+            log.fine("Added SOAP action header: " + soapActionHeader);
 
         /* TODO: Finish the M-POST crap (or not)
         } else if (getOperation().getMethod().equals(UpnpRequest.Method.MPOST)) {

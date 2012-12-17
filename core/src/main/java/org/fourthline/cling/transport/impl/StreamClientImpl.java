@@ -23,6 +23,7 @@ import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.UpnpResponse;
+import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.seamless.http.Headers;
@@ -177,11 +178,13 @@ public class StreamClientImpl implements StreamClient {
 
         // HttpURLConnection always adds an "Accept" header (not needed but shouldn't hurt)
 
-        // Let's just add the user-agent header on every request, the UDA 1.0 spec doesn't care and the UDA 1.1 spec says OK
-        urlConnection.setRequestProperty(
-                "User-Agent",
-                getConfiguration().getUserAgentValue(requestMessage.getUdaMajorVersion(), requestMessage.getUdaMinorVersion())
-        );
+        // Add the default user agent if not already set on the message
+        if (!requestMessage.getHeaders().containsKey(UpnpHeader.Type.USER_AGENT)) {
+            urlConnection.setRequestProperty(
+                    UpnpHeader.Type.USER_AGENT.getHttpName(),
+                    getConfiguration().getUserAgentValue(requestMessage.getUdaMajorVersion(), requestMessage.getUdaMinorVersion())
+            );
+        }
 
         // Other headers
         applyHeaders(urlConnection, requestMessage.getHeaders());

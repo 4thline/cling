@@ -156,6 +156,11 @@ public class UpnpHeaders extends Headers {
         return null;
     }
 
+    public String getFirstHeaderString(UpnpHeader.Type type) {
+        UpnpHeader header = getFirstHeader(type);
+        return header != null ? header.getString() : null;
+    }
+
     public void log() {
         if (log.isLoggable(Level.FINE)) {
             log.fine("############################ RAW HEADERS ###########################");

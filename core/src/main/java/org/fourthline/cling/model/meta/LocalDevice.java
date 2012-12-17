@@ -18,7 +18,7 @@
 package org.fourthline.cling.model.meta;
 
 import org.fourthline.cling.model.Namespace;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.profile.DeviceDetailsProvider;
 import org.fourthline.cling.model.resource.DeviceDescriptorResource;
 import org.fourthline.cling.model.resource.IconResource;
@@ -166,7 +166,7 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
     }
 
     @Override
-    public DeviceDetails getDetails(ClientInfo info) {
+    public DeviceDetails getDetails(RemoteClientInfo info) {
         if (getDeviceDetailsProvider() != null) {
             return getDeviceDetailsProvider().provide(info);
         }

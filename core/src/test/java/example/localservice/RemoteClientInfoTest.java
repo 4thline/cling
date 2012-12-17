@@ -21,24 +21,27 @@ import org.fourthline.cling.binding.LocalServiceBinder;
 import org.fourthline.cling.binding.annotations.AnnotationLocalServiceBinder;
 import org.fourthline.cling.model.DefaultServiceManager;
 import org.fourthline.cling.model.action.ActionInvocation;
+import org.fourthline.cling.model.action.RemoteActionInvocation;
+import org.fourthline.cling.model.message.Connection;
 import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.message.header.UserAgentHeader;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.test.data.SampleData;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import static org.testng.Assert.assertEquals;
 
 /**
- * Accessing client information
+ * Accessing remote client information
  * <p>
  * Theoretically, your service implementation should work with any client, as UPnP is
  * supposed to provide a compatibility layer. In practice, this never works as no
@@ -46,32 +49,42 @@ import static org.testng.Assert.assertEquals;
  * course).
  * </p>
  * <p>
- * If your action method has a last (or only parameter) of type <code>ClientInfo</code>,
+ * If your action method has a last (or only parameter) of type <code>RemoteClientInfo</code>,
  * Cling will provide details about the control point calling your service:
  * </p>
  * <a class="citation" href="javacode://example.localservice.SwitchPowerWithClientInfo" style="include:CLIENT_INFO"/>
  * <p>
- * The <code>ClientInfo</code> argument will only be available when this action method
+ * The <code>RemoteClientInfo</code> argument will only be available when this action method
  * is processing a remote client call, an <code>ActionInvocation</code> executed by the
- * local UPnP stack on a local service does not have client information and the argument
- * will be <code>null</code>.
+ * local UPnP stack on a local service does not have remote client information and the
+ * argument will be <code>null</code>.
  * </p>
  * <p>
- * Note that a client's remote address might be <code>null</code> if the Cling transport
- * layer was not able to obtain the connection's address.
+ * A client's remote and local address might be <code>null</code> if the Cling
+ * transport layer was not able to obtain the connection's address.
  * </p>
  * <p>
- * You can set extra response headers on the <code>ClientInfo</code>, which will be
- * returned to the client with the response of your UPnP action.
+ * You can set extra response headers on the <code>RemoteClientInfo</code>, which will be
+ * returned to the client with the response of your UPnP action. There is also a
+ * <code>setResponseUserAgent()</code> method for your convenience.
  * </p>
  * <p>
- * If you want to set the user-agent header for requests made by your UPnP stack,
- * override the <code>StreamClientConfiguration#getUserAgentValue()</code> method
- * as explained in <a href="#section.BasicAPI.UpnpService.Configuration">UPnP
- * Service Configuration</a>.
+ * If your action method is potentially long-running, you might want to periodically
+ * check if you should continue with another batch of work by calling
+ * <code>isRequestCancelled()</code>. Otherwise, you might do a lot of work for
+ * nothing, because while your action method may complete its processing, sending
+ * the response to the client will probably fail if the underlying HTTP connection was
+ * closed. A request is considered cancelled if either the thread executing the action
+ * was interrupted, or if the underlying HTTP connection of the client is no longer
+ * open.
+ * </p>
+ * <p>
+ * <em>Attention:</em> The Cling default transport can not detect if a connection is
+ * open or closed, it will always be considered open. The bundled Apache-based
+ * transport however can detect the current connection's state.
  * </p>
  */
-public class ClientInfoTest {
+public class RemoteClientInfoTest {
 
     public LocalDevice createTestDevice(Class serviceClass) throws Exception {
 
@@ -111,13 +124,35 @@ public class ClientInfoTest {
         requestHeaders.add(UpnpHeader.Type.USER_AGENT, new UserAgentHeader("foo/bar"));
         requestHeaders.add("X-MY-HEADER", "foo");
 
-        ClientInfo clientInfo = new ClientInfo(
-            InetAddress.getByName("10.0.0.1"),
-            InetAddress.getByName("10.0.0.2"),
+        RemoteClientInfo clientInfo = new RemoteClientInfo(
+            new Connection() {
+                @Override
+                public boolean isOpen() {
+                    return true;
+                }
+
+                @Override
+                public InetAddress getRemoteAddress() {
+                    try {
+                        return InetAddress.getByName("10.0.0.1");
+                    } catch (UnknownHostException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+
+                @Override
+                public InetAddress getLocalAddress() {
+                    try {
+                        return InetAddress.getByName("10.0.0.2");
+                    } catch (UnknownHostException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                }
+            },
             requestHeaders
         );
 
-        ActionInvocation setTargetInvocation = new ActionInvocation(
+        ActionInvocation setTargetInvocation = new RemoteActionInvocation(
             svc.getAction("SetTarget"), clientInfo
         );
 

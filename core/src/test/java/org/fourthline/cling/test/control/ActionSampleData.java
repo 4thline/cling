@@ -27,7 +27,7 @@ import org.fourthline.cling.binding.annotations.UpnpStateVariable;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.test.data.SampleData;
 
@@ -146,7 +146,7 @@ public class ActionSampleData {
         }
 
         @UpnpAction(out = @UpnpOutputArgument(name = "RetTargetValue"))
-        public boolean getTarget(ClientInfo clientInfo) {
+        public boolean getTarget(RemoteClientInfo clientInfo) {
             assertNotNull(clientInfo);
             assertEquals(clientInfo.getRemoteAddress().getHostAddress(), "10.0.0.1");
             assertEquals(clientInfo.getLocalAddress().getHostAddress(), "10.0.0.2");

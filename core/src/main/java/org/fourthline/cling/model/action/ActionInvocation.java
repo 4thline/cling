@@ -171,7 +171,6 @@ public class ActionInvocation<S extends Service> {
         return argument;
     }
 
-
     /**
      * @return <code>null</code> if execution was successful, failure details otherwise.
      */
@@ -184,7 +183,7 @@ public class ActionInvocation<S extends Service> {
     }
 
     /**
-     * @return <code>null</code> if this is a local action invocation.
+     * @return <code>null</code> if no info was provided for a local invocation.
      */
     public ClientInfo getClientInfo() {
         return clientInfo;

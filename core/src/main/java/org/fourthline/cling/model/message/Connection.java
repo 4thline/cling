@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 4th Line GmbH, Switzerland
+ * Copyright (C) 2012 4th Line GmbH, Switzerland
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -15,22 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.transport.spi;
+package org.fourthline.cling.model.message;
+
+import java.net.InetAddress;
 
 /**
- * Collection of typically needed configuration settings.
+ * An API for the Cling protocol layer to access some transport layer details.
  *
  * @author Christian Bauer
  */
-public interface StreamClientConfiguration {
+public interface Connection {
 
-    /**
-     * Used for outgoing HTTP requests if no other value was already set on messages.
-     *
-     * @param majorVersion The UPnP UDA major version.
-     * @param minorVersion The UPnP UDA minor version.
-     * @return The HTTP user agent value.
-     */
-    public String getUserAgentValue(int majorVersion, int minorVersion);
+    boolean isOpen();
+
+    InetAddress getRemoteAddress();
+
+    InetAddress getLocalAddress();
 
 }

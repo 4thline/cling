@@ -19,7 +19,7 @@ package org.fourthline.cling.test.data;
 
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.DeviceDetails;
-import org.fourthline.cling.model.profile.ClientInfo;
+import org.fourthline.cling.model.profile.RemoteClientInfo;
 import org.fourthline.cling.model.profile.DeviceDetailsProvider;
 import org.fourthline.cling.model.meta.DeviceIdentity;
 import org.fourthline.cling.model.meta.Icon;
@@ -59,7 +59,7 @@ public class SampleDeviceEmbeddedTwo extends SampleDevice {
     @Override
     public DeviceDetailsProvider getDeviceDetailsProvider() {
         return new DeviceDetailsProvider() {
-            public DeviceDetails provide(ClientInfo info) {
+            public DeviceDetails provide(RemoteClientInfo info) {
                 return getDeviceDetails();
             }
         };
