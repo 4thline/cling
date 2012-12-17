@@ -158,7 +158,14 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     public ServiceType[] getExclusiveServiceTypes() {
         return new ServiceType[0];
     }
-    
+
+    /**
+     * @return Defaults to <code>false</code>.
+     */
+	public boolean isReceivedSubscriptionTimeoutIgnored() {
+		return false;
+	}
+
     /**
      * @return Defaults to 1000 milliseconds.
      */

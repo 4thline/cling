@@ -195,6 +195,13 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     /**
+     * @return Defaults to <code>false</code>.
+     */
+	public boolean isReceivedSubscriptionTimeoutIgnored() {
+		return false;
+	}
+
+    /**
      * @return Defaults to 1000 milliseconds.
      */
     public int getRegistryMaintenanceIntervalMillis() {
@@ -344,4 +351,5 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
             return t;
         }
     }
+
 }

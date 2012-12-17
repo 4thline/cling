@@ -160,6 +160,22 @@ public interface UpnpServiceConfiguration {
     public int getAliveIntervalMillis();
 
     /**
+     * Ignore the received event subscription timeout from remote control points.
+     * <p>
+     * Some control points have trouble renewing subscriptions properly; enabling this option
+     * in conjunction with a high value for
+     * {@link org.fourthline.cling.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}
+     * ensures that your devices will not disappear on such control points.
+     * </p>
+     *
+     * @return <code>true</code> if the timeout in incoming event subscriptions should be ignored
+     *         and the default value ({@link org.fourthline.cling.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS})
+     *         should be used instead.
+     *
+     */
+    public boolean isReceivedSubscriptionTimeoutIgnored();
+
+    /**
      * Returns the time in seconds a remote device will be registered until it is expired.
      * <p>
      * This setting is useful on systems which do not support multicast networking
