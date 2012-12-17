@@ -48,6 +48,9 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
+/**
+ * TODO: These timing-sensitive tests fail sometimes... should use latches instead to coordinate threads
+ */
 public class LocalDeviceBindingAdvertisementTest {
 
     @Test
@@ -95,7 +98,7 @@ public class LocalDeviceBindingAdvertisementTest {
 
         LocalDevice ld =
             SampleData.createLocalDevice(
-                SampleData.createLocalDeviceIdentity(2)
+                SampleData.createLocalDeviceIdentity(3)
             );
 
         upnpService.getRegistry().addDevice(ld);
@@ -105,11 +108,11 @@ public class LocalDeviceBindingAdvertisementTest {
 
         assertEquals(upnpService.getRegistry().getLocalDevices().size(), 1);
 
-        // 30 from adDevice()
+        // 30 from addDevice()
         // 30 from regular refresh
         assertTrue(upnpService.getOutgoingDatagramMessages().size() >= 60);
         for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
-            assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 2);
+            assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 3);
         }
 
         upnpService.getOutgoingDatagramMessages().clear();
@@ -119,7 +122,7 @@ public class LocalDeviceBindingAdvertisementTest {
         // Check correct byebye
         assertTrue(upnpService.getOutgoingDatagramMessages().size() >= 30);
         for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
-            assertByeByeMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 2);
+            assertByeByeMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 3);
         }
     }
 

@@ -245,12 +245,22 @@ public class AnnotationLocalServiceBinder implements LocalServiceBinder {
         for (Method method : Reflections.getMethods(clazz, UpnpAction.class)) {
             AnnotationActionBinder actionBinder =
                     new AnnotationActionBinder(method, stateVariables, stringConvertibleTypes);
-            actionBinder.appendAction(map);
+            Action action = actionBinder.appendAction(map);
+            if(isActionExcluded(action)) {
+            	map.remove(action);
+            }
         }
 
         return map;
     }
 
+    /**
+     * Override this method to exclude action/methods after they have been discovered.
+     */
+    protected  boolean isActionExcluded(Action action) {
+    	return false;
+    }
+    
     // TODO: I don't like the exceptions much, user has no idea what to do
 
     static String toUpnpStateVariableName(String javaName) {

@@ -76,7 +76,7 @@ public class AnnotationActionBinder {
         return stringConvertibleTypes;
     }
 
-    public void appendAction(Map<Action, ActionExecutor> actions) throws LocalServiceBindingException {
+    public Action appendAction(Map<Action, ActionExecutor> actions) throws LocalServiceBindingException {
 
         String name;
         if (getAnnotation().name().length() != 0) {
@@ -98,6 +98,7 @@ public class AnnotationActionBinder {
         ActionExecutor executor = createExecutor(outputArguments);
 
         actions.put(action, executor);
+        return action;
     }
 
     protected ActionExecutor createExecutor(Map<ActionArgument<LocalService>, StateVariableAccessor> outputArguments) {
