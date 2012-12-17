@@ -31,6 +31,8 @@ public abstract class Descriptor {
         public static final String NAMESPACE_URI = "urn:schemas-upnp-org:device-1-0";
         public static final String DLNA_NAMESPACE_URI = "urn:schemas-dlna-org:device-1-0";
         public static final String DLNA_PREFIX = "dlna";
+        public static final String SEC_NAMESPACE_URI = "http://www.sec.co.kr/dlna";
+        public static final String SEC_PREFIX = "sec";
 
         public enum ELEMENT {
             root,
@@ -40,6 +42,8 @@ public abstract class Descriptor {
             UDN,
             X_DLNADOC,
             X_DLNACAP,
+            ProductCap,
+            X_ProductCap,
             deviceType,
             friendlyName,
             manufacturer,

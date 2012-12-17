@@ -481,6 +481,16 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                 descriptor, deviceElement, Descriptor.Device.DLNA_PREFIX + ":" + ELEMENT.X_DLNACAP,
                 deviceModelDetails.getDlnaCaps(), Descriptor.Device.DLNA_NAMESPACE_URI
         );
+        
+        appendNewElementIfNotNull(
+                descriptor, deviceElement, Descriptor.Device.SEC_PREFIX + ":" + ELEMENT.ProductCap,
+                deviceModelDetails.getSecProductCaps(), Descriptor.Device.SEC_NAMESPACE_URI
+        );
+        
+        appendNewElementIfNotNull(
+                descriptor, deviceElement, Descriptor.Device.SEC_PREFIX + ":" + ELEMENT.X_ProductCap,
+                deviceModelDetails.getSecProductCaps(), Descriptor.Device.SEC_NAMESPACE_URI
+        );
 
         generateIconList(namespace, deviceModel, descriptor, deviceElement);
         generateServiceList(namespace, deviceModel, descriptor, deviceElement);
