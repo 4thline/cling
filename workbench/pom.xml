@@ -34,18 +34,20 @@
                             <filename>${project.build.finalName}-standalone.jar</filename>
                         </configuration>
                     </execution>
+                    <!-- TODO: Move to bridge module
                     <execution>
                         <id>workbench-bridge-cli-jar</id>
                         <goals>
                             <goal>one-jar</goal>
                         </goals>
                         <configuration>
-                            <mainClass>org.fourthline.cling.workbench.bridge.Main</mainClass>
+                            <mainClass>org.fourthline.cling.bridge.ui.Main</mainClass>
                             <attachToBuild>true</attachToBuild>
                             <classifier>bridge-cli</classifier>
                             <filename>${project.build.finalName}-bridge-cli.jar</filename>
                         </configuration>
                     </execution>
+                    -->
                 </executions>
             </plugin>
 
@@ -96,22 +98,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.fourthline.cling</groupId>
-            <artifactId>cling-bridge</artifactId>
-            <version>${project.version}</version>
-            <classifier>classes</classifier>
-        </dependency>
-
-        <dependency>
             <groupId>org.seamless</groupId>
             <artifactId>seamless-cdi</artifactId>
             <version>${seamless.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
         </dependency>
 
         <dependency>

@@ -28,6 +28,7 @@ public class WorkbenchLogCategories extends CoreLogCategories implements LogView
     public WorkbenchLogCategories() {
         super();
 
+        /* TODO: Move to bridge module
         add(new LogCategory("Bridge", new LogCategory.Group[]{
 
                 new LogCategory.Group(
@@ -39,6 +40,7 @@ public class WorkbenchLogCategories extends CoreLogCategories implements LogView
                         }
                 ),
         }));
+        */
 
         // TODO: Externalize to SPI
         add(new LogCategory("Plugins", new LogCategory.Group[]{

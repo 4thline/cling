@@ -28,6 +28,7 @@ import org.fourthline.cling.transport.spi.StreamClientConfiguration;
 public class StreamClientConfigurationImpl implements StreamClientConfiguration {
 
     private int maxTotalConnections = 1024;
+    private int maxTotalPerRoute = 100;
     private int connectionTimeoutSeconds = 20; // WMP can be very slow to connect
     private int dataReadTimeoutSeconds = 60; // WMP can be very slow sending the initial data after connection
     private String contentCharset = "UTF-8"; // UDA spec says it's always UTF-8 entity content
@@ -41,6 +42,17 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
 
     public void setMaxTotalConnections(int maxTotalConnections) {
         this.maxTotalConnections = maxTotalConnections;
+    }
+
+    /**
+     * Defaults to 100.
+     */
+    public int getMaxTotalPerRoute() {
+        return maxTotalPerRoute;
+    }
+
+    public void setMaxTotalPerRoute(int maxTotalPerRoute) {
+        this.maxTotalPerRoute = maxTotalPerRoute;
     }
 
     /**
@@ -84,6 +96,10 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
 
     /**
      * If -1, the default value of HttpClient will be used (8192 in httpclient 4.1)
+     * <p>
+     * This will also avoid OOM on the HTC Thunderbolt where default size is 2MB (!):
+     * http://stackoverflow.com/questions/5358014/android-httpclient-oom-on-4g-lte-htc-thunderbolt
+     * </p>
      */
     public int getSocketBufferSize() {
     	return -1; 
@@ -97,7 +113,7 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
      * If -1, the default value of HttpClient will be used (3 in httpclient 4.1)
      */
 	public int getRequestRetryCount() {
-		// the default that is used by DefaultHttpClient if unspecified
+		// The default that is used by DefaultHttpClient if unspecified
 		return -1;
 	}
 

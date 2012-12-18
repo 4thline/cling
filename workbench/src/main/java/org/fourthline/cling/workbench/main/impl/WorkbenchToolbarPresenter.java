@@ -47,17 +47,4 @@ public class WorkbenchToolbarPresenter implements WorkbenchToolbarViewImpl.Prese
         createDemoDeviceEvent.fire(new CreateDemoDevice());
     }
 
-    @Override
-    public void onConfigureWANBridge() {
-    }
-
-    /*
-                   new ConfigureBridgeController(
-                           controller,
-                           Workbench.rootPresenter.getUpnpService(),
-                           Workbench.rootPresenter.getBridge()
-                   ).getView().setVisible(true);
-
-    */
-
 }

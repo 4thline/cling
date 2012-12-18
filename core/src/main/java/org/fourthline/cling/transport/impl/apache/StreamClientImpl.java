@@ -40,6 +40,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
@@ -72,39 +73,29 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
     final private static Logger log = Logger.getLogger(StreamClient.class.getName());
 
     final protected StreamClientConfigurationImpl configuration;
-    final protected ThreadSafeClientConnManager clientConnectionManager;
+    final protected PoolingClientConnectionManager clientConnectionManager;
     final protected DefaultHttpClient httpClient;
     final protected HttpParams globalParams = new BasicHttpParams();
 
     public StreamClientImpl(StreamClientConfigurationImpl configuration) throws InitializationException {
         this.configuration = configuration;
 
-        ConnManagerParams.setMaxTotalConnections(globalParams, getConfiguration().getMaxTotalConnections());
-        HttpConnectionParams.setConnectionTimeout(globalParams, getConfiguration().getConnectionTimeoutSeconds() * 1000);
-        HttpConnectionParams.setSoTimeout(globalParams, getConfiguration().getDataReadTimeoutSeconds() * 1000);
         HttpProtocolParams.setContentCharset(globalParams, getConfiguration().getContentCharset());
         HttpProtocolParams.setUseExpectContinue(globalParams, false);
 
-        if (getConfiguration().getSocketBufferSize() != -1) {
-
-            // Android configuration will set this to 8192 as its httpclient is based
-            // on a random pre 4.0.1 snapshot whose BasicHttpParams do not set a default value for socket buffer size.
-            // This will also avoid OOM on the HTC Thunderbolt where default size is 2Mb (!):
-            // http://stackoverflow.com/questions/5358014/android-httpclient-oom-on-4g-lte-htc-thunderbolt
-
-            HttpConnectionParams.setSocketBufferSize(globalParams, getConfiguration().getSocketBufferSize());
-        }
+        HttpConnectionParams.setConnectionTimeout(globalParams, getConfiguration().getConnectionTimeoutSeconds() * 1000);
+        HttpConnectionParams.setSoTimeout(globalParams, getConfiguration().getDataReadTimeoutSeconds() * 1000);
         HttpConnectionParams.setStaleCheckingEnabled(globalParams, getConfiguration().getStaleCheckingEnabled());
+        if (getConfiguration().getSocketBufferSize() != -1)
+            HttpConnectionParams.setSocketBufferSize(globalParams, getConfiguration().getSocketBufferSize());
 
+        // Only register 80, not 443 and SSL
         SchemeRegistry registry = new SchemeRegistry();
-        registry.register(new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-        clientConnectionManager = new ThreadSafeClientConnManager(globalParams, registry);
+        registry.register(new Scheme("http", 80, PlainSocketFactory.getSocketFactory()));
 
-        /* Apache 4.1 API
-        clientConnectionManager = new ThreadSafeClientConnManager(globalParams, registry);
+        clientConnectionManager = new PoolingClientConnectionManager(registry);
         clientConnectionManager.setMaxTotal(getConfiguration().getMaxTotalConnections());
-        clientConnectionManager.setDefaultMaxPerRoute(100);
-        */
+        clientConnectionManager.setDefaultMaxPerRoute(getConfiguration().getMaxTotalPerRoute());
 
         httpClient = new DefaultHttpClient(clientConnectionManager, globalParams);
         if (getConfiguration().getRequestRetryCount() != -1) {
@@ -125,24 +116,30 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
         final UpnpRequest requestOperation = requestMessage.getOperation();
         log.fine("Preparing HTTP request message with method '" + requestOperation.getHttpMethodName() + "': " + requestMessage);
 
+        HttpUriRequest httpRequest = null;
         try {
 
             // Create the right HTTP request
-            HttpUriRequest httpRequest = createHttpRequest(requestMessage, requestOperation);
+            httpRequest = createHttpRequest(requestMessage, requestOperation);
 
             // Set all the headers on the request
             httpRequest.setParams(getRequestParams(requestMessage));
             HeaderUtil.add(httpRequest, requestMessage.getHeaders());
 
-            log.fine("Sending HTTP request: " + httpRequest.getURI());
+            if (log.isLoggable(Level.FINE))
+                log.fine("Sending HTTP request: " + httpRequest.getURI());
+
             long start = System.currentTimeMillis();
+
             StreamResponseMessage response = httpClient.execute(httpRequest, createResponseHandler());
+
             long elapsed = System.currentTimeMillis() - start;
             if (log.isLoggable(Level.FINEST))
                 log.finest("Sent HTTP request, got response (" + elapsed + "ms) :" + httpRequest.getURI());
             if(elapsed > 5000) {
                 log.warning("HTTP request took a long time: " + elapsed + "ms: " + httpRequest.getURI());
             }
+
             return response;
 
         } catch (MethodNotSupportedException ex) {
@@ -153,9 +150,7 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
             log.warning("Cause: " + Exceptions.unwrap(ex));
             return null;
         } catch (IOException ex) {
-            //log.severe("Client connection was aborted: " + ex.getMessage()); // Don't log stacktrace
-            //ex.printStackTrace();
-            log.fine("Client connection was aborted: " + ex.getMessage()); // Don't log stacktrace
+            log.warning("Client connection to '" + httpRequest.getURI() + "' was aborted: " + ex);
             return null;
         } catch (IllegalStateException ex) {
             log.fine("Illegal state: " + ex.getMessage()); // Don't log stacktrace

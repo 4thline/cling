@@ -39,9 +39,6 @@ public class WorkbenchToolbarViewImpl extends JToolBar implements WorkbenchToolb
     final protected JButton demoButton =
             new JButton("Create Demo Device", Application.createImageIcon(Workbench.class, "img/24/lightbulb.png"));
 
-    final protected JButton bridgeButton =
-            new JButton("Configure WAN Bridge", Application.createImageIcon(Workbench.class, "img/24/device.png"));
-
     protected Presenter presenter;
 
     @PostConstruct
@@ -57,14 +54,6 @@ public class WorkbenchToolbarViewImpl extends JToolBar implements WorkbenchToolb
             }
         });
         add(demoButton);
-
-        bridgeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                presenter.onConfigureWANBridge();
-            }
-        });
-        add(bridgeButton);
     }
 
     @Override

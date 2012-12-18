@@ -33,7 +33,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.DefaultConnectionReuseStrategy;
 import org.apache.http.impl.DefaultHttpResponseFactory;
-import org.apache.http.impl.SocketHttpServerConnection;
+import org.apache.http.impl.DefaultHttpServerConnection;
 import org.apache.http.message.BasicStatusLine;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.DefaultedHttpParams;
@@ -182,22 +182,22 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
             requestMessage.getOperation().setHttpMinorVersion(requestHttpMinorVersion);
 
             // Connection wrapper
-            if (getConnection() instanceof SocketHttpServerConnection) {
-                final SocketHttpServerConnection socketConnection = (SocketHttpServerConnection) getConnection();
+            if (getConnection() instanceof DefaultHttpServerConnection) {
+                final DefaultHttpServerConnection defaultConnection = (DefaultHttpServerConnection) getConnection();
                 requestMessage.setConnection(new Connection() {
                     @Override
                     public boolean isOpen() {
-                        return socketConnection.isOpen();
+                        return defaultConnection.isOpen();
                     }
 
                     @Override
                     public InetAddress getRemoteAddress() {
-                        return socketConnection.getRemoteAddress();
+                        return defaultConnection.getRemoteAddress();
                     }
 
                     @Override
                     public InetAddress getLocalAddress() {
-                        return socketConnection.getLocalAddress();
+                        return defaultConnection.getLocalAddress();
                     }
                 });
             }
@@ -231,7 +231,6 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
             try {
                 responseMsg = process(requestMessage);
             } catch (RuntimeException ex) {
-
                 log.fine("Exception occured during UPnP stream processing: " + ex);
                 if (log.isLoggable(Level.FINE)) {
                     log.log(Level.FINE, "Cause: " + Exceptions.unwrap(ex), Exceptions.unwrap(ex));

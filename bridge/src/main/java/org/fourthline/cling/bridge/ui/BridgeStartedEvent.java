@@ -15,35 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.workbench.main;
+package org.fourthline.cling.bridge.ui;
 
-import org.fourthline.cling.ManagedUpnpService;
-import org.fourthline.cling.workbench.bridge.backend.Bridge;
-
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Alternative;
-import javax.enterprise.inject.Specializes;
+import org.fourthline.cling.bridge.ui.backend.Bridge;
+import org.seamless.swing.DefaultEvent;
 
 /**
- *
  * @author Christian Bauer
  */
-@Alternative
-@Specializes
-public class WorkbenchUpnpService extends ManagedUpnpService {
+public class BridgeStartedEvent extends DefaultEvent<Bridge> {
 
-    protected Bridge bridge;
-
-    @Override
-    public void start(@Observes Start start) {
-        super.start(start);
-        bridge = new Bridge(this);
-    }
-
-    @Override
-    public void shutdown(@Observes Shutdown shutdown) {
-        if (bridge != null)
-            bridge.stop(true);
-        super.shutdown(shutdown);
+    public BridgeStartedEvent(Bridge bridge) {
+        super(bridge);
     }
 }

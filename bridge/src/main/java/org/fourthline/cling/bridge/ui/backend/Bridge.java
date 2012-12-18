@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.workbench.bridge.backend;
+package org.fourthline.cling.bridge.ui.backend;
 
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.bio.SocketConnector;

@@ -15,14 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.workbench.bridge;
+package org.fourthline.cling.bridge.ui;
 
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.Option;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceImpl;
-import org.fourthline.cling.workbench.bridge.backend.Bridge;
+import org.fourthline.cling.bridge.ui.backend.Bridge;
 /* TODO
 import org.fourthline.cling.workbench.plugins.binarylight.device.DemoBinaryLight;
 */

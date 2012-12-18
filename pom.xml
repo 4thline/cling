@@ -18,7 +18,9 @@
         <module>distribution</module>
         <module>support</module>
         <module>mediarenderer</module>
+        <!-- TODO: Disabled until we have time to upgrade Jetty and integrate UI from old workbench code
         <module>bridge</module>
+        -->
         <module>osgi</module>
     </modules>
 
@@ -70,9 +72,10 @@
 
         <seamless.version>1.0-SNAPSHOT</seamless.version>
         <testng.version>6.2</testng.version>
-        <apache.httpcomponents.version>4.0.1</apache.httpcomponents.version>
-        <android.version>2.1_r1</android.version>
-        <jetty.version>7.1.6.v20100715</jetty.version>
+        <apache.httpcomponents.httpclient.version>4.2.2</apache.httpcomponents.httpclient.version>
+        <apache.httpcomponents.httpcore.version>4.2.3</apache.httpcomponents.httpcore.version>
+        <android.version>4.0.1.2</android.version>
+        <jetty.version>8.1.8.v20121106</jetty.version>
         <cdi.api.version>1.0-SP4</cdi.api.version>
         <ejb.api.version>3.0</ejb.api.version>
         <servlet.api.version>2.5</servlet.api.version>

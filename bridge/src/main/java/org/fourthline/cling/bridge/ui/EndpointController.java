@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.workbench.bridge;
+package org.fourthline.cling.bridge.ui;
 
 import org.fourthline.cling.bridge.BridgeUpnpService;
 import org.fourthline.cling.bridge.BridgeUpnpServiceConfiguration;
@@ -29,7 +29,7 @@ import org.fourthline.cling.bridge.link.LinkManagementListener;
 import org.fourthline.cling.bridge.link.LinkManager;
 import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.workbench.Workbench;
-import org.fourthline.cling.workbench.bridge.backend.Bridge;
+import org.fourthline.cling.bridge.ui.backend.Bridge;
 import org.seamless.http.Query;
 import org.seamless.swing.AbstractController;
 import org.seamless.swing.Application;

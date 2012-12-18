@@ -29,8 +29,6 @@ public interface WorkbenchToolbarView extends View<WorkbenchToolbarView.Presente
         void init();
 
         void onCreateDemoDevice();
-
-        void onConfigureWANBridge();
     }
 
 }

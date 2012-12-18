@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.fourthline.cling.workbench.bridge;
+package org.fourthline.cling.bridge.ui;
 
-import org.fourthline.cling.workbench.bridge.backend.Bridge;
+import org.fourthline.cling.bridge.ui.backend.Bridge;
 import org.seamless.swing.DefaultEvent;
 
 /**

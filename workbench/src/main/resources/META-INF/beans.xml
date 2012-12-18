@@ -6,8 +6,4 @@
           http://java.sun.com/xml/ns/javaee http://docs.jboss.org/cdi/beans_1_0.xsd
           http://jboss.org/schema/weld/beans http://jboss.org/schema/weld/beans_1_1.xsd">
 
-    <alternatives>
-        <class>org.fourthline.cling.workbench.main.WorkbenchUpnpService</class>
-    </alternatives>
-
 </beans>

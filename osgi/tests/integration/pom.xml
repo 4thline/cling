@@ -113,14 +113,14 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>${apache.httpcomponents.version}</version>
+            <version>${apache.httpcomponents.httpcore.version}</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${apache.httpcomponents.version}</version>
+            <version>${apache.httpcomponents.httpclient.version}</version>
             <scope>runtime</scope>
         </dependency>
 

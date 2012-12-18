@@ -133,14 +133,32 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>${apache.httpcomponents.version}</version>
+            <version>${apache.httpcomponents.httpcore.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${apache.httpcomponents.version}</version>
+            <version>${apache.httpcomponents.httpclient.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+            <exclusions>
+                <!-- Don't need these to compile Cling -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>${jetty.version}</version>
             <scope>compile</scope>
             <optional>true</optional>
         </dependency>
@@ -151,10 +169,32 @@
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
-                <!-- Use kxml instead -->
+                <!-- Of course, kxml2 is actually used by Android at runtime -->
                 <exclusion>
                     <groupId>xpp3</groupId>
                     <artifactId>xpp3</artifactId>
+                </exclusion>
+                <!-- We depend a newer non-buggy version, httpclient is unusable on Android! -->
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <!-- Don't need these to compile Cling -->
+                <exclusion>
+                    <groupId>org.khronos</groupId>
+                    <artifactId>opengl-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.json</groupId>
+                    <artifactId>json</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xerces</groupId>
+                    <artifactId>xmlParserAPIs</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

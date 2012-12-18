@@ -17,7 +17,6 @@
 
 package org.fourthline.cling.workbench.browser.impl;
 
-import org.fourthline.cling.bridge.link.proxy.ProxyLocalDevice;
 import org.fourthline.cling.controlpoint.event.Search;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
@@ -175,15 +174,7 @@ public class BrowserPresenter implements BrowserView.Presenter {
     public void onLocalDeviceComplete(@Observes @Phase.Complete LocalDeviceDiscovery discovery) {
         LocalDevice device = discovery.getDevice();
 
-        String[] labels = device instanceof ProxyLocalDevice
-                ?
-                new String[]{
-                        device.getDetails().getFriendlyName(),
-                        device.getDisplayString(),
-                        "(PROXY) " + device.getType().getDisplayString(),
-                        ((ProxyLocalDevice) device).getIdentity().getEndpoint().getCallback().toString()
-                }
-                :
+        String[] labels =
                 new String[]{
                         device.getDetails().getFriendlyName(),
                         device.getDisplayString(),
