@@ -64,7 +64,7 @@ import java.beans.PropertyChangeSupport;
                 sendEvents = false,
                 datatype = "ui2",
                 allowedValueMinimum = 0,
-                allowedValueMaximum = 15),
+                allowedValueMaximum = 100),
         @UpnpStateVariable(
                 name = "VolumeDB",
                 sendEvents = false,
