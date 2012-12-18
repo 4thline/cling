@@ -232,7 +232,7 @@ public class SwitchableRouterImpl implements SwitchableRouter {
                 throw new RouterLockAcquisitionException("Failed to acquire router lock: " + lock.getClass().getSimpleName());
             }
         } catch (InterruptedException e) {
-            throw new RuntimeException("Failed to acquire router lock: " + lock.getClass().getSimpleName(), e);
+            throw new RouterLockAcquisitionException("Waiting for lock interrupted: " + lock.getClass().getSimpleName(), e);
         }
     }
 
