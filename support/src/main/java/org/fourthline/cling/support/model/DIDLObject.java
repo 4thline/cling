@@ -200,6 +200,53 @@ public abstract class DIDLObject {
                 }
             }
         }
+        
+        static public abstract class SEC {
+
+            public interface NAMESPACE extends Property.NAMESPACE {
+                public static final String URI = "http://www.sec.co.kr/";
+            }
+            
+            static public class CAPTIONINFOEX extends Property<URI> implements NAMESPACE {
+                public CAPTIONINFOEX() {
+                    this(null);
+                }
+                
+                public CAPTIONINFOEX(URI value) {
+                    super(value, "CaptionInfoEx");
+                }
+
+                public CAPTIONINFOEX(URI value, List<Property<DIDLAttribute>> attributes) {
+                    super(value, "CaptionInfoEx", attributes);
+                }
+            }
+            
+            static public class CAPTIONINFO extends Property<URI> implements NAMESPACE {
+                public CAPTIONINFO() {
+                    this(null);
+                }
+                
+                public CAPTIONINFO(URI value) {
+                    super(value, "CaptionInfo");
+                }
+
+                public CAPTIONINFO(URI value, List<Property<DIDLAttribute>> attributes) {
+                    super(value, "CaptionInfo", attributes);
+                }
+            }
+            
+            static public class TYPE extends Property<DIDLAttribute> implements NAMESPACE {
+                public TYPE() {
+                    this(null);
+                }
+
+                public TYPE(DIDLAttribute value) {
+                    super(value, "type");
+                }
+            }
+            
+            
+        }
 
         static public abstract class UPNP {
 

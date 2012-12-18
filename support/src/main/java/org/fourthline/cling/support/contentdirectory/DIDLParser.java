@@ -334,6 +334,7 @@ public class DIDLParser extends SAXParser {
         // rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:didl", DIDLContent.NAMESPACE_URI);
         rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:upnp", DIDLObject.Property.UPNP.NAMESPACE.URI);
         rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:dc", DIDLObject.Property.DC.NAMESPACE.URI);
+        rootElement.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:sec", DIDLObject.Property.SEC.NAMESPACE.URI);
 
         for (Container container : content.getContainers()) {
             if (container == null) continue;
@@ -489,6 +490,7 @@ public class DIDLParser extends SAXParser {
 
         appendProperties(descriptor, itemElement, item, "upnp", DIDLObject.Property.UPNP.NAMESPACE.class, DIDLObject.Property.UPNP.NAMESPACE.URI);
         appendProperties(descriptor, itemElement, item, "dc", DIDLObject.Property.DC.NAMESPACE.class, DIDLObject.Property.DC.NAMESPACE.URI);
+        appendProperties(descriptor, itemElement, item, "sec", DIDLObject.Property.SEC.NAMESPACE.class, DIDLObject.Property.SEC.NAMESPACE.URI);
 
         for (Res resource : item.getResources()) {
             if (resource == null) continue;
