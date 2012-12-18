@@ -115,20 +115,29 @@ public class RouterImpl implements Router {
 
         // Start this first so we get a BindException if it's already started on this machine
         for (Map.Entry<InetAddress, StreamServer> entry : streamServers.entrySet()) {
-            log.fine("Starting stream server on address: " + entry.getKey());
+            log.fine("Init stream server on address: " + entry.getKey());
             entry.getValue().init(entry.getKey(), this);
+        }
+        for (Map.Entry<InetAddress, StreamServer> entry : streamServers.entrySet()) {
+            log.fine("Starting stream server on address: " + entry.getKey());
             getConfiguration().getStreamServerExecutor().execute(entry.getValue());
         }
 
         for (Map.Entry<NetworkInterface, MulticastReceiver> entry : multicastReceivers.entrySet()) {
-            log.fine("Starting multicast receiver on interface: " + entry.getKey().getDisplayName());
+            log.fine("Init multicast receiver on interface: " + entry.getKey().getDisplayName());
             entry.getValue().init(entry.getKey(), this, getConfiguration().getDatagramProcessor());
+        }
+        for (Map.Entry<NetworkInterface, MulticastReceiver> entry : multicastReceivers.entrySet()) {
+            log.fine("Starting multicast receiver on interface: " + entry.getKey().getDisplayName());
             getConfiguration().getMulticastReceiverExecutor().execute(entry.getValue());
         }
 
         for (Map.Entry<InetAddress, DatagramIO> entry : datagramIOs.entrySet()) {
-            log.fine("Starting datagram I/O on address: " + entry.getKey());
+            log.fine("Init datagram I/O on address: " + entry.getKey());
             entry.getValue().init(entry.getKey(), this, getConfiguration().getDatagramProcessor());
+        }
+        for (Map.Entry<InetAddress, DatagramIO> entry : datagramIOs.entrySet()) {
+            log.fine("Starting datagram I/O on address: " + entry.getKey());
             getConfiguration().getDatagramIOExecutor().execute(entry.getValue());
         }
 
