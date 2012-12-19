@@ -52,7 +52,7 @@ public interface StreamClient<C extends StreamClientConfiguration> {
      * </p>
      *
      * @param message The message to send.
-     * @return The response or <code>null</code> if no response has been received or an error occured.
+     * @return The response or <code>null</code> if no response has been received or an error occurred.
      */
     public StreamResponseMessage sendRequest(StreamRequestMessage message);
 

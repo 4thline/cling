@@ -35,6 +35,10 @@ import java.util.logging.Logger;
  * See <a href="http://download.oracle.com/javase/6/docs/jre/api/net/httpserver/spec/index.html?com/sun/net/httpserver/HttpServer.html">the
  * documentation of the SUN JDK 6.0 HTTP Server</a>.
  * </p>
+ * <p>
+ * This implementation <em>DOES NOT WORK</em> on Android. Read the Cling manual for
+ * alternatives for Android.
+ * </p>
  *
  * @author Christian Bauer
  */

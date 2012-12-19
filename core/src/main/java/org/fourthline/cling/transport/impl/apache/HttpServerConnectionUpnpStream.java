@@ -231,7 +231,7 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
             try {
                 responseMsg = process(requestMessage);
             } catch (RuntimeException ex) {
-                log.fine("Exception occured during UPnP stream processing: " + ex);
+                log.fine("Exception occurred during UPnP stream processing: " + ex);
                 if (log.isLoggable(Level.FINE)) {
                     log.log(Level.FINE, "Cause: " + Exceptions.unwrap(ex), Exceptions.unwrap(ex));
                 }

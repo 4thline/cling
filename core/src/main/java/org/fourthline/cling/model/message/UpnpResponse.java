@@ -51,7 +51,7 @@ public class UpnpResponse extends UpnpOperation {
             return statusMsg;
         }
 
-        public Status getByStatusCode(int statusCode) {
+        static public Status getByStatusCode(int statusCode) {
             for (Status status : values()) {
                 if (status.getStatusCode() == statusCode)
                     return status;

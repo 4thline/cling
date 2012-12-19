@@ -53,21 +53,29 @@ public class UpnpHeaders extends Headers {
     protected void parseHeaders() {
         // This runs as late as possible and only when necessary (getter called and map is dirty)
         parsedHeaders = new LinkedHashMap();
-        log.log(Level.FINE, "Parsing all HTTP headers for known UPnP headers: {0}", size());
+        if (log.isLoggable(Level.FINE))
+            log.fine("Parsing all HTTP headers for known UPnP headers: " + size());
         for (Entry<String, List<String>> entry : entrySet()) {
 
             if (entry.getKey() == null) continue; // Oh yes, the JDK has 'null' HTTP headers
 
             UpnpHeader.Type type = UpnpHeader.Type.getByHttpName(entry.getKey());
             if (type == null) {
-                log.log(Level.FINE, "Ignoring non-UPNP HTTP header: {0}", entry.getKey());
+                if (log.isLoggable(Level.FINE))
+                    log.fine("Ignoring non-UPNP HTTP header: " + entry.getKey());
                 continue;
             }
 
             for (String value : entry.getValue()) {
                 UpnpHeader upnpHeader = UpnpHeader.newInstance(type, value);
                 if (upnpHeader == null || upnpHeader.getValue() == null) {
-                    log.log(Level.FINE, "Ignoring known but non-parsable header (value violates the UDA specification?) '{0}': {1}", new Object[]{type.getHttpName(), value});
+                    if (log.isLoggable(Level.FINE))
+                        log.fine(
+                            "Ignoring known but irrelevant header (value violates the UDA specification?) '"
+                                + type.getHttpName()
+                                + "': "
+                                + value
+                        );
                 } else {
                     addParsedValue(type, upnpHeader);
                 }
@@ -76,7 +84,8 @@ public class UpnpHeaders extends Headers {
     }
 
     protected void addParsedValue(UpnpHeader.Type type, UpnpHeader value) {
-        log.log(Level.FINE, "Adding parsed header: {0}", value);
+        if (log.isLoggable(Level.FINE))
+            log.fine("Adding parsed header: " + value);
         List<UpnpHeader> list = parsedHeaders.get(type);
         if (list == null) {
             list = new LinkedList();
@@ -165,17 +174,17 @@ public class UpnpHeaders extends Headers {
         if (log.isLoggable(Level.FINE)) {
             log.fine("############################ RAW HEADERS ###########################");
             for (Entry<String, List<String>> entry : entrySet()) {
-                log.log(Level.FINE, "=== NAME : {0}", entry.getKey());
+                log.fine("=== NAME : " + entry.getKey());
                 for (String v : entry.getValue()) {
-                    log.log(Level.FINE, "VALUE: {0}", v);
+                    log.fine("VALUE: " + v);
                 }
             }
             if (parsedHeaders != null && parsedHeaders.size() > 0) {
                 log.fine("########################## PARSED HEADERS ##########################");
                 for (Map.Entry<UpnpHeader.Type, List<UpnpHeader>> entry : parsedHeaders.entrySet()) {
-                    log.log(Level.FINE, "=== TYPE: {0}", entry.getKey());
+                    log.fine("=== TYPE: " + entry.getKey());
                     for (UpnpHeader upnpHeader : entry.getValue()) {
-                        log.log(Level.FINE, "HEADER: {0}", upnpHeader);
+                        log.fine("HEADER: " + upnpHeader);
                     }
                 }
             }

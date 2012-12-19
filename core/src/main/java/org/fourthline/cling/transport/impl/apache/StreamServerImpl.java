@@ -36,13 +36,10 @@ import java.net.SocketException;
 import java.util.logging.Logger;
 
 /**
- * Implementation based on <a href="http://hc.apache.org/">Apache HTTP Components</a>.
+ * Implementation based on <a href="http://hc.apache.org/">Apache HTTP Components 4.2</a>.
  * <p>
- * This implementation works on Android.
- * </p>
- * <p>
- * Thread-safety is guaranteed through synchronization of methods of this service and
- * by the thread-safe underlying socket.
+ * This implementation <em>DOES NOT WORK</em> on Android. Read the Cling manual for
+ * alternatives on Android.
  * </p>
  *
  * @author Christian Bauer

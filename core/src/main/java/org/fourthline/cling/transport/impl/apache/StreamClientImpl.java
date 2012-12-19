@@ -32,7 +32,6 @@ import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -41,7 +40,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.DefaultedHttpParams;
@@ -61,9 +59,10 @@ import org.fourthline.cling.transport.spi.StreamClient;
 import org.seamless.util.Exceptions;
 
 /**
- * Implementation based on <a href="http://hc.apache.org/">Apache HTTP Components</a>.
+ * Implementation based on <a href="http://hc.apache.org/">Apache HTTP Components 4.2</a>.
  * <p>
- * This implementation works on Android.
+ * This implementation <em>DOES NOT WORK</em> on Android. Read the Cling manual for
+ * alternatives on Android.
  * </p>
  *
  * @author Christian Bauer
@@ -272,6 +271,4 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
 
         return new DefaultedHttpParams(localParams, globalParams);
     }
-
-
 }

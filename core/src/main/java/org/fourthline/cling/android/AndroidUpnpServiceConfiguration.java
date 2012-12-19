@@ -23,10 +23,12 @@ import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
 import org.fourthline.cling.binding.xml.ServiceDescriptorBinder;
 import org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderSAXImpl;
 import org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderSAXImpl;
-import org.fourthline.cling.transport.impl.apache.StreamClientConfigurationImpl;
-import org.fourthline.cling.transport.impl.apache.StreamClientImpl;
-import org.fourthline.cling.transport.impl.apache.StreamServerConfigurationImpl;
-import org.fourthline.cling.transport.impl.apache.StreamServerImpl;
+import org.fourthline.cling.model.Namespace;
+import org.fourthline.cling.transport.impl.AsyncServletStreamServerConfigurationImpl;
+import org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl;
+import org.fourthline.cling.transport.impl.jetty.JettyServletContainer;
+import org.fourthline.cling.transport.impl.jetty.StreamClientConfigurationImpl;
+import org.fourthline.cling.transport.impl.jetty.StreamClientImpl;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.fourthline.cling.transport.spi.StreamServer;
@@ -37,8 +39,8 @@ import java.util.logging.Logger;
 /**
  * Configuration settings for deployment on Android.
  * <p>
- * This configuration utilizes the Apache HTTP Components transport implementation
- * found in {@link org.fourthline.cling.transport.impl.apache} for TCP/HTTP networking. It
+ * This configuration utilizes the Jetty transport implementation
+ * found in {@link org.fourthline.cling.transport.impl.jetty} for TCP/HTTP networking. It
  * will attempt to bind only to the WiFi network interface and addresses on an
  * Android device.
  * </p>
@@ -80,7 +82,7 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
         this.wifiManager = wifiManager;
 
         // This should be the default on Android 2.1 but it's not set by default
-        System.setProperty("org.xml.sax.driver","org.xmlpull.v1.sax2.Driver");
+        System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
     }
 
     @Override
@@ -89,36 +91,29 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
     }
 
     @Override
-    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return new StreamServerImpl(
-                new StreamServerConfigurationImpl(
-                        networkAddressFactory.getStreamListenPort()
-                )
-        );
+    protected Namespace createNamespace() {
+        return new Namespace("/upnp");
     }
 
     @Override
     public StreamClient createStreamClient() {
-        return new StreamClientImpl(new StreamClientConfigurationImpl() {
-        	public int getConnectionTimeoutSeconds() {
-                return 2;
-            }
-        	public int getDataReadTimeoutSeconds() {
-                return 3;
-            }
-        	public boolean getStaleCheckingEnabled() {
-        		// comment from AndroidHttpClient.java:
-        		//
-                // Turn off stale checking.  Our connections break all the time anyway,
-                // and it's not worth it to pay the penalty of checking every time.
-        		return false;
-        	}
-        	public int getRequestRetryCount() {
-        		// since "connections break all the time anyway", limit number of retries to
-        		// minimize time spent in HttpClient.execute()
-        		return 1;
-        	}
-        });
+        // Use Jetty
+        return new StreamClientImpl(
+            new StreamClientConfigurationImpl(
+                getSyncProtocolExecutor()
+            )
+        );
+    }
+
+    @Override
+    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
+        // Use Jetty
+        return new AsyncServletStreamServerImpl(
+            new AsyncServletStreamServerConfigurationImpl(
+                JettyServletContainer.INSTANCE,
+                networkAddressFactory.getStreamListenPort()
+            )
+        );
     }
 
     @Override

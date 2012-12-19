@@ -79,7 +79,8 @@
                             !org.hibernate.*,
                             !org.dbunit.*,
                             !org.xmlpull.*,
-                            !org.ietf.*
+                            !org.ietf.*,
+                            !org.eclipse.jetty.*
                         </Import-Package>
                         <Embed-Transitive>false</Embed-Transitive>
                         <Embed-Dependency>

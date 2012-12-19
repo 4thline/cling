@@ -17,6 +17,7 @@
 
 package org.fourthline.cling.transport.impl;
 
+import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpHeaders;
@@ -27,18 +28,14 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.seamless.http.Headers;
-import org.seamless.util.io.IO;
 import org.seamless.util.URIUtil;
-import sun.net.www.protocol.http.Handler;
+import org.seamless.util.io.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
-import java.net.Proxy;
 import java.net.URL;
-import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +46,10 @@ import java.util.logging.Logger;
  * <p>
  * This class works around a serious design issue in the SUN JDK, so it will not work on any JDK that
  * doesn't offer the <code>sun.net.www.protocol.http.HttpURLConnection </code> implementation.
+ * </p>
+ * <p>
+ * This implementation <em>DOES NOT WORK</em> on Android. Read the Cling manual for
+ * alternatives for Android.
  * </p>
  *
  * @author Christian Bauer
@@ -64,40 +65,43 @@ public class StreamClientImpl implements StreamClient {
     public StreamClientImpl(StreamClientConfigurationImpl configuration) throws InitializationException {
         this.configuration = configuration;
 
+        if (ModelUtil.ANDROID_EMULATOR || ModelUtil.ANDROID_RUNTIME) {
+            /*
+            See the fantastic PERMITTED_USER_METHODS here:
+
+            https://android.googlesource.com/platform/libcore/+/android-4.0.1_r1.2/luni/src/main/java/java/net/HttpURLConnection.java
+
+            We'd have to basically copy the whole Android code, and have a dependency on
+            libcore.*, and do much more hacking to allow more HTTP methods. This is the same
+            problem we are hacking below for the JDK but at least there we don't have a
+            dependency issue for compiling Cling. These guys all suck, there is no list
+            of "permitted" HTTP methods. HttpURLConnection and the whole stream handler
+            factory stuff is the worst Java API ever created.
+            */
+            throw new InitializationException(
+                "This client does not work on Android. The design of HttpURLConnection is broken, we "
+                    + "can not add additional 'permitted' HTTP methods. Read the Cling manual."
+            );
+        }
+
         log.fine("Using persistent HTTP stream client connections: " + configuration.isUsePersistentConnections());
         System.setProperty("http.keepAlive", Boolean.toString(configuration.isUsePersistentConnections()));
 
-        // Hack the JDK to allow additional HTTP methods
+        // Hack the environment to allow additional HTTP methods
         if (System.getProperty(HACK_STREAM_HANDLER_SYSTEM_PROPERTY) == null) {
-            log.fine("Setting custom static URLStreamHandlerFactory to work around Sun JDK bugs");
-            URLStreamHandlerFactory shf =
-                    new URLStreamHandlerFactory() {
-                        public URLStreamHandler createURLStreamHandler(String protocol) {
-                            log.fine("Creating new URLStreamHandler for protocol: " + protocol);
-                            if ("http".equals(protocol)) {
-                                return new Handler() {
-
-                                    protected java.net.URLConnection openConnection(URL u) throws IOException {
-                                        return openConnection(u, null);
-                                    }
-
-                                    protected java.net.URLConnection openConnection(URL u, Proxy p) throws IOException {
-                                        return new UpnpURLConnection(u, this);
-                                    }
-                                };
-                            } else {
-                                return null;
-                            }
-                        }
-                    };
-
+            log.fine("Setting custom static URLStreamHandlerFactory to work around bad JDK defaults");
             try {
-                URL.setURLStreamHandlerFactory(shf);
+                // Use reflection to avoid dependency on sun.net package so this class at least
+                // loads on Android, even if it doesn't work...
+                URL.setURLStreamHandlerFactory(
+                    (URLStreamHandlerFactory) Class.forName(
+                        "org.fourthline.cling.transport.impl.FixedSunURLStreamHandler"
+                    ).newInstance()
+                );
             } catch (Throwable t) {
                 throw new InitializationException(
-                        "URLStreamHandlerFactory already set for this JVM." +
-                                " Can't use bundled default client based on JDK's HTTPURLConnection." +
-                                " Switch to org.fourthline.cling.transport.impl.apache.StreamClientImpl, see manual."
+                    "Failed to set modified URLStreamHandlerFactory in this environment."
+                        + " Can't use bundled default client based on HTTPURLConnection, see manual."
                 );
             }
             System.setProperty(HACK_STREAM_HANDLER_SYSTEM_PROPERTY, "alreadyWorkedAroundTheEvilJDK");
@@ -144,7 +148,7 @@ public class StreamClientImpl implements StreamClient {
                 return null;
             }
 
-            log.fine("Exception occured, trying to read the error stream");
+            log.fine("Exception occurred, trying to read the error stream");
             try {
                 inputStream = urlConnection.getErrorStream();
                 return createResponse(urlConnection, inputStream);
@@ -181,8 +185,8 @@ public class StreamClientImpl implements StreamClient {
         // Add the default user agent if not already set on the message
         if (!requestMessage.getHeaders().containsKey(UpnpHeader.Type.USER_AGENT)) {
             urlConnection.setRequestProperty(
-                    UpnpHeader.Type.USER_AGENT.getHttpName(),
-                    getConfiguration().getUserAgentValue(requestMessage.getUdaMajorVersion(), requestMessage.getUdaMinorVersion())
+                UpnpHeader.Type.USER_AGENT.getHttpName(),
+                getConfiguration().getUserAgentValue(requestMessage.getUdaMajorVersion(), requestMessage.getUdaMinorVersion())
             );
         }
 
@@ -263,60 +267,6 @@ public class StreamClientImpl implements StreamClient {
 
         log.fine("Response message complete: " + responseMessage);
         return responseMessage;
-    }
-
-    /**
-     * The SUNW morons restrict the JDK handlers to GET/POST/etc for "security" reasons.
-     * They do not understand HTTP. This is the hilarious comment in their source:
-     * <p/>
-     * "This restriction will prevent people from using this class to experiment w/ new
-     * HTTP methods using java.  But it should be placed for security - the request String
-     * could be arbitrarily long."
-     */
-    static class UpnpURLConnection extends sun.net.www.protocol.http.HttpURLConnection {
-
-        private static final String[] methods = {
-                "GET", "POST", "HEAD", "OPTIONS", "PUT", "DELETE",
-                "SUBSCRIBE", "UNSUBSCRIBE", "NOTIFY"
-        };
-
-        protected UpnpURLConnection(URL u, Handler handler) throws IOException {
-            super(u, handler);
-        }
-
-        public UpnpURLConnection(URL u, String host, int port) throws IOException {
-            super(u, host, port);
-        }
-
-        public synchronized OutputStream getOutputStream() throws IOException {
-            OutputStream os;
-            String savedMethod = method;
-            // see if the method supports output
-            if (method.equals("PUT") || method.equals("POST") || method.equals("NOTIFY")) {
-                // fake the method so the superclass method sets its instance variables
-                method = "PUT";
-            } else {
-                // use any method that doesn't support output, an exception will be
-                // raised by the superclass
-                method = "GET";
-            }
-            os = super.getOutputStream();
-            method = savedMethod;
-            return os;
-        }
-
-        public void setRequestMethod(String method) throws ProtocolException {
-            if (connected) {
-                throw new ProtocolException("Cannot reset method once connected");
-            }
-            for (String m : methods) {
-                if (m.equals(method)) {
-                    this.method = method;
-                    return;
-                }
-            }
-            throw new ProtocolException("Invalid UPnP HTTP method: " + method);
-        }
     }
 
 }

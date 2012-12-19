@@ -54,7 +54,7 @@ import java.net.InetAddress;
  *      run() {
  *          try {
  *              StreamRequestMessage request = // ... Read request
- *              StreamRsponseMessage response = process(request);
+ *              StreamResponseMessage response = process(request);
  *              // ... Send response
  *              responseSent(response))
  *          } catch (Exception ex) {
@@ -83,6 +83,10 @@ public interface StreamServer<C extends StreamServerConfiguration> extends Runna
     public void init(InetAddress bindAddress, Router router) throws InitializationException;
 
     /**
+     * This method will be called potentially right after
+     * {@link #init(java.net.InetAddress, org.fourthline.cling.transport.Router)}, the
+     * actual assigned local port must be available before the server is started.
+     *
      * @return The TCP port this service is listening on, e.g. the actual ephemeral port.
      */
     public int getPort();
