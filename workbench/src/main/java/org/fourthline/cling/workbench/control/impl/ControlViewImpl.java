@@ -112,7 +112,8 @@ public class ControlViewImpl extends JDialog implements ControlView {
             }
         };
 
-        inputArgumentsTable.getArgumentValuesModel().setValues(presetInputValues);
+        if (presetInputValues != null && presetInputValues.length > 0)
+            inputArgumentsTable.getArgumentValuesModel().setValues(presetInputValues);
 
         inputArgumentsScrollPane = new JScrollPane(inputArgumentsTable);
         outputArgumentsScrollPane = new JScrollPane(outputArgumentsTable);
