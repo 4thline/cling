@@ -39,7 +39,10 @@ import java.io.IOException;
 public interface ServletContainerAdapter {
 
     /**
-     * Might be called several times to set up the connectors.
+     * Might be called several times to set up the connectors. This is the host/address
+     * and the port Cling expects to receive HTTP requests on. If you set up your HTTP
+     * server connectors elsewhere and ignore when Cling calls this method, make sure
+     * you configure Cling with the correct host/port.
      *
      * @param host The host address for the socket.
      * @param port The port, might be <code>-1</code> to bind to an ephemeral port.

@@ -100,8 +100,7 @@ public class StreamClientImpl implements StreamClient {
                 try {
                     return exchange.createResponse();
                 } catch (Throwable t) {
-                    log.warning("Error reading response: " + requestMessage);
-                    log.warning("Cause: " + Exceptions.unwrap(t));
+                    log.log(Level.WARNING, "Error reading response: " + requestMessage, Exceptions.unwrap(t));
                     return null;
                 }
             } else if (exchangeState == HttpExchange.STATUS_EXCEPTED) {

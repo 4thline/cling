@@ -19,6 +19,7 @@ package org.fourthline.cling.transport.spi;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.Iterator;
 
 /**
  * Configuration utility for network interfaces and addresses.
@@ -60,16 +61,25 @@ public interface NetworkAddressFactory {
     public int getStreamListenPort();
 
     /**
+     * The caller might <code>remove()</code> an interface if initialization fails.
+     *
      * @return The local network interfaces on which multicast groups will be joined.
      */
-    public NetworkInterface[] getNetworkInterfaces();
+    public Iterator<NetworkInterface> getNetworkInterfaces();
 
     /**
+     * The caller might <code>remove()</code> an address if initialization fails.
+     *
      * @return The local addresses of the network interfaces bound to
      *         sockets listening for unicast datagrams and TCP requests.
      */
-    public InetAddress[] getBindAddresses();
-    
+    public Iterator<InetAddress> getBindAddresses();
+
+    /**
+     * @return <code>true</code> if there is at least one usable network interface and bind address.
+     */
+    public boolean hasUsableNetwork();
+
     /**
      * @return The network prefix length of this address or <code>null</code>.
      */

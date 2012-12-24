@@ -28,6 +28,7 @@ import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
 import org.fourthline.cling.transport.spi.UpnpStream;
 import org.seamless.util.Exceptions;
+import org.seamless.util.Iterators;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -36,6 +37,7 @@ import javax.inject.Inject;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
@@ -72,10 +74,10 @@ public class SwitchableRouterImpl implements SwitchableRouter {
 
     final private static Logger log = Logger.getLogger(Router.class.getName());
 
-    private UpnpServiceConfiguration configuration;
-    private ProtocolFactory protocolFactory;
+    protected UpnpServiceConfiguration configuration;
+    protected ProtocolFactory protocolFactory;
 
-    private Router router;
+    protected Router router;
     protected ReentrantReadWriteLock routerLock = new ReentrantReadWriteLock(true);
     protected Lock readLock = routerLock.readLock();
     protected Lock writeLock = routerLock.writeLock();
@@ -267,12 +269,16 @@ public class SwitchableRouterImpl implements SwitchableRouter {
             return 0;
         }
 
-        public NetworkInterface[] getNetworkInterfaces() {
-            return new NetworkInterface[0];
+        public Iterator<NetworkInterface> getNetworkInterfaces() {
+            return new Iterators.Empty<NetworkInterface>();
         }
 
-        public InetAddress[] getBindAddresses() {
-            return new InetAddress[0];
+        public Iterator<InetAddress> getBindAddresses() {
+            return new Iterators.Empty<InetAddress>();
+        }
+
+        public boolean hasUsableNetwork() {
+            return false;
         }
 
         public byte[] getHardwareAddress(InetAddress inetAddress) {

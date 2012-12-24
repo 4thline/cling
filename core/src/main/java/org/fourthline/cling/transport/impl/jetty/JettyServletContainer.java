@@ -57,10 +57,13 @@ public class JettyServletContainer extends Server implements ServletContainerAda
         SocketConnector connector = new SocketConnector();
         connector.setHost(host);
         connector.setPort(port);
-        addConnector(connector);
 
         // Open immediately so we can get the assigned local port
         connector.open();
+
+        // Only add if open() succeeded
+        addConnector(connector);
+
         return connector.getLocalPort();
     }
 

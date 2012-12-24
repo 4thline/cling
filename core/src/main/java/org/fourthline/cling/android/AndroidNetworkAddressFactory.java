@@ -22,6 +22,7 @@ import org.fourthline.cling.model.Constants;
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
+import org.seamless.util.Iterators;
 
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -32,6 +33,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -49,9 +51,8 @@ public class AndroidNetworkAddressFactory implements NetworkAddressFactory {
 
     final private static Logger log = Logger.getLogger(NetworkAddressFactory.class.getName());
 
-
-    protected NetworkInterface wifiInterface;
-    protected List<InetAddress> bindAddresses = new ArrayList<InetAddress>();
+    final protected NetworkInterface wifiInterface;
+    final protected List<InetAddress> bindAddresses = new ArrayList<InetAddress>();
 
     /**
      * Defaults to an ephemeral port.
@@ -79,7 +80,9 @@ public class AndroidNetworkAddressFactory implements NetworkAddressFactory {
 
                 if (isUsableAddress(inetAddress)) {
                     log.fine("Discovered usable network interface address: " + inetAddress.getHostAddress());
-                    bindAddresses.add(inetAddress);
+                    synchronized (bindAddresses) {
+                        bindAddresses.add(inetAddress);
+                    }
                 } else {
                     log.finer("Ignoring non-usable network interface address: " + inetAddress.getHostAddress());
                 }
@@ -118,15 +121,27 @@ public class AndroidNetworkAddressFactory implements NetworkAddressFactory {
         return 0; // Ephemeral
     }
 
-    public NetworkInterface[] getNetworkInterfaces() {
-        return new NetworkInterface[] { wifiInterface };
+    public Iterator<NetworkInterface> getNetworkInterfaces() {
+        return new Iterators.Singular<NetworkInterface>(wifiInterface);
     }
 
-    public InetAddress[] getBindAddresses() {
-        return bindAddresses.toArray(new InetAddress[bindAddresses.size()]);
+    public Iterator<InetAddress> getBindAddresses() {
+        return new Iterators.Synchronized<InetAddress>(bindAddresses) {
+            @Override
+            protected void synchronizedRemove(int index) {
+                synchronized (bindAddresses) {
+                    bindAddresses.remove(index);
+                }
+            }
+        };
     }
-    
-	public Short getAddressNetworkPrefixLength(InetAddress inetAddress) {
+
+    @Override
+    public boolean hasUsableNetwork() {
+        return bindAddresses.size() > 0;
+    }
+
+    public Short getAddressNetworkPrefixLength(InetAddress inetAddress) {
 		return null;
 	}
 

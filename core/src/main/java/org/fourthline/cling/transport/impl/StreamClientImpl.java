@@ -157,7 +157,7 @@ public class StreamClientImpl implements StreamClient {
                 return null;
             }
         } catch (Exception ex) {
-            log.info("Unrecoverable exception occured, no error response possible: " + ex);
+            log.info("Unrecoverable exception occurred, no error response possible: " + ex);
             return null;
 
         } finally {
