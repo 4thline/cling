@@ -222,7 +222,7 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     public void shutdown() {
         if (getDefaultExecutor() instanceof ThreadPoolExecutor) {
             log.fine("Shutting down thread pool");
-            ((ThreadPoolExecutor) getDefaultExecutor()).shutdown();
+            ((ThreadPoolExecutor) getDefaultExecutor()).shutdownNow();
         }
     }
 

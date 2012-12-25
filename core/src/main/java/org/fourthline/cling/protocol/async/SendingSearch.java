@@ -95,7 +95,8 @@ public class SendingSearch extends SendingAsync {
                 Thread.sleep(getBulkIntervalMilliseconds());
 
             } catch (InterruptedException ex) {
-                log.warning("Search sending thread was interrupted: " + ex);
+                // Interruption means we stop sending search messages, e.g. on shutdown of thread pool
+                break;
             }
         }
     }

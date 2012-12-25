@@ -17,7 +17,7 @@
 
 package org.fourthline.cling.support.shared.log.impl;
 
-import org.fourthline.cling.support.shared.Main;
+import org.fourthline.cling.support.shared.CenterWindow;
 import org.fourthline.cling.support.shared.log.LogView;
 import org.seamless.swing.Application;
 import org.seamless.swing.logging.LogCategorySelector;
@@ -27,6 +27,7 @@ import org.seamless.swing.logging.LogTableCellRenderer;
 import org.seamless.swing.logging.LogTableModel;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.BorderFactory;
@@ -59,7 +60,7 @@ public class LogViewImpl extends JPanel implements LogView {
     protected LogCategories logCategories;
 
     @Inject
-    protected Main.ApplicationWindow applicationWindow;
+    protected Event<CenterWindow> centerWindowEvent;
 
     protected LogCategorySelector logCategorySelector;
     protected JTable logTable;
@@ -216,7 +217,7 @@ public class LogViewImpl extends JPanel implements LogView {
         configureButton.setFocusable(false);
         configureButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Application.center(logCategorySelector, applicationWindow.asUIComponent());
+                centerWindowEvent.fire(new CenterWindow(logCategorySelector));
                 logCategorySelector.setVisible(!logCategorySelector.isVisible());
             }
         });

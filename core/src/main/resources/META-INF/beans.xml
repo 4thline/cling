@@ -14,6 +14,21 @@
             <weld:if-class-available name="!org.apache.http.HttpVersion"/>
         </weld:exclude>
 
+        <weld:exclude name="org.fourthline.cling.transport.impl.jetty.StreamClient*">
+            <weld:if-class-available name="!org.eclipse.jetty.client.HttpClient"/>
+        </weld:exclude>
+
+        <weld:exclude name="org.fourthline.cling.transport.impl.jetty.JettyServletContainer">
+            <weld:if-class-available name="!org.eclipse.jetty.server.Server"/>
+        </weld:exclude>
+
+        <weld:exclude name="org.fourthline.cling.transport.spi.*Servlet*">
+            <weld:if-class-available name="!javax.servlet.Servlet"/>
+        </weld:exclude>
+        <weld:exclude name="org.fourthline.cling.transport.impl.*Servlet*">
+            <weld:if-class-available name="!javax.servlet.Servlet"/>
+        </weld:exclude>
+
         <weld:exclude name="org.fourthline.cling.transport.impl.*Pull*">
             <weld:if-class-available name="!org.xmlpull.v1.XmlPullParser"/>
         </weld:exclude>

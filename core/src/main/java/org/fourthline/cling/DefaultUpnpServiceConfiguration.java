@@ -257,7 +257,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     public void shutdown() {
         if (getDefaultExecutor() instanceof ThreadPoolExecutor) {
             log.fine("Shutting down thread pool");
-            ((ThreadPoolExecutor) getDefaultExecutor()).shutdown();
+            ((ThreadPoolExecutor) getDefaultExecutor()).shutdownNow();
         }
     }
 
@@ -329,6 +329,12 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         protected void afterExecute(Runnable runnable, Throwable throwable) {
             super.afterExecute(runnable, throwable);
             if (throwable != null) {
+                if (throwable instanceof InterruptedException) {
+                    // Ignore this, might happen when we shutdownNow() the executor. We can't
+                    // log at this point as the logging system might be stopped already (e.g.
+                    // if it's a CDI component).
+                    return;
+                }
                 // Log only
                 log.warning("Thread terminated " + runnable + " abruptly with exception: " + throwable);
                 log.warning("Root cause: " + Exceptions.unwrap(throwable));

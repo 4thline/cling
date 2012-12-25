@@ -17,7 +17,7 @@
 
 package org.fourthline.cling.workbench.main.impl;
 
-import org.fourthline.cling.support.shared.Main;
+import org.fourthline.cling.support.shared.CenterWindow;
 import org.fourthline.cling.support.shared.log.LogView;
 import org.fourthline.cling.workbench.Workbench;
 import org.fourthline.cling.workbench.browser.BrowserView;
@@ -27,7 +27,7 @@ import org.fourthline.cling.workbench.main.WorkbenchView;
 import org.seamless.swing.Application;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Produces;
+import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.swing.BorderFactory;
@@ -72,16 +72,6 @@ public class WorkbenchViewImpl extends JFrame implements WorkbenchView {
 
     public WorkbenchViewImpl() throws HeadlessException {
         super(Workbench.APPNAME);
-    }
-
-    @Produces
-    public Main.ApplicationWindow getMainWindow() {
-        return new Main.ApplicationWindow() {
-            @Override
-            public Window asUIComponent() {
-                return WorkbenchViewImpl.this;
-            }
-        };
     }
 
     @PostConstruct
@@ -151,4 +141,9 @@ public class WorkbenchViewImpl extends JFrame implements WorkbenchView {
         Application.center(this);
         setVisible(true);
     }
+
+    public void onCenterWindow(@Observes CenterWindow centerWindow) {
+        Application.center(centerWindow.getWindow(), this);
+    }
+
 }

@@ -50,11 +50,6 @@ import java.util.logging.LogManager;
  */
 public abstract class Main implements ShutdownHandler, Thread.UncaughtExceptionHandler {
 
-    @Singleton
-    public interface ApplicationWindow {
-        Window asUIComponent();
-    }
-
     @Inject
     LogView.Presenter logPresenter;
 
