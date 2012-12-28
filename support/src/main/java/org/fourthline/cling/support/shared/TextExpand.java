@@ -27,4 +27,8 @@ public class TextExpand {
     public TextExpand(String text) {
         this.text = text;
     }
+
+    public String getText() {
+        return text;
+    }
 }

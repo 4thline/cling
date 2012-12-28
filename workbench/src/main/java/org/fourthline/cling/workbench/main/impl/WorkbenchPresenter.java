@@ -18,19 +18,24 @@
 package org.fourthline.cling.workbench.main.impl;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.support.shared.CenterWindow;
 import org.fourthline.cling.support.shared.TextExpand;
+import org.fourthline.cling.support.shared.TextExpandDialog;
 import org.fourthline.cling.support.shared.log.LogView;
 import org.fourthline.cling.workbench.browser.BrowserView;
 import org.fourthline.cling.workbench.info.DevicesView;
 import org.fourthline.cling.workbench.main.WorkbenchToolbarView;
 import org.fourthline.cling.workbench.main.WorkbenchView;
+import org.seamless.swing.Application;
 
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 
+@ApplicationScoped
 public class WorkbenchPresenter implements WorkbenchViewImpl.Presenter {
 
     static public class ViewDisposed {
@@ -74,10 +79,6 @@ public class WorkbenchPresenter implements WorkbenchViewImpl.Presenter {
         logPresenter.init();
     }
 
-    protected void onTextExpand(@Observes TextExpand textExpand) {
-        // TODO new TextExpandDialog(WorkbenchPresenter.this.getView(), e.getPayload());
-    }
-
     @PreDestroy
     public void destroy() {
         SwingUtilities.invokeLater(new Runnable() {
@@ -91,4 +92,13 @@ public class WorkbenchPresenter implements WorkbenchViewImpl.Presenter {
     public void onViewDisposed() {
         viewDisposedEvent.fire(new ViewDisposed());
     }
+
+    protected void onTextExpand(@Observes TextExpand textExpand) {
+        new TextExpandDialog(view.getFrame(), textExpand.getText());
+    }
+
+    public void onCenterWindow(@Observes CenterWindow centerWindow) {
+        Application.center(centerWindow.getWindow(), view.getFrame());
+    }
+
 }

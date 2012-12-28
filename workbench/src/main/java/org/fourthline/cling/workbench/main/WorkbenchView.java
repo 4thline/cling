@@ -17,6 +17,7 @@
 
 package org.fourthline.cling.workbench.main;
 
+import java.awt.Frame;
 import org.fourthline.cling.support.shared.View;
 
 /**
@@ -31,6 +32,8 @@ public interface WorkbenchView extends View<WorkbenchView.Presenter> {
     }
 
     void setVisible();
+
+    Frame getFrame();
 
     void dispose();
 }
