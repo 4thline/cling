@@ -30,7 +30,7 @@ import java.util.Set;
  */
 public class RenderingControlLastChangeParser extends LastChangeParser {
 
-    public static final String NAMESPACE_URI = "urn:schemas-upnp-org:metadata-1-0/RCS";
+    public static final String NAMESPACE_URI = "urn:schemas-upnp-org:metadata-1-0/RCS/";
     public static final String SCHEMA_RESOURCE = "org/fourthline/cling/support/renderingcontrol/metadata-1.0-rcs.xsd";
 
     @Override

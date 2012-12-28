@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-TODO: UPNP VIOLATION: RenderingControl 1.0 specification schema says "/RCS" but examples
-in the spec say "AVT_RCS". We had /AVT_RCS, now we have /RCS, let's see who complains.
+TODO: UPNP VIOLATION: RenderingControl 1.0 specification schema says "/RCS/" but examples
+in the spec say "/AVT_RCS". We had "/AVT_RCS", then "/RCS", now we have "/RCS/", let's
+see who complains.
 -->
-<xsd:schema targetNamespace="urn:schemas-upnp-org:metadata-1-0/RCS"
-            xmlns:rcs="urn:schemas-upnp-org:metadata-1-0/RCS"
+<xsd:schema targetNamespace="urn:schemas-upnp-org:metadata-1-0/RCS/"
+            xmlns:rcs="urn:schemas-upnp-org:metadata-1-0/RCS/"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             elementFormDefault="qualified"
             attributeFormDefault="unqualified">

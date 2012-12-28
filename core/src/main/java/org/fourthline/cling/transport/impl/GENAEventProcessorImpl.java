@@ -73,7 +73,7 @@ public class GENAEventProcessorImpl implements GENAEventProcessor, ErrorHandler 
             if (log.isLoggable(Level.FINER)) {
                 log.finer("===================================== GENA BODY BEGIN ============================================");
                 log.finer(requestMessage.getBody().toString());
-                log.finer("-===================================== GENA BODY END ============================================");
+                log.finer("====================================== GENA BODY END =============================================");
             }
 
         } catch (Exception ex) {

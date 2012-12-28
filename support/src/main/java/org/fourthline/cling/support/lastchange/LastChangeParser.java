@@ -108,7 +108,12 @@ public abstract class LastChangeParser extends SAXParser {
         Event event = new Event();
         new RootHandler(event, this);
 
-        log.fine("Parsing 'LastChange' event XML content");
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Parsing 'LastChange' event XML content");
+            log.fine("===================================== 'LastChange' BEGIN ============================================");
+            log.fine(xml);
+            log.fine("====================================== 'LastChange' END  ============================================");
+        }
         parse(new InputSource(new StringReader(xml)));
 
         log.fine("Parsed event with instances IDs: " + event.getInstanceIDs().size());
