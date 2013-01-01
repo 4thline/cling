@@ -128,7 +128,11 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
         } catch (UnsupportedDataException ex) {
             log.fine("Error reading SOAP body: " + ex);
             log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
-            throw new ActionException(ErrorCode.ACTION_FAILED, "Error reading response message. " + ex.getMessage());
+            throw new ActionException(
+                ErrorCode.ACTION_FAILED,
+                "Error reading SOAP response message. " + ex.getMessage(),
+                false
+            );
         }
     }
 
@@ -140,7 +144,11 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
         } catch (UnsupportedDataException ex) {
             log.fine("Error reading SOAP body: " + ex);
             log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
-            throw new ActionException(ErrorCode.ACTION_FAILED, "Error reading response failure message. " + ex.getMessage());
+            throw new ActionException(
+                ErrorCode.ACTION_FAILED,
+                "Error reading SOAP response failure message. " + ex.getMessage(),
+                false
+            );
         }
     }
 

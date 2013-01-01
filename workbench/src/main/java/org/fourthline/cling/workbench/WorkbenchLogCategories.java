@@ -65,6 +65,7 @@ public class WorkbenchLogCategories extends CoreLogCategories implements LogView
                         new LogCategory.LoggerLevel[]{
                                 new LogCategory.LoggerLevel("org.fourthline.cling.workbench.plugins.avtransport", Level.FINER),
                                 new LogCategory.LoggerLevel("org.fourthline.cling.support.avtransport", Level.FINER),
+                                new LogCategory.LoggerLevel("org.fourthline.cling.support.lastchange", Level.FINE),
                                 new LogCategory.LoggerLevel("org.seamless.statemachine", Level.FINER),
                         }
                 ),
@@ -73,6 +74,7 @@ public class WorkbenchLogCategories extends CoreLogCategories implements LogView
                         new LogCategory.LoggerLevel[]{
                                 new LogCategory.LoggerLevel("org.fourthline.cling.workbench.plugins.renderingcontrol", Level.FINER),
                                 new LogCategory.LoggerLevel("org.fourthline.cling.support.renderingcontrol", Level.FINER),
+                                new LogCategory.LoggerLevel("org.fourthline.cling.support.lastchange", Level.FINE),
                         }
                 ),
         }));
