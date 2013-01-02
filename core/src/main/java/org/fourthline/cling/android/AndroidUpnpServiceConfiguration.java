@@ -18,68 +18,58 @@
 package org.fourthline.cling.android;
 
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import org.fourthline.cling.DefaultUpnpServiceConfiguration;
 import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
+import org.fourthline.cling.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl;
 import org.fourthline.cling.binding.xml.ServiceDescriptorBinder;
-import org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderSAXImpl;
 import org.fourthline.cling.binding.xml.UDA10ServiceDescriptorBinderSAXImpl;
 import org.fourthline.cling.model.Namespace;
+import org.fourthline.cling.model.ServerClientTokens;
 import org.fourthline.cling.transport.impl.AsyncServletStreamServerConfigurationImpl;
 import org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl;
+import org.fourthline.cling.transport.impl.RecoveringGENAEventProcessorImpl;
+import org.fourthline.cling.transport.impl.RecoveringSOAPActionProcessorImpl;
 import org.fourthline.cling.transport.impl.jetty.JettyServletContainer;
 import org.fourthline.cling.transport.impl.jetty.StreamClientConfigurationImpl;
 import org.fourthline.cling.transport.impl.jetty.StreamClientImpl;
+import org.fourthline.cling.transport.spi.GENAEventProcessor;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
+import org.fourthline.cling.transport.spi.SOAPActionProcessor;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.fourthline.cling.transport.spi.StreamServer;
-
-import java.util.concurrent.Executor;
-import java.util.logging.Logger;
 
 /**
  * Configuration settings for deployment on Android.
  * <p>
  * This configuration utilizes the Jetty transport implementation
- * found in {@link org.fourthline.cling.transport.impl.jetty} for TCP/HTTP networking. It
- * will attempt to bind only to the WiFi network interface and addresses on an
- * Android device.
+ * found in {@link org.fourthline.cling.transport.impl.jetty} for TCP/HTTP networking, as
+ * client and server. The servlet context path for UPnP is set to <code>/upnp</code>.
  * </p>
  * <p>
- * This configuration utilizes the SAX default descriptor binders found in
- * {@link org.fourthline.cling.binding.xml}. The system property <code>org.xml.sax.driver</code>
- * is set to <code>org.xmlpull.v1.sax2.Driver</code>.
+ * The kxml2 implementation of <code>org.xmlpull</code> is available Android, therefore
+ * this configuration uses {@link RecoveringUDA10DeviceDescriptorBinderImpl},
+ * {@link RecoveringSOAPActionProcessorImpl}, and {@link RecoveringGENAEventProcessorImpl}.
  * </p>
  * <p>
- * The thread <code>Executor</code> is a <code>ThreadPoolExecutor</code> with the following
- * properties, optimized for machines with limited resources:
+ * This configuration utilizes {@link UDA10ServiceDescriptorBinderSAXImpl}, the system property
+ * <code>org.xml.sax.driver</code> is set to  <code>org.xmlpull.v1.sax2.Driver</code>.
  * </p>
- * <ul>
- * <li>Core pool size of minimum 8 idle threads</li>
- * <li>Maximum 16 threads active</li>
- * <li>5 seconds keep-alive time before an idle thread is removed from the pool</li>
- * <li>A FIFO queue of maximum 512 tasks waiting for a thread from the pool</li>
- * </ul>
  * <p>
- * A warning message will be logged when all threads of the pool have been exhausted
- * and executions have to be dropped.
+ * To preserve battery, the {@link org.fourthline.cling.registry.Registry} will only
+ * be maintained every 3 seconds.
  * </p>
  *
  * @author Christian Bauer
  */
 public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
-    final private static Logger log = Logger.getLogger(AndroidUpnpServiceConfiguration.class.getName());
-
-    final protected WifiManager wifiManager;
-
-    public AndroidUpnpServiceConfiguration(WifiManager wifiManager) {
-        this(wifiManager, 0); // Ephemeral port
+    public AndroidUpnpServiceConfiguration() {
+        this(0); // Ephemeral port
     }
 
-    public AndroidUpnpServiceConfiguration(WifiManager wifiManager, int streamListenPort) {
+    public AndroidUpnpServiceConfiguration(int streamListenPort) {
         super(streamListenPort, false);
-
-        this.wifiManager = wifiManager;
 
         // This should be the default on Android 2.1 but it's not set by default
         System.setProperty("org.xml.sax.driver", "org.xmlpull.v1.sax2.Driver");
@@ -87,11 +77,12 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
 
     @Override
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort) {
-        return new AndroidNetworkAddressFactory(wifiManager);
+        return new AndroidNetworkAddressFactory(streamListenPort);
     }
 
     @Override
     protected Namespace createNamespace() {
+        // For the Jetty server, this is the servlet context path
         return new Namespace("/upnp");
     }
 
@@ -101,13 +92,24 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
         return new StreamClientImpl(
             new StreamClientConfigurationImpl(
                 getSyncProtocolExecutor()
-            )
+            ) {
+                @Override
+                public String getUserAgentValue(int majorVersion, int minorVersion) {
+                    // TODO: UPNP VIOLATION: Synology NAS requires User-Agent to contain
+                    // "Android" to return DLNA protocolInfo required to stream to Samsung TV
+			        // see: http://two-play.com/forums/viewtopic.php?f=6&t=81
+                    ServerClientTokens tokens = new ServerClientTokens(majorVersion, minorVersion);
+                    tokens.setOsName("Android");
+                    tokens.setOsVersion(Build.VERSION.RELEASE);
+                    return tokens.toString();
+                }
+            }
         );
     }
 
     @Override
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        // Use Jetty
+        // Use Jetty, start/stop a new shared instance of JettyServletContainer
         return new AsyncServletStreamServerImpl(
             new AsyncServletStreamServerConfigurationImpl(
                 JettyServletContainer.INSTANCE,
@@ -118,7 +120,7 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
 
     @Override
     protected DeviceDescriptorBinder createDeviceDescriptorBinderUDA10() {
-        return new UDA10DeviceDescriptorBinderSAXImpl();
+        return new RecoveringUDA10DeviceDescriptorBinderImpl();
     }
 
     @Override
@@ -127,42 +129,18 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
     }
 
     @Override
-    public int getRegistryMaintenanceIntervalMillis() {
-        return 3000; // Preserve battery on Android, only run every 3 seconds
+    protected SOAPActionProcessor createSOAPActionProcessor() {
+        return new RecoveringSOAPActionProcessorImpl();
     }
 
     @Override
-    protected Executor createDefaultExecutor() {
-        return super.createDefaultExecutor();
+    protected GENAEventProcessor createGENAEventProcessor() {
+        return new RecoveringGENAEventProcessorImpl();
+    }
 
-        /* Old executor with limits, not really necessary...
-        // Smaller pool and larger queue on Android, devices do not have much resources...
-        ThreadPoolExecutor defaultExecutor = new ThreadPoolExecutor(8, 16, 5, TimeUnit.SECONDS, new ArrayBlockingQueue(512)) {
-            @Override
-            protected void beforeExecute(Thread thread, Runnable runnable) {
-                super.beforeExecute(thread, runnable);
-                thread.setName("Thread " + thread.getId() + " (Active: " + getActiveCount() + ")");
-            }
-        };
-
-        defaultExecutor.setRejectedExecutionHandler(
-                new ThreadPoolExecutor.DiscardPolicy() {
-                    @Override
-                    public void rejectedExecution(Runnable runnable, ThreadPoolExecutor threadPoolExecutor) {
-
-                        // Log and discard
-                        log.warning(
-                                "Thread pool saturated, discarding execution " +
-                                "of '"+runnable.getClass()+"', consider raising the " +
-                                "maximum pool or queue size"
-                        );
-                        super.rejectedExecution(runnable, threadPoolExecutor);
-                    }
-                }
-        );
-
-        return defaultExecutor;
-        */
+    @Override
+    public int getRegistryMaintenanceIntervalMillis() {
+        return 3000; // Preserve battery on Android, only run every 3 seconds
     }
 
 }

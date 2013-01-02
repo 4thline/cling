@@ -20,6 +20,7 @@ package org.fourthline.cling.transport.impl;
 import org.fourthline.cling.model.Constants;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
+import org.fourthline.cling.transport.spi.NoNetworkException;
 import org.seamless.util.Iterators;
 
 import java.net.Inet4Address;
@@ -44,7 +45,7 @@ import java.util.logging.Logger;
 /**
  * Default implementation of network interface and address configuration/discovery.
  * <p
- * This implementation has been tested on Windows XP, Windows Vista, Mac OS X 10.6,
+ * This implementation has been tested on Windows XP, Windows Vista, Mac OS X 10.8,
  * and whatever kernel ships in Ubuntu 9.04. This implementation does not support IPv6.
  * </p>
  *
@@ -57,11 +58,11 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
     private static Logger log = Logger.getLogger(NetworkAddressFactoryImpl.class.getName());
 
-    final protected Set<String> useInterfaces = new HashSet();
-    final protected Set<String> useAddresses = new HashSet();
+    final protected Set<String> useInterfaces = new HashSet<String>();
+    final protected Set<String> useAddresses = new HashSet<String>();
 
-    final protected List<NetworkInterface> networkInterfaces = new ArrayList();
-    final protected List<InetAddress> bindAddresses = new ArrayList();
+    final protected List<NetworkInterface> networkInterfaces = new ArrayList<NetworkInterface>();
+    final protected List<InetAddress> bindAddresses = new ArrayList<InetAddress>();
 
     protected int streamListenPort;
 
@@ -94,7 +95,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
         if ((networkInterfaces.size() == 0 || bindAddresses.size() == 0)) {
             log.warning("No usable network interface or addresses found");
         	if(requiresNetworkInterface()) {
-        		throw new MissingNetworkInterfaceException(
+        		throw new NoNetworkException(
                     "Could not discover any usable network interfaces and/or addresses"
                 );
         	}
@@ -173,7 +174,13 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             NetworkInterface iface = NetworkInterface.getByInetAddress(inetAddress);
             return iface != null ? iface.getHardwareAddress() : null;
         } catch (Throwable ex) {
-        	// seen on Win32: java.lang.Error: IP Helper Library GetIpAddrTable function failed
+            log.log(Level.WARNING, "Cannot get hardware address for: " + inetAddress, ex);
+        	// On Win32: java.lang.Error: IP Helper Library GetIpAddrTable function failed
+
+            // On Android 4.0.3 NullPointerException with inetAddress != null
+
+            // On Android "SocketException: No such device or address" when
+            // switching networks (mobile -> WiFi)
         	return null;
         }
     }

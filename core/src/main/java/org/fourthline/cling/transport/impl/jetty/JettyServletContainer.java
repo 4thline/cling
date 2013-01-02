@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
- * A basic singleton <code>org.eclipse.jetty.server.Server</code>.
+ * A singleton wrapper of a <code>org.eclipse.jetty.server.Server</code>.
  * <p>
  * This {@link org.fourthline.cling.transport.spi.ServletContainerAdapter} starts
  * a Jetty 8 instance on its own and stops it. Only one single context and servlet
@@ -41,16 +41,17 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
-public class JettyServletContainer extends Server implements ServletContainerAdapter {
+public class JettyServletContainer implements ServletContainerAdapter {
 
     final private static Logger log = Logger.getLogger(JettyServletContainer.class.getName());
-    
-    // Singleton with its own QueuedThreadPool
+
+    // Singleton
     public static final JettyServletContainer INSTANCE = new JettyServletContainer();
     private JettyServletContainer() {
-        super();
-        setGracefulShutdown(1000); // Let's wait a second for ongoing transfers to complete
+        resetServer();
     }
+
+    protected Server server;
 
     @Override
     synchronized public int addConnector(String host, int port) throws IOException {
@@ -62,14 +63,14 @@ public class JettyServletContainer extends Server implements ServletContainerAda
         connector.open();
 
         // Only add if open() succeeded
-        addConnector(connector);
+        server.addConnector(connector);
 
         return connector.getLocalPort();
     }
 
     @Override
     synchronized public void registerServlet(String contextPath, Servlet servlet) {
-        if (getHandler() != null) {
+        if (server.getHandler() != null) {
             return;
         }
         log.info("Registering UPnP servlet under context path: " + contextPath);
@@ -79,15 +80,15 @@ public class JettyServletContainer extends Server implements ServletContainerAda
             servletHandler.setContextPath(contextPath);
         ServletHolder s = new ServletHolder(servlet);
         servletHandler.addServlet(s, "/*");
-        setHandler(servletHandler);
+        server.setHandler(servletHandler);
     }
 
     @Override
     synchronized public void startIfNotRunning() {
-        if (!isStarted() && !isStarting()) {
+        if (!server.isStarted() && !server.isStarting()) {
             log.info("Starting Jetty server... ");
             try {
-                start();
+                server.start();
             } catch (Exception ex) {
                 log.severe("Couldn't start Jetty server: " + ex);
                 throw new RuntimeException(ex);
@@ -97,15 +98,22 @@ public class JettyServletContainer extends Server implements ServletContainerAda
 
     @Override
     synchronized public void stopIfRunning() {
-        if (!isStopped() && !isStopping()) {
+        if (!server.isStopped() && !server.isStopping()) {
             log.info("Stopping Jetty server...");
             try {
-                stop();
+                server.stop();
             } catch (Exception ex) {
                 log.severe("Couldn't stop Jetty server: " + ex);
                 throw new RuntimeException(ex);
+            } finally {
+                resetServer();
             }
         }
+    }
+
+    protected void resetServer() {
+        server = new Server(); // Has its own QueuedThreadPool
+        server.setGracefulShutdown(1000); // Let's wait a second for ongoing transfers to complete
     }
 
 }

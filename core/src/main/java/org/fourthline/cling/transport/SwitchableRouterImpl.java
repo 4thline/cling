@@ -26,6 +26,7 @@ import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
+import org.fourthline.cling.transport.spi.NoNetworkException;
 import org.fourthline.cling.transport.spi.UpnpStream;
 import org.seamless.util.Exceptions;
 import org.seamless.util.Iterators;
@@ -131,8 +132,12 @@ public class SwitchableRouterImpl implements SwitchableRouter {
     }
 
     public void handleStartFailure(InitializationException ex) {
-        log.severe("Unable to initialize network router: " + ex);
-        log.severe("Cause: " + Exceptions.unwrap(ex));
+        if (ex instanceof NoNetworkException) {
+            log.info("Unable to initialize network router, no network found.");
+        } else {
+            log.severe("Unable to initialize network router: " + ex);
+            log.severe("Cause: " + Exceptions.unwrap(ex));
+        }
     }
 
     public boolean disable(@Observes @Default TransportStop transportStop) throws RouterLockAcquisitionException {

@@ -30,6 +30,7 @@ import org.fourthline.cling.transport.spi.DatagramIO;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.MulticastReceiver;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
+import org.fourthline.cling.transport.spi.NoNetworkException;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.fourthline.cling.transport.spi.StreamServer;
 import org.fourthline.cling.transport.spi.UpnpStream;
@@ -92,18 +93,20 @@ public class RouterImpl implements Router {
         this.protocolFactory = protocolFactory;
 
         log.fine("Starting networking services...");
-        streamClient = getConfiguration().createStreamClient();
-
         networkAddressFactory = getConfiguration().createNetworkAddressFactory();
 
         startInterfaceBasedTransports(networkAddressFactory.getNetworkInterfaces());
         startAddressBasedTransports(networkAddressFactory.getBindAddresses());
 
+        // The transports possibly removed some unusable network interfaces/addresses
         if (!networkAddressFactory.hasUsableNetwork()) {
-            throw new InitializationException(
+            throw new NoNetworkException(
                 "No usable network interface and/or addresses available, check the log for errors."
             );
         }
+
+        // Start the HTTP client last, we don't even have to try if there is no network
+        streamClient = getConfiguration().createStreamClient();
     }
 
     protected void startInterfaceBasedTransports(Iterator<NetworkInterface> interfaces) throws InitializationException {
