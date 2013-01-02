@@ -58,6 +58,15 @@
             <plugin>
                 <groupId>org.fourthline.lemma</groupId>
                 <artifactId>lemma-maven-plugin</artifactId>
+                <configuration>
+                    <!-- The directories containing Java (test) sources for citation -->
+                    <sourceDirectories>
+                        <sourceDirectory>src/main/java</sourceDirectory>
+                        <sourceDirectory>src/test/java</sourceDirectory>
+                        <sourceDirectory>../demo/android/browser/src/main/java</sourceDirectory>
+                        <sourceDirectory>../demo/android/light/src/main/java</sourceDirectory>
+                    </sourceDirectories>
+                </configuration>
                 <executions>
                     <execution>
                         <id>prepare-package-manual</id>

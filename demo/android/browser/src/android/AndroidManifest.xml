@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="org.fourthline.cling.demo.android.browser">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-sdk android:targetSdkVersion="15"
+              android:minSdkVersion="15"/>
+
+    <application android:icon="@drawable/appicon"
+                 android:label="@string/appName">
+
+        <activity android:name=".BrowserActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
+
+        <!-- Or a custom service configuration, also use this class in bindService()!
+        <service android:name=".BrowserUpnpService"/>
+        -->
+
+    </application>
+
+</manifest>

@@ -1,0 +1,301 @@
+/*
+ * Copyright (C) 2013 4th Line GmbH, Switzerland
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 2 of
+ * the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+package org.fourthline.cling.demo.android.browser;
+
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+import org.fourthline.cling.android.AndroidUpnpService;
+import org.fourthline.cling.android.AndroidUpnpServiceImpl;
+import org.fourthline.cling.model.meta.Device;
+import org.fourthline.cling.model.meta.LocalDevice;
+import org.fourthline.cling.model.meta.RemoteDevice;
+import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.registry.DefaultRegistryListener;
+import org.fourthline.cling.registry.Registry;
+import org.fourthline.cling.transport.SwitchableRouter;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * @author Christian Bauer
+ */
+public class BrowserActivity extends ListActivity {
+
+    private ArrayAdapter<DeviceDisplay> listAdapter;
+
+    private BrowseRegistryListener registryListener = new BrowseRegistryListener();
+
+    private AndroidUpnpService upnpService;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            upnpService = (AndroidUpnpService) service;
+
+            // Clear the list
+            listAdapter.clear();
+
+            // Get ready for future device advertisements
+            upnpService.getRegistry().addListener(registryListener);
+
+            // Now add all devices to the list we already know about
+            for (Device device : upnpService.getRegistry().getDevices()) {
+                registryListener.deviceAdded(device);
+            }
+
+            // Search asynchronously for all devices, they will respond soon
+            upnpService.getControlPoint().search();
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            upnpService = null;
+        }
+    };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Fix the logging integration between java.util.logging and Android internal logging
+        org.seamless.util.logging.LoggingUtil.resetRootHandler(
+            new org.seamless.android.FixedAndroidLogHandler()
+        );
+
+        listAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1);
+        setListAdapter(listAdapter);
+
+        // This will start the UPnP service if it wasn't already started
+        getApplicationContext().bindService(
+            new Intent(this, AndroidUpnpServiceImpl.class),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        );
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (upnpService != null) {
+            upnpService.getRegistry().removeListener(registryListener);
+        }
+        // This will stop the UPnP service if nobody else is bound to it
+        getApplicationContext().unbindService(serviceConnection);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add(0, 0, 0, R.string.searchLAN).setIcon(android.R.drawable.ic_menu_search);
+        menu.add(0, 1, 0, R.string.switchRouter).setIcon(android.R.drawable.ic_menu_revert);
+        menu.add(0, 2, 0, R.string.toggleDebugLogging).setIcon(android.R.drawable.ic_menu_info_details);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 0:
+                searchNetwork();
+                break;
+            case 1:
+                if (upnpService != null) {
+                    SwitchableRouter router = (SwitchableRouter) upnpService.get().getRouter();
+                    if (router.isEnabled()) {
+                        Toast.makeText(this, R.string.disablingRouter, Toast.LENGTH_SHORT).show();
+                        router.disable();
+                    } else {
+                        Toast.makeText(this, R.string.enablingRouter, Toast.LENGTH_SHORT).show();
+                        router.enable();
+                    }
+                }
+                break;
+            case 2:
+                Logger logger = Logger.getLogger("org.fourthline.cling");
+                if (logger.getLevel() != null && !logger.getLevel().equals(Level.INFO)) {
+                    Toast.makeText(this, R.string.disablingDebugLogging, Toast.LENGTH_SHORT).show();
+                    logger.setLevel(Level.INFO);
+                } else {
+                    Toast.makeText(this, R.string.enablingDebugLogging, Toast.LENGTH_SHORT).show();
+                    logger.setLevel(Level.FINEST);
+                }
+                break;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle(R.string.deviceDetails);
+        DeviceDisplay deviceDisplay = (DeviceDisplay)l.getItemAtPosition(position);
+        dialog.setMessage(deviceDisplay.getDetailsMessage());
+        dialog.setButton(
+            getString(R.string.OK),
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            }
+        );
+        dialog.show();
+        TextView textView = (TextView) dialog.findViewById(android.R.id.message);
+        textView.setTextSize(12);
+        super.onListItemClick(l, v, position, id);
+    }
+
+    protected void searchNetwork() {
+        if (upnpService == null)
+            return;
+        Toast.makeText(this, R.string.searchingLAN, Toast.LENGTH_SHORT).show();
+        upnpService.getRegistry().removeAllRemoteDevices();
+        upnpService.getControlPoint().search();
+    }
+
+    protected class BrowseRegistryListener extends DefaultRegistryListener {
+
+        /* Discovery performance optimization for very slow Android devices! */
+        @Override
+        public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {
+            deviceAdded(device);
+        }
+
+        @Override
+        public void remoteDeviceDiscoveryFailed(Registry registry, final RemoteDevice device, final Exception ex) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(
+                        BrowserActivity.this,
+                        "Discovery failed of '" + device.getDisplayString() + "': "
+                            + (ex != null ? ex.toString() : "Couldn't retrieve device/service descriptors"),
+                        Toast.LENGTH_LONG
+                    ).show();
+                }
+            });
+            deviceRemoved(device);
+        }
+        /* End of optimization, you can remove the whole block if your Android handset is fast (>= 600 Mhz) */
+
+        @Override
+        public void remoteDeviceAdded(Registry registry, RemoteDevice device) {
+            deviceAdded(device);
+        }
+
+        @Override
+        public void remoteDeviceRemoved(Registry registry, RemoteDevice device) {
+            deviceRemoved(device);
+        }
+
+        @Override
+        public void localDeviceAdded(Registry registry, LocalDevice device) {
+            deviceAdded(device);
+        }
+
+        @Override
+        public void localDeviceRemoved(Registry registry, LocalDevice device) {
+            deviceRemoved(device);
+        }
+
+        public void deviceAdded(final Device device) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    DeviceDisplay d = new DeviceDisplay(device);
+                    int position = listAdapter.getPosition(d);
+                    if (position >= 0) {
+                        // Device already in the list, re-set new value at same position
+                        listAdapter.remove(d);
+                        listAdapter.insert(d, position);
+                    } else {
+                        listAdapter.add(d);
+                    }
+                }
+            });
+        }
+
+        public void deviceRemoved(final Device device) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    listAdapter.remove(new DeviceDisplay(device));
+                }
+            });
+        }
+    }
+
+    protected class DeviceDisplay {
+
+        Device device;
+
+        public DeviceDisplay(Device device) {
+            this.device = device;
+        }
+
+        public Device getDevice() {
+            return device;
+        }
+
+        public String getDetailsMessage() {
+            StringBuilder sb = new StringBuilder();
+            if (getDevice().isFullyHydrated()) {
+                sb.append(getDevice().getDisplayString());
+                sb.append("\n\n");
+                for (Service service : getDevice().getServices()) {
+                    sb.append(service.getServiceType()).append("\n");
+                }
+            } else {
+                sb.append(getString(R.string.deviceDetailsNotYetAvailable));
+            }
+            return sb.toString();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            DeviceDisplay that = (DeviceDisplay) o;
+            return device.equals(that.device);
+        }
+
+        @Override
+        public int hashCode() {
+            return device.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            String name =
+                getDevice().getDetails() != null && getDevice().getDetails().getFriendlyName() != null
+                    ? getDevice().getDetails().getFriendlyName()
+                    : getDevice().getDisplayString();
+            // Display a little star while the device is being loaded (see performance optimization earlier)
+            return device.isFullyHydrated() ? name : name + " *";
+        }
+    }
+
+}

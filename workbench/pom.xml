@@ -14,6 +14,11 @@
     <artifactId>cling-workbench</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <!-- This module (and its sub-modules) doesn't have a manual -->
+        <lemma.manual>false</lemma.manual>
+    </properties>
+
     <build>
         <plugins>
 
@@ -149,7 +154,7 @@
             <artifactId>ejb-api</artifactId>
             <version>${ejb.api.version}</version>
         </dependency>
-        
+
     </dependencies>
 
 </project>

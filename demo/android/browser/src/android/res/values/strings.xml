@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appName">Cling Browser</string>
+
+    <string name="deviceDetails">Device Details</string>
+
+    <string name="searchLAN">Search LAN</string>
+    <string name="switchRouter">Network On/Off</string>
+    <string name="toggleDebugLogging">Toggle debug logging</string>
+    <string name="OK">OK</string>
+
+    <string name="searchingLAN">Searching LAN for UPnP devices...</string>
+    <string name="enablingRouter">Enabling network router...</string>
+    <string name="disablingRouter">Disabling network router...</string>
+    <string name="enablingDebugLogging">Enabling debug logging...</string>
+    <string name="disablingDebugLogging">Disabling debug logging...</string>
+    <string name="deviceDetailsNotYetAvailable">Device details are being discovered, please wait.</string>
+
+</resources>
