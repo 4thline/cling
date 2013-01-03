@@ -1,0 +1,119 @@
+<div class="section" id="section.ConfiguringTransports"
+     xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Configuring network transports</div>
+    <div class="content">
+
+        <p>
+            Cling has to accept and make HTTP requests to implement UPnP discovery, action processing, and
+            GENA eventing. This is the job of the <code>StreamServer</code> and <code>StreamClient</code>
+            implementations, working together with the <code>Router</code> as the Cling network transport
+            layer.
+        </p>
+
+        <p>
+            For the <code>StreamClient</code> SPI, the following implementations are bundled with Cling:
+        </p>
+
+        <dl>
+            <dt><code>org.fourthline.cling.transport.impl.StreamClientImpl</code> (default)</dt>
+            <dd>
+                This implementation uses the JDK's <code>HTTPURLConnection</code>, it doesn't require any additional
+                libraries. Note that Cling has to customize (with an ugly hack, really) the VM's
+                <code>URLStreamHandlerFactory</code> to support additional HTTP methods such as <code>NOTIFY</code>,
+                <code>SUBSCRIBE</code>, and <code>UNSUBSCRIBE</code>. The designers of the JDK do not understand HTTP
+                very well and made this extremely difficult to extend. Cling's patch only works if no other code in your
+                environment has already set a custom <code>URLStreamHandlerFactory</code>, you will get an exception
+                on startup if this issue is detected; then you have to switch to another <code>StreamClient</code>
+                implementation. Note that this implementation does <em>NOT WORK</em> on Android, the
+                <code>URLStreamHandlerFactory</code> can't be patched on Android!
+            </dd>
+            <dt><code>org.fourthline.cling.transport.impl.apache.StreamClientImpl</code></dt>
+            <dd>
+                This implementation relies on <em>Apache HTTP Client 4.2</em>, you need the
+                <code>org.apache.httpcomponents:httpclient:4.2</code> artifact on your classpath to use it. Note that
+                this implementation does <em>NOT WORK</em> on Android! The hardcoded version of
+                <code>org.apache.http.*</code> on Android is 4.0 and can't ever be upgraded.
+            </dd>
+            <dt><code>org.fourthline.cling.transport.impl.jetty.StreamClientImpl</code></dt>
+            <dd>
+                This implementation is based on the <em>Jetty 8</em> HTTP client, you need the artifact
+                <code>org.eclipse.jetty:jetty-client:8.1</code> on your classpath to use it. This implementation works
+                in any environment, including Android.
+            </dd>
+        </dl>
+
+        <p>
+            For the <code>StreamServer</code> SPI, the following implementations are bundled with Cling:
+        </p>
+
+        <dl>
+            <dt><code>org.fourthline.cling.transport.impl.StreamServerImpl</code> (default)</dt>
+            <dd>
+                This implementation uses the built-in webserver of the Sun JDK 6
+                (<code>com.sun.net.httpserver.HttpServer</code>), hence, it does <em>NOT WORK</em> in an
+                Android environment.
+            </dd>
+            <dt><code>org.fourthline.cling.transport.impl.apache.StreamServerImpl</code></dt>
+            <dd>
+                This implementation relies on <em>Apache HTTP Components 4.2</em>, you need the
+                <code>org.apache.httpcomponents:httpcore:4.2</code> artifact on your classpath to use it. Note that
+                this implementation does <em>NOT WORK</em> on Android! The hardcoded version of
+                <code>org.apache.http.*</code> on Android is 4.0 and can't ever be upgraded.
+            </dd>
+            <dt><code>org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl</code></dt>
+            <dd>
+                This implementation is based on the standard <em>Servlet 3.0</em> API and can be used in any environment
+                with a compatible servlet container. It requires a <code>ServletContainerAdapter</code> to integrate
+                with the servlet container, the bundled <code>JettyServletContainer</code> is such an adapter for a
+                standalone <em>Jetty 8</em> server. You need the artifact
+                <code>org.eclipse.jetty:jetty-servlet:8.1</code> on your classpath to use it. This implementation works
+                in any environment, including Android. For other containers, write your own adapter and provide it
+                to the <code>AsyncServletStreamServerConfigurationImpl</code>.
+            </dd>
+        </dl>
+
+        <p>
+            Each <code>StreamClient</code> and <code>StreamServer</code> implementation is paired with an implementation
+            of <code>StreamClientConfiguration</code> and <code>StreamServerConfiguration</code>. This is how you
+            override the Cling network transport configuration:
+        </p>
+
+        <div><pre class="prettyprint"><![CDATA[...
+public class MyUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
+
+    @Override
+    protected Namespace createNamespace() {
+        return new Namespace("/upnp"); // This will be the servlet context path
+    }
+
+    @Override
+    public StreamClient createStreamClient() {
+        return new org.fourthline.cling.transport.impl.jetty.StreamClientImpl(
+            new org.fourthline.cling.transport.impl.jetty.StreamClientConfigurationImpl(
+                getSyncProtocolExecutor()
+            )
+        );
+    }
+
+    @Override
+    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
+        return new org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl(
+            new org.fourthline.cling.transport.impl.AsyncServletStreamServerConfigurationImpl(
+                org.fourthline.cling.transport.impl.jetty.JettyServletContainer.INSTANCE,
+                networkAddressFactory.getStreamListenPort()
+            )
+        );
+    }
+
+}]]></pre>
+        </div>
+
+        <p>
+            The above configuration will use the Jetty client and the Jetty servlet container. The
+            <code>JettyServletContainer.INSTANCE</code> adapter is managing a standalone singleton server, it is
+            started and stopped when Cling starts and stops the UPnP stack. If you have run Cling with an existing,
+            external servlet container, provide a custom adapter.
+        </p>
+
+    </div>
+</div>

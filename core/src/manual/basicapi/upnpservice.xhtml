@@ -84,33 +84,37 @@
     // NETWORK
     public NetworkAddressFactory createNetworkAddressFactory();
 
+    public StreamClient createStreamClient();
+    public StreamServer createStreamServer(NetworkAddressFactory naf);
+
+    public MulticastReceiver createMulticastReceiver(NetworkAddressFactory naf);
+    public DatagramIO createDatagramIO(NetworkAddressFactory naf);
+
+    // PROCESSORS
     public DatagramProcessor getDatagramProcessor();
     public SOAPActionProcessor getSoapActionProcessor();
     public GENAEventProcessor getGenaEventProcessor();
-
-    public StreamClient createStreamClient();
-    public MulticastReceiver createMulticastReceiver(NetworkAddressFactory naf);
-    public DatagramIO createDatagramIO(NetworkAddressFactory naf);
-    public StreamServer createStreamServer(NetworkAddressFactory naf);
-
-    public Executor getMulticastReceiverExecutor();
-    public Executor getDatagramIOExecutor();
-    public Executor getStreamServerExecutor();
 
     // DESCRIPTORS
     public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10();
     public ServiceDescriptorBinder getServiceDescriptorBinderUDA10();
 
-    // PROTOCOL
+    // EXECUTORS
+    public Executor getMulticastReceiverExecutor();
+    public Executor getDatagramIOExecutor();
+    public Executor getStreamServerExecutor();
     public Executor getAsyncProtocolExecutor();
     public Executor getSyncProtocolExecutor();
-
-    // REGISTRY
-    public Namespace getNamespace();
     public Executor getRegistryMaintainerExecutor();
     public Executor getRegistryListenerExecutor();
 
-}]]></pre></div>
+    // REGISTRY
+    public Namespace getNamespace();
+    public int getRegistryMaintenanceIntervalMillis();
+    ...
+
+}]]></pre>
+                </div>
 
                 <p>
                     This is quite an extensive SPI but you typically won't implement it from scratch. Overriding
@@ -129,36 +133,51 @@
                             The <code>NetworkAddressFactory</code> provides the network interfaces, ports, and
                             multicast settings which are used by the UPnP stack. At the time of writing, the following
                             interfaces and IP addresses are ignored by the default configuration: any IPv6 interfaces
-                            and addresses, interfaces whose name starts with "vmnet", and the local loopback.
-                            Otherwise, all interfaces and their TCP/IP addresses are used and bound.
+                            and addresses, interfaces whose name is "vmnet*", "vnic*", "*virtual*", or "ppp*", and the
+                            local loopback. Otherwise, all interfaces and their TCP/IP addresses are used and bound.
                         </p>
                         <p>
                             You can set the system property <code>org.fourthline.cling.network.useInterfaces</code> to
-                            provide a comma-separated list of network interfaces you'd like to bind excusively.
+                            provide a comma-separated list of network interfaces you'd like to bind exclusively.
                             Additionally, you can restrict the actual TCP/IP addresses to which the stack will
                             bind with a comma-separated list of IP address provided through the
                             <code>org.fourthline.cling.network.useAddresses</code> system property.
                         </p>
                         <p>
-                            Furthermore, the configuration declares the network-level message listeners and
+                            Furthermore, the configuration produces the network-level message receivers and
                             senders, that is, the implementations used by the network <code>Router</code>.
                         </p>
                         <p>
-                            Stream messages are TCP HTTP requests and responses, the bundled implementation
+                            Stream messages are TCP/HTTP requests and responses, the default configuration
                             will use the Sun JDK 6.0 webserver to listen for HTTP requests, and it sends
-                            HTTP requests through the standard JDK <code>HttpURLConnection</code>.
+                            HTTP requests with the standard JDK <code>HttpURLConnection</code>. This means
+                            there are by default no additional dependencies on any HTTP server/library by Cling
+                            Core. However, if you are trying to use Cling Core in a runtime container such as Tomcat,
+                            JBoss AS, or Glassfish, you might run into an error on startup. The error tells you that
+                            Cling couldn't use the Java JDK's <code>HTTPURLConnection</code> for HTTP client operations.
+                            This is an old and badly designed part of the JDK: Only "one application" in the whole JVM
+                            can configure URL connections. If your container is already using the
+                            <code>HTTPURLConnection</code>, you have to switch Cling to an alternative HTTP client. See
+                            <a href="#section.ConfiguringTransports">Configuring network transports</a> for other
+                            available options and how to change various network-related settings.
                         </p>
                         <p>
                             UDP unicast and multicast datagrams are received, parsed, and send by a custom
                             implementation bundled with Cling Core that does not require any particular Sun
-                            JDK classes.
+                            JDK classes, they should work an all platforms and in any environment.
                         </p>
+                    </dd>
+
+                    <dt>Processors</dt>
+                    <dd>
                         <p>
-                            SOAP action and event messages are handled by configurable processors, you can provide
-                            alternative implementations if necessary, see
+                            The payload of SSDP datagrams is handled by a default processor, you rarely have to
+                            customize it. SOAP action and GENA event messages are also handled by configurable
+                            processors,
+                            you can provide alternative implementations if necessary, see
                             <a href="#section.SwitchingXMLProcessors">Switching XML processors</a>. For best
                             interoperability with other (broken) UPnP stacks, consider switching from the strictly
-                            specification-compliant default processors to the more lenient alternatives.
+                            specification-compliant default SOAP and GENA processors to the more lenient alternatives.
                         </p>
                     </dd>
 
@@ -185,59 +204,24 @@
                             have to customize any of these settings.
                         </p>
                     </dd>
+
+                    <dt>Registry</dt>
+                    <dd>
+                        <p>
+                            Your local device and service XML descriptors and icons can be served with a given
+                            <code>Namespace</code>, defining how the URL paths of local resources is constructed.
+                            You can also configure how frequently Cling will check its <code>Registry</code> for
+                            outdated devices and expired GENA subscriptions.
+                        </p>
+                    </dd>
                 </dl>
 
                 <p>
-                    If you are trying to use Cling Core in a runtime container such as Tomcat, JBoss AS,
-                    or Glassfish, you might run into an error on startup. The error tells you that
-                    Cling couldn't use the Java JDK's <code>HTTPURLConnection</code> for HTTP
-                    client operations. This is an old and badly designed part of the JDK: Only "one
-                    application" in the whole JVM can configure it. If your container is already using
-                    the <code>HTTPURLConnection</code>, you have to switch Cling to an alternative
-                    HTTP client, e.g. the other bundled implementation based on Apache HTTP Core.
-                </p>
-
-                <p>
-                    Furthermore, as mentioned earlier, Cling Core provides HTTP services using, by default,
-                    the SUN JDK 6.x bundled webserver. If you are not deploying with the Sun JDK, or if you
-                    also switched the HTTP client already to Apache HTTP Core, you probably also have or
-                    want to switch the HTTP server.
-                </p>
-
-                <p>
-                    This is how you override the default network transport configuration:
-                </p>
-
-                <div><pre class="prettyprint"><![CDATA[...
-import org.fourthline.cling.transport.impl.apache.StreamClientConfigurationImpl;
-import org.fourthline.cling.transport.impl.apache.StreamClientImpl;
-import org.fourthline.cling.transport.impl.apache.StreamServerConfigurationImpl;
-import org.fourthline.cling.transport.impl.apache.StreamServerImpl;
-
-public class MyUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
-
-    @Override
-    public StreamClient createStreamClient() {
-        return new StreamClientImpl(new StreamClientConfigurationImpl());
-    }
-
-    @Override
-    public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
-        return new StreamServerImpl(
-                new StreamServerConfigurationImpl(
-                        networkAddressFactory.getStreamListenPort()
-                )
-        );
-    }
-
-}]]></pre></div>
-                <p>
-                    Don't forget to add the Apache HTTP Core libraries to your classpath or as dependencies
-                    in your <code>pom.xml</code>!
+                    There are various other, rarely needed, configuration options available for customizing Cling's
+                    behavior, see the Javadoc of <code>UpnpConfiguration</code>.
                 </p>
 
             </div>
-
 
         </div>
 
@@ -286,7 +270,7 @@ public class MyUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration 
 
                 <p>
                     The local registry of local services known to the UPnP stack naturally also sends messages,
-                    such as alive and byebye notifications. Also, if you write a UPnP control point various search,
+                    such as ALIVE and BYEBYE notifications. Also, if you write a UPnP control point, various search,
                     control, and eventing messages are send by the local UPnP stack. The protocol factory decouples
                     the message sender (registry, control point) from the actual creation, preparation, and
                     transmission of the messages.
