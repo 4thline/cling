@@ -84,6 +84,7 @@ public class SendingSearch extends SendingAsync {
         log.fine("Executing search for target: " + searchTarget.getString() + " with MX seconds: " + getMxSeconds());
 
         OutgoingSearchRequest msg = new OutgoingSearchRequest(searchTarget, getMxSeconds());
+        prepareOutgoingSearchRequest(msg);
 
         for (int i = 0; i < getBulkRepeat(); i++) {
             try {
@@ -107,6 +108,12 @@ public class SendingSearch extends SendingAsync {
 
     public int getBulkIntervalMilliseconds() {
         return 500; // That should be plenty on an ethernet LAN
+    }
+
+    /**
+     * Override this to edit the outgoing message, e.g. by adding headers.
+     */
+    protected void prepareOutgoingSearchRequest(OutgoingSearchRequest message) {
     }
 
 }

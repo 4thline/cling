@@ -15,7 +15,7 @@
             <div class="content">
 
                 <p>
-                    By default, Cling will add all necessary headers to all outbound requeset messages.
+                    By default, Cling will add all necessary headers to all outbound request messages.
                     For HTTP-based messages such as descriptor retrieval, action invocation, and GENA
                     messages, the <code>User-Agent</code> HTTP header will be set to a default value,
                     obtained from your <code>StreamClientConfiguration</code>.
@@ -80,6 +80,16 @@ ActionInvocation actionInvocation =
                     Any of these settings only affect outbound request messages! Any outbound
                     response to a remote request will have only headers required by the UPnP protocols.
                     See the next section on how to customize response headers for remote action requests.
+                </p>
+
+                <p>
+                    Very rarely you have to customize SSDP (MSEARCH and its response) messages. First,
+                    subclass the default <code>ProtocolFactoryImpl</code> and override the instantiation
+                    of the protocols as necessary. For example, override <code>createSendingSearch()</code>
+                    and return your own instance of the <code>SendingSearch</code> protocol.
+                    Next, override <code>prepareOutgoingSearchRequest(OutgoingSearchRequest)</code> of
+                    the <code>SendingSearch</code> protocol and modify the message. The same procedure can
+                    be applied to customize search responses with the <code>ReceivingSearch</code> protocol.
                 </p>
 
             </div>

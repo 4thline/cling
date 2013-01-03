@@ -90,19 +90,31 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
             switch (incomingRequest.getOperation().getMethod()) {
                 case NOTIFY:
                     return isByeBye(incomingRequest) || isSupportedServiceAdvertisement(incomingRequest)
-                            ? new ReceivingNotification(getUpnpService(), incomingRequest) : null;
+                            ? createReceivingNotification(incomingRequest) : null;
                 case MSEARCH:
-                    return new ReceivingSearch(getUpnpService(), incomingRequest);
+                    return createReceivingSearch(incomingRequest);
             }
 
         } else if (message.getOperation() instanceof UpnpResponse) {
             IncomingDatagramMessage<UpnpResponse> incomingResponse = message;
 
             return isSupportedServiceAdvertisement(incomingResponse)
-                    ? new ReceivingSearchResponse(getUpnpService(), incomingResponse) : null;
+                    ? createReceivingSearchResponse(incomingResponse) : null;
         }
 
         throw new ProtocolCreationException("Protocol for incoming datagram message not found: " + message);
+    }
+
+    protected ReceivingAsync createReceivingNotification(IncomingDatagramMessage<UpnpRequest> incomingRequest) {
+        return new ReceivingNotification(getUpnpService(), incomingRequest);
+    }
+
+    protected ReceivingAsync createReceivingSearch(IncomingDatagramMessage<UpnpRequest> incomingRequest) {
+        return new ReceivingSearch(getUpnpService(), incomingRequest);
+    }
+
+    protected ReceivingAsync createReceivingSearchResponse(IncomingDatagramMessage<UpnpResponse> incomingResponse) {
+        return new ReceivingSearchResponse(getUpnpService(), incomingResponse);
     }
 
     // DO NOT USE THE PARSED/TYPED MSG HEADERS! THIS WOULD DEFEAT THE PURPOSE OF THIS OPTIMIZATION!
@@ -138,27 +150,25 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
 
         if (message.getOperation().getMethod().equals(UpnpRequest.Method.GET)) {
 
-            return new ReceivingRetrieval(getUpnpService(), message);
+            return createReceivingRetrieval(message);
 
         } else if (getUpnpService().getConfiguration().getNamespace().isControlPath(message.getUri())) {
 
             if (message.getOperation().getMethod().equals(UpnpRequest.Method.POST))
-                return new ReceivingAction(getUpnpService(), message);
+                return createReceivingAction(message);
 
         } else if (getUpnpService().getConfiguration().getNamespace().isEventSubscriptionPath(message.getUri())) {
 
             if (message.getOperation().getMethod().equals(UpnpRequest.Method.SUBSCRIBE)) {
-
-                return new ReceivingSubscribe(getUpnpService(), message);
-
+                return createReceivingSubscribe(message);
             } else if (message.getOperation().getMethod().equals(UpnpRequest.Method.UNSUBSCRIBE)) {
-                return new ReceivingUnsubscribe(getUpnpService(), message);
+                return createReceivingUnsubscribe(message);
             }
 
         } else if (getUpnpService().getConfiguration().getNamespace().isEventCallbackPath(message.getUri())) {
 
             if (message.getOperation().getMethod().equals(UpnpRequest.Method.NOTIFY))
-                return new ReceivingEvent(getUpnpService(), message);
+                return createReceivingEvent(message);
 
         } else {
 
@@ -174,7 +184,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
                 );
                 if (getUpnpService().getConfiguration().getNamespace().isEventCallbackPath(message.getUri())
                     && message.getOperation().getMethod().equals(UpnpRequest.Method.NOTIFY))
-                    return new ReceivingEvent(getUpnpService(), message);
+                    return createReceivingEvent(message);
             }
 
         }
@@ -212,5 +222,25 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
 
     public SendingEvent createSendingEvent(LocalGENASubscription subscription) {
         return new SendingEvent(getUpnpService(), subscription);
+    }
+
+    protected ReceivingRetrieval createReceivingRetrieval(StreamRequestMessage message) {
+        return new ReceivingRetrieval(getUpnpService(), message);
+    }
+
+    protected ReceivingAction createReceivingAction(StreamRequestMessage message) {
+        return new ReceivingAction(getUpnpService(), message);
+    }
+
+    protected ReceivingSubscribe createReceivingSubscribe(StreamRequestMessage message) {
+        return new ReceivingSubscribe(getUpnpService(), message);
+    }
+
+    protected ReceivingUnsubscribe createReceivingUnsubscribe(StreamRequestMessage message) {
+        return new ReceivingUnsubscribe(getUpnpService(), message);
+    }
+
+    protected ReceivingEvent createReceivingEvent(StreamRequestMessage message) {
+        return new ReceivingEvent(getUpnpService(), message);
     }
 }
