@@ -58,10 +58,13 @@ import java.util.logging.Logger;
 /**
  * @author Christian Bauer
  */
+// DOC:CLASS
 public class LightActivity extends Activity implements PropertyChangeListener {
 
+    // DOC:CLASS
     private static final Logger log = Logger.getLogger(LightActivity.class.getName());
 
+    // DOC:SERVICE_BINDING
     private AndroidUpnpService upnpService;
 
     private UDN udn = new UDN(UUID.randomUUID()); // TODO: Not stable!
@@ -84,7 +87,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
                     switchPowerService = getSwitchPowerService();
 
                 } catch (Exception ex) {
-                    log.log(Level.SEVERE, "Creating demo device failed", ex);
+                    log.log(Level.SEVERE, "Creating BinaryLight device failed", ex);
                     Toast.makeText(LightActivity.this, R.string.createDeviceFailed, Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -107,11 +110,12 @@ public class LightActivity extends Activity implements PropertyChangeListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        // DOC:LOGGING
         // Fix the logging integration between java.util.logging and Android internal logging
         org.seamless.util.logging.LoggingUtil.resetRootHandler(
             new org.seamless.android.FixedAndroidLogHandler()
         );
+        // DOC:LOGGING
 
         setContentView(R.layout.light);
 
@@ -134,6 +138,19 @@ public class LightActivity extends Activity implements PropertyChangeListener {
 
         getApplicationContext().unbindService(serviceConnection);
     }
+
+    protected LocalService<SwitchPower> getSwitchPowerService() {
+        if (upnpService == null)
+            return null;
+
+        LocalDevice binaryLightDevice;
+        if ((binaryLightDevice = upnpService.getRegistry().getLocalDevice(udn, true)) == null)
+            return null;
+
+        return (LocalService<SwitchPower>)
+                binaryLightDevice.findService(new UDAServiceType("SwitchPower", 1));
+    }
+    // DOC:SERVICE_BINDING
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,6 +188,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
         return false;
     }
 
+    // DOC:PROPERTY_CHANGE
     public void propertyChange(PropertyChangeEvent event) {
         // This is regular JavaBean eventing, not UPnP eventing!
         if (event.getPropertyName().equals("status")) {
@@ -182,26 +200,16 @@ public class LightActivity extends Activity implements PropertyChangeListener {
     protected void setLightbulb(final boolean on) {
         runOnUiThread(new Runnable() {
             public void run() {
-                ImageView imageView = (ImageView) findViewById(R.id.demo_imageview);
+                ImageView imageView = (ImageView) findViewById(R.id.light_imageview);
                 imageView.setImageResource(on ? R.drawable.light_on : R.drawable.light_off);
                 // You can NOT externalize this color into /res/values/colors.xml. Go on, try it!
                 imageView.setBackgroundColor(on ? Color.parseColor("#9EC942") : Color.WHITE);
             }
         });
     }
+    // DOC:PROPERTY_CHANGE
 
-    protected LocalService<SwitchPower> getSwitchPowerService() {
-        if (upnpService == null)
-            return null;
-
-        LocalDevice binaryLightDevice;
-        if ((binaryLightDevice = upnpService.getRegistry().getLocalDevice(udn, true)) == null)
-            return null;
-
-        return (LocalService<SwitchPower>)
-                binaryLightDevice.findService(new UDAServiceType("SwitchPower", 1));
-    }
-
+    // DOC:CREATE_DEVICE
     protected LocalDevice createDevice()
             throws ValidationException, LocalServiceBindingException {
 
@@ -212,7 +220,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
                 new DeviceDetails(
                         "Friendly Binary Light",
                         new ManufacturerDetails("ACME"),
-                        new ModelDetails("AndroidLight", "A demo light with on/off switch.", "v1")
+                        new ModelDetails("AndroidLight", "A light with on/off switch.", "v1")
                 );
 
         LocalService service =
@@ -230,6 +238,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
                 service
         );
     }
+    // DOC:CREATE_DEVICE
 
     protected Icon createDefaultDeviceIcon() {
         return new Icon(
@@ -286,4 +295,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
                         "04408001003EE42959E2CD74A60000000049454E44AE426082"
         );
     }
+    // DOC:CLASS_END
+    // ...
 }
+// DOC:CLASS_END

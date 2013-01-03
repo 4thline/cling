@@ -19,31 +19,35 @@ package org.fourthline.cling.demo.android.browser;
 
 import org.fourthline.cling.android.AndroidUpnpServiceConfiguration;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
+import org.fourthline.cling.model.types.ServiceType;
+import org.fourthline.cling.model.types.UDAServiceType;
 
 /**
  * @author Christian Bauer
  */
+// DOC:CLASS
 public class BrowserUpnpService extends AndroidUpnpServiceImpl {
 
     @Override
     protected AndroidUpnpServiceConfiguration createConfiguration() {
         return new AndroidUpnpServiceConfiguration() {
 
-            /* The only purpose of this class is to show you how you'd
-               configure the AndroidUpnpServiceImpl in your application:
-
+            // DOC:REGISTRY
             @Override
             public int getRegistryMaintenanceIntervalMillis() {
                 return 7000;
             }
+            // DOC:REGISTRY
 
+            // DOC:SERVICE_TYPE
             @Override
             public ServiceType[] getExclusiveServiceTypes() {
                 return new ServiceType[]{
                     new UDAServiceType("SwitchPower")
                 };
             }
-            */
+            // DOC:SERVICE_TYPE
         };
     }
 }
+// DOC:CLASS

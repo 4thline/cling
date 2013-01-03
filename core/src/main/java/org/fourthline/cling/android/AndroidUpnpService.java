@@ -55,6 +55,7 @@ import org.fourthline.cling.registry.Registry;
  *<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
  *<uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
  *<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+ *<uses-permission android:name="android.permission.WAKE_LOCK"/>
  *}</pre>
  * <p>
  * You also have to add the application service component:
@@ -68,6 +69,7 @@ import org.fourthline.cling.registry.Registry;
  *
  * @author Christian Bauer
  */
+// DOC:CLASS
 public interface AndroidUpnpService {
 
     /**
@@ -91,3 +93,4 @@ public interface AndroidUpnpService {
     public ControlPoint getControlPoint();
 
 }
+// DOC:CLASS

@@ -63,6 +63,7 @@
                     <sourceDirectories>
                         <sourceDirectory>src/main/java</sourceDirectory>
                         <sourceDirectory>src/test/java</sourceDirectory>
+                        <sourceDirectory>../demo/android/browser/src/android</sourceDirectory>
                         <sourceDirectory>../demo/android/browser/src/main/java</sourceDirectory>
                         <sourceDirectory>../demo/android/light/src/main/java</sourceDirectory>
                     </sourceDirectories>

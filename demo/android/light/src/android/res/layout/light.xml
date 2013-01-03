@@ -4,7 +4,7 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent">
     <ImageView
-            android:id="@+id/demo_imageview"
+            android:id="@+id/light_imageview"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:scaleType="center"/>

@@ -49,8 +49,11 @@ import java.util.logging.Logger;
 /**
  * @author Christian Bauer
  */
+// DOC:CLASS
 public class BrowserActivity extends ListActivity {
 
+    // DOC:CLASS
+    // DOC:SERVICE_BINDING
     private ArrayAdapter<DeviceDisplay> listAdapter;
 
     private BrowseRegistryListener registryListener = new BrowseRegistryListener();
@@ -90,8 +93,10 @@ public class BrowserActivity extends ListActivity {
         org.seamless.util.logging.LoggingUtil.resetRootHandler(
             new org.seamless.android.FixedAndroidLogHandler()
         );
+        // Now you can enable logging as needed for various categories of Cling:
+        // Logger.getLogger("org.fourthline.cling").setLevel(Level.INFO);
 
-        listAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1);
+        listAdapter = new ArrayAdapter<DeviceDisplay>(this, android.R.layout.simple_list_item_1);
         setListAdapter(listAdapter);
 
         // This will start the UPnP service if it wasn't already started
@@ -111,12 +116,16 @@ public class BrowserActivity extends ListActivity {
         // This will stop the UPnP service if nobody else is bound to it
         getApplicationContext().unbindService(serviceConnection);
     }
+    // DOC:SERVICE_BINDING
 
+    // DOC:MENU
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, 0, 0, R.string.searchLAN).setIcon(android.R.drawable.ic_menu_search);
+        // DOC:OPTIONAL
         menu.add(0, 1, 0, R.string.switchRouter).setIcon(android.R.drawable.ic_menu_revert);
         menu.add(0, 2, 0, R.string.toggleDebugLogging).setIcon(android.R.drawable.ic_menu_info_details);
+        // DOC:OPTIONAL
         return true;
     }
 
@@ -124,8 +133,13 @@ public class BrowserActivity extends ListActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 0:
-                searchNetwork();
+                if (upnpService == null)
+                    break;
+                Toast.makeText(this, R.string.searchingLAN, Toast.LENGTH_SHORT).show();
+                upnpService.getRegistry().removeAllRemoteDevices();
+                upnpService.getControlPoint().search();
                 break;
+            // DOC:OPTIONAL
             case 1:
                 if (upnpService != null) {
                     SwitchableRouter router = (SwitchableRouter) upnpService.get().getRouter();
@@ -148,9 +162,11 @@ public class BrowserActivity extends ListActivity {
                     logger.setLevel(Level.FINEST);
                 }
                 break;
+            // DOC:OPTIONAL
         }
         return false;
     }
+    // DOC:MENU
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -169,14 +185,6 @@ public class BrowserActivity extends ListActivity {
         TextView textView = (TextView) dialog.findViewById(android.R.id.message);
         textView.setTextSize(12);
         super.onListItemClick(l, v, position, id);
-    }
-
-    protected void searchNetwork() {
-        if (upnpService == null)
-            return;
-        Toast.makeText(this, R.string.searchingLAN, Toast.LENGTH_SHORT).show();
-        upnpService.getRegistry().removeAllRemoteDevices();
-        upnpService.getControlPoint().search();
     }
 
     protected class BrowseRegistryListener extends DefaultRegistryListener {
@@ -260,6 +268,7 @@ public class BrowserActivity extends ListActivity {
             return device;
         }
 
+        // DOC:DETAILS
         public String getDetailsMessage() {
             StringBuilder sb = new StringBuilder();
             if (getDevice().isFullyHydrated()) {
@@ -273,6 +282,7 @@ public class BrowserActivity extends ListActivity {
             }
             return sb.toString();
         }
+        // DOC:DETAILS
 
         @Override
         public boolean equals(Object o) {
@@ -297,5 +307,7 @@ public class BrowserActivity extends ListActivity {
             return device.isFullyHydrated() ? name : name + " *";
         }
     }
-
+    // DOC:CLASS_END
+    // ...
 }
+// DOC:CLASS_END

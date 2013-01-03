@@ -62,21 +62,6 @@
             <artifactId>cling-mediarenderer</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.fourthline.cling</groupId>
-            <artifactId>cling-osgi-basedriver</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.fourthline.cling</groupId>
-            <artifactId>cling-osgi-samples-basicdevice</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.fourthline.cling</groupId>
-            <artifactId>cling-osgi-samples-lights</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
 
 </project>
