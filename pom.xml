@@ -9,7 +9,7 @@
     <groupId>org.fourthline.cling</groupId>
     <artifactId>cling</artifactId>
     <packaging>pom</packaging>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0-alpha1</version>
 
     <modules>
         <module>core</module>
@@ -71,7 +71,8 @@
         <maven.compiler.source>6</maven.compiler.source>
         <maven.compiler.target>6</maven.compiler.target>
 
-        <seamless.version>1.0-SNAPSHOT</seamless.version>
+        <seamless.version>1.0-alpha1</seamless.version>
+        <lemma.version>1.1-SNAPSHOT</lemma.version>
         <testng.version>6.2</testng.version>
         <apache.httpcomponents.httpclient.version>4.2.2</apache.httpcomponents.httpclient.version>
         <apache.httpcomponents.httpcore.version>4.2.3</apache.httpcomponents.httpcore.version>
@@ -261,7 +262,7 @@
                 <plugin>
                     <groupId>org.fourthline.lemma</groupId>
                     <artifactId>lemma-maven-plugin</artifactId>
-                    <version>1.1-SNAPSHOT</version>
+                    <version>${lemma.version}</version>
                     <configuration>
                         <!-- Generate unique identifiers for all citations
                         TODO: Docs cleanup necessary for this
