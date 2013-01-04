@@ -1,18 +1,16 @@
 /*
- * Copyright (C) 2011 4th Line GmbH, Switzerland
+ * Copyright (C) 2013 4th Line GmbH, Switzerland
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 2 of
- * the License, or (at your option) any later version.
+ * The contents of this file are subject to the terms of either the GNU
+ * Lesser General Public License Version 2 or later ("LGPL") or the
+ * Common Development and Distribution License Version 1 or later
+ * ("CDDL") (collectively, the "License"). You may not use this file
+ * except in compliance with the License. See LICENSE.txt for more
+ * information.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
 package org.fourthline.cling.support.shared.log;

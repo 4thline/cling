@@ -1,3 +1,17 @@
+/*
+ * Copyright (C) 2013 4th Line GmbH, Switzerland
+ *
+ * The contents of this file are subject to the terms of either the GNU
+ * Lesser General Public License Version 2 or later ("LGPL") or the
+ * Common Development and Distribution License Version 1 or later
+ * ("CDDL") (collectively, the "License"). You may not use this file
+ * except in compliance with the License. See LICENSE.txt for more
+ * information.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ */
 package example.controlpoint;
 
 import example.binarylight.BinaryLightSampleData;
@@ -43,7 +57,7 @@ import static org.testng.Assert.assertEquals;
  * <a class="citation" href="javacode://this#invokeActions(LocalDevice)" id="ai_findservice" style="include: FINDSERVICE"/>
  * <p>
  * This method will search the device and all its embedded devices for a service with the given
- * identififer and returns either the found <code>Service</code> or <code>null</code>. The Cling
+ * identifier and returns either the found <code>Service</code> or <code>null</code>. The Cling
  * metamodel is thread-safe, so you can share an instance of <code>Service</code> or
  * <code>Action</code> and access it concurrently.
  * </p>
