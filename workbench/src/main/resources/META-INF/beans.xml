@@ -8,5 +8,8 @@
 
     <alternatives>
         <class>org.fourthline.cling.workbench.WorkbenchRouter</class>
+        <!-- See pom.xml
+        <class>org.fourthline.cling.workbench.WorkbenchUpnpConfiguration</class>
+        -->
     </alternatives>
 </beans>
