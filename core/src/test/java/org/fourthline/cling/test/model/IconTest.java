@@ -23,6 +23,8 @@ import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.test.data.SampleData;
 import org.testng.annotations.Test;
 
+import java.net.URI;
+
 import static org.testng.Assert.*;
 
 /**
@@ -37,9 +39,9 @@ public class IconTest {
             new UDADeviceType("Foo", 1),
             new DeviceDetails("Foo"),
             new Icon[]{
-                new Icon(null, 0, 0, 0, "foo"),
-                new Icon("foo/bar", 0, 0, 0, "foo"),
-                new Icon("foo/bar", 123, 456, 0, "foo")
+                new Icon(null, 0, 0, 0, URI.create("foo")),
+                new Icon("foo/bar", 0, 0, 0, URI.create("foo")),
+                new Icon("foo/bar", 123, 456, 0, URI.create("foo"))
             },
             new RemoteService[0]
         );
@@ -53,7 +55,7 @@ public class IconTest {
             new UDADeviceType("Foo", 1),
             new DeviceDetails("Foo"),
             new Icon[]{
-                new Icon("image/png", 123, 123, 8, "urn:not_a_URL"),
+                new Icon("image/png", 123, 123, 8, URI.create("urn:not_a_URL")),
             },
             new RemoteService[0]
         );

@@ -85,8 +85,8 @@ public class SampleDeviceRoot extends SampleDevice {
     @Override
     public Icon[] getIcons() {
         return new Icon[]{
-                new Icon("image/png", 32, 32, 8, "icon.png"),
-                new Icon("image/png", 32, 32, 8, "icon2.png")
+                new Icon("image/png", 32, 32, 8, URI.create("icon.png")),
+                new Icon("image/png", 32, 32, 8, URI.create("icon2.png"))
         };
     }
 

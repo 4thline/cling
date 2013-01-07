@@ -59,41 +59,63 @@ public class Icon implements Validatable {
     // Package mutable state
     private Device device;
 
-    public Icon(String mimeType, int width, int height, int depth, String uri) throws IllegalArgumentException {
-        this(mimeType, width, height, depth, URI.create(uri), "");
-    }
-
+    /**
+     * Used internally by Cling when {@link RemoteDevice} is discovered, you shouldn't have to call this.
+     */
     public Icon(String mimeType, int width, int height, int depth, URI uri) {
-        this(mimeType, width, height, depth, uri, "");
+        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth, uri, null);
     }
 
     /**
-     * @param data The icon bytes encoded as BinHex.
+     * Use this constructor if your local icon data can be resolved on the classpath, for
+     * example: <code>MyClass.class.getResource("/my/icon.png)</code>
+     *
+     * @param url A URL of the icon data that can be read with <code>new File(url.toURI())</code>.
      */
-    public Icon(String mimeType, int width, int height, int depth, URI uri, String data) {
-        this(
-                mimeType, width, height, depth, uri,
-                data != null && !data.equals("") ? new BinHexDatatype().valueOf(data) : null
-        );
-    }
-
     public Icon(String mimeType, int width, int height, int depth, URL url) throws IOException{
         this(mimeType, width, height, depth, new File(URIUtil.toURI(url)));
     }
 
-    public Icon(String mimeType, int width, int height, int depth, URI uri, InputStream is) throws IOException {
-        this(mimeType, width, height, depth, uri, IO.readBytes(is));
-    }
-
+    /**
+     * Use this constructor if your local icon data can be resolved with a <code>File</code>, the file's
+     * name must be unique within the scope of a device.
+     */
     public Icon(String mimeType, int width, int height, int depth, File file) throws IOException {
-        this(mimeType, width, height, depth, URI.create(file.getName()), IO.readBytes(file));
+        this(mimeType, width, height, depth, file.getName(), IO.readBytes(file));
     }
 
-    public Icon(String mimeType, int width, int height, int depth, URI uri, byte[] data) {
-        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth, uri, data);
+    /**
+     * Use this constructor if your local icon data is an <code>InputStream</code>.
+     *
+     * @param uniqueName Must be a valid URI path segment and unique within the scope of a device.
+     */
+    public Icon(String mimeType, int width, int height, int depth, String uniqueName, InputStream is) throws IOException {
+        this(mimeType, width, height, depth, uniqueName, IO.readBytes(is));
     }
 
-    public Icon(MimeType mimeType, int width, int height, int depth, URI uri, byte[] data) {
+    /**
+     * Use this constructor if your local icon data is in a <code>byte[]</code>.
+     *
+     * @param uniqueName Must be a valid URI path segment and unique within the scope of a device.
+     */
+    public Icon(String mimeType, int width, int height, int depth, String uniqueName, byte[] data) {
+        this(mimeType != null && mimeType.length() > 0 ? MimeType.valueOf(mimeType) : null, width, height, depth, URI.create(uniqueName), data);
+    }
+
+    /**
+     * Use this constructor if your local icon is binary data encoded with <em>BinHex</em>.
+
+     * @param uniqueName Must be a valid URI path segment and unique within the scope of a device.
+     * @param binHexEncoded The icon bytes encoded as BinHex.
+     */
+    public Icon(String mimeType, int width, int height, int depth, String uniqueName, String binHexEncoded) {
+        this(
+                mimeType, width, height, depth, uniqueName,
+                binHexEncoded != null && !binHexEncoded.equals("") ? new BinHexDatatype().valueOf(binHexEncoded) : null
+        );
+    }
+
+    protected Icon(MimeType mimeType, int width, int height, int depth, URI uri, byte[] data) {
         this.mimeType = mimeType;
         this.width = width;
         this.height = height;

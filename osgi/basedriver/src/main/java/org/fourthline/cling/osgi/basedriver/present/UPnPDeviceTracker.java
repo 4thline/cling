@@ -48,6 +48,7 @@ import org.fourthline.cling.model.types.InvalidValueException;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDN;
+import org.seamless.util.io.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -211,8 +212,9 @@ class UPnPDeviceTracker extends ServiceTracker {
                                      icon.getWidth(),
                                      icon.getHeight(),
                                      icon.getDepth(),
-                                     new URI(UUID.randomUUID().toString()),
-                                     in);
+                                     UUID.randomUUID().toString(),
+                                     in
+                            );
                     list.add(local);
                 }
             }

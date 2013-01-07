@@ -28,6 +28,8 @@ import org.fourthline.cling.model.types.DeviceType;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.model.types.UDN;
 
+import java.net.URI;
+
 /**
  * @author Christian Bauer
  */
@@ -66,7 +68,7 @@ public class SampleDeviceEmbeddedOne extends SampleDevice {
     @Override
     public Icon[] getIcons() {
         return new Icon[]{
-                new Icon("image/png", 32, 32, 8, "icon3.png")
+                new Icon("image/png", 32, 32, 8, URI.create("icon3.png"))
         };
     }
 

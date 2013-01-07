@@ -220,8 +220,7 @@ public class GstMediaRenderer {
             return new Icon(
                     "image/png",
                     48, 48, 8,
-                    URI.create("icon.png"),
-                    MediaRenderer.class.getResourceAsStream(iconPath)
+                    MediaRenderer.class.getResource(iconPath)
             );
         } catch (IOException ex) {
             throw new RuntimeException("Could not load icon: " + iconPath, ex);
