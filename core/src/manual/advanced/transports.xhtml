@@ -38,7 +38,8 @@
             <dd>
                 This implementation is based on the <em>Jetty 8</em> HTTP client, you need the artifact
                 <code>org.eclipse.jetty:jetty-client:8.1</code> on your classpath to use it. This implementation works
-                in any environment, including Android.
+                in any environment, including Android. It is the default transport for
+                <code>AndroidUpnpServiceConfiguration</code>.
             </dd>
         </dl>
 
@@ -67,8 +68,9 @@
                 with the servlet container, the bundled <code>JettyServletContainer</code> is such an adapter for a
                 standalone <em>Jetty 8</em> server. You need the artifact
                 <code>org.eclipse.jetty:jetty-servlet:8.1</code> on your classpath to use it. This implementation works
-                in any environment, including Android. For other containers, write your own adapter and provide it
-                to the <code>AsyncServletStreamServerConfigurationImpl</code>.
+                in any environment, including Android. It is the default transport for
+                <code>AndroidUpnpServiceConfiguration</code>. For other containers, write your own adapter and provide
+                it to the <code>AsyncServletStreamServerConfigurationImpl</code>.
             </dd>
         </dl>
 

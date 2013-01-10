@@ -54,7 +54,8 @@
                 modifying the XML text in different ways. This is the processor you should use for best
                 interoperability with other (broken) UPnP stacks. Furthermore, it let's you handle a failure
                 when reading an XML message easily by overriding the <code>handleInvalidMessage()</code> method,
-                e.g. to create or log an error report.
+                e.g. to create or log an error report. It is the default processor for
+                <code>AndroidUpnpServiceConfiguration</code>.
             </dd>
         </dl>
 
@@ -89,6 +90,7 @@
                 modifying the XML text in different ways. This is the processor you should use for best
                 interoperability with other (broken) UPnP stacks. Furthermore, it will return partial results,
                 when at least one single state variable value was successfully read from the event XML.
+                It is the default processor for <code>AndroidUpnpServiceConfiguration</code>.
             </dd>
         </dl>
 
