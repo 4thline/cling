@@ -241,7 +241,14 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
             if (ELEMENT.name.equals(argumentNodeChild)) {
                 actionArgument.name = XMLUtil.getTextContent(argumentNodeChild);
             } else if (ELEMENT.direction.equals(argumentNodeChild)) {
-                actionArgument.direction = ActionArgument.Direction.valueOf(XMLUtil.getTextContent(argumentNodeChild).toUpperCase(Locale.ENGLISH));
+                String directionString = XMLUtil.getTextContent(argumentNodeChild);
+                try {
+                    actionArgument.direction = ActionArgument.Direction.valueOf(directionString.toUpperCase(Locale.ENGLISH));
+                } catch (IllegalArgumentException ex) {
+                    // TODO: UPNP VIOLATION: Pelco SpectraIV-IP uses illegal value INOUT
+                    log.warning("UPnP specification violation: Invalid action argument direction, assuming 'IN': " + directionString);
+                    actionArgument.direction = ActionArgument.Direction.IN;
+                }
             } else if (ELEMENT.relatedStateVariable.equals(argumentNodeChild)) {
                 actionArgument.relatedStateVariable = XMLUtil.getTextContent(argumentNodeChild);
             } else if (ELEMENT.retval.equals(argumentNodeChild)) {

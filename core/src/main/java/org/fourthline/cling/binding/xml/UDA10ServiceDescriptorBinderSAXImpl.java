@@ -237,7 +237,14 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                     getInstance().name = getCharacters();
                     break;
                 case direction:
-                    getInstance().direction = ActionArgument.Direction.valueOf(getCharacters().toUpperCase(Locale.ENGLISH));
+                    String directionString = getCharacters();
+                    try {
+                        getInstance().direction = ActionArgument.Direction.valueOf(directionString.toUpperCase(Locale.ENGLISH));
+                    } catch (IllegalArgumentException ex) {
+                        // TODO: UPNP VIOLATION: Pelco SpectraIV-IP uses illegal value INOUT
+                        log.warning("UPnP specification violation: Invalid action argument direction, assuming 'IN': " + directionString);
+                        getInstance().direction = ActionArgument.Direction.IN;
+                    }
                     break;
                 case relatedStateVariable:
                     getInstance().relatedStateVariable = getCharacters();
