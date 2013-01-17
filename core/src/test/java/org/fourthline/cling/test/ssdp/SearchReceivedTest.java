@@ -36,6 +36,7 @@ import org.fourthline.cling.model.message.header.STAllHeader;
 import org.fourthline.cling.model.message.header.ServiceTypeHeader;
 import org.fourthline.cling.model.message.header.ServiceUSNHeader;
 import org.fourthline.cling.model.message.header.UDNHeader;
+import org.fourthline.cling.model.message.header.USNRootDeviceHeader;
 import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.Service;
@@ -112,7 +113,7 @@ public class SearchReceivedTest {
         );
         assertEquals(
                 upnpService.getOutgoingDatagramMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.USN).getString(),
-                new UDNHeader(localDevice.getIdentity().getUdn()).getString()
+                localDevice.getIdentity().getUdn().toString() + USNRootDeviceHeader.ROOT_DEVICE_SUFFIX
         );
     }
 

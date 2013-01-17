@@ -15,6 +15,12 @@
 
 package org.fourthline.cling.protocol.async;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+import java.util.logging.Logger;
+
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.DiscoveryOptions;
 import org.fourthline.cling.model.Location;
@@ -25,7 +31,6 @@ import org.fourthline.cling.model.message.discovery.IncomingSearchRequest;
 import org.fourthline.cling.model.message.discovery.OutgoingSearchResponse;
 import org.fourthline.cling.model.message.discovery.OutgoingSearchResponseDeviceType;
 import org.fourthline.cling.model.message.discovery.OutgoingSearchResponseRootDevice;
-import org.fourthline.cling.model.message.discovery.OutgoingSearchResponseRootDeviceUDN;
 import org.fourthline.cling.model.message.discovery.OutgoingSearchResponseServiceType;
 import org.fourthline.cling.model.message.discovery.OutgoingSearchResponseUDN;
 import org.fourthline.cling.model.message.header.DeviceTypeHeader;
@@ -41,12 +46,6 @@ import org.fourthline.cling.model.types.DeviceType;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.protocol.ReceivingAsync;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.logging.Logger;
 
 /**
  * Handles reception of search requests, responds for local registered devices.
@@ -256,7 +255,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
                 continue;
 
             OutgoingSearchResponse message =
-                new OutgoingSearchResponseRootDeviceUDN(
+                new OutgoingSearchResponseRootDevice(
                         getInputMessage(),
                         getDescriptorLocation(activeStreamServer, device),
                         device
