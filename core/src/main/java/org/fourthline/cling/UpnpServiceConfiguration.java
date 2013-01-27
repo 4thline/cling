@@ -32,6 +32,7 @@ import org.fourthline.cling.transport.spi.StreamClient;
 import org.fourthline.cling.transport.spi.StreamServer;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Shared configuration data of the UPnP stack..
@@ -105,7 +106,7 @@ public interface UpnpServiceConfiguration {
     /**
      * @return The executor which runs the listening background threads for HTTP requests.
      */
-    public Executor getStreamServerExecutor();
+    public ExecutorService getStreamServerExecutorService();
 
     /**
      * @return The shared implementation of {@link org.fourthline.cling.binding.xml.DeviceDescriptorBinder} for the UPnP 1.0 Device Architecture..
@@ -228,9 +229,9 @@ public interface UpnpServiceConfiguration {
     public Executor getAsyncProtocolExecutor();
 
     /**
-     * @return The executor which runs the processing of synchronous aspects of the UPnP stack (description, control, GENA).
+     * @return The executor service which runs the processing of synchronous aspects of the UPnP stack (description, control, GENA).
      */
-    public Executor getSyncProtocolExecutor();
+    public ExecutorService getSyncProtocolExecutorService();
 
     /**
      * @return An instance of {@link org.fourthline.cling.model.Namespace} for this UPnP stack.
@@ -238,7 +239,7 @@ public interface UpnpServiceConfiguration {
     public Namespace getNamespace();
 
     /**
-     * @return The executor which runs the background thread for maintainting the registry.
+     * @return The executor which runs the background thread for maintaining the registry.
      */
     public Executor getRegistryMaintainerExecutor();
 

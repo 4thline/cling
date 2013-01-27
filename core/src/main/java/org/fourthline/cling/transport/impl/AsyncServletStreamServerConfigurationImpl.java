@@ -31,7 +31,7 @@ public class AsyncServletStreamServerConfigurationImpl implements StreamServerCo
 
     protected ServletContainerAdapter servletContainerAdapter;
     protected int listenPort = 0;
-    protected int asyncTimeoutMillis = 10000;
+    protected int asyncTimeoutSeconds = 60;
 
     /**
      * Defaults to port '0', ephemeral.
@@ -48,10 +48,10 @@ public class AsyncServletStreamServerConfigurationImpl implements StreamServerCo
 
     public AsyncServletStreamServerConfigurationImpl(ServletContainerAdapter servletContainerAdapter,
                                                      int listenPort,
-                                                     int asyncTimeoutMillis) {
+                                                     int asyncTimeoutSeconds) {
         this.servletContainerAdapter = servletContainerAdapter;
         this.listenPort = listenPort;
-        this.asyncTimeoutMillis = asyncTimeoutMillis;
+        this.asyncTimeoutSeconds = asyncTimeoutSeconds;
     }
 
     /**
@@ -66,17 +66,17 @@ public class AsyncServletStreamServerConfigurationImpl implements StreamServerCo
     }
 
     /**
-     * The time in milliseconds this server wait for the {@link org.fourthline.cling.transport.Router}
+     * The time in seconds this server wait for the {@link org.fourthline.cling.transport.Router}
      * to execute a {@link org.fourthline.cling.transport.spi.UpnpStream}.
      *
-     * @return The default of 10 seconds.
+     * @return The default of 60 seconds.
      */
-    public int getAsyncTimeoutMillis() {
-        return asyncTimeoutMillis;
+    public int getAsyncTimeoutSeconds() {
+        return asyncTimeoutSeconds;
     }
 
-    public void setAsyncTimeoutMillis(int asyncTimeoutMillis) {
-        this.asyncTimeoutMillis = asyncTimeoutMillis;
+    public void setAsyncTimeoutSeconds(int asyncTimeoutSeconds) {
+        this.asyncTimeoutSeconds = asyncTimeoutSeconds;
     }
 
     public ServletContainerAdapter getServletContainerAdapter() {

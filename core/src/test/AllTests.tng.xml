@@ -50,6 +50,12 @@
         </packages>
     </test>
 
+    <test name="Transport">
+        <packages>
+            <package name="org.fourthline.cling.test.transport"/>
+        </packages>
+    </test>
+
     <test name="Examples">
         <packages>
             <package name="example.binarylight"/>

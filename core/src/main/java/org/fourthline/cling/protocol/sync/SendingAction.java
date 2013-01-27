@@ -16,6 +16,7 @@
 package org.fourthline.cling.protocol.sync;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.model.action.ActionCancelledException;
 import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.StreamResponseMessage;
@@ -110,10 +111,16 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
 
             log.fine("Sending SOAP body of message as stream to remote device");
             return getUpnpService().getRouter().send(requestMessage);
-
+        } catch (InterruptedException ex) {
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Sending action request message was interrupted: " + ex);
+            }
+            throw new ActionCancelledException(ex);
         } catch (UnsupportedDataException ex) {
-            log.fine("Error writing SOAP body: " + ex);
-            log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("Error writing SOAP body: " + ex);
+                log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
+            }
             throw new ActionException(ErrorCode.ACTION_FAILED, "Error writing request message. " + ex.getMessage());
         }
     }

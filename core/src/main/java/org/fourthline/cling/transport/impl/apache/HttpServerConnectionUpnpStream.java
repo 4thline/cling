@@ -31,7 +31,6 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.DefaultConnectionReuseStrategy;
 import org.apache.http.impl.DefaultHttpResponseFactory;
-import org.apache.http.impl.DefaultHttpServerConnection;
 import org.apache.http.message.BasicStatusLine;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.DefaultedHttpParams;
@@ -58,7 +57,6 @@ import org.fourthline.cling.transport.spi.UpnpStream;
 import org.seamless.util.Exceptions;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.util.logging.Level;
@@ -69,7 +67,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
-public class HttpServerConnectionUpnpStream extends UpnpStream {
+public abstract class HttpServerConnectionUpnpStream extends UpnpStream {
 
     final private static Logger log = Logger.getLogger(UpnpStream.class.getName());
 
@@ -180,25 +178,7 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
             requestMessage.getOperation().setHttpMinorVersion(requestHttpMinorVersion);
 
             // Connection wrapper
-            if (getConnection() instanceof DefaultHttpServerConnection) {
-                final DefaultHttpServerConnection defaultConnection = (DefaultHttpServerConnection) getConnection();
-                requestMessage.setConnection(new Connection() {
-                    @Override
-                    public boolean isOpen() {
-                        return defaultConnection.isOpen();
-                    }
-
-                    @Override
-                    public InetAddress getRemoteAddress() {
-                        return defaultConnection.getRemoteAddress();
-                    }
-
-                    @Override
-                    public InetAddress getLocalAddress() {
-                        return defaultConnection.getLocalAddress();
-                    }
-                });
-            }
+            requestMessage.setConnection(createConnection());
 
             // Headers
             requestMessage.setHeaders(new UpnpHeaders(HeaderUtil.get(httpRequest)));
@@ -282,5 +262,7 @@ public class HttpServerConnectionUpnpStream extends UpnpStream {
         }
 
     }
+
+    abstract protected Connection createConnection();
 
 }

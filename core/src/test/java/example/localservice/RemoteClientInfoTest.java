@@ -66,21 +66,6 @@ import static org.testng.Assert.assertEquals;
  * returned to the client with the response of your UPnP action. There is also a
  * <code>setResponseUserAgent()</code> method for your convenience.
  * </p>
- * <p>
- * If your action method is potentially long-running, you might want to periodically
- * check if you should continue with another batch of work by calling
- * <code>isRequestCancelled()</code>. Otherwise, you might do a lot of work for
- * nothing, because while your action method may complete its processing, sending
- * the response to the client will probably fail if the underlying HTTP connection was
- * closed. A request is considered cancelled if either the thread executing the action
- * was interrupted, or if the underlying HTTP connection of the client is no longer
- * open.
- * </p>
- * <p>
- * <em>Attention:</em> The Cling default transport can not detect if a connection is
- * open or closed, it will always be considered open. The bundled Apache-based
- * transport however can detect the current connection's state.
- * </p>
  */
 public class RemoteClientInfoTest {
 

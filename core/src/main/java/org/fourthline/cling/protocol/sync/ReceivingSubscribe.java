@@ -151,7 +151,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
 
                 public void eventReceived() {
                     // The only thing we are interested in, sending an event when the state changes
-                    getUpnpService().getConfiguration().getSyncProtocolExecutor().execute(
+                    getUpnpService().getConfiguration().getSyncProtocolExecutorService().execute(
                             getUpnpService().getProtocolFactory().createSendingEvent(this)
                     );
                 }

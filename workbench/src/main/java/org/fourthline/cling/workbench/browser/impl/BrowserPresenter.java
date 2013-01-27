@@ -107,7 +107,12 @@ public class BrowserPresenter implements BrowserView.Presenter {
             final StreamRequestMessage iconRetrievalMsg =
                     new StreamRequestMessage(UpnpRequest.Method.GET, device.normalizeURI(usableIcon.getUri()));
 
-            StreamResponseMessage responseMsg = router.send(iconRetrievalMsg);
+            StreamResponseMessage responseMsg = null;
+            try {
+                responseMsg = router.send(iconRetrievalMsg);
+            } catch (InterruptedException ex) {
+                Workbench.log(Level.WARNING, "Icon retrieval was interrupted: " + ex);
+            }
 
             if (responseMsg != null && !responseMsg.getOperation().isFailed()) {
 

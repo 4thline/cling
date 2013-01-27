@@ -49,7 +49,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.util.concurrent.Executor;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 /**
@@ -66,7 +66,7 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
 
     private int streamListenPort;
 
-    private Executor defaultExecutor;
+    private ExecutorService defaultExecutorService;
 
     @Inject
     protected DatagramProcessor datagramProcessor;
@@ -88,7 +88,7 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
 
         this.streamListenPort = NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT;
 
-        defaultExecutor = createDefaultExecutor();
+        defaultExecutorService = createDefaultExecutorService();
 
         soapActionProcessor = createSOAPActionProcessor();
         genaEventProcessor = createGENAEventProcessor();
@@ -112,7 +112,11 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     public StreamClient createStreamClient() {
-        return new StreamClientImpl(new StreamClientConfigurationImpl());
+        return new StreamClientImpl(
+            new StreamClientConfigurationImpl(
+                getSyncProtocolExecutorService()
+            )
+        );
     }
 
     public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
@@ -137,15 +141,15 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     public Executor getMulticastReceiverExecutor() {
-        return getDefaultExecutor();
+        return getDefaultExecutorService();
     }
 
     public Executor getDatagramIOExecutor() {
-        return getDefaultExecutor();
+        return getDefaultExecutorService();
     }
 
-    public Executor getStreamServerExecutor() {
-        return getDefaultExecutor();
+    public ExecutorService getStreamServerExecutorService() {
+        return getDefaultExecutorService();
     }
 
     public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
@@ -194,11 +198,11 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     public Executor getAsyncProtocolExecutor() {
-        return getDefaultExecutor();
+        return getDefaultExecutorService();
     }
 
-    public Executor getSyncProtocolExecutor() {
-        return getDefaultExecutor();
+    public ExecutorService getSyncProtocolExecutorService() {
+        return getDefaultExecutorService();
     }
 
     public Namespace getNamespace() {
@@ -206,11 +210,11 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     public Executor getRegistryMaintainerExecutor() {
-        return getDefaultExecutor();
+        return getDefaultExecutorService();
     }
 
     public Executor getRegistryListenerExecutor() {
-        return getDefaultExecutor();
+        return getDefaultExecutorService();
     }
 
     public NetworkAddressFactory createNetworkAddressFactory() {
@@ -218,10 +222,8 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     public void shutdown() {
-        if (getDefaultExecutor() instanceof ThreadPoolExecutor) {
-            log.fine("Shutting down thread pool");
-            ((ThreadPoolExecutor) getDefaultExecutor()).shutdownNow();
-        }
+        log.fine("Shutting down default executor service");
+        getDefaultExecutorService().shutdownNow();
     }
 
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort) {
@@ -248,11 +250,11 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
         return new Namespace();
     }
 
-    protected Executor getDefaultExecutor() {
-        return defaultExecutor;
+    protected ExecutorService getDefaultExecutorService() {
+        return defaultExecutorService;
     }
 
-    protected Executor createDefaultExecutor() {
+    protected ExecutorService createDefaultExecutorService() {
         return new DefaultUpnpServiceConfiguration.ClingExecutor();
     }
 }

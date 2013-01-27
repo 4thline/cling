@@ -23,7 +23,11 @@ import javax.enterprise.inject.Alternative;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.List;
+import java.util.concurrent.AbstractExecutorService;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Christian Bauer
@@ -88,18 +92,44 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
                 }
             };
         }
-        return createDefaultExecutor();
+        return getDefaultExecutorService();
     }
 
     @Override
-    protected Executor createDefaultExecutor() {
-        return isMultiThreaded()
-                ? super.createDefaultExecutor()
-                : new Executor() {
-                    public void execute(Runnable runnable) {
-                        runnable.run();
-                    }
-                 };
+    protected ExecutorService getDefaultExecutorService() {
+        if (isMultiThreaded()) {
+            return super.getDefaultExecutorService();
+        }
+        return new AbstractExecutorService() {
+
+            boolean terminated;
+
+            public void shutdown() {
+                terminated = true;
+            }
+
+            public List<Runnable> shutdownNow() {
+                shutdown();
+                return null;
+            }
+
+            public boolean isShutdown() {
+                return terminated;
+            }
+
+            public boolean isTerminated() {
+                return terminated;
+            }
+
+            public boolean awaitTermination(long l, TimeUnit timeUnit) throws InterruptedException {
+                shutdown();
+                return terminated;
+            }
+
+            public void execute(Runnable runnable) {
+                runnable.run();
+            }
+        };
     }
 
 }

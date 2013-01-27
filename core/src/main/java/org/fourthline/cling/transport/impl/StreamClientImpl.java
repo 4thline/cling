@@ -26,6 +26,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.seamless.http.Headers;
+import org.seamless.util.Exceptions;
 import org.seamless.util.URIUtil;
 import org.seamless.util.io.IO;
 
@@ -33,10 +34,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLStreamHandlerFactory;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -48,6 +51,16 @@ import java.util.logging.Logger;
  * <p>
  * This implementation <em>DOES NOT WORK</em> on Android. Read the Cling manual for
  * alternatives for Android.
+ * </p>
+ * <p>
+ * This implementation <em>DOES NOT</em> support Cling's server-side heartbeat for connection checking.
+ * Any data returned by a server has to be "valid HTTP", checked in Sun's HttpClient with:
+ * </p>
+ * {@code ret = b[0] == 'H' && b[1] == 'T' && b[2] == 'T' && b[3] == 'P' && b[4] == '/' && b[5] == '1' && b[6] == '.';}
+ * <p>
+ * Hence, if you are using this client, don't call Cling's
+ * {@link org.fourthline.cling.model.profile.RemoteClientInfo#isRequestCancelled()} function on your
+ * server to send a heartbeat to the client!
  * </p>
  *
  * @author Christian Bauer
@@ -126,8 +139,10 @@ public class StreamClientImpl implements StreamClient {
             urlConnection = (HttpURLConnection) url.openConnection();
 
             urlConnection.setRequestMethod(requestOperation.getHttpMethodName());
-            urlConnection.setReadTimeout(configuration.getDataReadTimeoutSeconds() * 1000);
-            urlConnection.setConnectTimeout(configuration.getConnectionTimeoutSeconds() * 1000);
+
+            // Use the built-in expiration, we can't cancel HttpURLConnection
+            urlConnection.setReadTimeout(configuration.getTimeoutSeconds() * 1000);
+            urlConnection.setConnectTimeout(configuration.getTimeoutSeconds() * 1000);
 
             applyRequestProperties(urlConnection, requestMessage);
             applyRequestBody(urlConnection, requestMessage);
@@ -137,25 +152,35 @@ public class StreamClientImpl implements StreamClient {
             return createResponse(urlConnection, inputStream);
 
         } catch (ProtocolException ex) {
-            log.fine("Unrecoverable HTTP protocol exception: " + ex);
+            log.log(Level.WARNING, "HTTP request failed: " + requestMessage, Exceptions.unwrap(ex));
             return null;
         } catch (IOException ex) {
 
             if (urlConnection == null) {
-                log.info("Could not open URL connection: " + ex.getMessage());
+                log.log(Level.WARNING, "HTTP request failed: " + requestMessage, Exceptions.unwrap(ex));
                 return null;
             }
 
-            log.fine("Exception occurred, trying to read the error stream");
+            if (ex instanceof SocketTimeoutException) {
+                log.info(
+                    "Timeout of " + getConfiguration().getTimeoutSeconds()
+                        + " seconds while waiting for HTTP request to complete, aborting: " + requestMessage
+                );
+                return null;
+            }
+
+            if (log.isLoggable(Level.FINE))
+                log.fine("Exception occurred, trying to read the error stream: " + Exceptions.unwrap(ex));
             try {
                 inputStream = urlConnection.getErrorStream();
                 return createResponse(urlConnection, inputStream);
             } catch (Exception errorEx) {
-                log.fine("Could not read error stream: " + errorEx);
+                if (log.isLoggable(Level.FINE))
+                    log.fine("Could not read error stream: " + errorEx);
                 return null;
             }
         } catch (Exception ex) {
-            log.info("Unrecoverable exception occurred, no error response possible: " + ex);
+            log.log(Level.WARNING, "HTTP request failed: " + requestMessage, Exceptions.unwrap(ex));
             return null;
 
         } finally {
@@ -223,7 +248,10 @@ public class StreamClientImpl implements StreamClient {
     protected StreamResponseMessage createResponse(HttpURLConnection urlConnection, InputStream inputStream) throws Exception {
 
         if (urlConnection.getResponseCode() == -1) {
-            log.fine("Did not receive valid HTTP response");
+            log.warning("Received an invalid HTTP response: " + urlConnection.getURL());
+            log.warning("Is your Cling-based server sending connection heartbeats with " +
+                "RemoteClientInfo#isRequestCancelled? This client can't handle " +
+                "heartbeats, read the manual.");
             return null;
         }
 

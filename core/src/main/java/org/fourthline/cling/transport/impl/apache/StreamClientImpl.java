@@ -15,17 +15,11 @@
 
 package org.fourthline.cling.transport.impl.apache;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
-import org.apache.http.MethodNotSupportedException;
 import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -52,9 +46,14 @@ import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.header.UpnpHeader;
+import org.fourthline.cling.transport.spi.AbstractStreamClient;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamClient;
-import org.seamless.util.Exceptions;
+
+import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implementation based on <a href="http://hc.apache.org/">Apache HTTP Components 4.2</a>.
@@ -65,7 +64,7 @@ import org.seamless.util.Exceptions;
  *
  * @author Christian Bauer
  */
-public class StreamClientImpl implements StreamClient<StreamClientConfigurationImpl> {
+public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigurationImpl, HttpUriRequest> {
 
     final private static Logger log = Logger.getLogger(StreamClient.class.getName());
 
@@ -80,8 +79,11 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
         HttpProtocolParams.setContentCharset(globalParams, getConfiguration().getContentCharset());
         HttpProtocolParams.setUseExpectContinue(globalParams, false);
 
-        HttpConnectionParams.setConnectionTimeout(globalParams, getConfiguration().getConnectionTimeoutSeconds() * 1000);
-        HttpConnectionParams.setSoTimeout(globalParams, getConfiguration().getDataReadTimeoutSeconds() * 1000);
+        // These are some safety settings, we should never run into these timeouts as we
+        // do our own expiration checking
+        HttpConnectionParams.setConnectionTimeout(globalParams, (getConfiguration().getTimeoutSeconds()+5) * 1000);
+        HttpConnectionParams.setSoTimeout(globalParams, (getConfiguration().getTimeoutSeconds()+5) * 1000);
+
         HttpConnectionParams.setStaleCheckingEnabled(globalParams, getConfiguration().getStaleCheckingEnabled());
         if (getConfiguration().getSocketBufferSize() != -1)
             HttpConnectionParams.setSocketBufferSize(globalParams, getConfiguration().getSocketBufferSize());
@@ -107,104 +109,103 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
         return configuration;
     }
 
-    @Override
-    public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) {
-
-        final UpnpRequest requestOperation = requestMessage.getOperation();
-        log.fine("Preparing HTTP request message with method '" + requestOperation.getHttpMethodName() + "': " + requestMessage);
-
-        HttpUriRequest httpRequest = null;
-        try {
-
-            // Create the right HTTP request
-            httpRequest = createHttpRequest(requestMessage, requestOperation);
-
-            // Set all the headers on the request
-            httpRequest.setParams(getRequestParams(requestMessage));
-            HeaderUtil.add(httpRequest, requestMessage.getHeaders());
-
-            if (log.isLoggable(Level.FINE))
-                log.fine("Sending HTTP request: " + httpRequest.getURI());
-
-            long start = System.currentTimeMillis();
-
-            StreamResponseMessage response = httpClient.execute(httpRequest, createResponseHandler());
-
-            long elapsed = System.currentTimeMillis() - start;
-            if (log.isLoggable(Level.FINEST))
-                log.finest("Sent HTTP request, got response (" + elapsed + "ms) :" + httpRequest.getURI());
-            if(elapsed > 5000) {
-                log.warning("HTTP request took a long time: " + elapsed + "ms: " + httpRequest.getURI());
-            }
-
-            return response;
-
-        } catch (MethodNotSupportedException ex) {
-            log.warning("Request aborted: " + ex.toString());
-            return null;
-        } catch (ClientProtocolException ex) {
-            log.warning("HTTP protocol exception executing request: " + requestMessage);
-            log.warning("Cause: " + Exceptions.unwrap(ex));
-            return null;
-        } catch (IOException ex) {
-            log.warning("Client connection to '" + httpRequest.getURI() + "' was aborted: " + ex);
-            return null;
-        } catch (IllegalStateException ex) {
-            log.fine("Illegal state: " + ex.getMessage()); // Don't log stacktrace
-            return null;
-        }
-    }
 
     @Override
-    public void stop() {
-        log.fine("Shutting down HTTP client connection manager/pool");
-        clientConnectionManager.shutdown();
-    }
-
-    protected HttpUriRequest createHttpRequest(UpnpMessage upnpMessage, UpnpRequest upnpRequestOperation) throws MethodNotSupportedException {
-
-        switch (upnpRequestOperation.getMethod()) {
+    protected HttpUriRequest createRequest(StreamRequestMessage requestMessage) {
+        UpnpRequest requestOperation = requestMessage.getOperation();
+        HttpUriRequest request;
+        switch (requestOperation.getMethod()) {
             case GET:
-                return new HttpGet(upnpRequestOperation.getURI());
+                request = new HttpGet(requestOperation.getURI());
+                break;
             case SUBSCRIBE:
-                return new HttpGet(upnpRequestOperation.getURI()) {
+                request = new HttpGet(requestOperation.getURI()) {
                     @Override
                     public String getMethod() {
                         return UpnpRequest.Method.SUBSCRIBE.getHttpName();
                     }
                 };
+                break;
             case UNSUBSCRIBE:
-                return new HttpGet(upnpRequestOperation.getURI()) {
+                request = new HttpGet(requestOperation.getURI()) {
                     @Override
                     public String getMethod() {
                         return UpnpRequest.Method.UNSUBSCRIBE.getHttpName();
                     }
                 };
+                break;
             case POST:
-                HttpEntityEnclosingRequest post = new HttpPost(upnpRequestOperation.getURI());
-                post.setEntity(createHttpRequestEntity(upnpMessage));
-                return (HttpUriRequest) post; // Fantastic API
+                HttpEntityEnclosingRequest post = new HttpPost(requestOperation.getURI());
+                post.setEntity(createHttpRequestEntity(requestMessage));
+                request = (HttpUriRequest) post; // Fantastic API
+                break;
             case NOTIFY:
-                HttpEntityEnclosingRequest notify = new HttpPost(upnpRequestOperation.getURI()) {
+                HttpEntityEnclosingRequest notify = new HttpPost(requestOperation.getURI()) {
                     @Override
                     public String getMethod() {
                         return UpnpRequest.Method.NOTIFY.getHttpName();
                     }
                 };
-                notify.setEntity(createHttpRequestEntity(upnpMessage));
-                return (HttpUriRequest) notify; // Fantastic API
+                notify.setEntity(createHttpRequestEntity(requestMessage));
+                request = (HttpUriRequest) notify; // Fantastic API
+                break;
             default:
-                throw new MethodNotSupportedException(upnpRequestOperation.getHttpMethodName());
+                throw new RuntimeException("Unknown HTTP method: " + requestOperation.getHttpMethodName());
         }
 
+        // Headers
+        request.setParams(getRequestParams(requestMessage));
+        HeaderUtil.add(request, requestMessage.getHeaders());
+
+        return request;
+    }
+
+    @Override
+    protected Callable<StreamResponseMessage> createCallable(final StreamRequestMessage requestMessage,
+                                                             final HttpUriRequest request) {
+        return new Callable<StreamResponseMessage>() {
+            public StreamResponseMessage call() throws Exception {
+
+                if (log.isLoggable(Level.FINE))
+                    log.fine("Sending HTTP request: " + requestMessage);
+
+                return httpClient.execute(request, createResponseHandler());
+            }
+        };
+    }
+
+    @Override
+    protected void abort(HttpUriRequest request) {
+        request.abort();
+    }
+
+    @Override
+    protected boolean logExecutionException(Throwable t) {
+        if (t instanceof IllegalStateException) {
+            // TODO: Document when/why this happens and why we can ignore it, violating the
+            // logging rules of the StreamClient#sendRequest() method
+            if (log.isLoggable(Level.FINE))
+                log.fine("Illegal state: " + t.getMessage());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void stop() {
+        if (log.isLoggable(Level.FINE))
+            log.fine("Shutting down HTTP client connection manager/pool");
+        clientConnectionManager.shutdown();
     }
 
     protected HttpEntity createHttpRequestEntity(UpnpMessage upnpMessage) {
         if (upnpMessage.getBodyType().equals(UpnpMessage.BodyType.BYTES)) {
-            log.fine("Preparing HTTP request entity as byte[]");
+            if (log.isLoggable(Level.FINE))
+                log.fine("Preparing HTTP request entity as byte[]");
             return new ByteArrayEntity(upnpMessage.getBodyBytes());
         } else {
-            log.fine("Preparing HTTP request entity as string");
+            if (log.isLoggable(Level.FINE))
+                log.fine("Preparing HTTP request entity as string");
             try {
                 String charset = upnpMessage.getContentTypeCharset();
                 return new StringEntity(upnpMessage.getBodyString(), charset != null ? charset : "UTF-8");
@@ -220,7 +221,8 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
             public StreamResponseMessage handleResponse(final HttpResponse httpResponse) throws IOException {
 
                 StatusLine statusLine = httpResponse.getStatusLine();
-                log.fine("Received HTTP response: " + statusLine);
+                if (log.isLoggable(Level.FINE))
+                    log.fine("Received HTTP response: " + statusLine);
 
                 // Status
                 UpnpResponse responseOperation =
@@ -237,10 +239,12 @@ public class StreamClientImpl implements StreamClient<StreamClientConfigurationI
                 if (entity == null || entity.getContentLength() == 0) return responseMessage;
 
                 if (responseMessage.isContentTypeMissingOrText()) {
-                    log.fine("HTTP response message contains text entity");
+                    if (log.isLoggable(Level.FINE))
+                        log.fine("HTTP response message contains text entity");
                     responseMessage.setBody(UpnpMessage.BodyType.STRING, EntityUtils.toString(entity));
                 } else {
-                    log.fine("HTTP response message contains binary entity");
+                    if (log.isLoggable(Level.FINE))
+                        log.fine("HTTP response message contains binary entity");
                     responseMessage.setBody(UpnpMessage.BodyType.BYTES, EntityUtils.toByteArray(entity));
                 }
 

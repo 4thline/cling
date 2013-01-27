@@ -15,6 +15,7 @@
 
 package org.fourthline.cling.transport.impl;
 
+import org.fourthline.cling.model.message.Connection;
 import org.fourthline.cling.transport.Router;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamServer;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -52,6 +54,11 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
 
     synchronized public void init(InetAddress bindAddress, final Router router) throws InitializationException {
         try {
+            log.info("Setting executor service on servlet container adapter");
+            getConfiguration().getServletContainerAdapter().setExecutorService(
+                router.getConfiguration().getStreamServerExecutorService()
+            );
+
             log.info("Adding connector: " + bindAddress + ":" + getConfiguration().getListenPort());
             localPort = getConfiguration().getServletContainerAdapter().addConnector(
                 bindAddress.getHostAddress(),
@@ -88,15 +95,65 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
                     );
 
                 AsyncContext async = req.startAsync();
-                async.setTimeout(getConfiguration().getAsyncTimeoutMillis());
+                async.setTimeout(getConfiguration().getAsyncTimeoutSeconds()*1000);
 
                 AsyncServletUpnpStream stream =
-                    new AsyncServletUpnpStream(router.getProtocolFactory(), async, req);
-
-                async.addListener(stream);
+                    new AsyncServletUpnpStream(router.getProtocolFactory(), async, req) {
+                        @Override
+                        protected Connection createConnection() {
+                            return new AsyncServletConnection(getRequest());
+                        }
+                    };
 
                 router.received(stream);
             }
         };
+    }
+
+    /**
+     * Override this method if you can check, at a low level, if the client connection is still open
+     * for the given request. This will likely require access to proprietary APIs of your servlet
+     * container to obtain the socket/channel for the given request.
+     *
+     * @return By default <code>true</code>.
+     */
+    protected boolean isConnectionOpen(HttpServletRequest request) {
+        return true;
+    }
+
+    protected class AsyncServletConnection implements Connection {
+
+        protected HttpServletRequest request;
+
+        public AsyncServletConnection(HttpServletRequest request) {
+            this.request = request;
+        }
+
+        public HttpServletRequest getRequest() {
+            return request;
+        }
+
+        @Override
+        public boolean isOpen() {
+            return AsyncServletStreamServerImpl.this.isConnectionOpen(getRequest());
+        }
+
+        @Override
+        public InetAddress getRemoteAddress() {
+            try {
+                return InetAddress.getByName(getRequest().getRemoteAddr());
+            } catch (UnknownHostException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+
+        @Override
+        public InetAddress getLocalAddress() {
+            try {
+                return InetAddress.getByName(getRequest().getLocalAddr());
+            } catch (UnknownHostException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 }

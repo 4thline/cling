@@ -35,9 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URI;
-import java.net.UnknownHostException;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
@@ -46,16 +44,19 @@ import java.util.logging.Logger;
 
 /**
  * Implementation based on Servlet 3.0 API.
+ * <p>
+ * Concrete implementations must provide a connection wrapper, as this wrapper most likely has
+ * to access proprietary APIs to implement connection checking.
+ * </p>
  *
  * @author Christian Bauer
  */
-public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener {
+public abstract class AsyncServletUpnpStream extends UpnpStream implements AsyncListener {
 
     final private static Logger log = Logger.getLogger(UpnpStream.class.getName());
 
     final protected AsyncContext asyncContext;
     final protected HttpServletRequest request;
-    protected volatile boolean isOpen;
 
     protected StreamResponseMessage responseMessage;
 
@@ -65,6 +66,7 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
         super(protocolFactory);
         this.asyncContext = asyncContext;
         this.request = request;
+        asyncContext.addListener(this);
     }
 
     protected HttpServletRequest getRequest() {
@@ -124,16 +126,14 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
 
     @Override
     public void onStartAsync(AsyncEvent event) throws IOException {
-        if (log.isLoggable(Level.FINER))
-            log.finer("Starting asynchronous processing of HTTP request: " + event.getSuppliedRequest());
-        isOpen = true;
+        // This is a completely useless callback, it will only be called on request.startAsync() which
+        // then immediately removes the listener... what were they thinking.
     }
 
     @Override
     public void onComplete(AsyncEvent event) throws IOException {
         if (log.isLoggable(Level.FINER))
             log.finer("Completed asynchronous processing of HTTP request: " + event.getSuppliedRequest());
-        isOpen = false;
         responseSent(responseMessage);
     }
 
@@ -141,7 +141,6 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
     public void onTimeout(AsyncEvent event) throws IOException {
         if (log.isLoggable(Level.FINER))
             log.finer("Asynchronous processing of HTTP request timed out: " + event.getSuppliedRequest());
-        isOpen = false;
         responseException(new Exception("Asynchronous request timed out"));
     }
 
@@ -149,7 +148,6 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
     public void onError(AsyncEvent event) throws IOException {
         if (log.isLoggable(Level.FINER))
             log.finer("Asynchronous processing of HTTP request error: " + event.getThrowable());
-        isOpen = false;
         responseException(event.getThrowable());
     }
 
@@ -177,30 +175,7 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
         }
 
         // Connection wrapper
-        requestMessage.setConnection(new Connection() {
-            @Override
-            public boolean isOpen() {
-                return isOpen;
-            }
-
-            @Override
-            public InetAddress getRemoteAddress() {
-                try {
-                    return InetAddress.getByName(getRequest().getRemoteAddr());
-                } catch (UnknownHostException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-
-            @Override
-            public InetAddress getLocalAddress() {
-                try {
-                    return InetAddress.getByName(getRequest().getLocalAddr());
-                } catch (UnknownHostException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-        });
+        requestMessage.setConnection(createConnection());
 
         // Headers
         UpnpHeaders headers = new UpnpHeaders();
@@ -249,6 +224,11 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
     }
 
     protected void writeResponseMessage(StreamResponseMessage responseMessage) throws IOException {
+        if (log.isLoggable(Level.FINER))
+            log.finer("Sending HTTP response status: " + responseMessage.getOperation().getStatusCode());
+
+        getResponse().setStatus(responseMessage.getOperation().getStatusCode());
+
         // Headers
         for (Map.Entry<String, List<String>> entry : responseMessage.getHeaders().entrySet()) {
             for (String value : entry.getValue()) {
@@ -257,11 +237,6 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
         }
         // The Date header is recommended in UDA
         getResponse().setDateHeader("Date", System.currentTimeMillis());
-
-        if (log.isLoggable(Level.FINER))
-            log.finer("Sending HTTP response status: " + responseMessage.getOperation().getStatusCode());
-
-        getResponse().setStatus(responseMessage.getOperation().getStatusCode());
 
         // Body
         byte[] responseBodyBytes = responseMessage.hasBody() ? responseMessage.getBodyBytes() : null;
@@ -273,5 +248,7 @@ public class AsyncServletUpnpStream extends UpnpStream implements AsyncListener 
             IO.writeBytes(getResponse().getOutputStream(), responseBodyBytes);
         }
     }
+
+    abstract protected Connection createConnection();
 
 }

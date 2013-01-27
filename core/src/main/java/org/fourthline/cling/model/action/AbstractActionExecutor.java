@@ -39,7 +39,8 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
 
     private static Logger log = Logger.getLogger(AbstractActionExecutor.class.getName());
 
-    protected Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors = new HashMap();
+    protected Map<ActionArgument<LocalService>, StateVariableAccessor> outputArgumentAccessors =
+        new HashMap<ActionArgument<LocalService>, StateVariableAccessor>();
 
     protected AbstractActionExecutor() {
     }
@@ -82,9 +83,17 @@ public abstract class AbstractActionExecutor implements ActionExecutor {
             });
 
         } catch (ActionException ex) {
-            log.fine("ActionException thrown by service method, wrapping in invocation and returning: " + ex);
-            log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("ActionException thrown by service, wrapping in invocation and returning: " + ex);
+                log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
+            }
             actionInvocation.setFailure(ex);
+        } catch (InterruptedException ex) {
+            if (log.isLoggable(Level.FINE)) {
+                log.fine("InterruptedException thrown by service, wrapping in invocation and returning: " + ex);
+                log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
+            }
+            actionInvocation.setFailure(new ActionCancelledException(ex));
         } catch (Throwable t) {
             Throwable rootCause = Exceptions.unwrap(t);
             if (log.isLoggable(Level.FINE)) {

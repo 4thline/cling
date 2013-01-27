@@ -29,6 +29,8 @@ public interface ControlView extends View<ControlView.Presenter> {
 
         void onInvoke();
 
+        void onCancel();
+
         void onExpandText(String text);
     }
 
@@ -37,6 +39,8 @@ public interface ControlView extends View<ControlView.Presenter> {
     ActionArgumentValue[] getInputValues();
 
     void setOutputValues(ActionArgumentValue[] values);
+
+    void setCancelEnabled(boolean enabled);
 
     void dispose();
 }

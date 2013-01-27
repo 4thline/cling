@@ -83,7 +83,11 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
 
 
             // Send request
-            lastResponse = getUpnpService().getRouter().send(requestMessage);
+            try {
+                lastResponse = getUpnpService().getRouter().send(requestMessage);
+            } catch (InterruptedException ex) {
+                log.warning("Sending event message was interrupted: " + ex);
+            }
             log.fine("Received event callback response: " + lastResponse);
 
         }

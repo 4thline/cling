@@ -20,6 +20,7 @@ import org.apache.http.impl.DefaultHttpServerConnection;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.HttpParams;
+import org.fourthline.cling.model.message.Connection;
 import org.fourthline.cling.transport.Router;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamServer;
@@ -31,6 +32,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -109,10 +111,10 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
             try {
 
                 // Block until we have a connection
-                Socket clientSocket = serverSocket.accept();
+                final Socket clientSocket = serverSocket.accept();
 
                 // We have to force this fantastic library to accept HTTP methods which are not in the holy RFCs.
-                DefaultHttpServerConnection httpServerConnection = new DefaultHttpServerConnection() {
+                final DefaultHttpServerConnection httpServerConnection = new DefaultHttpServerConnection() {
                     @Override
                     protected HttpRequestFactory createHttpRequestFactory() {
                         return new UpnpHttpRequestFactory();
@@ -128,7 +130,15 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
                                 router.getProtocolFactory(),
                                 httpServerConnection,
                                 globalParams
-                        );
+                        ) {
+                            @Override
+                            protected Connection createConnection() {
+                                return new ApacheServerConnection(
+                                    clientSocket, httpServerConnection
+                                );
+
+                            }
+                        };
 
                 router.received(connectionStream);
 
@@ -159,6 +169,58 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
             log.info("Exception closing streaming server socket: " + ex.getMessage());
         }
 
+    }
+
+    /**
+     * Writes a space character to the output stream of the socket.
+     * <p>
+     * This space character might confuse the HTTP client. The Cling transports for Jetty Client and
+     * Apache HttpClient have been tested to work with space characters. Unfortunately, Sun JDK's
+     * HttpURLConnection does not gracefully handle any garbage in the HTTP request!
+     * </p>
+     */
+    protected boolean isConnectionOpen(Socket socket) {
+        return isConnectionOpen(socket, " ".getBytes());
+    }
+
+    protected boolean isConnectionOpen(Socket socket, byte[] heartbeat) {
+        if (log.isLoggable(Level.FINE))
+            log.fine("Checking if client connection is still open on: " + socket.getRemoteSocketAddress());
+        try {
+            socket.getOutputStream().write(heartbeat);
+            socket.getOutputStream().flush();
+            return true;
+        } catch (IOException ex) {
+            if (log.isLoggable(Level.FINE))
+                log.fine("Client connection has been closed: " + socket.getRemoteSocketAddress());
+            return false;
+        }
+    }
+
+    protected class ApacheServerConnection implements Connection {
+
+        protected Socket socket;
+        protected DefaultHttpServerConnection connection;
+
+        public ApacheServerConnection(Socket socket, DefaultHttpServerConnection connection) {
+            this.socket = socket;
+            this.connection = connection;
+        }
+
+        @Override
+        public boolean isOpen() {
+            return isConnectionOpen(socket);
+        }
+
+        @Override
+        public InetAddress getRemoteAddress() {
+            return connection.getRemoteAddress();
+        }
+
+        @Override
+        public InetAddress getLocalAddress() {
+            return connection.getLocalAddress();
+        }
     }
 
 }

@@ -17,6 +17,7 @@ package org.fourthline.cling.workbench.control.impl;
 
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionArgumentValue;
+import org.fourthline.cling.model.action.ActionCancelledException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.workbench.Workbench;
@@ -34,8 +35,8 @@ abstract public class ControlActionCallback extends ActionCallback {
     public void success(final ActionInvocation invocation) {
         onSuccess(invocation.getOutput());
         Workbench.log(
-                "Action Invocation",
-                "Completed invocation: " + invocation.getAction().getName()
+            "Action Invocation",
+            "Completed invocation: " + invocation.getAction().getName()
         );
     }
 
@@ -43,11 +44,19 @@ abstract public class ControlActionCallback extends ActionCallback {
     public void failure(ActionInvocation invocation,
                         UpnpResponse operation,
                         String defaultMsg) {
-        Workbench.log(
+        if (invocation.getFailure() instanceof ActionCancelledException) {
+            Workbench.log(
+                "Action Invocation",
+                "Action execution of '" + invocation.getAction().getName() + "' was cancelled, cause: "
+                    + invocation.getFailure().getCause().getMessage()
+            );
+        } else {
+            Workbench.log(
                 Level.SEVERE,
                 "Action Invocation",
                 defaultMsg
-        );
+            );
+        }
     }
 
     abstract protected void onSuccess(ActionArgumentValue[] values);

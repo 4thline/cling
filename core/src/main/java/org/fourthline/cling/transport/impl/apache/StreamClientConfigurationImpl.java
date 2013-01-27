@@ -15,21 +15,28 @@
 
 package org.fourthline.cling.transport.impl.apache;
 
-import org.fourthline.cling.model.ServerClientTokens;
-import org.fourthline.cling.transport.spi.StreamClientConfiguration;
+import org.fourthline.cling.transport.spi.AbstractStreamClientConfiguration;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * Settings for the Apache HTTP Components implementation.
  *
  * @author Christian Bauer
  */
-public class StreamClientConfigurationImpl implements StreamClientConfiguration {
+public class StreamClientConfigurationImpl extends AbstractStreamClientConfiguration {
 
-    private int maxTotalConnections = 1024;
-    private int maxTotalPerRoute = 100;
-    private int connectionTimeoutSeconds = 20; // WMP can be very slow to connect
-    private int dataReadTimeoutSeconds = 60; // WMP can be very slow sending the initial data after connection
-    private String contentCharset = "UTF-8"; // UDA spec says it's always UTF-8 entity content
+    protected int maxTotalConnections = 1024;
+    protected int maxTotalPerRoute = 100;
+    protected String contentCharset = "UTF-8"; // UDA spec says it's always UTF-8 entity content
+
+    public StreamClientConfigurationImpl(ExecutorService timeoutExecutorService) {
+        super(timeoutExecutorService);
+    }
+
+    public StreamClientConfigurationImpl(ExecutorService timeoutExecutorService, int timeoutSeconds) {
+        super(timeoutExecutorService, timeoutSeconds);
+    }
 
     /**
      * Defaults to 1024.
@@ -54,27 +61,6 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
     }
 
     /**
-     * Defaults to 20 seconds.
-     */
-    public int getConnectionTimeoutSeconds() {
-        return connectionTimeoutSeconds;
-    }
-
-    public void setConnectionTimeoutSeconds(int connectionTimeoutSeconds) {
-        this.connectionTimeoutSeconds = connectionTimeoutSeconds;
-    }
-    /**
-     * Defaults to 60 seconds.
-     */
-    public int getDataReadTimeoutSeconds() {
-        return dataReadTimeoutSeconds;
-    }
-
-    public void setDataReadTimeoutSeconds(int dataReadTimeoutSeconds) {
-        this.dataReadTimeoutSeconds = dataReadTimeoutSeconds;
-    }
-
-    /**
      * @return Character set of textual content, defaults to "UTF-8".
      */
     public String getContentCharset() {
@@ -86,33 +72,28 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
     }
 
     /**
-     * Defaults to string value of {@link ServerClientTokens}.
-     */
-    public String getUserAgentValue(int majorVersion, int minorVersion) {
-        return new ServerClientTokens(majorVersion, minorVersion).toString();
-    }
-
-    /**
-     * If -1, the default value of HttpClient will be used (8192 in httpclient 4.1)
      * <p>
-     * This will also avoid OOM on the HTC Thunderbolt where default size is 2MB (!):
+     * Returning <code>-1</code> will also avoid OOM on the HTC Thunderbolt where default size is 2MB (!):
      * http://stackoverflow.com/questions/5358014/android-httpclient-oom-on-4g-lte-htc-thunderbolt
      * </p>
+     * @return By default <code>-1</code>, enabling HttpClient's default (8192 bytes in version 4.1)
      */
     public int getSocketBufferSize() {
     	return -1; 
     }
 
+    /**
+     * @return Whether we should (expensively) check for stale connections, defaults to <code>false</code>.
+     */
 	public boolean getStaleCheckingEnabled() {
 		return false;
 	}
 
     /**
-     * If -1, the default value of HttpClient will be used (3 in httpclient 4.1)
+     * @return By default <code>0</code>, use <code>-1</code> to enable HttpClient's default (3 retries in version 4.1)
      */
 	public int getRequestRetryCount() {
-		// The default that is used by DefaultHttpClient if unspecified
-		return -1;
+		return 0;
 	}
 
 }

@@ -56,28 +56,33 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
 
         log.fine("Sending unsubscribe request: " + getInputMessage());
 
-        final StreamResponseMessage response = getUpnpService().getRouter().send(getInputMessage());
+        try {
+            final StreamResponseMessage response = getUpnpService().getRouter().send(getInputMessage());
 
-        // Always remove from the registry and return the response status - even if it's failed
-        getUpnpService().getRegistry().removeRemoteSubscription(subscription);
+            // Always remove from the registry and return the response status - even if it's failed
+            getUpnpService().getRegistry().removeRemoteSubscription(subscription);
 
-        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-                new Runnable() {
-                    public void run() {
-                        if (response == null) {
-                            log.fine("Unsubscribe failed, no response received");
-                            subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
-                        } else if (response.getOperation().isFailed()) {
-                            log.fine("Unsubscribe failed, response was: " + response);
-                            subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
-                        } else {
-                            log.fine("Unsubscribe successful, response was: " + response);
-                            subscription.end(null, response.getOperation());
+            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                    new Runnable() {
+                        public void run() {
+                            if (response == null) {
+                                log.fine("Unsubscribe failed, no response received");
+                                subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
+                            } else if (response.getOperation().isFailed()) {
+                                log.fine("Unsubscribe failed, response was: " + response);
+                                subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
+                            } else {
+                                log.fine("Unsubscribe successful, response was: " + response);
+                                subscription.end(null, response.getOperation());
+                            }
                         }
                     }
-                }
-        );
-
-        return response;
+            );
+    
+            return response;
+        } catch (InterruptedException ex) {
+            log.warning("Sending unsubscribe message was interrupted: " + ex);
+            return null;
+        }
     }
 }

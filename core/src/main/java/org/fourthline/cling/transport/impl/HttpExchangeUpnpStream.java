@@ -24,14 +24,13 @@ import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.transport.spi.UpnpStream;
-import org.seamless.util.io.IO;
 import org.seamless.util.Exceptions;
+import org.seamless.util.io.IO;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,7 +43,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
-public class HttpExchangeUpnpStream extends UpnpStream {
+public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
     private static Logger log = Logger.getLogger(UpnpStream.class.getName());
 
@@ -84,27 +83,7 @@ public class HttpExchangeUpnpStream extends UpnpStream {
             log.fine("Created new request message: " + requestMessage);
 
             // Connection wrapper
-            requestMessage.setConnection(new Connection() {
-                @Override
-                public boolean isOpen() {
-                    log.info("Can't check connection state with this transport, returning true");
-                    return true;
-                }
-
-                @Override
-                public InetAddress getRemoteAddress() {
-                    return getHttpExchange().getRemoteAddress() != null
-                        ? getHttpExchange().getRemoteAddress().getAddress()
-                        : null;
-                }
-
-                @Override
-                public InetAddress getLocalAddress() {
-                    return getHttpExchange().getLocalAddress() != null
-                        ? getHttpExchange().getLocalAddress().getAddress()
-                        : null;
-                }
-            });
+            requestMessage.setConnection(createConnection());
 
             // Headers
             requestMessage.setHeaders(new UpnpHeaders(getHttpExchange().getRequestHeaders()));
@@ -200,5 +179,7 @@ public class HttpExchangeUpnpStream extends UpnpStream {
             responseException(t);
         }
     }
+
+    abstract protected Connection createConnection();
 
 }

@@ -71,11 +71,6 @@ public class SwitchPowerWithClientInfo {
 
             // Return some extra headers in the response
             clientInfo.getExtraResponseHeaders().add("X-MY-HEADER", "foobar");
-
-            // In potentially long-running action methods, regularly check if you
-            // should continue processing, e.g. if the client connection was closed...
-            if (!clientInfo.isRequestCancelled())
-                System.out.println("Connection/thread still active, continuing...");
         }
     }
     // DOC:CLIENT_INFO

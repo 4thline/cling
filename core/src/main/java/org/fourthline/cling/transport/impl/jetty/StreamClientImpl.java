@@ -30,15 +30,16 @@ import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.header.ContentTypeHeader;
 import org.fourthline.cling.model.message.header.UpnpHeader;
+import org.fourthline.cling.transport.spi.AbstractStreamClient;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamClient;
 import org.seamless.util.Exceptions;
 import org.seamless.util.MimeType;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,7 +52,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
-public class StreamClientImpl implements StreamClient {
+public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigurationImpl, StreamClientImpl.HttpContentExchange> {
 
     final private static Logger log = Logger.getLogger(StreamClient.class.getName());
 
@@ -63,10 +64,17 @@ public class StreamClientImpl implements StreamClient {
 
         log.info("Starting Jetty HttpClient...");
         client = new HttpClient();
-        client.setThreadPool(new ExecutorThreadPool(configuration.getExecutorService()));
-        client.setTimeout(configuration.getResponseTimeoutSeconds() * 1000);
-        client.setConnectTimeout(configuration.getConnectionTimeoutSeconds() * 1000);
-        client.setMaxRetries(0);
+
+        // Jetty client needs threads for its internal expiration routines, which we don't need but
+        // can't disable, so let's abuse the request executor service for this
+        client.setThreadPool(new ExecutorThreadPool(getConfiguration().getRequestExecutorService()));
+
+        // These are some safety settings, we should never run into these timeouts as we
+        // do our own expiration checking
+        client.setTimeout((configuration.getTimeoutSeconds()+5) * 1000);
+        client.setConnectTimeout((configuration.getTimeoutSeconds()+5) * 1000);
+
+        client.setMaxRetries(configuration.getRequestRetryCount());
 
         try {
             client.start();
@@ -83,41 +91,51 @@ public class StreamClientImpl implements StreamClient {
     }
 
     @Override
-    public StreamResponseMessage sendRequest(StreamRequestMessage requestMessage) {
-        try {
-            HttpContentExchange exchange = createHttpContentExchange(getConfiguration(), requestMessage);
+    protected HttpContentExchange createRequest(StreamRequestMessage requestMessage) {
+        return new HttpContentExchange(getConfiguration(), client, requestMessage);
+    }
 
-            client.send(exchange);
+    @Override
+    protected Callable<StreamResponseMessage> createCallable(final StreamRequestMessage requestMessage,
+                                                             final HttpContentExchange exchange) {
+        return new Callable<StreamResponseMessage>() {
+            public StreamResponseMessage call() throws Exception {
 
-            // Execute synchronously, this means the HttpClient will use the thread
-            // from the configured ExecutorService to do the work (which by default is the
-            // current thread) and also stay within this thread waiting for the response.
-            int exchangeState = exchange.waitForDone();
+                if (log.isLoggable(Level.FINE))
+                    log.fine("Sending HTTP request: " + requestMessage);
 
-            if (exchangeState == HttpExchange.STATUS_COMPLETED) {
-                try {
-                    return exchange.createResponse();
-                } catch (Throwable t) {
-                    log.log(Level.WARNING, "Error reading response: " + requestMessage, Exceptions.unwrap(t));
+                client.send(exchange);
+                int exchangeState = exchange.waitForDone();
+
+                if (exchangeState == HttpExchange.STATUS_COMPLETED) {
+                    try {
+                        return exchange.createResponse();
+                    } catch (Throwable t) {
+                        log.log(Level.WARNING, "Error reading response: " + requestMessage, Exceptions.unwrap(t));
+                        return null;
+                    }
+                } else if (exchangeState == HttpExchange.STATUS_CANCELLED) {
+                    // That's ok, happens when we abort the exchange after timeout
+                    return null;
+                } else if (exchangeState == HttpExchange.STATUS_EXCEPTED) {
+                    // The warnings of the "excepted" condition are logged in HttpContentExchange
+                    return null;
+                } else {
+                    log.warning("Unhandled HTTP exchange status: " + exchangeState);
                     return null;
                 }
-            } else if (exchangeState == HttpExchange.STATUS_EXCEPTED) {
-                return null;
-            } else if (exchangeState == HttpExchange.STATUS_EXPIRED) {
-                log.warning("Timeout while waiting for HTTP exchange to complete: " + requestMessage);
-                return null;
-            } else {
-                log.warning("Unhandled HTTP exchange status: " + exchangeState);
-                return null;
             }
+        };
+    }
 
-        } catch (IOException ex) {
-            log.warning("Client connection for '" + requestMessage + "' was aborted: " + ex);
-            return null;
-        } catch (InterruptedException ex) {
-            log.warning("Interrupted while waiting for HTTP response for '" + requestMessage + "': " + ex);
-            return null;
-        }
+    @Override
+    protected void abort(HttpContentExchange exchange) {
+        exchange.cancel();
+    }
+
+    @Override
+    protected boolean logExecutionException(Throwable t) {
+        return false;
     }
 
     @Override
@@ -129,20 +147,20 @@ public class StreamClientImpl implements StreamClient {
         }
     }
 
-    protected HttpContentExchange createHttpContentExchange(StreamClientConfigurationImpl configuration,
-                                                            StreamRequestMessage requestMessage) {
-        return new HttpContentExchange(configuration, requestMessage);
-    }
-
     static public class HttpContentExchange extends ContentExchange {
 
         final protected StreamClientConfigurationImpl configuration;
+        final protected HttpClient client;
         final protected StreamRequestMessage requestMessage;
 
+        protected Throwable exception;
+
         public HttpContentExchange(StreamClientConfigurationImpl configuration,
+                                   HttpClient client,
                                    StreamRequestMessage requestMessage) {
             super(true);
             this.configuration = configuration;
+            this.client = client;
             this.requestMessage = requestMessage;
             applyRequestURLMethod();
             applyRequestHeaders();
@@ -151,14 +169,12 @@ public class StreamClientImpl implements StreamClient {
 
         @Override
         protected void onConnectionFailed(Throwable t) {
-            log.warning("Can't connect to HTTP server: " + requestMessage);
-            log.warning("Cause: " + Exceptions.unwrap(t));
+            log.log(Level.WARNING, "HTTP connection failed: " + requestMessage, Exceptions.unwrap(t));
         }
 
         @Override
         protected void onException(Throwable t) {
-            log.warning("Exception while processing HTTP exchange: " + getRequestMessage());
-            log.warning("Cause: " + Exceptions.unwrap(t));
+            log.log(Level.WARNING, "HTTP request failed: " + requestMessage, Exceptions.unwrap(t));
         }
 
         public StreamClientConfigurationImpl getConfiguration() {

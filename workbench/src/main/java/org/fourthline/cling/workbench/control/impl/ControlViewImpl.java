@@ -48,6 +48,9 @@ public class ControlViewImpl extends JDialog implements ControlView {
     final protected JButton invokeActionButton =
             new JButton("Invoke", Application.createImageIcon(Workbench.class, "img/16/execute.png"));
 
+    final protected JButton cancelActionButton =
+            new JButton("Cancel", Application.createImageIcon(Workbench.class, "img/16/stop.png"));
+
     protected JScrollPane inputArgumentsScrollPane;
     protected ActionArgumentTable inputArgumentsTable;
 
@@ -92,6 +95,16 @@ public class ControlViewImpl extends JDialog implements ControlView {
         });
         invokeActionButton.setPreferredSize(new Dimension(5000, 25));
         invocationToolBar.add(invokeActionButton);
+
+        cancelActionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                presenter.onCancel();
+            }
+        });
+        cancelActionButton.setEnabled(false);
+        cancelActionButton.setPreferredSize(new Dimension(5000, 25));
+        invocationToolBar.add(cancelActionButton);
     }
 
     @Override
@@ -155,4 +168,9 @@ public class ControlViewImpl extends JDialog implements ControlView {
         validate();
     }
 
+    @Override
+    public void setCancelEnabled(boolean enabled) {
+        cancelActionButton.setEnabled(enabled);
+        validate();
+    }
 }

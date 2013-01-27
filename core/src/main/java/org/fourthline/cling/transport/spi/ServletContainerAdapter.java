@@ -17,6 +17,7 @@ package org.fourthline.cling.transport.spi;
 
 import javax.servlet.Servlet;
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 
 /**
  * Implement this to provide your own servlet container (instance),
@@ -37,10 +38,19 @@ import java.io.IOException;
 public interface ServletContainerAdapter {
 
     /**
+     * Might be called several times to integrate the servlet container with Cling's executor
+     * configuration. You can ignore this call if you want to configure the container's thread
+     * pooling independently from Cling.
+     *
+     * @param executorService The service to use when spawning new servlet execution threads.
+     */
+    void setExecutorService(ExecutorService executorService);
+
+    /**
      * Might be called several times to set up the connectors. This is the host/address
      * and the port Cling expects to receive HTTP requests on. If you set up your HTTP
      * server connectors elsewhere and ignore when Cling calls this method, make sure
-     * you configure Cling with the correct host/port.
+     * you configure Cling with the correct host/port of your servlet container.
      *
      * @param host The host address for the socket.
      * @param port The port, might be <code>-1</code> to bind to an ephemeral port.

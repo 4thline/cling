@@ -16,6 +16,7 @@
 package org.fourthline.cling.protocol.sync;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.model.action.ActionCancelledException;
 import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.RemoteActionInvocation;
 import org.fourthline.cling.model.message.StreamRequestMessage;
@@ -105,9 +106,20 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
                 responseMessage =
                         new OutgoingActionResponseMessage(invocation.getAction());
             } else {
-                responseMessage =
-                        new OutgoingActionResponseMessage(UpnpResponse.Status.INTERNAL_SERVER_ERROR, invocation.getAction());
 
+                if (invocation.getFailure() instanceof ActionCancelledException) {
+                    log.fine("Action execution was cancelled, returning 404 to client");
+                    // A 404 status is appropriate for this situation: The resource is gone/not available and it's
+                    // a temporary condition. Most likely the cancellation happened because the client connection
+                    // has been dropped, so it doesn't really matter what we return here anyway.
+                    return null;
+                } else {
+                    responseMessage =
+                            new OutgoingActionResponseMessage(
+                                UpnpResponse.Status.INTERNAL_SERVER_ERROR,
+                                invocation.getAction()
+                            );
+                }
             }
 
         } catch (ActionException ex) {

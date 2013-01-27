@@ -45,7 +45,7 @@ public class WorkbenchUpnpConfiguration extends ManagedUpnpServiceConfiguration 
     public StreamClient createStreamClient() {
         return new org.fourthline.cling.transport.impl.jetty.StreamClientImpl(
             new org.fourthline.cling.transport.impl.jetty.StreamClientConfigurationImpl(
-                getSyncProtocolExecutor()
+                getSyncProtocolExecutorService()
             )
         );
     }

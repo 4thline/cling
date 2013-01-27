@@ -204,7 +204,7 @@ public class RouterImpl implements Router {
         for (Map.Entry<InetAddress, StreamServer> entry : streamServers.entrySet()) {
             if (log.isLoggable(Level.FINE))
                 log.fine("Starting stream server on address: " + entry.getKey());
-            getConfiguration().getStreamServerExecutor().execute(entry.getValue());
+            getConfiguration().getStreamServerExecutorService().execute(entry.getValue());
         }
 
         for (Map.Entry<InetAddress, DatagramIO> entry : datagramIOs.entrySet()) {
@@ -332,7 +332,7 @@ public class RouterImpl implements Router {
      */
     public void received(UpnpStream stream) {
         log.fine("Received synchronous stream: " + stream);
-        getConfiguration().getSyncProtocolExecutor().execute(stream);
+        getConfiguration().getSyncProtocolExecutorService().execute(stream);
     }
 
     /**
@@ -353,7 +353,7 @@ public class RouterImpl implements Router {
      * @return The return value of the {@link org.fourthline.cling.transport.spi.StreamClient#sendRequest(StreamRequestMessage)}
      *         method or <code>null</code> if no <code>StreamClient</code> is available.
      */
-    public StreamResponseMessage send(StreamRequestMessage msg) {
+    public StreamResponseMessage send(StreamRequestMessage msg) throws InterruptedException {
         if (getStreamClient() == null) {
             log.fine("No StreamClient available, ignoring: " + msg);
             return null;

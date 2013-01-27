@@ -85,7 +85,12 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
             // Block incoming (initial) event messages until the subscription is fully registered
             getUpnpService().getRegistry().lockRemoteSubscriptions();
 
-            StreamResponseMessage response = getUpnpService().getRouter().send(getInputMessage());
+            StreamResponseMessage response = null;
+            try {
+                response = getUpnpService().getRouter().send(getInputMessage());
+            } catch (InterruptedException ex) {
+                log.warning("Sending subscribe message was interrupted: " + ex);
+            }
 
             if (response == null) {
                 log.fine("Subscription failed, no response received");

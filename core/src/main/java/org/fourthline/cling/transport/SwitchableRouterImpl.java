@@ -41,6 +41,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -210,7 +211,7 @@ public class SwitchableRouterImpl implements SwitchableRouter {
         }
     }
 
-    public StreamResponseMessage send(StreamRequestMessage msg) throws RouterLockAcquisitionException {
+    public StreamResponseMessage send(StreamRequestMessage msg) throws RouterLockAcquisitionException, InterruptedException{
         lock(readLock);
         try {
             return router != null ? router.send(msg) : null;
@@ -236,8 +237,8 @@ public class SwitchableRouterImpl implements SwitchableRouter {
             } else {
                 throw new RouterLockAcquisitionException("Failed to acquire router lock: " + lock.getClass().getSimpleName());
             }
-        } catch (InterruptedException e) {
-            throw new RouterLockAcquisitionException("Waiting for lock interrupted: " + lock.getClass().getSimpleName(), e);
+        } catch (InterruptedException ex) {
+            log.log(Level.INFO, "Waiting for lock interrupted: " + lock.getClass().getSimpleName(), ex);
         }
     }
 

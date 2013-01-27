@@ -154,11 +154,7 @@
             <scope>compile</scope>
             <optional>true</optional>
             <exclusions>
-                <!-- Don't need these to compile Cling -->
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
+                <!-- Don't need these to compile/test Cling -->
                 <exclusion>
                     <groupId>commons-codec</groupId>
                     <artifactId>commons-codec</artifactId>

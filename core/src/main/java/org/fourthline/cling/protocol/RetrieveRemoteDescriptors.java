@@ -113,17 +113,17 @@ public class RetrieveRemoteDescriptors implements Runnable {
         // braindead design of UPnP. Several GET requests, several descriptors, several XML parsing
         // steps - all of this could be done with one and it wouldn't make a difference. So every
         // call of this method has to be really necessary and rare.
-    	
+
     	if(getUpnpService().getRouter() == null) {
     		log.warning("Router not yet initialized");
     		return ;
     	}
-    	
+
     	StreamRequestMessage deviceDescRetrievalMsg;
     	StreamResponseMessage deviceDescMsg;
 
     	try {
-    		
+
     		deviceDescRetrievalMsg =
                 new StreamRequestMessage(UpnpRequest.Method.GET, rd.getIdentity().getDescriptorURL());
 
@@ -135,16 +135,22 @@ public class RetrieveRemoteDescriptors implements Runnable {
 
     		log.fine("Sending device descriptor retrieval message: " + deviceDescRetrievalMsg);
             deviceDescMsg = getUpnpService().getRouter().send(deviceDescRetrievalMsg);
-            
-    	} catch(IllegalArgumentException e) {
+
+    	} catch(IllegalArgumentException ex) {
     		// UpnpRequest constructor can throw IllegalArgumentException on invalid URI
     		// IllegalArgumentException can also be thrown by Apache HttpClient on blank URI in send()
             log.warning(
                 "Device descriptor retrieval failed: "
                 + rd.getIdentity().getDescriptorURL()
-                + ", possibly invalid URL: " + e);
+                + ", possibly invalid URL: " + ex);
             return ;
-    	}
+    	} catch (InterruptedException ex) {
+            log.warning(
+                "Device descriptor retrieval was interrupted: "
+                + rd.getIdentity().getDescriptorURL()
+            );
+            return ;
+        }
 
         if (deviceDescMsg == null) {
             log.warning(
@@ -293,7 +299,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
     		log.warning("Could not normalize service descriptor URL: " + service.getDescriptorURI());
     		return null;
     	}
-    	
+
         StreamRequestMessage serviceDescRetrievalMsg = new StreamRequestMessage(UpnpRequest.Method.GET, descriptorURL);
 
         // Extra headers
@@ -303,7 +309,12 @@ public class RetrieveRemoteDescriptors implements Runnable {
             serviceDescRetrievalMsg.getHeaders().putAll(headers);
 
         log.fine("Sending service descriptor retrieval message: " + serviceDescRetrievalMsg);
-        StreamResponseMessage serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
+        StreamResponseMessage serviceDescMsg = null;
+        try {
+            serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
+        } catch (InterruptedException ex) {
+            log.warning("Service descriptor retrieval was interrupted: " + descriptorURL);
+        }
 
         if (serviceDescMsg == null) {
             log.warning("Could not retrieve service descriptor, no response: " + service);

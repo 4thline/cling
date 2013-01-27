@@ -222,7 +222,7 @@ public class MockUpnpService implements UpnpService {
                 outgoingDatagramMessages.add(msg);
             }
 
-            public StreamResponseMessage send(StreamRequestMessage msg) {
+            public StreamResponseMessage send(StreamRequestMessage msg) throws InterruptedException{
                 sentStreamRequestMessages.add(msg);
                 counter++;
                 return getStreamResponseMessages() != null

@@ -15,7 +15,6 @@
 
 package org.fourthline.cling.android;
 
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import org.fourthline.cling.DefaultUpnpServiceConfiguration;
 import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
@@ -89,7 +88,7 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
         // Use Jetty
         return new StreamClientImpl(
             new StreamClientConfigurationImpl(
-                getSyncProtocolExecutor()
+                getSyncProtocolExecutorService()
             ) {
                 @Override
                 public String getUserAgentValue(int majorVersion, int minorVersion) {

@@ -57,7 +57,12 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
     protected IncomingSubscribeResponseMessage executeSync() {
         log.fine("Sending subscription renewal request: " + getInputMessage());
 
-        StreamResponseMessage response = getUpnpService().getRouter().send(getInputMessage());
+        StreamResponseMessage response = null;
+        try {
+            response = getUpnpService().getRouter().send(getInputMessage());
+        } catch (InterruptedException ex) {
+            log.warning("Sending renewal message was interrupted: " + ex);
+        }
 
         if (response == null) {
             log.fine("Subscription renewal failed, no response received");

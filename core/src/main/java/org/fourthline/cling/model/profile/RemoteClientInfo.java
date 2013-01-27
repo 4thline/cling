@@ -58,15 +58,28 @@ public class RemoteClientInfo extends ClientInfo {
     }
 
     /**
-     * @return <code>true</code> if the Thread has been interrupted or the client's connection was closed
+     * <p>
+     * Check if the remote client's connection is still open.
+     * </p>
+     * <p>
+     * How connection checking is actually performed is transport-implementation dependent. Usually,
+     * the {@link org.fourthline.cling.transport.spi.StreamServer} will send meaningless heartbeat
+     * data to the client on its (open) socket. If that fails, the client's connection has been
+     * closed. Note that some HTTP clients can <em>NOT</em> handle such garbage data in HTTP
+     * responses, hence calling this method might cause compatibility issues.
+     * </p>
+     * @return <code>true</code> if the remote client's connection was closed.
      */
     public boolean isRequestCancelled() {
-        return Thread.interrupted() || !getConnection().isOpen();
+        return !getConnection().isOpen();
     }
 
+    /**
+     * @throws InterruptedException if {@link #isRequestCancelled()} returns <code>true</code>.
+     */
     public void throwIfRequestCancelled() throws InterruptedException{
         if(isRequestCancelled())
-             throw new InterruptedException();
+             throw new InterruptedException("Client's request cancelled");
     }
 
     public InetAddress getRemoteAddress() {

@@ -15,19 +15,26 @@
 
 package org.fourthline.cling.transport.impl;
 
-import org.fourthline.cling.transport.spi.StreamClientConfiguration;
-import org.fourthline.cling.model.ServerClientTokens;
+import org.fourthline.cling.transport.spi.AbstractStreamClientConfiguration;
+
+import java.util.concurrent.ExecutorService;
 
 /**
  * Settings for the default implementation.
  *
  * @author Christian Bauer
  */
-public class StreamClientConfigurationImpl implements StreamClientConfiguration {
+public class StreamClientConfigurationImpl extends AbstractStreamClientConfiguration {
 
     private boolean usePersistentConnections = false;
-    private int connectionTimeoutSeconds = 20; // WMP can be very slow to connect
-    private int dataReadTimeoutSeconds = 60; // WMP can be very slow sending the initial data after connection
+
+    public StreamClientConfigurationImpl(ExecutorService timeoutExecutorService) {
+        super(timeoutExecutorService);
+    }
+
+    public StreamClientConfigurationImpl(ExecutorService timeoutExecutorService, int timeoutSeconds) {
+        super(timeoutExecutorService, timeoutSeconds);
+    }
 
     /**
      * Defaults to <code>false</code>, avoiding obscure bugs in the JDK.
@@ -38,35 +45,6 @@ public class StreamClientConfigurationImpl implements StreamClientConfiguration 
 
     public void setUsePersistentConnections(boolean usePersistentConnections) {
         this.usePersistentConnections = usePersistentConnections;
-    }
-
-    /**
-     * Defaults to 20 seconds.
-     */
-    public int getConnectionTimeoutSeconds() {
-        return connectionTimeoutSeconds;
-    }
-
-    public void setConnectionTimeoutSeconds(int connectionTimeoutSeconds) {
-        this.connectionTimeoutSeconds = connectionTimeoutSeconds;
-    }
-
-    /**
-     * Defaults to 60 seconds.
-     */
-    public int getDataReadTimeoutSeconds() {
-        return dataReadTimeoutSeconds;
-    }
-
-    public void setDataReadTimeoutSeconds(int dataReadTimeoutSeconds) {
-        this.dataReadTimeoutSeconds = dataReadTimeoutSeconds;
-    }
-
-    /**
-     * Defaults to string value of {@link ServerClientTokens}.
-     */
-    public String getUserAgentValue(int majorVersion, int minorVersion) {
-        return new ServerClientTokens(majorVersion, minorVersion).toString();
     }
 
 }

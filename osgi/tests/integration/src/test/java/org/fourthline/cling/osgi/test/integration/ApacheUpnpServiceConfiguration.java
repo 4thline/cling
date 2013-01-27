@@ -28,7 +28,7 @@ public class ApacheUpnpServiceConfiguration extends DefaultUpnpServiceConfigurat
 
 	@Override
     public StreamClient<?> createStreamClient() {
-        return new StreamClientImpl(new StreamClientConfigurationImpl());
+        return new StreamClientImpl(new StreamClientConfigurationImpl(getSyncProtocolExecutorService()));
     }
 	
 	@Override

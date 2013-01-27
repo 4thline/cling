@@ -27,13 +27,15 @@ import org.fourthline.cling.registry.Registry;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
 /**
  * Default implementation.
  * <p>
  * This implementation uses the executor returned by
- * {@link org.fourthline.cling.UpnpServiceConfiguration#getSyncProtocolExecutor()}.
+ * {@link org.fourthline.cling.UpnpServiceConfiguration#getSyncProtocolExecutorService()}.
  * </p>
  *
  * @author Christian Bauer
@@ -98,15 +100,16 @@ public class ControlPointImpl implements ControlPoint {
         execute(executeAction.getCallback());
     }
 
-    public void execute(ActionCallback callback) {
+    public Future execute(ActionCallback callback) {
         log.fine("Invoking action in background: " + callback);
         callback.setControlPoint(this);
-        getConfiguration().getSyncProtocolExecutor().execute(callback);
+        ExecutorService executor = getConfiguration().getSyncProtocolExecutorService();
+        return executor.submit(callback);
     }
 
     public void execute(SubscriptionCallback callback) {
         log.fine("Invoking subscription in background: " + callback);
         callback.setControlPoint(this);
-        getConfiguration().getSyncProtocolExecutor().execute(callback);
+        getConfiguration().getSyncProtocolExecutorService().execute(callback);
     }
 }

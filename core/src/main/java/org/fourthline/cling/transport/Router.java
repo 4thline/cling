@@ -116,8 +116,9 @@ public interface Router {
      * </p>
      * @param msg The TCP (HTTP) stream message to send.
      * @return The response received from the server.
+     * @throws InterruptedException if the sending thread was interrupted while waiting for a response.
      */
-    public StreamResponseMessage send(StreamRequestMessage msg);
+    public StreamResponseMessage send(StreamRequestMessage msg) throws InterruptedException;
 
     /**
      * <p>

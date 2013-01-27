@@ -1,0 +1,25 @@
+<div class="section" id="section.LongRunningActions"
+     xmlns="http://www.w3.org/1999/xhtml">
+    <div class="title">Long-running actions</div>
+    <div class="content">
+
+        <p>
+            An action of a service might take a long time to complete and consume resources. For example, if your
+            service has to process significant amounts of data, you might want to stop processing when the client
+            calling your action is actually no longer connected. On the client side, you might want to give your users
+            the option to interrupt and abort action requests if the service takes too long to respond. These are
+            two distinct issues, and we'll first look at it from the client's perspective.
+        </p>
+
+        <div class="section">
+            <a class="citation"
+               href="javadoc://example.controlpoint.ActionCancellationTest"/>
+        </div>
+
+        <div class="section">
+            <a class="citation"
+               href="javadoc://example.controlpoint.SwitchPowerWithInterruption"/>
+        </div>
+
+    </div>
+</div>

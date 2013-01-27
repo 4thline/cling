@@ -19,6 +19,7 @@ import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.action.ActionArgumentValue;
 import org.fourthline.cling.model.action.ActionInvocation;
+import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Action;
 import org.fourthline.cling.support.shared.TextExpand;
 import org.fourthline.cling.workbench.Workbench;
@@ -27,7 +28,8 @@ import org.fourthline.cling.workbench.control.ControlView;
 import javax.annotation.PreDestroy;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
+import java.util.concurrent.Future;
 
 public class ControlPresenter implements ControlView.Presenter {
 
@@ -41,6 +43,7 @@ public class ControlPresenter implements ControlView.Presenter {
     Event<TextExpand> textExpandEvent;
 
     protected Action action;
+    protected Future actionExecutionFuture;
 
     @Override
     public void init(Action action, ActionArgumentValue[] presetInputValues) {
@@ -58,7 +61,7 @@ public class ControlPresenter implements ControlView.Presenter {
         // Starts background thread
         Workbench.log(
                 "Action Invocation",
-                "Executing action: " + actionInvocation.getAction().getName()
+                "Executing action: " + action.getName()
         );
         ActionCallback actionCallback =
                 new ControlActionCallback(actionInvocation) {
@@ -66,13 +69,36 @@ public class ControlPresenter implements ControlView.Presenter {
                     protected void onSuccess(final ActionArgumentValue[] values) {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
+                                view.setCancelEnabled(false);
                                 view.setOutputValues(values);
                             }
                         });
+                    }
 
+                    @Override
+                    public void failure(ActionInvocation invocation, UpnpResponse operation, String defaultMsg) {
+                        SwingUtilities.invokeLater(new Runnable() {
+                            public void run() {
+                                view.setCancelEnabled(false);
+                            }
+                        });
+                        super.failure(invocation, operation, defaultMsg);
                     }
                 };
-        controlPoint.execute(actionCallback);
+        actionExecutionFuture = controlPoint.execute(actionCallback);
+        view.setCancelEnabled(true);
+    }
+
+    @Override
+    public void onCancel() {
+        view.setCancelEnabled(false);
+        if (actionExecutionFuture != null) {
+            Workbench.log(
+                    "Action Invocation",
+                    "Interrupting action execution: " + action.getName()
+            );
+            actionExecutionFuture.cancel(true);
+        }
     }
 
     @PreDestroy

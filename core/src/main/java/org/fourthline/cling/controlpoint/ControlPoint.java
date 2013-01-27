@@ -20,6 +20,8 @@ import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.registry.Registry;
 
+import java.util.concurrent.Future;
+
 /**
  * Unified API for the asynchronous execution of network searches, actions, event subscriptions.
  *
@@ -35,7 +37,7 @@ public interface ControlPoint {
     public void search(UpnpHeader searchType);
     public void search(int mxSeconds);
     public void search(UpnpHeader searchType, int mxSeconds);
-    public void execute(ActionCallback callback);
+    public Future execute(ActionCallback callback);
     public void execute(SubscriptionCallback callback);
 
 }
