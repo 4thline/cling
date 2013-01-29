@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.contentdirectory;
+package org.fourthline.cling.workbench.plugins.contentdirectory.impl;
 
 import org.fourthline.cling.support.model.DIDLObject;
 import org.fourthline.cling.support.model.container.Container;

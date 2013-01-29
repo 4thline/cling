@@ -22,7 +22,6 @@ import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.workbench.Workbench;
 
 import javax.inject.Inject;
-import java.util.logging.Level;
 
 /**
  * @author Christian Bauer
@@ -96,7 +95,7 @@ public abstract class ReconnectingPresenter implements ReconnectView.Presenter {
 
     public void onConnectionFailure(String msg) {
         setTitle("Connection failed: " + msg);
-        Workbench.log(Level.WARNING, "Connection failed: " + msg);
+        Workbench.Log.MAIN.warning("Connection failed: " + msg);
         setReconnectViewEnabled(true);
     }
 

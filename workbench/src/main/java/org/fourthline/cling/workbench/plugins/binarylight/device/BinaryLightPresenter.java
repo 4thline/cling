@@ -29,8 +29,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.swing.SwingUtilities;
-import java.util.logging.Level;
+import javax.swing.*;
 
 /**
  * @author Christian Bauer
@@ -51,7 +50,7 @@ public class BinaryLightPresenter implements BinaryLightView.Presenter {
     public void onCreate(@Observes CreateDemoDevice createDemoDevice) {
 
         if (upnpService.getRegistry().getLocalDevice(DEMO_DEVICE_UDN, true) != null) {
-            Workbench.log(Level.INFO, "Local demo device already exists!");
+            Workbench.Log.MAIN.info("Local demo device already exists!");
             return;
         }
 

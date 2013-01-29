@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.igd;
+package org.fourthline.cling.workbench.plugins.igd.impl;
 
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -22,13 +22,13 @@ import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.support.igd.callback.GetExternalIP;
 import org.fourthline.cling.support.igd.callback.GetStatusInfo;
 import org.fourthline.cling.support.model.Connection;
-import org.fourthline.cling.workbench.Workbench;
-import org.seamless.swing.logging.LogMessage;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingPresenter;
+import org.fourthline.cling.workbench.plugins.igd.WANIPConnectionControlPoint;
+import org.fourthline.cling.workbench.plugins.igd.WANIPConnectionView;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.swing.SwingUtilities;
-import java.util.logging.Level;
+import javax.swing.*;
 
 /**
  * @author Christian Bauer
@@ -87,11 +87,9 @@ public class WANIPConnectionPresenter implements WANIPConnectionView.Presenter {
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        Workbench.log(new LogMessage(
-                                Level.INFO,
-                                "WANIPConnection ControlPoint",
-                                "Can't retrieve external IP: " + defaultMsg
-                        ));
+                        WANIPConnectionControlPoint.LOGGER.info(
+                            "Can't retrieve external IP: " + defaultMsg
+                        );
                     }
                 }
         );
@@ -111,11 +109,9 @@ public class WANIPConnectionPresenter implements WANIPConnectionView.Presenter {
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        Workbench.log(new LogMessage(
-                                Level.INFO,
-                                "WANIPConnection ControlPoint",
-                                "Can't retrieve connection status: " + defaultMsg
-                        ));
+                        WANIPConnectionControlPoint.LOGGER.info(
+                            "Can't retrieve connection status: " + defaultMsg
+                        );
                     }
                 }
         );

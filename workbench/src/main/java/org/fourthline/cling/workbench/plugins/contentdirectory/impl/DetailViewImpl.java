@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.contentdirectory;
+package org.fourthline.cling.workbench.plugins.contentdirectory.impl;
 
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.Service;
@@ -21,6 +21,8 @@ import org.fourthline.cling.support.model.ProtocolInfo;
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.container.Container;
 import org.fourthline.cling.support.model.item.Item;
+import org.fourthline.cling.workbench.plugins.contentdirectory.DetailView;
+import org.fourthline.cling.workbench.plugins.contentdirectory.ItemFormPanel;
 
 import javax.annotation.PostConstruct;
 import javax.swing.JLabel;

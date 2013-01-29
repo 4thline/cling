@@ -18,9 +18,8 @@ package org.fourthline.cling.workbench.shared.datatable;
 import org.fourthline.cling.model.action.ActionArgumentValue;
 import org.fourthline.cling.model.meta.ActionArgument;
 import org.fourthline.cling.workbench.Workbench;
-import org.seamless.swing.logging.LogMessage;
 
-import javax.swing.AbstractCellEditor;
+import javax.swing.*;
 import javax.swing.table.TableCellEditor;
 
 
@@ -51,7 +50,7 @@ public abstract class ArgumentValueCellEditor extends AbstractCellEditor impleme
     }
 
     public void setStatus(String msg) {
-        Workbench.log(new LogMessage("Argument Editor", msg));
+        Workbench.Log.MAIN.info(msg);
     }
 
     public abstract boolean handlesEditability();

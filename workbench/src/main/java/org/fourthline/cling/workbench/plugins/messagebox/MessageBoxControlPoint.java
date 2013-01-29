@@ -13,31 +13,32 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.avtransport;
+package org.fourthline.cling.workbench.plugins.messagebox;
 
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ServiceType;
-import org.fourthline.cling.model.types.UDAServiceType;
-import org.fourthline.cling.workbench.spi.AbstractControlPointAdapter;
+import org.fourthline.cling.workbench.spi.ControlPointAdapter;
 
-import javax.enterprise.inject.Instance;
-import javax.inject.Inject;
+import java.util.logging.Logger;
 
 /**
+ * urn:samsung.com:service:MessageBoxService:1
+ *
  * @author Christian Bauer
  */
-public class AVTransportControlPointAdapter extends AbstractControlPointAdapter {
+public class MessageBoxControlPoint implements ControlPointAdapter {
 
-    @Inject
-    protected Instance<AVTransportView.Presenter> avTransportPresenterInstance;
+    final public static Logger LOGGER = Logger.getLogger("MessageBox");
 
-    @Override
-    protected ServiceType[] getSupportedServiceTypes() {
-        return new ServiceType[] {new UDAServiceType("AVTransport", 1)};
+    public ServiceType getServiceType() {
+        return new ServiceType("samsung.com", "MessageBoxService", 1);
     }
 
-    @Override
-    protected void onUseServiceRequest(Service service) {
-        avTransportPresenterInstance.get().init(service);
+    public void start(Service service) {
+/*
+        JFrame view = new MessageBoxController(controller, upnpService.getControlPoint(), service).getView();
+        Application.center(view);
+        view.setVisible(true);
+*/
     }
 }

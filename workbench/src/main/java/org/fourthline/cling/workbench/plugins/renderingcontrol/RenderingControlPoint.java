@@ -22,11 +22,14 @@ import org.fourthline.cling.workbench.spi.AbstractControlPointAdapter;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer
  */
-public class RenderingControlPointAdapter extends AbstractControlPointAdapter {
+public class RenderingControlPoint extends AbstractControlPointAdapter {
+
+    final public static Logger LOGGER = Logger.getLogger("RenderingControl ControlPoint");
 
     @Inject
     protected Instance<RenderingControlView.Presenter> renderingControlPresenterInstance;

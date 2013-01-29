@@ -13,31 +13,23 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.igd;
+package org.fourthline.cling.workbench.plugins.igd.impl;
 
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.support.model.PortMapping;
 import org.fourthline.cling.workbench.Workbench;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingEditView;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingPresenter;
+import org.fourthline.cling.workbench.plugins.igd.WANIPConnectionControlPoint;
 import org.seamless.swing.Application;
 import org.seamless.swing.Form;
-import org.seamless.swing.logging.LogMessage;
 
 import javax.annotation.PostConstruct;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridBagLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.logging.Level;
 
 /**
  * @author Christian Bauer
@@ -152,11 +144,9 @@ public class PortMappingEditViewImpl extends JPanel implements PortMappingEditVi
 
             return pm;
         } catch (Exception ex) {
-            Workbench.log(new LogMessage(
-                    Level.INFO,
-                    "WANIPConnection ControlPoint",
-                    "Error in port mapping form data: " + ex
-            ));
+            WANIPConnectionControlPoint.LOGGER.info(
+                "Error in port mapping form data: " + ex
+            );
         }
 
         return null;

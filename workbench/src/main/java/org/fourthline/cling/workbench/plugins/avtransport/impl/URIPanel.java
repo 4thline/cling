@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.workbench.plugins.avtransport.impl;
 
-import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPointAdapter;
+import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
 import org.seamless.swing.Application;
 
 import javax.swing.JPanel;
@@ -35,7 +35,7 @@ public class URIPanel extends JPanel {
     final private JButton setButton =
             new JButton(
                     ACTION_SET[0],
-                    Application.createImageIcon(AVTransportControlPointAdapter.class, "img/16/set_on_screen.png")
+                    Application.createImageIcon(AVTransportControlPoint.class, "img/16/set_on_screen.png")
             );
 
     public URIPanel() {

@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.contentdirectory;
+package org.fourthline.cling.workbench.plugins.contentdirectory.impl;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -33,8 +33,8 @@ import org.fourthline.cling.support.model.ProtocolInfos;
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.container.Container;
 import org.fourthline.cling.support.model.item.Item;
-import org.fourthline.cling.workbench.Workbench;
-import org.seamless.swing.logging.LogMessage;
+import org.fourthline.cling.workbench.plugins.contentdirectory.ContentDirectoryControlPoint;
+import org.fourthline.cling.workbench.plugins.contentdirectory.DetailView;
 import org.seamless.util.MimeType;
 
 import javax.inject.Inject;
@@ -44,15 +44,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer
  */
 public class DetailPresenter implements DetailView.Presenter {
-
-    final private static Logger log = Logger.getLogger(DetailPresenter.class.getName());
 
     public static final DeviceType SUPPORTED_MEDIA_RENDERER_TYPE = new UDADeviceType("MediaRenderer", 1);
     public static final ServiceType SUPPORTED_CONNECTION_MGR_TYPE = new UDAServiceType("ConnectionManager", 1);
@@ -103,24 +99,30 @@ public class DetailPresenter implements DetailView.Presenter {
     }
 
     synchronized protected void updateMediaRenderers() {
-        log.fine("Updating media renderers");
+        ContentDirectoryControlPoint.LOGGER.fine("Updating media renderers");
 
         Collection<Device> foundMediaRenderers = upnpService.getRegistry().getDevices(SUPPORTED_MEDIA_RENDERER_TYPE);
 
-        log.fine("Mediarenderers found in local registry: " + foundMediaRenderers.size());
+        ContentDirectoryControlPoint.LOGGER.fine(
+            "Mediarenderers found in local registry: " + foundMediaRenderers.size()
+        );
 
         for (final Device foundMediaRenderer : foundMediaRenderers) {
 
             // Queue a GetProtocolInfo action that will add the renderer + protocol info to the available renderer map
             if (!availableRenderers.containsKey(foundMediaRenderer)) {
 
-                log.fine("New media renderer, preparing to get protocol information: " + foundMediaRenderer);
+                ContentDirectoryControlPoint.LOGGER.fine(
+                    "New media renderer, preparing to get protocol information: " + foundMediaRenderer
+                );
 
                 Service connectionManager =
                         foundMediaRenderer.findService(SUPPORTED_CONNECTION_MGR_TYPE);
 
                 if (connectionManager == null) {
-                    log.warning("MediaRenderer device has no ConnectionManager service: " + foundMediaRenderer);
+                    ContentDirectoryControlPoint.LOGGER.warning(
+                        "MediaRenderer device has no ConnectionManager service: " + foundMediaRenderer
+                    );
                     break;
                 }
 
@@ -174,7 +176,9 @@ public class DetailPresenter implements DetailView.Presenter {
         try {
             resourceMimeType = resourceProtocolInfo.getContentFormatMimeType();
         } catch (IllegalArgumentException ex) {
-            log.warning("Illegal resource mime type: " + resourceProtocolInfo.getContentFormat());
+            ContentDirectoryControlPoint.LOGGER.warning(
+                "Illegal resource mime type: " + resourceProtocolInfo.getContentFormat()
+            );
             return false;
         }
 
@@ -188,7 +192,9 @@ public class DetailPresenter implements DetailView.Presenter {
                     return true;
                 }
             } catch (IllegalArgumentException ex) {
-                log.warning("Illegal MediaRenderer supported mime type: " + supportedProtocol.getContentFormat());
+                ContentDirectoryControlPoint.LOGGER.warning(
+                    "Illegal MediaRenderer supported mime type: " + supportedProtocol.getContentFormat()
+                );
             }
         }
         return false;
@@ -221,11 +227,11 @@ public class DetailPresenter implements DetailView.Presenter {
     }
 
     protected void updateStatus(String statusMessage) {
-        Workbench.log(new LogMessage("ContentDirectory ControlPoint", statusMessage));
+        ContentDirectoryControlPoint.LOGGER.info(statusMessage);
     }
 
     protected void updateStatusFailure(String statusMessage) {
-        Workbench.log(new LogMessage(Level.SEVERE, "ContentDirectory ControlPoint", statusMessage));
+        ContentDirectoryControlPoint.LOGGER.severe(statusMessage);
     }
 
 }

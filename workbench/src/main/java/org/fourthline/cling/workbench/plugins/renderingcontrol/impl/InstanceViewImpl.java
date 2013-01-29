@@ -13,9 +13,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.renderingcontrol;
+package org.fourthline.cling.workbench.plugins.renderingcontrol.impl;
 
 import org.fourthline.cling.model.meta.StateVariableAllowedValueRange;
+import org.fourthline.cling.workbench.plugins.renderingcontrol.InstanceView;
+import org.fourthline.cling.workbench.plugins.renderingcontrol.RenderingControlPoint;
 import org.seamless.swing.Application;
 
 import javax.swing.BorderFactory;
@@ -39,10 +41,10 @@ import java.awt.event.ItemListener;
 public class InstanceViewImpl extends JPanel implements InstanceView {
 
     public static final ImageIcon ICON_MUTE_OFF =
-            Application.createImageIcon(RenderingControlPointAdapter.class, "img/32/speaker.png");
+            Application.createImageIcon(RenderingControlPoint.class, "img/32/speaker.png");
 
     public static final ImageIcon ICON_MUTE_ON =
-            Application.createImageIcon(RenderingControlPointAdapter.class, "img/32/speaker_mute.png");
+            Application.createImageIcon(RenderingControlPoint.class, "img/32/speaker_mute.png");
 
     protected JToggleButton muteButton = new JToggleButton("Mute", ICON_MUTE_OFF);
     protected JSlider volumeSlider;

@@ -35,16 +35,13 @@ import org.fourthline.cling.workbench.browser.BrowserView;
 import org.fourthline.cling.workbench.browser.RootDeviceSelected;
 import org.fourthline.cling.workbench.info.DeviceInfoSelectionChanged;
 import org.seamless.swing.Application;
-import org.seamless.swing.logging.LogMessage;
 import org.seamless.util.MimeType;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.swing.ImageIcon;
-import javax.swing.SwingUtilities;
-import java.util.logging.Level;
+import javax.swing.*;
 
 @ApplicationScoped
 public class BrowserPresenter implements BrowserView.Presenter {
@@ -88,7 +85,7 @@ public class BrowserPresenter implements BrowserView.Presenter {
 
         RemoteDevice device = discovery.getDevice();
 
-        Workbench.log(new LogMessage(Level.INFO, "Remote device added: " + device));
+        Workbench.Log.MAIN.info("Remote device added: " + device);
 
         final DeviceItem deviceItem =
                 new DeviceItem(
@@ -111,7 +108,7 @@ public class BrowserPresenter implements BrowserView.Presenter {
             try {
                 responseMsg = router.send(iconRetrievalMsg);
             } catch (InterruptedException ex) {
-                Workbench.log(Level.WARNING, "Icon retrieval was interrupted: " + ex);
+                Workbench.Log.MAIN.warning("Icon retrieval was interrupted: " + ex);
             }
 
             if (responseMsg != null && !responseMsg.getOperation().isFailed()) {
@@ -125,29 +122,25 @@ public class BrowserPresenter implements BrowserView.Presenter {
                         ImageIcon imageIcon = new ImageIcon(imageBody);
                         deviceItem.setIcon(imageIcon);
                     } else {
-                        Workbench.log(
-                                Level.WARNING,
-                                "Icon request did not return with response body '" + contentType + "': " + iconRetrievalMsg.getUri()
+                        Workbench.Log.MAIN.warning(
+                            "Icon request did not return with response body '" + contentType + "': " + iconRetrievalMsg.getUri()
                         );
                     }
                 } else {
-                    Workbench.log(
-                            Level.WARNING,
-                            "Icon was delivered with unsupported content type '" + contentType + "': " + iconRetrievalMsg.getUri()
+                    Workbench.Log.MAIN.warning(
+                        "Icon was delivered with unsupported content type '" + contentType + "': " + iconRetrievalMsg.getUri()
                     );
                 }
 
             } else {
                 if (responseMsg != null) {
-                    Workbench.log(
-                            Level.WARNING,
-                            "Icon retrieval of '" + iconRetrievalMsg.getUri() + "' failed: " +
+                    Workbench.Log.MAIN.warning(
+                        "Icon retrieval of '" + iconRetrievalMsg.getUri() + "' failed: " +
                                     responseMsg.getOperation().getResponseDetails()
                     );
                 } else {
-                    Workbench.log(
-                            Level.WARNING,
-                            "Icon retrieval of '" + iconRetrievalMsg.getUri() + "' failed, no response received."
+                    Workbench.Log.MAIN.warning(
+                        "Icon retrieval of '" + iconRetrievalMsg.getUri() + "' failed, no response received."
                     );
                 }
             }

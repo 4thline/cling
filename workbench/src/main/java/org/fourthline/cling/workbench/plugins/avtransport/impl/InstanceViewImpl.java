@@ -18,22 +18,17 @@ package org.fourthline.cling.workbench.plugins.avtransport.impl;
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.support.model.PositionInfo;
 import org.fourthline.cling.support.model.TransportState;
-import org.fourthline.cling.workbench.Workbench;
+import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
 import org.fourthline.cling.workbench.plugins.avtransport.InstanceView;
 import org.seamless.statemachine.StateMachineBuilder;
-import org.seamless.swing.logging.LogMessage;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URI;
-import java.util.logging.Level;
 
 /**
  * @author Christian Bauer
@@ -125,9 +120,9 @@ public class InstanceViewImpl extends JPanel implements InstanceView {
                 try {
                     URI.create(uri);
                 } catch (IllegalArgumentException ex) {
-                    Workbench.log(new LogMessage(
-                            Level.WARNING, "AVTransport ControlPoint", "Invalid URI, can't set on AVTransport: " + uri
-                    ));
+                    AVTransportControlPoint.LOGGER.warning(
+                        "Invalid URI, can't set on AVTransport: " + uri
+                    );
                 }
                 presenter.onSetAVTransportURISelected(getInstanceId(), uri);
             }
@@ -158,7 +153,9 @@ public class InstanceViewImpl extends JPanel implements InstanceView {
             try {
                 viewStateMachine.forceState(newClientState);
             } catch (Exception ex) {
-                Workbench.log(Level.SEVERE, "Error switching client instance state: " + ex);
+                AVTransportControlPoint.LOGGER.severe(
+                    "Error switching client instance state: " + ex
+                );
             }
         }
     }

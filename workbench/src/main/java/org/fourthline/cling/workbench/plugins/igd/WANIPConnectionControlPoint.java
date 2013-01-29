@@ -18,15 +18,19 @@ package org.fourthline.cling.workbench.plugins.igd;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDAServiceType;
+import org.fourthline.cling.workbench.plugins.igd.impl.WANIPConnectionPresenter;
 import org.fourthline.cling.workbench.spi.AbstractControlPointAdapter;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer
  */
-public class WANIPConnectionControlPointAdapter extends AbstractControlPointAdapter {
+public class WANIPConnectionControlPoint extends AbstractControlPointAdapter {
+
+    final public static Logger LOGGER = Logger.getLogger("WANIPConnection ControlPoint");
 
     @Inject
     protected Instance<WANIPConnectionPresenter> presenterInstance;

@@ -92,9 +92,6 @@ public class ManagedUpnpService implements UpnpService {
     @Inject
     Event<TransportStop> transportStopEvent;
 
-    @Inject
-    Event<Shutdown> shutdownEvent;
-
     @Override
     public UpnpServiceConfiguration getConfiguration() {
         return configuration.get();
@@ -120,12 +117,6 @@ public class ManagedUpnpService implements UpnpService {
         return routerInstance.get();
     }
 
-    @Override
-    @PreDestroy // Listen to application context shutdown
-    public void shutdown() {
-        shutdownEvent.fire(new Shutdown());
-    }
-
     public void start(@Observes Start start) {
         log.info(">>> Starting managed UPnP service...");
 
@@ -136,6 +127,11 @@ public class ManagedUpnpService implements UpnpService {
         transportStartEvent.fire(new TransportStart());
 
         log.info("<<< Managed UPnP service started successfully");
+    }
+
+    @Override
+    public void shutdown() {
+        shutdown(null);
     }
 
     public void shutdown(@Observes Shutdown shutdown) {

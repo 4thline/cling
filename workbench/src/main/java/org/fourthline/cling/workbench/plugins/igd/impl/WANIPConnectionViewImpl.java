@@ -13,24 +13,20 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.igd;
+package org.fourthline.cling.workbench.plugins.igd.impl;
 
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.support.model.Connection;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingEditView;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingListView;
+import org.fourthline.cling.workbench.plugins.igd.WANIPConnectionView;
 import org.seamless.swing.Form;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.swing.BorderFactory;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 

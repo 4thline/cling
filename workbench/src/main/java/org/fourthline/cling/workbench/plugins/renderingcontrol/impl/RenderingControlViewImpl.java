@@ -13,9 +13,11 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.renderingcontrol;
+package org.fourthline.cling.workbench.plugins.renderingcontrol.impl;
 
 import org.fourthline.cling.model.meta.StateVariableAllowedValueRange;
+import org.fourthline.cling.workbench.plugins.renderingcontrol.InstanceView;
+import org.fourthline.cling.workbench.plugins.renderingcontrol.RenderingControlView;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;

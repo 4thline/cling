@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.renderingcontrol;
+package org.fourthline.cling.workbench.plugins.renderingcontrol.impl;
 
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -25,20 +25,17 @@ import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.support.renderingcontrol.callback.GetVolume;
 import org.fourthline.cling.support.renderingcontrol.callback.SetMute;
 import org.fourthline.cling.support.renderingcontrol.callback.SetVolume;
-import org.fourthline.cling.workbench.Workbench;
-import org.seamless.swing.logging.LogMessage;
+import org.fourthline.cling.workbench.plugins.renderingcontrol.RenderingControlPoint;
+import org.fourthline.cling.workbench.plugins.renderingcontrol.RenderingControlView;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.swing.SwingUtilities;
-import java.util.logging.Logger;
+import javax.swing.*;
 
 /**
  * @author Christian Bauer
  */
 public class RenderingControlPresenter implements RenderingControlView.Presenter {
-
-    final private static Logger log = Logger.getLogger(RenderingControlPresenter.class.getName());
 
     @Inject
     protected ControlPoint controlPoint;
@@ -88,7 +85,9 @@ public class RenderingControlPresenter implements RenderingControlView.Presenter
         controlPoint.execute(eventCallback);
 
         // TODO: The initial event should contain values, section 2.3.1 rendering control spec
-        log.info("Querying initial state of RenderingControl service");
+        RenderingControlPoint.LOGGER.info(
+            "Querying initial state of RenderingControl service"
+        );
         for (int i = 0; i < RenderingControlView.SUPPORTED_INSTANCES; i++) {
             updateVolume(i);
         }
@@ -118,16 +117,18 @@ public class RenderingControlPresenter implements RenderingControlView.Presenter
 
             @Override
             public void success(ActionInvocation invocation) {
-                Workbench.log(new LogMessage(
-                        "RenderingControl ControlPoint", "Service mute set to: " + (desiredMute ? "ON" : "OFF")
-                ));
+                RenderingControlPoint.LOGGER.info(
+                    "Service mute set to: " + (desiredMute ? "ON" : "OFF")
+                );
             }
 
             @Override
             public void failure(ActionInvocation invocation,
                                 UpnpResponse operation,
                                 String defaultMsg) {
-                log.warning("Can't set mute: " + defaultMsg);
+                RenderingControlPoint.LOGGER.warning(
+                    "Can't set mute: " + defaultMsg
+                );
             }
         });
     }
@@ -137,16 +138,18 @@ public class RenderingControlPresenter implements RenderingControlView.Presenter
         controlPoint.execute(new SetVolume(new UnsignedIntegerFourBytes(instanceId), service, newVolume) {
             @Override
             public void success(ActionInvocation invocation) {
-                Workbench.log(new LogMessage(
-                        "RenderingControl ControlPoint", "Service volume set to: " + newVolume
-                ));
+                RenderingControlPoint.LOGGER.info(
+                    "Service volume set to: " + newVolume
+                );
             }
 
             @Override
             public void failure(ActionInvocation invocation,
                                 UpnpResponse operation,
                                 String defaultMsg) {
-                log.warning("Can't set volume: " + defaultMsg);
+                RenderingControlPoint.LOGGER.warning(
+                    "Can't set volume: " + defaultMsg
+                );
             }
         });
     }
@@ -167,7 +170,9 @@ public class RenderingControlPresenter implements RenderingControlView.Presenter
             public void failure(ActionInvocation invocation,
                                 UpnpResponse operation,
                                 String defaultMsg) {
-                log.warning("Instance ID " + instanceId + " failed, can't retrieve initial volume: " + defaultMsg);
+                RenderingControlPoint.LOGGER.warning(
+                    "Instance ID " + instanceId + " failed, can't retrieve initial volume: " + defaultMsg
+                );
                 view.getInstanceView(instanceId).setSelectionEnabled(false);
             }
         });

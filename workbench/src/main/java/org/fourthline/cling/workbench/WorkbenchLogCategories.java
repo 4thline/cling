@@ -17,6 +17,10 @@ package org.fourthline.cling.workbench;
 
 import org.fourthline.cling.support.shared.CoreLogCategories;
 import org.fourthline.cling.support.shared.log.LogView;
+import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
+import org.fourthline.cling.workbench.plugins.binarylight.controlpoint.SwitchPowerControlPoint;
+import org.fourthline.cling.workbench.plugins.contentdirectory.ContentDirectoryControlPoint;
+import org.fourthline.cling.workbench.plugins.renderingcontrol.RenderingControlPoint;
 import org.seamless.swing.logging.LogCategory;
 
 import java.util.logging.Level;
@@ -43,38 +47,39 @@ public class WorkbenchLogCategories extends CoreLogCategories implements LogView
         // TODO: Externalize to SPI
         add(new LogCategory("Plugins", new LogCategory.Group[]{
 
-                new LogCategory.Group(
-                        "Binary Light",
-                        new LogCategory.LoggerLevel[]{
-                                new LogCategory.LoggerLevel("org.fourthline.cling.workbench.plugins.binarylight", Level.FINER),
-                        }
-                ),
+            new LogCategory.Group(
+                "Binary Light",
+                new LogCategory.LoggerLevel[]{
+                    new LogCategory.LoggerLevel(SwitchPowerControlPoint.LOGGER.getName(), Level.FINE),
+                    new LogCategory.LoggerLevel("org.fourthline.cling.workbench.plugins.binarylight", Level.FINE),
+                }
+            ),
 
-                new LogCategory.Group(
-                        "Content Directory Browser",
-                        new LogCategory.LoggerLevel[]{
-                                new LogCategory.LoggerLevel("org.fourthline.cling.workbench.plugins.contentdirectory", Level.FINER),
-                                new LogCategory.LoggerLevel("org.fourthline.cling.support.contentdirectory", Level.FINER),
-                                new LogCategory.LoggerLevel("org.seamless.statemachine", Level.FINER),
-                        }
-                ),
-                new LogCategory.Group(
-                        "Audio/Video Transport Control Point",
-                        new LogCategory.LoggerLevel[]{
-                                new LogCategory.LoggerLevel("org.fourthline.cling.workbench.plugins.avtransport", Level.FINER),
-                                new LogCategory.LoggerLevel("org.fourthline.cling.support.avtransport", Level.FINER),
-                                new LogCategory.LoggerLevel("org.fourthline.cling.support.lastchange", Level.FINE),
-                                new LogCategory.LoggerLevel("org.seamless.statemachine", Level.FINER),
-                        }
-                ),
-                new LogCategory.Group(
-                        "Media Rendering Control",
-                        new LogCategory.LoggerLevel[]{
-                                new LogCategory.LoggerLevel("org.fourthline.cling.workbench.plugins.renderingcontrol", Level.FINER),
-                                new LogCategory.LoggerLevel("org.fourthline.cling.support.renderingcontrol", Level.FINER),
-                                new LogCategory.LoggerLevel("org.fourthline.cling.support.lastchange", Level.FINE),
-                        }
-                ),
+            new LogCategory.Group(
+                ContentDirectoryControlPoint.LOGGER.getName(),
+                new LogCategory.LoggerLevel[]{
+                    new LogCategory.LoggerLevel(ContentDirectoryControlPoint.LOGGER.getName(), Level.FINE),
+                    new LogCategory.LoggerLevel("org.fourthline.cling.support.contentdirectory", Level.FINER),
+                    new LogCategory.LoggerLevel("org.seamless.statemachine", Level.FINER),
+                }
+            ),
+            new LogCategory.Group(
+                AVTransportControlPoint.LOGGER.getName(),
+                new LogCategory.LoggerLevel[]{
+                    new LogCategory.LoggerLevel(AVTransportControlPoint.LOGGER.getName(), Level.FINE),
+                    new LogCategory.LoggerLevel("org.fourthline.cling.support.avtransport", Level.FINER),
+                    new LogCategory.LoggerLevel("org.fourthline.cling.support.lastchange", Level.FINE),
+                    new LogCategory.LoggerLevel("org.seamless.statemachine", Level.FINER),
+                }
+            ),
+            new LogCategory.Group(
+                RenderingControlPoint.LOGGER.getName(),
+                new LogCategory.LoggerLevel[]{
+                    new LogCategory.LoggerLevel(RenderingControlPoint.LOGGER.getName(), Level.FINE),
+                    new LogCategory.LoggerLevel("org.fourthline.cling.support.renderingcontrol", Level.FINER),
+                    new LogCategory.LoggerLevel("org.fourthline.cling.support.lastchange", Level.FINE),
+                }
+            ),
         }));
 
     }

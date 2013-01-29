@@ -18,15 +18,19 @@ package org.fourthline.cling.workbench.plugins.contentdirectory;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDAServiceType;
+import org.fourthline.cling.workbench.plugins.contentdirectory.impl.ContentDirectoryPresenter;
 import org.fourthline.cling.workbench.spi.AbstractControlPointAdapter;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer
  */
-public class ContentDirectoryControlPointAdapter extends AbstractControlPointAdapter {
+public class ContentDirectoryControlPoint extends AbstractControlPointAdapter {
+
+    final public static Logger LOGGER = Logger.getLogger("ContentDirectory ControlPoint");
 
     @Inject
     protected Instance<ContentDirectoryPresenter> contentDirectoryPresenterInstance;

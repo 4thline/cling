@@ -57,13 +57,7 @@ public class WorkbenchPresenter implements WorkbenchViewImpl.Presenter {
     @Inject
     protected LogView.Presenter logPresenter;
 
-    @Inject
-    protected Event<UpnpService.Start> upnpServiceStartEvent;
-
     public void init() {
-
-        upnpServiceStartEvent.fire(new UpnpService.Start());
-
         view.setPresenter(this);
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {

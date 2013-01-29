@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.binarylight.controlpoint;
+package org.fourthline.cling.workbench.plugins.avtransport;
 
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ServiceType;
@@ -22,23 +22,25 @@ import org.fourthline.cling.workbench.spi.AbstractControlPointAdapter;
 
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
+import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer
  */
-public class SwitchPowerControlPointAdapter extends AbstractControlPointAdapter {
+public class AVTransportControlPoint extends AbstractControlPointAdapter {
+
+    final public static Logger LOGGER = Logger.getLogger("SwitchPower ControlPoint");
 
     @Inject
-    protected Instance<SwitchPowerPresenter> switchPowerPresenterInstance;
+    protected Instance<AVTransportView.Presenter> avTransportPresenterInstance;
 
     @Override
     protected ServiceType[] getSupportedServiceTypes() {
-        return new ServiceType[]{new UDAServiceType("SwitchPower", 1)};
+        return new ServiceType[] {new UDAServiceType("AVTransport", 1)};
     }
 
     @Override
     protected void onUseServiceRequest(Service service) {
-        switchPowerPresenterInstance.get().init(service);
+        avTransportPresenterInstance.get().init(service);
     }
-
 }

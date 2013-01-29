@@ -13,20 +13,17 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.binarylight.controlpoint;
+package org.fourthline.cling.workbench.plugins.binarylight.controlpoint.impl;
 
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-
-import java.util.logging.Logger;
+import org.fourthline.cling.workbench.plugins.binarylight.controlpoint.SwitchPowerControlPoint;
 
 /**
  * @author Christian Bauer
  */
 public abstract class SetTarget extends ActionCallback {
-
-    private static Logger log = Logger.getLogger(SetTarget.class.getName());
 
     public SetTarget(Service service, boolean desiredTarget) {
         super(new ActionInvocation(service.getAction("SetTarget")));
@@ -35,7 +32,6 @@ public abstract class SetTarget extends ActionCallback {
 
     @Override
     public void success(ActionInvocation invocation) {
-        log.fine("Executed successfully");
-
+        SwitchPowerControlPoint.LOGGER.fine("Executed successfully");
     }
 }

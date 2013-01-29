@@ -17,6 +17,7 @@ package org.fourthline.cling.workbench.plugins.igd;
 
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.support.model.PortMapping;
+import org.fourthline.cling.workbench.plugins.igd.impl.WANIPConnectionPresenter;
 
 /**
  * @author Christian Bauer

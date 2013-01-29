@@ -13,25 +13,26 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.contentdirectory;
+package org.fourthline.cling.workbench.plugins.contentdirectory.impl;
 
 import org.fourthline.cling.support.contentdirectory.ui.ContentTree;
 import org.fourthline.cling.support.contentdirectory.ui.ContentTreeCellRenderer;
 import org.fourthline.cling.support.model.container.Container;
 import org.fourthline.cling.support.model.item.Item;
 import org.fourthline.cling.workbench.Workbench;
+import org.fourthline.cling.workbench.plugins.contentdirectory.ContentDirectoryControlPoint;
+import org.fourthline.cling.workbench.plugins.contentdirectory.TreeDetailPresenter;
+import org.fourthline.cling.workbench.plugins.contentdirectory.TreeView;
 import org.seamless.swing.Application;
-import org.seamless.swing.logging.LogMessage;
 
 import javax.annotation.PostConstruct;
-import javax.swing.Icon;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-import java.awt.Component;
-import java.util.logging.Level;
+import java.awt.*;
 
 /**
  * Customizes the tree icons and how status updates are displayed.
@@ -128,7 +129,7 @@ public class TreeViewImpl extends ContentTree implements TreeView {
     */
 
     public void failure(String message) {
-        Workbench.log(new LogMessage(Level.SEVERE, "ContentDirectory ControlPoint", message));
+        ContentDirectoryControlPoint.LOGGER.severe(message);
     }
 
 }

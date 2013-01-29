@@ -20,27 +20,20 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.support.messagebox.AddMessage;
-import org.fourthline.cling.workbench.Workbench;
 import org.seamless.swing.AbstractController;
 import org.seamless.swing.Controller;
 import org.seamless.swing.DefaultAction;
-import org.seamless.swing.logging.LogMessage;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import java.awt.BorderLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer
  */
 public class MessageBoxController extends AbstractController<JFrame> {
-
-    final private static Logger log = Logger.getLogger(MessageBoxController.class.getName());
 
     public static String[] ACTION_SEND_MESSAGE = {"Send Message", "sendMessage"};
 
@@ -68,16 +61,16 @@ public class MessageBoxController extends AbstractController<JFrame> {
                         new AddMessage(service, getCurrentView().getMessage()) {
                             @Override
                             public void success(ActionInvocation invocation) {
-                                Workbench.log(new LogMessage(
-                                        "MessageBox", "Successfully sent message to device"
-                                ));
+                                MessageBoxControlPoint.LOGGER.info(
+                                    "Successfully sent message to device"
+                                );
                             }
 
                             @Override
                             public void failure(ActionInvocation invocation,
                                                 UpnpResponse operation,
                                                 String defaultMsg) {
-                                log.severe(defaultMsg);
+                                MessageBoxControlPoint.LOGGER.severe(defaultMsg);
                             }
                         }
                 );

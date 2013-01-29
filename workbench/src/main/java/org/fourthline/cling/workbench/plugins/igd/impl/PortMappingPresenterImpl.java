@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.igd;
+package org.fourthline.cling.workbench.plugins.igd.impl;
 
 import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.controlpoint.ActionCallback;
@@ -26,6 +26,10 @@ import org.fourthline.cling.support.igd.callback.PortMappingAdd;
 import org.fourthline.cling.support.igd.callback.PortMappingDelete;
 import org.fourthline.cling.support.model.PortMapping;
 import org.fourthline.cling.workbench.Workbench;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingEditView;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingListView;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingPresenter;
+import org.fourthline.cling.workbench.plugins.igd.WANIPConnectionControlPoint;
 import org.seamless.swing.logging.LogMessage;
 
 import javax.inject.Inject;
@@ -96,11 +100,9 @@ public class PortMappingPresenterImpl implements PortMappingPresenter {
                 new PortMappingDelete(service, mapping) {
                     @Override
                     public void success(ActionInvocation invocation) {
-                        Workbench.log(new LogMessage(
-                                Level.INFO,
-                                "WANIPConnection ControlPoint",
-                                "Removed port mapping " + mapping.getProtocol() + "/" + mapping.getExternalPort()
-                        ));
+                        WANIPConnectionControlPoint.LOGGER.info(
+                            "Removed port mapping " + mapping.getProtocol() + "/" + mapping.getExternalPort()
+                        );
                         onReload();
                     }
 
@@ -108,11 +110,9 @@ public class PortMappingPresenterImpl implements PortMappingPresenter {
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        Workbench.log(new LogMessage(
-                                Level.WARNING,
-                                "WANIPConnection ControlPoint",
-                                "Port mapping removal failed: " + defaultMsg
-                        ));
+                        WANIPConnectionControlPoint.LOGGER.warning(
+                            "Port mapping removal failed: " + defaultMsg
+                        );
                     }
                 }
         );
@@ -123,11 +123,9 @@ public class PortMappingPresenterImpl implements PortMappingPresenter {
                 new PortMappingAdd(service, mapping) {
                     @Override
                     public void success(ActionInvocation invocation) {
-                        Workbench.log(new LogMessage(
-                                Level.INFO,
-                                "WANIPConnection ControlPoint",
-                                "Added port mapping " + mapping.getProtocol() + "/" + mapping.getExternalPort()
-                        ));
+                        WANIPConnectionControlPoint.LOGGER.info(
+                            "Added port mapping " + mapping.getProtocol() + "/" + mapping.getExternalPort()
+                        );
                         onReload();
                     }
 
@@ -135,11 +133,9 @@ public class PortMappingPresenterImpl implements PortMappingPresenter {
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        Workbench.log(new LogMessage(
-                                Level.WARNING,
-                                "WANIPConnection ControlPoint",
-                                "Port mapping addition failed: " + defaultMsg
-                        ));
+                        WANIPConnectionControlPoint.LOGGER.warning(
+                            "Port mapping addition failed: " + defaultMsg
+                        );
                     }
                 }
         );
@@ -149,11 +145,9 @@ public class PortMappingPresenterImpl implements PortMappingPresenter {
         // Don't block the EDT
         configuration.getAsyncProtocolExecutor().execute(new Runnable() {
             public void run() {
-                Workbench.log(new LogMessage(
-                        Level.INFO,
-                        "WANIPConnection ControlPoint",
-                        "Updating list of port mappings"
-                ));
+                WANIPConnectionControlPoint.LOGGER.info(
+                    "Updating list of port mappings"
+                );
                 final List<PortMapping> mappings = new ArrayList();
                 for (int i = 0; i < 65535; i++) { // You can't have more than 65535 port mappings
                     // Synchronous execution! And we stop when we hit a 713 response code because there
@@ -209,17 +203,13 @@ public class PortMappingPresenterImpl implements PortMappingPresenter {
                 // This is the _only_ way how we can know that we have retrieved an almost-up-to-date
                 // list of all port mappings! Yes, the designer of this API was and probably still is
                 // a moron.
-                Workbench.log(new LogMessage(
-                        Level.INFO,
-                        "WANIPConnection ControlPoint",
-                        "Retrieved all port mappings: " + index
-                ));
+                WANIPConnectionControlPoint.LOGGER.info(
+                    "Retrieved all port mappings: " + index
+                );
             } else {
-                Workbench.log(new LogMessage(
-                        Level.WARNING,
-                        "WANIPConnection ControlPoint",
-                        "Error retrieving port mapping index '" + index + "': " + defaultMsg
-                ));
+                WANIPConnectionControlPoint.LOGGER.warning(
+                    "Error retrieving port mapping index '" + index + "': " + defaultMsg
+                );
             }
         }
 

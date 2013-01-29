@@ -59,13 +59,13 @@ public class MonitorPresenter implements MonitorView.Presenter {
 
     @Override
     public void onStartMonitoring() {
-        Workbench.log(new LogMessage("Monitor Controller", "Subscribing monitor to: " + callback.getService()));
+        Workbench.Log.EVENT_MONITOR.info("Subscribing monitor to: " + callback.getService());
         controlPoint.execute(callback);
     }
 
     @Override
     public void onStopMonitoring() {
-        Workbench.log(new LogMessage("Monitor Controller", "Unsubscribing from: " + callback.getService()));
+        Workbench.Log.EVENT_MONITOR.info("Unsubscribing from: " + callback.getService());
         callback.end();
     }
 
@@ -88,7 +88,7 @@ public class MonitorPresenter implements MonitorView.Presenter {
                 }
             });
 
-            Workbench.log(new LogMessage("Monitor Controller", "Event received: " + new Date()));
+            Workbench.Log.EVENT_MONITOR.info("Event received: " + new Date());
         }
 
         public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
@@ -97,7 +97,7 @@ public class MonitorPresenter implements MonitorView.Presenter {
                     view.setStartStopEnabled(false, true);
                 }
             });
-            Workbench.log(new LogMessage("Monitor Controller", "Events missed: " + numberOfMissedEvents));
+            Workbench.Log.EVENT_MONITOR.info("Events missed: " + numberOfMissedEvents);
         }
 
         @Override
@@ -117,7 +117,7 @@ public class MonitorPresenter implements MonitorView.Presenter {
                                 : "Subscription failed: " + exception.toString();
                     }
 
-                    Workbench.log(new LogMessage(Level.SEVERE, "Monitor Controller", failureMessage));
+                    Workbench.Log.EVENT_MONITOR.severe(failureMessage);
                     view.setStartStopEnabled(true, false);
 
                 }
@@ -131,9 +131,9 @@ public class MonitorPresenter implements MonitorView.Presenter {
                     view.setStartStopEnabled(false, true);
                 }
             });
-            Workbench.log(new LogMessage(
-                    "Monitor Controller", "Subscription established for seconds: " + subscription.getActualDurationSeconds()
-            ));
+            Workbench.Log.EVENT_MONITOR.info(
+                "Subscription established for seconds: " + subscription.getActualDurationSeconds()
+            );
         }
 
         @Override
@@ -143,9 +143,9 @@ public class MonitorPresenter implements MonitorView.Presenter {
                     view.setStartStopEnabled(true, false);
                 }
             });
-            Workbench.log(new LogMessage(
-                    "Monitor Controller", "Subscription ended" + (reason != null ? ": " + reason : "")
-            ));
+            Workbench.Log.EVENT_MONITOR.info(
+                "Subscription ended" + (reason != null ? ": " + reason : "")
+            );
         }
     }
 

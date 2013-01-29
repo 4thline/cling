@@ -34,21 +34,17 @@ import org.fourthline.cling.support.model.MediaInfo;
 import org.fourthline.cling.support.model.PositionInfo;
 import org.fourthline.cling.support.model.TransportInfo;
 import org.fourthline.cling.support.model.TransportState;
-import org.fourthline.cling.workbench.Workbench;
+import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
 import org.fourthline.cling.workbench.plugins.avtransport.AVTransportView;
-import org.seamless.swing.logging.LogMessage;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
-import javax.swing.SwingUtilities;
-import java.util.logging.Logger;
+import javax.swing.*;
 
 /**
- *
+ * @author Christian Bauer
  */
 public class AVTransportPresenter implements AVTransportView.Presenter {
-
-    final private static Logger log = Logger.getLogger(AVTransportPresenter.class.getName());
 
     @Inject
     protected ControlPoint controlPoint;
@@ -95,7 +91,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
         controlPoint.execute(eventCallback);
 
         // TODO: The initial event should contain values, section 2.3.1 rendering control spec
-        log.info("Querying initial state of AVTransport service");
+        AVTransportControlPoint.LOGGER.info("Querying initial state of AVTransport service");
         for (int i = 0; i < AVTransportView.SUPPORTED_INSTANCES; i++) {
             updateTransportInfo(i);
             updateMediaInfo(i);
@@ -127,16 +123,14 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                 new SetAVTransportURI(new UnsignedIntegerFourBytes(instanceId), service, uri) {
                     @Override
                     public void success(ActionInvocation invocation) {
-                        Workbench.log(new LogMessage(
-                                "AVTransport ControlPointAdapter", "New transport URI set: " + uri
-                        ));
+                        AVTransportControlPoint.LOGGER.info("New transport URI set: " + uri);
                     }
 
                     @Override
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        log.severe(defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe(defaultMsg);
                     }
                 }
         );
@@ -149,16 +143,16 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                 new Pause(new UnsignedIntegerFourBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
-                        Workbench.log(new LogMessage(
-                                "AVTransport ControlPointAdapter", "Called 'Pause' action successfully"
-                        ));
+                        AVTransportControlPoint.LOGGER.info(
+                            "Called 'Pause' action successfully"
+                        );
                     }
 
                     @Override
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        log.severe(defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe(defaultMsg);
                     }
                 }
         );
@@ -170,16 +164,16 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                 new Play(new UnsignedIntegerFourBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
-                        Workbench.log(new LogMessage(
-                                "AVTransport ControlPointAdapter", "Called 'Play' action successfully"
-                        ));
+                        AVTransportControlPoint.LOGGER.info(
+                            "Called 'Play' action successfully"
+                        );
                     }
 
                     @Override
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        log.severe(defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe(defaultMsg);
                     }
                 }
         );
@@ -191,16 +185,16 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                 new Stop(new UnsignedIntegerFourBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
-                        Workbench.log(new LogMessage(
-                                "AVTransport ControlPointAdapter", "Called 'Stop' action successfully"
-                        ));
+                        AVTransportControlPoint.LOGGER.info(
+                            "Called 'Stop' action successfully"
+                        );
                     }
 
                     @Override
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        log.severe(defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe(defaultMsg);
                     }
                 }
         );
@@ -208,7 +202,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
 
     @Override
     public void onSeekSelected(int instanceId, String target) {
-        log.fine("Seeking to target time: " + target);
+        AVTransportControlPoint.LOGGER.fine("Seeking to target time: " + target);
         // First update the internal model, so fast clicks will trigger seeks with the right offset
         view.getInstanceView(instanceId).setProgress(
                 new PositionInfo(
@@ -223,16 +217,16 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                 new Seek(new UnsignedIntegerFourBytes(instanceId), service, target) {
                     @Override
                     public void success(final ActionInvocation invocation) {
-                        Workbench.log(new LogMessage(
-                                "AVTransport ControlPointAdapter", "Called 'Seek' action successfully"
-                        ));
+                        AVTransportControlPoint.LOGGER.info(
+                            "Called 'Seek' action successfully"
+                        );
                     }
 
                     @Override
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        log.severe(defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe(defaultMsg);
                     }
                 }
         );
@@ -260,7 +254,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                     public void received(ActionInvocation actionInvocation, final PositionInfo positionInfo) {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                                log.info("Setting PositionInfo: " + positionInfo);
+                                AVTransportControlPoint.LOGGER.info("Setting PositionInfo: " + positionInfo);
                                 view.getInstanceView(instanceId).setProgress(positionInfo);
                             }
                         });
@@ -271,7 +265,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                                         UpnpResponse operation,
                                         String defaultMsg) {
                         // TODO: Is this really severe?
-                        log.severe("Can't retrieve PositionInfo: " + defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe("Can't retrieve PositionInfo: " + defaultMsg);
                     }
                 }
         );
@@ -284,7 +278,9 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                     public void received(ActionInvocation actionInvocation, final TransportInfo transportInfo) {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                                log.info("Setting TransportState: " + transportInfo.getCurrentTransportState());
+                                AVTransportControlPoint.LOGGER.info(
+                                    "Setting TransportState: " + transportInfo.getCurrentTransportState()
+                                );
                                 view.getInstanceView(instanceId).setState(transportInfo.getCurrentTransportState());
                             }
                         });
@@ -294,7 +290,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        log.severe("Can't retrieve TransportInfo: " + defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe("Can't retrieve TransportInfo: " + defaultMsg);
                     }
                 }
         );
@@ -307,7 +303,9 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                     public void received(ActionInvocation actionInvocation, final MediaInfo mediaInfo) {
                         SwingUtilities.invokeLater(new Runnable() {
                             public void run() {
-                                log.info("Setting CurrentURI: " + mediaInfo.getCurrentURI());
+                                AVTransportControlPoint.LOGGER.info(
+                                    "Setting CurrentURI: " + mediaInfo.getCurrentURI()
+                                );
                                 view.getInstanceView(instanceId).setCurrentTrackURI(
                                         mediaInfo.getCurrentURI()
                                 );
@@ -319,7 +317,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        log.severe("Can't retrieve initial MediaInfo: " + defaultMsg);
+                        AVTransportControlPoint.LOGGER.severe("Can't retrieve initial MediaInfo: " + defaultMsg);
                     }
                 }
         );

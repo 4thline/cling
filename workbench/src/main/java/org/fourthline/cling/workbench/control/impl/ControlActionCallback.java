@@ -22,9 +22,6 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.workbench.Workbench;
 
-import java.util.logging.Level;
-
-
 abstract public class ControlActionCallback extends ActionCallback {
 
     public ControlActionCallback(ActionInvocation actionInvocation) {
@@ -34,8 +31,7 @@ abstract public class ControlActionCallback extends ActionCallback {
     @Override
     public void success(final ActionInvocation invocation) {
         onSuccess(invocation.getOutput());
-        Workbench.log(
-            "Action Invocation",
+        Workbench.Log.ACTION_INVOCATION.info(
             "Completed invocation: " + invocation.getAction().getName()
         );
     }
@@ -45,17 +41,12 @@ abstract public class ControlActionCallback extends ActionCallback {
                         UpnpResponse operation,
                         String defaultMsg) {
         if (invocation.getFailure() instanceof ActionCancelledException) {
-            Workbench.log(
-                "Action Invocation",
+            Workbench.Log.ACTION_INVOCATION.info(
                 "Action execution of '" + invocation.getAction().getName() + "' was cancelled, cause: "
                     + invocation.getFailure().getCause().getMessage()
             );
         } else {
-            Workbench.log(
-                Level.SEVERE,
-                "Action Invocation",
-                defaultMsg
-            );
+            Workbench.Log.ACTION_INVOCATION.severe(defaultMsg);
         }
     }
 

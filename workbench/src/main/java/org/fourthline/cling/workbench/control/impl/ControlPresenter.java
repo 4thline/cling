@@ -59,10 +59,7 @@ public class ControlPresenter implements ControlView.Presenter {
                 new ActionInvocation(action, view.getInputValues());
 
         // Starts background thread
-        Workbench.log(
-                "Action Invocation",
-                "Executing action: " + action.getName()
-        );
+        Workbench.Log.ACTION_INVOCATION.info("Executing action: " + action.getName());
         ActionCallback actionCallback =
                 new ControlActionCallback(actionInvocation) {
                     @Override
@@ -93,9 +90,8 @@ public class ControlPresenter implements ControlView.Presenter {
     public void onCancel() {
         view.setCancelEnabled(false);
         if (actionExecutionFuture != null) {
-            Workbench.log(
-                    "Action Invocation",
-                    "Interrupting action execution: " + action.getName()
+            Workbench.Log.ACTION_INVOCATION.info(
+                "Interrupting action execution: " + action.getName()
             );
             actionExecutionFuture.cancel(true);
         }

@@ -15,18 +15,14 @@
 
 package org.fourthline.cling.workbench.plugins.avtransport.impl;
 
-import org.fourthline.cling.workbench.Workbench;
-import org.seamless.swing.logging.LogMessage;
+import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
 
-import javax.swing.BorderFactory;
-import java.util.logging.Logger;
+import javax.swing.*;
 
 /**
  * @author Christian Bauer
  */
 public class Playing extends InstanceViewState {
-
-    public static final Logger log = Logger.getLogger(Playing.class.getName());
 
     final protected PositionUpdater positionUpdater;
 
@@ -37,11 +33,10 @@ public class Playing extends InstanceViewState {
 
     public void onEntry() {
 
-        Workbench.log(new LogMessage(
-                "AVTransport ControlPointAdapter",
-                "Entering Playing state, starting to poll PositionInfo in " +
-                        "background every " + positionUpdater.getSleepIntervalMillis() + "ms..."
-        ));
+        AVTransportControlPoint.LOGGER.info(
+            "Entering Playing state, starting to poll PositionInfo in " +
+            "background every " + positionUpdater.getSleepIntervalMillis() + "ms..."
+        );
         synchronized (positionUpdater) {
             positionUpdater.breakLoop();
             positionUpdater.notifyAll();
@@ -60,10 +55,9 @@ public class Playing extends InstanceViewState {
 
     public void onExit() {
 
-        Workbench.log(new LogMessage(
-                "AVTransport ControlPointAdapter",
-                "Exiting Playing state, stopping background PositionInfo polling..."
-        ));
+        AVTransportControlPoint.LOGGER.info(
+            "Exiting Playing state, stopping background PositionInfo polling..."
+        );
         synchronized (positionUpdater) {
             positionUpdater.breakLoop();
             positionUpdater.notifyAll();
@@ -91,13 +85,15 @@ public class Playing extends InstanceViewState {
         }
 
         public void breakLoop() {
-            log.fine("Setting stopped status on thread");
+            AVTransportControlPoint.LOGGER.fine("Setting stopped status on thread");
             stopped = true;
         }
 
         public void run() {
             stopped = false;
-            log.fine("Running position updater loop every milliseconds: " + getSleepIntervalMillis());
+            AVTransportControlPoint.LOGGER.fine(
+                "Running position updater loop every milliseconds: " + getSleepIntervalMillis()
+            );
             while (!stopped) {
                 try {
                     // TODO: Well, we could do this once and then just increment the seconds instead of querying...
@@ -108,10 +104,14 @@ public class Playing extends InstanceViewState {
 
                 } catch (Exception ex) {
                     breakLoop();
-                    log.fine("Failed updating position info, polling stopped: " + ex);
+                    AVTransportControlPoint.LOGGER.fine(
+                        "Failed updating position info, polling stopped: " + ex
+                    );
                 }
             }
-            log.fine("Stopped status on thread received, ending position updater loop");
+            AVTransportControlPoint.LOGGER.fine(
+                "Stopped status on thread received, ending position updater loop"
+            );
         }
     }
 

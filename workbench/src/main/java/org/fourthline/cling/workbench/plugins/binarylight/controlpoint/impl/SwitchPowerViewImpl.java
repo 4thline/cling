@@ -13,8 +13,10 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.binarylight.controlpoint;
+package org.fourthline.cling.workbench.plugins.binarylight.controlpoint.impl;
 
+import org.fourthline.cling.workbench.plugins.binarylight.controlpoint.SwitchPowerControlPoint;
+import org.fourthline.cling.workbench.plugins.binarylight.controlpoint.SwitchPowerView;
 import org.fourthline.cling.workbench.spi.ReconnectView;
 import org.seamless.swing.Application;
 
@@ -40,10 +42,10 @@ import java.awt.event.WindowEvent;
 public class SwitchPowerViewImpl extends JDialog implements SwitchPowerView {
 
     final protected ImageIcon ICON_ON =
-            Application.createImageIcon(SwitchPowerViewImpl.class, "img/switch_down.png");
+            Application.createImageIcon(SwitchPowerControlPoint.class, "img/switch_down.png");
 
     final protected ImageIcon ICON_OFF =
-            Application.createImageIcon(SwitchPowerViewImpl.class, "img/switch_up.png");
+            Application.createImageIcon(SwitchPowerControlPoint.class, "img/switch_up.png");
 
     final protected JToggleButton toggleButton = new JToggleButton(ICON_OFF);
 

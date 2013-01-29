@@ -52,6 +52,16 @@ public abstract class Main implements ShutdownHandler, Thread.UncaughtExceptionH
     LogView.Presenter logPresenter;
 
     final protected JFrame errorWindow = new JFrame();
+
+    // In addition to the JUL-configured handler, show log messages in the UI
+    final protected LoggingHandler loggingHandler =
+        new LoggingHandler() {
+            @Override
+            protected void log(LogMessage msg) {
+                logPresenter.pushMessage(msg);
+            }
+        };
+
     protected boolean isRegularShutdown;
 
     public void init() {
@@ -88,19 +98,13 @@ public abstract class Main implements ShutdownHandler, Thread.UncaughtExceptionH
             }
         });
 
-        // Wire logging UI into JUL
-        // Don't reset JUL root logger but add if there is a JUL config file
-        Handler handler = new LoggingHandler() {
-            protected void log(LogMessage msg) {
-                logPresenter.pushMessage(msg);
-            }
-        };
+        // Wire logging UI into JUL, don't reset JUL root logger but
+        // add our handler if there is a JUL config file
         if (System.getProperty("java.util.logging.config.file") == null) {
-            LoggingUtil.resetRootHandler(handler);
+            LoggingUtil.resetRootHandler(loggingHandler);
         } else {
-            LogManager.getLogManager().getLogger("").addHandler(handler);
+            LogManager.getLogManager().getLogger("").addHandler(loggingHandler);
         }
-
     }
 
     @Override
@@ -156,6 +160,10 @@ public abstract class Main implements ShutdownHandler, Thread.UncaughtExceptionH
                 errorWindow.setVisible(true);
             }
         });
+    }
+
+    protected void removeLoggingHandler() {
+        LogManager.getLogManager().getLogger("").removeHandler(loggingHandler);
     }
 
     abstract protected String getAppName();

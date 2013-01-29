@@ -13,18 +13,18 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.igd;
+package org.fourthline.cling.workbench.plugins.igd.impl;
 
 import org.fourthline.cling.support.model.PortMapping;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingListView;
+import org.fourthline.cling.workbench.plugins.igd.PortMappingPresenter;
 
 import javax.annotation.PostConstruct;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
-import java.awt.Component;
+import java.awt.*;
 
 /**
  * @author Christian Bauer

@@ -13,7 +13,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.binarylight.controlpoint;
+package org.fourthline.cling.workbench.plugins.binarylight.controlpoint.impl;
 
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
 import org.fourthline.cling.model.gena.CancelReason;
@@ -21,8 +21,7 @@ import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.workbench.Workbench;
-import org.seamless.swing.logging.LogMessage;
+import org.fourthline.cling.workbench.plugins.binarylight.controlpoint.SwitchPowerControlPoint;
 
 import java.util.Map;
 import java.util.logging.Level;
@@ -32,8 +31,6 @@ import java.util.logging.Logger;
  * @author Christian Bauer
  */
 public class SwitchPowerSubscriptionCallback  extends SubscriptionCallback {
-
-    private static Logger log = Logger.getLogger(SwitchPowerSubscriptionCallback.class.getName());
 
     protected final SwitchPowerPresenter presenter;
 
@@ -51,24 +48,24 @@ public class SwitchPowerSubscriptionCallback  extends SubscriptionCallback {
     }
 
     public void established(GENASubscription subscription) {
-        Workbench.log(
-                "SwitchPower ControlPoint",
-                "Subscription with service established, listening for events, renewing in seconds: " + subscription.getActualDurationSeconds()
+        SwitchPowerControlPoint.LOGGER.info(
+            "Subscription with service established, listening for events, renewing in seconds: " + subscription.getActualDurationSeconds()
         );
         presenter.onConnected();
     }
 
     public void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus) {
-        Workbench.log(new LogMessage(
-                reason != null ? Level.WARNING : Level.INFO,
-                "SwitchPower ControlPoint",
-                "Subscription with service ended. " + (reason != null ? "Reason: " + reason : "")
-        ));
+        SwitchPowerControlPoint.LOGGER.log(
+            reason != null ? Level.WARNING : Level.INFO,
+            "Subscription with service ended. " + (reason != null ? "Reason: " + reason : "")
+        );
         presenter.onDisconnected();
     }
 
     public void eventReceived(GENASubscription subscription) {
-        log.finer("Event received, sequence number: " + subscription.getCurrentSequence());
+        SwitchPowerControlPoint.LOGGER.fine(
+            "Event received, sequence number: " + subscription.getCurrentSequence()
+        );
 
         Map<String, StateVariableValue> map = subscription.getCurrentValues();
         final StateVariableValue stateValue = map.get("Status");
@@ -78,7 +75,9 @@ public class SwitchPowerSubscriptionCallback  extends SubscriptionCallback {
     }
 
     public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
-        log.warning("Events missed (" + numberOfMissedEvents + "), consider restarting this control point!");
+        SwitchPowerControlPoint.LOGGER.warning(
+            "Events missed (" + numberOfMissedEvents + "), consider restarting this control point!"
+        );
     }
 
 }

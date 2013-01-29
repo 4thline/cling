@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.workbench.plugins.avtransport.impl;
 
-import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPointAdapter;
+import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
 import org.seamless.swing.Application;
 
 import javax.swing.Box;
@@ -39,7 +39,7 @@ public class PlayerPanel extends JPanel {
 
     class PlayerButton extends JButton {
         PlayerButton(String text, String icon) {
-            super(text, Application.createImageIcon(AVTransportControlPointAdapter.class, icon));
+            super(text, Application.createImageIcon(AVTransportControlPoint.class, icon));
             setVerticalTextPosition(SwingConstants.BOTTOM);
             setHorizontalTextPosition(SwingConstants.CENTER);
             setFocusable(false);

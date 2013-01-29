@@ -13,11 +13,13 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.workbench.plugins.contentdirectory;
+package org.fourthline.cling.workbench.plugins.contentdirectory.impl;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.workbench.plugins.contentdirectory.ContentDirectoryView;
+import org.fourthline.cling.workbench.plugins.contentdirectory.DetailView;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
