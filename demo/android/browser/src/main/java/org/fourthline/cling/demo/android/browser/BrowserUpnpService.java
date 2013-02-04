@@ -15,6 +15,7 @@
 
 package org.fourthline.cling.demo.android.browser;
 
+import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.android.AndroidUpnpServiceConfiguration;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
 import org.fourthline.cling.model.types.ServiceType;
@@ -27,7 +28,7 @@ import org.fourthline.cling.model.types.UDAServiceType;
 public class BrowserUpnpService extends AndroidUpnpServiceImpl {
 
     @Override
-    protected AndroidUpnpServiceConfiguration createConfiguration() {
+    protected UpnpServiceConfiguration createConfiguration() {
         return new AndroidUpnpServiceConfiguration() {
 
             // DOC:REGISTRY

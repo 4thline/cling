@@ -44,6 +44,9 @@ public class AndroidUpnpServiceImpl extends Service {
     protected UpnpService upnpService;
     protected Binder binder = new Binder();
 
+    /**
+     * Starts the UPnP service.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -60,7 +63,7 @@ public class AndroidUpnpServiceImpl extends Service {
         };
     }
 
-    protected AndroidUpnpServiceConfiguration createConfiguration() {
+    protected UpnpServiceConfiguration createConfiguration() {
         return new AndroidUpnpServiceConfiguration();
     }
 
@@ -73,6 +76,15 @@ public class AndroidUpnpServiceImpl extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return binder;
+    }
+
+    /**
+     * Stops the UPnP service, when the last Activity unbinds from this Service.
+     */
+    @Override
+    public void onDestroy() {
+        upnpService.shutdown();
+        super.onDestroy();
     }
 
     protected class Binder extends android.os.Binder implements AndroidUpnpService {
