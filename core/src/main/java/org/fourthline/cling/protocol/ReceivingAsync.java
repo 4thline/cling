@@ -18,6 +18,9 @@ package org.fourthline.cling.protocol;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.header.UpnpHeader;
+import org.seamless.util.Exceptions;
+
+import java.util.logging.Logger;
 
 /**
  * Supertype for all asynchronously executing protocols, handling reception of UPnP messages.
@@ -32,6 +35,8 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
  * @author Christian Bauer
  */
 public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable {
+
+    final private static Logger log = Logger.getLogger(ReceivingAsync.class.getName());
 
     private final UpnpService upnpService;
 
@@ -55,11 +60,21 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
         try {
             proceed = waitBeforeExecution();
         } catch (InterruptedException ex) {
+            log.info("Protocol wait before execution interrupted (on shutdown?): " + getClass().getSimpleName());
             proceed = false;
         }
 
         if (proceed) {
-            execute();
+            try {
+                execute();
+            } catch (RuntimeException ex) {
+                Throwable cause = Exceptions.unwrap(ex);
+                if (cause instanceof InterruptedException) {
+                    log.info("Protocol execution interrupted (on shutdown?): " + ex);
+                } else {
+                    throw ex;
+                }
+            }
         }
     }
 
