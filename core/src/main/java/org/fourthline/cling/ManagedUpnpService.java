@@ -28,11 +28,10 @@ import org.fourthline.cling.registry.event.LocalDeviceDiscovery;
 import org.fourthline.cling.registry.event.Phase;
 import org.fourthline.cling.registry.event.RegistryShutdown;
 import org.fourthline.cling.registry.event.RemoteDeviceDiscovery;
+import org.fourthline.cling.transport.DisableRouter;
+import org.fourthline.cling.transport.EnableRouter;
 import org.fourthline.cling.transport.Router;
-import org.fourthline.cling.transport.TransportStart;
-import org.fourthline.cling.transport.TransportStop;
 
-import javax.annotation.PreDestroy;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -87,10 +86,10 @@ public class ManagedUpnpService implements UpnpService {
     Instance<ControlPoint> controlPointInstance;
 
     @Inject
-    Event<TransportStart> transportStartEvent;
+    Event<EnableRouter> transportStartEvent;
 
     @Inject
-    Event<TransportStop> transportStopEvent;
+    Event<DisableRouter> transportStopEvent;
 
     @Override
     public UpnpServiceConfiguration getConfiguration() {
@@ -124,7 +123,7 @@ public class ManagedUpnpService implements UpnpService {
 
         getRegistry().addListener(registryListenerAdapter);
 
-        transportStartEvent.fire(new TransportStart());
+        transportStartEvent.fire(new EnableRouter());
 
         log.info("<<< Managed UPnP service started successfully");
     }
@@ -142,7 +141,7 @@ public class ManagedUpnpService implements UpnpService {
 
         // First stop the registry and announce BYEBYE on the transport
         getRegistry().shutdown();
-        transportStopEvent.fire(new TransportStop());
+        transportStopEvent.fire(new DisableRouter());
 
         getConfiguration().shutdown();
 

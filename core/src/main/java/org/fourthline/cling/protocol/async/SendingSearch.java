@@ -21,6 +21,7 @@ import org.fourthline.cling.model.message.header.MXHeader;
 import org.fourthline.cling.model.message.header.STAllHeader;
 import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.protocol.SendingAsync;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -77,7 +78,7 @@ public class SendingSearch extends SendingAsync {
         return mxSeconds;
     }
 
-    protected void execute() {
+    protected void execute() throws RouterException {
 
         log.fine("Executing search for target: " + searchTarget.getString() + " with MX seconds: " + getMxSeconds());
 

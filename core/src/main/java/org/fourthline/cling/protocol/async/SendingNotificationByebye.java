@@ -18,6 +18,7 @@ package org.fourthline.cling.protocol.async;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.types.NotificationSubtype;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -44,7 +45,7 @@ public class SendingNotificationByebye extends SendingNotification {
     // In other words: The superclass method is fine even for byebye.
 
     @Override
-    protected void execute() {
+    protected void execute() throws RouterException {
         log.fine("Sending byebye messages ("+getBulkRepeat()+" times) for: " + getDevice());
         super.execute();
     }

@@ -30,6 +30,7 @@ import org.fourthline.cling.model.resource.ServiceControlResource;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
 import java.util.logging.Level;
@@ -53,7 +54,7 @@ public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamR
         super(upnpService, inputMessage);
     }
 
-    protected StreamResponseMessage executeSync() {
+    protected StreamResponseMessage executeSync() throws RouterException{
 
         ContentTypeHeader contentTypeHeader =
                 getInputMessage().getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class);

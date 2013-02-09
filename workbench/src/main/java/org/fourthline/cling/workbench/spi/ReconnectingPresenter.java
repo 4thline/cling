@@ -19,6 +19,7 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.ServiceReference;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.transport.RouterException;
 import org.fourthline.cling.workbench.Workbench;
 
 import javax.inject.Inject;
@@ -73,7 +74,13 @@ public abstract class ReconnectingPresenter implements ReconnectView.Presenter {
 
     @Override
     public void onWakeupClicked() {
-        upnpService.getRouter().broadcast(wakeOnLANBytes);
+        try {
+            upnpService.getRouter().broadcast(wakeOnLANBytes);
+        } catch (RouterException ex) {
+            Workbench.Log.MAIN.warning(
+                "Broadcasting wakeup bytes on LAN failed: " + ex
+            );
+        }
     }
 
     protected Service resolveService() {

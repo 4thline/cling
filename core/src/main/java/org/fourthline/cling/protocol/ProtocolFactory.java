@@ -100,7 +100,7 @@ public interface ProtocolFactory {
     /**
      * Called by the {@link org.fourthline.cling.controlpoint.ControlPoint}, creates a protocol for GENA subscription.
      */
-    public SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription);
+    public SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription) throws ProtocolCreationException;
 
     /**
      * Called by the {@link org.fourthline.cling.controlpoint.ControlPoint}, creates a protocol for GENA renewal.

@@ -27,6 +27,7 @@ import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.types.NotificationSubtype;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.protocol.SendingAsync;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,7 @@ public abstract class SendingNotification extends SendingAsync {
         return device;
     }
 
-    protected void execute() {
+    protected void execute() throws RouterException {
 
         List<NetworkAddress> activeStreamServers =
             getUpnpService().getRouter().getActiveStreamServers(null);
@@ -101,7 +102,7 @@ public abstract class SendingNotification extends SendingAsync {
         return 150;
     }
 
-    public void sendMessages(Location descriptorLocation) {
+    public void sendMessages(Location descriptorLocation) throws RouterException {
         log.finer("Sending root device messages: " + getDevice());
         List<OutgoingNotificationRequest> rootDeviceMsgs =
                 createDeviceMessages(getDevice(), descriptorLocation);

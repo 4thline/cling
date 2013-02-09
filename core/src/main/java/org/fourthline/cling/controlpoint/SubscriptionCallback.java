@@ -25,6 +25,8 @@ import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.protocol.ProtocolCreationException;
+import org.fourthline.cling.protocol.sync.SendingSubscribe;
 import org.seamless.util.Exceptions;
 
 import java.util.Collections;
@@ -235,9 +237,14 @@ public abstract class SubscriptionCallback implements Runnable {
 					}
                 };
 
-        getControlPoint().getProtocolFactory()
-                . createSendingSubscribe(remoteSubscription)
-                .run();
+        SendingSubscribe protocol;
+        try {
+            protocol = getControlPoint().getProtocolFactory().createSendingSubscribe(remoteSubscription);
+        } catch (ProtocolCreationException ex) {
+            failed(subscription, null, ex);
+            return;
+        }
+        protocol.run();
     }
 
     synchronized public void end() {
@@ -272,7 +279,8 @@ public abstract class SubscriptionCallback implements Runnable {
      *
      * @param subscription   The failed subscription object, not very useful at this point.
      * @param responseStatus For a remote subscription, if a response was received at all, this is it, otherwise <tt>null</tt>.
-     * @param exception      For a local subscription, any exception that caused the failure, otherwise <tt>null</tt>.
+     * @param exception      For a local subscription and failed creation of a remote subscription protocol (before
+     *                       sending the subscribe request), any exception that caused the failure, otherwise <tt>null</tt>.
      * @param defaultMsg     A user-friendly error message.
      * @see #createDefaultFailureMessage
      */

@@ -37,6 +37,7 @@ import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
 import java.net.URL;
+import java.util.List;
 
 import static org.testng.Assert.assertEquals;
 
@@ -95,33 +96,34 @@ public class IncomingSubscriptionLifecycleTest {
         assertEquals(unsubscribeResponseMessage.getOperation().getStatusCode(), UpnpResponse.Status.OK.getStatusCode());
         assert(upnpService.getRegistry().getLocalSubscription(subscriptionId) == null);
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 2);
+        List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
+        assertEquals(sentMessages.size(), 2);
         assertEquals(
-                (upnpService.getSentStreamRequestMessages().get(0).getOperation()).getMethod(),
+                (sentMessages.get(0).getOperation()).getMethod(),
                 UpnpRequest.Method.NOTIFY
         );
         assertEquals(
-                (upnpService.getSentStreamRequestMessages().get(1).getOperation()).getMethod(),
+                (sentMessages.get(1).getOperation()).getMethod(),
                 UpnpRequest.Method.NOTIFY
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
+                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
                 subscriptionId
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
+                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
                 subscriptionId
         );
         assertEquals(
-                (upnpService.getSentStreamRequestMessages().get(0).getOperation()).getURI().toString(),
+                (sentMessages.get(0).getOperation()).getURI().toString(),
                 callbackURL.toString()
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue(),
+                sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue(),
                 new Long(0)
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue(),
+                sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SEQ, EventSequenceHeader.class).getValue().getValue(),
                 new Long(1)
         );
 

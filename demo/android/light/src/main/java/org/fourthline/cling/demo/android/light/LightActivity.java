@@ -44,11 +44,11 @@ import org.fourthline.cling.model.types.DeviceType;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.model.types.UDAServiceType;
 import org.fourthline.cling.model.types.UDN;
-import org.fourthline.cling.transport.SwitchableRouter;
+import org.fourthline.cling.transport.Router;
+import org.fourthline.cling.transport.RouterException;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URI;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -162,13 +162,18 @@ public class LightActivity extends Activity implements PropertyChangeListener {
         switch (item.getItemId()) {
             case 0:
                 if (upnpService != null) {
-                    SwitchableRouter router = (SwitchableRouter) upnpService.get().getRouter();
-                    if (router.isEnabled()) {
-                        Toast.makeText(this, R.string.disablingRouter, Toast.LENGTH_SHORT).show();
-                        router.disable();
-                    } else {
-                        Toast.makeText(this, R.string.enablingRouter, Toast.LENGTH_SHORT).show();
-                        router.enable();
+                    Router router = upnpService.get().getRouter();
+                    try {
+                        if (router.isEnabled()) {
+                            Toast.makeText(this, R.string.disablingRouter, Toast.LENGTH_SHORT).show();
+                            router.disable();
+                        } else {
+                            Toast.makeText(this, R.string.enablingRouter, Toast.LENGTH_SHORT).show();
+                            router.enable();
+                        }
+                    } catch (RouterException ex) {
+                        Toast.makeText(this, getText(R.string.errorSwitchingRouter) + ex.toString(), Toast.LENGTH_LONG).show();
+                        ex.printStackTrace(System.err);
                     }
                 }
                 break;

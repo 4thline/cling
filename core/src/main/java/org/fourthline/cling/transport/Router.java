@@ -22,7 +22,7 @@ import org.fourthline.cling.model.message.OutgoingDatagramMessage;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.protocol.ProtocolFactory;
-import org.fourthline.cling.transport.spi.NetworkAddressFactory;
+import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.UpnpStream;
 
 import java.net.InetAddress;
@@ -42,6 +42,11 @@ import java.util.List;
  * {@link org.fourthline.cling.transport.spi.UpnpStream}s. An implementation of this interface
  * handles these messages, e.g. by selecting and executing the right protocol.
  * </p>
+ * <p>
+ * An implementation must be thread-safe, and can be accessed concurrently. If the Router is
+ * disabled, it doesn't listen on the network for incoming messages and does not send outgoing
+ * messages.
+ * </p>
  *
  * @see org.fourthline.cling.protocol.ProtocolFactory
  *
@@ -60,9 +65,37 @@ public interface Router {
     public ProtocolFactory getProtocolFactory();
 
     /**
-     * @return The network interface and address binding configuration of this router.
+     * Starts all sockets and listening threads for datagrams and streams.
+     *
+     * @return <code>true</code> if the router was enabled. <code>false</code> if it's already running.
      */
-    public NetworkAddressFactory getNetworkAddressFactory();
+    boolean enable() throws RouterException;
+
+    /**
+     * Unbinds all sockets and stops all listening threads for datagrams and streams.
+     *
+     * @return <code>true</code> if the router was disabled. <code>false</code> if it wasn't running.
+     */
+    boolean disable() throws RouterException;
+
+    /**
+     * Disables the router and releases all other resources.
+     */
+    void shutdown() throws RouterException ;
+
+    /**
+     *
+     * @return <code>true</code> if the router is currently enabled.
+     */
+    boolean isEnabled() throws RouterException;
+
+    /**
+     * Called by the {@link #enable()} method before it returns.
+     *
+     * @param ex The cause of the failure.
+     * @throws InitializationException if the exception was not recoverable.
+     */
+    void handleStartFailure(InitializationException ex) throws InitializationException;
 
     /**
      * @param preferredAddress A preferred stream server bound address or <code>null</code>.
@@ -70,12 +103,7 @@ public interface Router {
      *         address if the preferred address is active, or a list of all active bound
      *         stream servers.
      */
-    public List<NetworkAddress> getActiveStreamServers(InetAddress preferredAddress);
-
-    /**
-     * Unbinds all sockets and stops all listening threads for datagrams and streams.
-     */
-    public void shutdown();
+    public List<NetworkAddress> getActiveStreamServers(InetAddress preferredAddress) throws RouterException;
 
     /**
      * <p>
@@ -107,8 +135,9 @@ public interface Router {
      * Call this method to send a UDP datagram message.
      * </p>
      * @param msg The UDP datagram message to send.
+     * @throws RouterException if a recoverable error, such as thread interruption, occurs.
      */
-    public void send(OutgoingDatagramMessage msg);
+    public void send(OutgoingDatagramMessage msg) throws RouterException;
 
     /**
      * <p>
@@ -116,16 +145,17 @@ public interface Router {
      * </p>
      * @param msg The TCP (HTTP) stream message to send.
      * @return The response received from the server.
-     * @throws InterruptedException if the sending thread was interrupted while waiting for a response.
+     * @throws RouterException if a recoverable error, such as thread interruption, occurs.
      */
-    public StreamResponseMessage send(StreamRequestMessage msg) throws InterruptedException;
+    public StreamResponseMessage send(StreamRequestMessage msg) throws RouterException;
 
     /**
      * <p>
      * Call this method to broadcast a UDP message to all hosts on the network.
      * </p>
      * @param bytes The byte payload of the UDP datagram.
+     * @throws RouterException if a recoverable error, such as thread interruption, occurs.
      */
-    public void broadcast(byte[] bytes);
+    public void broadcast(byte[] bytes) throws RouterException;
 
 }

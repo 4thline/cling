@@ -17,6 +17,7 @@ package org.fourthline.cling.protocol;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.Namespace;
+import org.fourthline.cling.model.NetworkAddress;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
 import org.fourthline.cling.model.gena.RemoteGENASubscription;
@@ -46,11 +47,13 @@ import org.fourthline.cling.protocol.sync.SendingEvent;
 import org.fourthline.cling.protocol.sync.SendingRenewal;
 import org.fourthline.cling.protocol.sync.SendingSubscribe;
 import org.fourthline.cling.protocol.sync.SendingUnsubscribe;
+import org.fourthline.cling.transport.RouterException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -88,7 +91,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
             switch (incomingRequest.getOperation().getMethod()) {
                 case NOTIFY:
                     return isByeBye(incomingRequest) || isSupportedServiceAdvertisement(incomingRequest)
-                            ? createReceivingNotification(incomingRequest) : null;
+                        ? createReceivingNotification(incomingRequest) : null;
                 case MSEARCH:
                     return createReceivingSearch(incomingRequest);
             }
@@ -97,7 +100,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
             IncomingDatagramMessage<UpnpResponse> incomingResponse = message;
 
             return isSupportedServiceAdvertisement(incomingResponse)
-                    ? createReceivingSearchResponse(incomingResponse) : null;
+                ? createReceivingSearchResponse(incomingResponse) : null;
         }
 
         throw new ProtocolCreationException("Protocol for incoming datagram message not found: " + message);
@@ -171,7 +174,7 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         } else {
 
             // TODO: UPNP VIOLATION: Onkyo devices send event messages with trailing garbage characters
-        	// dev/1234/svc/upnp-org/MyService/event/callback192%2e168%2e10%2e38
+            // dev/1234/svc/upnp-org/MyService/event/callback192%2e168%2e10%2e38
             if (message.getUri().getPath().contains(Namespace.EVENTS + Namespace.CALLBACK_FILE)) {
                 log.warning("Fixing trailing garbage in event message path: " + message.getUri().getPath());
                 String invalid = message.getUri().toString();
@@ -206,8 +209,19 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         return new SendingAction(getUpnpService(), actionInvocation, controlURL);
     }
 
-    public SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription) {
-        return new SendingSubscribe(getUpnpService(), subscription);
+    public SendingSubscribe createSendingSubscribe(RemoteGENASubscription subscription) throws ProtocolCreationException {
+        try {
+            List<NetworkAddress> activeStreamServers =
+                getUpnpService().getRouter().getActiveStreamServers(
+                    subscription.getService().getDevice().getIdentity().getDiscoveredOnLocalAddress()
+                );
+            return new SendingSubscribe(getUpnpService(), subscription, activeStreamServers);
+        } catch (RouterException ex) {
+            throw new ProtocolCreationException(
+                "Failed to obtain local stream servers (for event callback URL creation) from router",
+                ex
+            );
+        }
     }
 
     public SendingRenewal createSendingRenewal(RemoteGENASubscription subscription) {

@@ -19,11 +19,6 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.controlpoint.ControlPointImpl;
-import org.fourthline.cling.model.NetworkAddress;
-import org.fourthline.cling.model.message.IncomingDatagramMessage;
-import org.fourthline.cling.model.message.OutgoingDatagramMessage;
-import org.fourthline.cling.model.message.StreamRequestMessage;
-import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.protocol.ProtocolFactory;
@@ -33,28 +28,13 @@ import org.fourthline.cling.protocol.async.SendingSearch;
 import org.fourthline.cling.registry.Registry;
 import org.fourthline.cling.registry.RegistryImpl;
 import org.fourthline.cling.registry.RegistryMaintainer;
-import org.fourthline.cling.transport.Router;
-import org.fourthline.cling.transport.impl.NetworkAddressFactoryImpl;
+import org.fourthline.cling.transport.RouterException;
 import org.fourthline.cling.transport.spi.NetworkAddressFactory;
-import org.fourthline.cling.transport.spi.StreamClient;
-import org.fourthline.cling.transport.spi.UpnpStream;
 
 import javax.enterprise.inject.Alternative;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Simplifies testing of core and non-core modules.
- * <p>
- * This service has no real network transport layer, it collects all messages instead and makes
- * them available for testing with {@link #getOutgoingDatagramMessages()},
- * {@link #getSentStreamRequestMessages()}, etc. Mock responses for TCP (HTTP) stream requests
- * can be returned by overriding {@link #getStreamResponseMessage(org.fourthline.cling.model.message.StreamRequestMessage)}
- * or {@link #getStreamResponseMessages()} if you know the order of requests.
- * </p>
  * <p>
  * It uses the {@link org.fourthline.cling.mock.MockUpnpService.MockProtocolFactory}.
  * </p>
@@ -68,15 +48,9 @@ public class MockUpnpService implements UpnpService {
     protected final ControlPoint controlPoint;
     protected final ProtocolFactory protocolFactory;
     protected final Registry registry;
-    protected final Router router;
+    protected final MockRouter router;
 
     protected final NetworkAddressFactory networkAddressFactory;
-
-    private List<IncomingDatagramMessage> incomingDatagramMessages = new ArrayList();
-    private List<OutgoingDatagramMessage> outgoingDatagramMessages = new ArrayList();
-    private List<UpnpStream> receivedUpnpStreams = new ArrayList();
-    private List<StreamRequestMessage> sentStreamRequestMessages = new ArrayList();
-    private List<byte[]> broadcastedBytes = new ArrayList();
 
     /**
      * Single-thread of execution for the whole UPnP stack, no ALIVE messages or registry maintenance.
@@ -127,8 +101,8 @@ public class MockUpnpService implements UpnpService {
         return new MockProtocolFactory(service, sendsAlive);
     }
 
-    protected Router createRouter() {
-        return new MockRouter();
+    protected MockRouter createRouter() {
+        return new MockRouter(getConfiguration(), getProtocolFactory());
     }
 
     /**
@@ -155,7 +129,7 @@ public class MockUpnpService implements UpnpService {
         public SendingNotificationAlive createSendingNotificationAlive(LocalDevice localDevice) {
             return new SendingNotificationAlive(getUpnpService(), localDevice) {
                 @Override
-                protected void execute() {
+                protected void execute() throws RouterException {
                     if (sendsAlive) super.execute();
                 }
             };
@@ -170,69 +144,6 @@ public class MockUpnpService implements UpnpService {
                 }
             };
         }
-    }
-
-    public class MockRouter implements Router {
-            int counter = -1;
-
-            public UpnpServiceConfiguration getConfiguration() {
-                return configuration;
-            }
-
-            public ProtocolFactory getProtocolFactory() {
-                return protocolFactory;
-            }
-
-            public StreamClient getStreamClient() {
-                return null;
-            }
-
-            public NetworkAddressFactory getNetworkAddressFactory() {
-                return networkAddressFactory;
-            }
-
-            public List<NetworkAddress> getActiveStreamServers(InetAddress preferredAddress) {
-                // Simulate an active stream server, otherwise the notification/search response
-                // protocols won't even run
-                try {
-                    return Arrays.asList(
-                            new NetworkAddress(
-                                    InetAddress.getByName("127.0.0.1"),
-                                    NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT
-                            )
-                    );
-                } catch (UnknownHostException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-
-            public void shutdown() {
-
-            }
-
-            public void received(IncomingDatagramMessage msg) {
-                incomingDatagramMessages.add(msg);
-            }
-
-            public void received(UpnpStream stream) {
-                receivedUpnpStreams.add(stream);
-            }
-
-            public void send(OutgoingDatagramMessage msg) {
-                outgoingDatagramMessages.add(msg);
-            }
-
-            public StreamResponseMessage send(StreamRequestMessage msg) throws InterruptedException{
-                sentStreamRequestMessages.add(msg);
-                counter++;
-                return getStreamResponseMessages() != null
-                        ? getStreamResponseMessages()[counter]
-                        : getStreamResponseMessage(msg);
-            }
-
-            public void broadcast(byte[] bytes) {
-                broadcastedBytes.add(bytes);
-            }
     }
 
     public UpnpServiceConfiguration getConfiguration() {
@@ -251,41 +162,12 @@ public class MockUpnpService implements UpnpService {
         return registry;
     }
 
-    public Router getRouter() {
+    public MockRouter getRouter() {
         return router;
     }
 
     public void shutdown() {
-        getRouter().shutdown();
         getRegistry().shutdown();
         getConfiguration().shutdown();
-    }
-
-    public List<IncomingDatagramMessage> getIncomingDatagramMessages() {
-        return incomingDatagramMessages;
-    }
-
-    public List<OutgoingDatagramMessage> getOutgoingDatagramMessages() {
-        return outgoingDatagramMessages;
-    }
-
-    public List<UpnpStream> getReceivedUpnpStreams() {
-        return receivedUpnpStreams;
-    }
-
-    public List<StreamRequestMessage> getSentStreamRequestMessages() {
-        return sentStreamRequestMessages;
-    }
-
-    public List<byte[]> getBroadcastedBytes() {
-        return broadcastedBytes;
-    }
-
-    public StreamResponseMessage[] getStreamResponseMessages() {
-        return null;
-    }
-
-    public StreamResponseMessage getStreamResponseMessage(StreamRequestMessage request) {
-        return null;
     }
 }

@@ -22,6 +22,7 @@ import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.gena.OutgoingEventRequestMessage;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.protocol.SendingSync;
+import org.fourthline.cling.transport.RouterException;
 
 import java.net.URL;
 
@@ -67,7 +68,7 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
         subscription.incrementSequence();
     }
 
-    protected StreamResponseMessage executeSync() {
+    protected StreamResponseMessage executeSync() throws RouterException {
 
         log.fine("Sending event for subscription: " + subscriptionId);
 
@@ -83,11 +84,7 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
 
 
             // Send request
-            try {
-                lastResponse = getUpnpService().getRouter().send(requestMessage);
-            } catch (InterruptedException ex) {
-                log.warning("Sending event message was interrupted: " + ex);
-            }
+            lastResponse = getUpnpService().getRouter().send(requestMessage);
             log.fine("Received event callback response: " + lastResponse);
 
         }

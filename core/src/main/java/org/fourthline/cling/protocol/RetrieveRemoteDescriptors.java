@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fourthline.cling.UpnpService;
@@ -39,6 +40,7 @@ import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.registry.RegistrationException;
+import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
 /**
@@ -102,12 +104,17 @@ public class RetrieveRemoteDescriptors implements Runnable {
         try {
             activeRetrievals.add(deviceURL);
             describe();
+        } catch (RouterException ex) {
+            log.log(Level.WARNING,
+                "Descriptor retrieval failed: " + deviceURL,
+                ex
+            );
         } finally {
             activeRetrievals.remove(deviceURL);
         }
     }
 
-    protected void describe() {
+    protected void describe() throws RouterException {
 
         // All of the following is a very expensive and time consuming procedure, thanks to the
         // braindead design of UPnP. Several GET requests, several descriptors, several XML parsing
@@ -144,12 +151,6 @@ public class RetrieveRemoteDescriptors implements Runnable {
                 + rd.getIdentity().getDescriptorURL()
                 + ", possibly invalid URL: " + ex);
             return ;
-    	} catch (InterruptedException ex) {
-            log.warning(
-                "Device descriptor retrieval was interrupted: "
-                + rd.getIdentity().getDescriptorURL()
-            );
-            return ;
         }
 
         if (deviceDescMsg == null) {
@@ -179,7 +180,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         describe(deviceDescMsg.getBodyString());
     }
 
-    protected void describe(String descriptorXML) {
+    protected void describe(String descriptorXML) throws RouterException {
 
         boolean notifiedStart = false;
         RemoteDevice describedDevice = null;
@@ -245,7 +246,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
     }
 
     protected RemoteDevice describeServices(RemoteDevice currentDevice)
-            throws DescriptorBindingException, ValidationException {
+            throws RouterException, DescriptorBindingException, ValidationException {
 
         List<RemoteService> describedServices = new ArrayList();
         if (currentDevice.hasServices()) {
@@ -290,7 +291,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
     }
 
     protected RemoteService describeService(RemoteService service)
-            throws DescriptorBindingException, ValidationException {
+            throws RouterException, DescriptorBindingException, ValidationException {
 
     	URL descriptorURL;
     	try {
@@ -309,12 +310,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
             serviceDescRetrievalMsg.getHeaders().putAll(headers);
 
         log.fine("Sending service descriptor retrieval message: " + serviceDescRetrievalMsg);
-        StreamResponseMessage serviceDescMsg = null;
-        try {
-            serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
-        } catch (InterruptedException ex) {
-            log.warning("Service descriptor retrieval was interrupted: " + descriptorURL);
-        }
+        StreamResponseMessage serviceDescMsg = getUpnpService().getRouter().send(serviceDescRetrievalMsg);
 
         if (serviceDescMsg == null) {
             log.warning("Could not retrieve service descriptor, no response: " + service);

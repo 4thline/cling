@@ -17,10 +17,12 @@ package org.fourthline.cling.test.gena;
 
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
+import org.fourthline.cling.mock.MockRouter;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.gena.RemoteGENASubscription;
+import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.model.message.UpnpResponse;
@@ -52,12 +54,17 @@ public class OutgoingSubscriptionLifecycleTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                @Override
+                public StreamResponseMessage[] getStreamResponseMessages() {
 
-                return new StreamResponseMessage[]{
-                        createSubscribeResponseMessage(),
-                        createUnsubscribeResponseMessage()
+                    return new StreamResponseMessage[]{
+                            createSubscribeResponseMessage(),
+                            createUnsubscribeResponseMessage()
 
+                    };
+                }
                 };
             }
         };
@@ -132,28 +139,29 @@ public class OutgoingSubscriptionLifecycleTest {
             assert testAssertion;
         }
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 2);
+        List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
+        assertEquals(sentMessages.size(), 2);
         assertEquals(
-                (upnpService.getSentStreamRequestMessages().get(0).getOperation()).getMethod(),
+                (sentMessages.get(0).getOperation()).getMethod(),
                 UpnpRequest.Method.SUBSCRIBE
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue(),
+            sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.TIMEOUT, TimeoutHeader.class).getValue(),
                 Integer.valueOf(1800)
         );
 
         assertEquals(callbackURLs.size(), 1);
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CALLBACK, CallbackHeader.class).getValue().get(0),
+            sentMessages.get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CALLBACK, CallbackHeader.class).getValue().get(0),
                 callbackURLs.get(0)
         );
 
         assertEquals(
-                (upnpService.getSentStreamRequestMessages().get(1).getOperation()).getMethod(),
+                (sentMessages.get(1).getOperation()).getMethod(),
                 UpnpRequest.Method.UNSUBSCRIBE
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
+            sentMessages.get(1).getHeaders().getFirstHeader(UpnpHeader.Type.SID, SubscriptionIdHeader.class).getValue(),
                 "uuid:1234"
         );
     }

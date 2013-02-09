@@ -20,6 +20,7 @@ import org.fourthline.cling.transport.spi.DatagramProcessor;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.MulticastReceiver;
 import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.transport.spi.NetworkAddressFactory;
 
 import java.net.DatagramPacket;
 import java.net.Inet6Address;
@@ -45,6 +46,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
     final protected MulticastReceiverConfigurationImpl configuration;
 
     protected Router router;
+    protected NetworkAddressFactory networkAddressFactory;
     protected DatagramProcessor datagramProcessor;
 
     protected NetworkInterface multicastInterface;
@@ -59,9 +61,13 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
         return configuration;
     }
 
-    synchronized public void init(NetworkInterface networkInterface, Router router, DatagramProcessor datagramProcessor) throws InitializationException {
+    synchronized public void init(NetworkInterface networkInterface,
+                                  Router router,
+                                  NetworkAddressFactory networkAddressFactory,
+                                  DatagramProcessor datagramProcessor) throws InitializationException {
 
         this.router = router;
+        this.networkAddressFactory = networkAddressFactory;
         this.datagramProcessor = datagramProcessor;
         this.multicastInterface = networkInterface;
 
@@ -108,10 +114,10 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
                 socket.receive(datagram);
 
                 InetAddress receivedOnLocalAddress =
-                        router.getNetworkAddressFactory().getLocalAddress(
-                                multicastInterface,
-                                multicastAddress.getAddress() instanceof Inet6Address,
-                                datagram.getAddress()
+                        networkAddressFactory.getLocalAddress(
+                            multicastInterface,
+                            multicastAddress.getAddress() instanceof Inet6Address,
+                            datagram.getAddress()
                         );
 
                 log.fine(

@@ -26,6 +26,7 @@ import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.protocol.ReceivingAsync;
 import org.fourthline.cling.protocol.RetrieveRemoteDescriptors;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -76,7 +77,7 @@ public class ReceivingNotification extends ReceivingAsync<IncomingNotificationRe
         super(upnpService, new IncomingNotificationRequest(inputMessage));
     }
 
-    protected void execute() {
+    protected void execute() throws RouterException {
 
         UDN udn = getInputMessage().getUDN();
         if (udn == null) {

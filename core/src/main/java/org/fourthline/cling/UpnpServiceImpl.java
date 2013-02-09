@@ -23,9 +23,12 @@ import org.fourthline.cling.registry.Registry;
 import org.fourthline.cling.registry.RegistryImpl;
 import org.fourthline.cling.registry.RegistryListener;
 import org.fourthline.cling.transport.Router;
+import org.fourthline.cling.transport.RouterException;
 import org.fourthline.cling.transport.RouterImpl;
+import org.seamless.util.Exceptions;
 
 import javax.enterprise.inject.Alternative;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -80,6 +83,12 @@ public class UpnpServiceImpl implements UpnpService {
 
         this.router = createRouter(protocolFactory, registry);
 
+        try {
+            this.router.enable();
+        } catch (RouterException ex) {
+            throw new RuntimeException("Enabling network router failed: " + ex, ex);
+        }
+
         this.controlPoint = createControlPoint(protocolFactory, registry);
 
         log.info("<<< UPnP service started successfully");
@@ -127,7 +136,18 @@ public class UpnpServiceImpl implements UpnpService {
         log.info(">>> Shutting down UPnP service...");
 
         getRegistry().shutdown();
-        getRouter().shutdown();
+
+        try {
+            getRouter().shutdown();
+        } catch (RouterException ex) {
+            Throwable cause = Exceptions.unwrap(ex);
+            if (cause instanceof InterruptedException) {
+                log.log(Level.INFO, "Router shutdown was interrupted: " + ex, cause);
+            } else {
+                throw new RuntimeException("Router error on shutdown: " + ex, ex);
+            }
+        }
+
         getConfiguration().shutdown();
 
         log.info("<<< UPnP service shutdown completed");

@@ -18,6 +18,7 @@ package org.fourthline.cling.protocol;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.transport.RouterException;
 
 /**
  * Supertype for all synchronously executing protocols, sending UPnP messages.
@@ -49,11 +50,11 @@ public abstract class SendingSync<IN extends StreamRequestMessage, OUT extends S
         return outputMessage;
     }
 
-    final protected void execute() {
+    final protected void execute() throws RouterException {
         outputMessage = executeSync();
     }
 
-    protected abstract OUT executeSync();
+    protected abstract OUT executeSync() throws RouterException;
 
     @Override
     public String toString() {

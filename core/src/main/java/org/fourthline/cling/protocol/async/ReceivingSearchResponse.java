@@ -26,6 +26,7 @@ import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.protocol.ReceivingAsync;
 import org.fourthline.cling.protocol.RetrieveRemoteDescriptors;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -47,7 +48,7 @@ public class ReceivingSearchResponse extends ReceivingAsync<IncomingSearchRespon
         super(upnpService, new IncomingSearchResponse(inputMessage));
     }
 
-    protected void execute() {
+    protected void execute() throws RouterException {
 
         if (!getInputMessage().isSearchResponseMessage()) {
             log.fine("Ignoring invalid search response message: " + getInputMessage());

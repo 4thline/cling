@@ -131,7 +131,7 @@ public class SearchExecuteTest {
 
         assertMessages(upnpService, new UDADeviceTypeHeader(udaType));
 
-        upnpService.getOutgoingDatagramMessages().clear();
+        upnpService.getRouter().getOutgoingDatagramMessages().clear();
 
         DeviceType type = new DeviceType("org-mydomain", "MyDeviceType", 1);    // DOC: SEARCH_CUSTOM
         upnpService.getControlPoint().search(
@@ -159,7 +159,7 @@ public class SearchExecuteTest {
 
         assertMessages(upnpService, new UDAServiceTypeHeader(udaType));
 
-        upnpService.getOutgoingDatagramMessages().clear();
+        upnpService.getRouter().getOutgoingDatagramMessages().clear();
 
         ServiceType type = new ServiceType("org-mydomain", "MyServiceType", 1);    // DOC: SEARCH_CUSTOM
         upnpService.getControlPoint().search(
@@ -190,8 +190,8 @@ public class SearchExecuteTest {
     }
 
     protected void assertMessages(MockUpnpService upnpService, UpnpHeader header) throws Exception {
-        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 5);
-        for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
+        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 5);
+        for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertSearchMessage(msg, header);
         }
     }

@@ -26,8 +26,10 @@ import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.transport.Router;
-import org.fourthline.cling.transport.SwitchableRouterImpl;
+import org.fourthline.cling.transport.RouterException;
+import org.fourthline.cling.transport.RouterImpl;
 import org.fourthline.cling.transport.spi.InitializationException;
+import org.seamless.util.Exceptions;
 
 import java.lang.reflect.Field;
 import java.util.logging.Level;
@@ -39,7 +41,7 @@ import java.util.logging.Logger;
  * @author Michael Pujos
  * @author Christian Bauer
  */
-public class AndroidSwitchableRouter extends SwitchableRouterImpl {
+public class AndroidRouter extends RouterImpl {
 
     final private static Logger log = Logger.getLogger(Router.class.getName());
 
@@ -51,17 +53,14 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
     protected NetworkInfo networkInfo;
     protected BroadcastReceiver broadcastReceiver;
 
-    public AndroidSwitchableRouter(UpnpServiceConfiguration configuration,
-                                   ProtocolFactory protocolFactory,
-                                   Context context) throws InitializationException {
+    public AndroidRouter(UpnpServiceConfiguration configuration,
+                         ProtocolFactory protocolFactory,
+                         Context context) throws InitializationException {
         super(configuration, protocolFactory);
 
         this.context = context;
         this.wifiManager = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
         this.networkInfo = NetworkUtils.getConnectedNetworkInfo(context);
-
-        // Start the router!
-        onNetworkTypeChange(null, networkInfo);
 
         // Only register for network connectivity changes if we are not running on emulator
         if (!ModelUtil.ANDROID_EMULATOR) {
@@ -76,7 +75,7 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
     }
 
     @Override
-    public void shutdown() {
+    public void shutdown() throws RouterException {
         super.shutdown();
         if (broadcastReceiver != null) {
             context.unregisterReceiver(broadcastReceiver);
@@ -84,7 +83,7 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
     }
 
     @Override
-    public boolean enable() throws RouterLockAcquisitionException {
+    public boolean enable() throws RouterException {
         lock(writeLock);
         try {
             boolean enabled;
@@ -103,7 +102,7 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
     }
 
     @Override
-    public boolean disable() throws RouterLockAcquisitionException {
+    public boolean disable() throws RouterException {
         lock(writeLock);
         try {
             // Disable multicast on WiFi network interface,
@@ -215,7 +214,7 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
      *
      * @param oldNetwork <code>null</code> when first called by constructor.
      */
-    protected void onNetworkTypeChange(NetworkInfo oldNetwork, NetworkInfo newNetwork) {
+    protected void onNetworkTypeChange(NetworkInfo oldNetwork, NetworkInfo newNetwork) throws RouterException {
         log.info(String.format("Network type changed %s => %s",
             oldNetwork == null ? "" : oldNetwork.getTypeName(),
             newNetwork == null ? "NONE" : newNetwork.getTypeName()));
@@ -235,6 +234,15 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
                 "Enabled router on network type change (new network: %s)",
                 newNetwork == null ? "NONE" : newNetwork.getTypeName()
             ));
+        }
+    }
+
+    protected void handleRouterExceptionOnNetworkTypeChange(RouterException ex) {
+        Throwable cause = Exceptions.unwrap(ex);
+        if (cause instanceof InterruptedException) {
+            log.log(Level.INFO, "Router was interrupted: " + ex, cause);
+        } else {
+            throw new RuntimeException("Router error on network change: " + ex, ex);
         }
     }
 
@@ -276,7 +284,11 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
             if (isSameNetworkType(networkInfo, newNetworkInfo)) {
                 log.info("No actual network change... ignoring event!");
             } else {
-                onNetworkTypeChange(networkInfo, newNetworkInfo);
+                try {
+                    onNetworkTypeChange(networkInfo, newNetworkInfo);
+                } catch (RouterException ex) {
+                    handleRouterExceptionOnNetworkTypeChange(ex);
+                }
             }
         }
 
@@ -304,5 +316,7 @@ public class AndroidSwitchableRouter extends SwitchableRouterImpl {
             log.info("EXTRA_OTHER_NETWORK_INFO: " + (otherNetworkInfo == null ? "none" : otherNetworkInfo));
             log.info("EXTRA_EXTRA_INFO: " + intent.getStringExtra(ConnectivityManager.EXTRA_EXTRA_INFO));
         }
+
     }
+
 }

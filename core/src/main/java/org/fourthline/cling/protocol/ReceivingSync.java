@@ -19,6 +19,7 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.profile.RemoteClientInfo;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -44,7 +45,7 @@ import java.util.logging.Logger;
  */
 public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends StreamResponseMessage> extends ReceivingAsync<IN> {
 
-    final private static Logger log = Logger.getLogger(ReceivingSync.class.getName());
+    final private static Logger log = Logger.getLogger(UpnpService.class.getName());
 
     final protected RemoteClientInfo remoteClientInfo;
     protected OUT outputMessage;
@@ -58,7 +59,7 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
         return outputMessage;
     }
 
-    final protected void execute() {
+    final protected void execute() throws RouterException {
         outputMessage = executeSync();
 
         if (outputMessage != null && getRemoteClientInfo().getExtraResponseHeaders().size() > 0) {
@@ -67,7 +68,7 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
         }
     }
 
-    protected abstract OUT executeSync();
+    protected abstract OUT executeSync() throws RouterException;
 
     /**
      * Called by the client of this protocol after the returned response has been successfully delivered.

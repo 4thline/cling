@@ -23,6 +23,7 @@ import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.gena.IncomingUnsubscribeRequestMessage;
 import org.fourthline.cling.model.resource.ServiceEventSubscriptionResource;
 import org.fourthline.cling.protocol.ReceivingSync;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -39,7 +40,7 @@ public class ReceivingUnsubscribe extends ReceivingSync<StreamRequestMessage, St
         super(upnpService, inputMessage);
     }
 
-    protected StreamResponseMessage executeSync() {
+    protected StreamResponseMessage executeSync() throws RouterException {
 
         ServiceEventSubscriptionResource resource =
                 getUpnpService().getRegistry().getResource(

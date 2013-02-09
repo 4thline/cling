@@ -26,6 +26,7 @@ import org.fourthline.cling.model.message.gena.OutgoingSubscribeResponseMessage;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.resource.ServiceEventSubscriptionResource;
 import org.fourthline.cling.protocol.ReceivingSync;
+import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
 import java.net.URL;
@@ -62,7 +63,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
         super(upnpService, inputMessage);
     }
 
-    protected OutgoingSubscribeResponseMessage executeSync() {
+    protected OutgoingSubscribeResponseMessage executeSync() throws RouterException {
 
         ServiceEventSubscriptionResource resource =
                 getUpnpService().getRegistry().getResource(

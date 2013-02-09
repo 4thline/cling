@@ -18,5 +18,5 @@ package org.fourthline.cling.transport;
 /**
  * @author Christian Bauer
  */
-public class TransportStart {
+public class DisableRouter {
 }

@@ -24,6 +24,7 @@ import org.fourthline.cling.model.message.gena.OutgoingEventResponseMessage;
 import org.fourthline.cling.model.resource.ServiceEventCallbackResource;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -47,7 +48,7 @@ public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, Outgoing
         super(upnpService, inputMessage);
     }
 
-    protected OutgoingEventResponseMessage executeSync() {
+    protected OutgoingEventResponseMessage executeSync() throws RouterException{
 
         if (!getInputMessage().isContentTypeTextUDA()) {
             log.warning("Received without or with invalid Content-Type: " + getInputMessage());

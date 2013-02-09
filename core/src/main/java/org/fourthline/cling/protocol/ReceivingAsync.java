@@ -18,8 +18,10 @@ package org.fourthline.cling.protocol;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.message.UpnpMessage;
 import org.fourthline.cling.model.message.header.UpnpHeader;
+import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -36,7 +38,7 @@ import java.util.logging.Logger;
  */
 public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable {
 
-    final private static Logger log = Logger.getLogger(ReceivingAsync.class.getName());
+    final private static Logger log = Logger.getLogger(UpnpService.class.getName());
 
     private final UpnpService upnpService;
 
@@ -67,12 +69,14 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
         if (proceed) {
             try {
                 execute();
-            } catch (RuntimeException ex) {
+            } catch (Exception ex) {
                 Throwable cause = Exceptions.unwrap(ex);
                 if (cause instanceof InterruptedException) {
-                    log.info("Protocol execution interrupted (on shutdown?): " + ex);
+                    log.log(Level.INFO, "Interrupted protocol '" + getClass().getSimpleName() + "': " + ex, cause);
                 } else {
-                    throw ex;
+                    throw new RuntimeException(
+                        "Fatal error while executing protocol '" + getClass().getSimpleName() + "': " + ex, ex
+                    );
                 }
             }
         }
@@ -90,7 +94,7 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
         return true;
     }
 
-    protected abstract void execute();
+    protected abstract void execute() throws RouterException;
 
     protected <H extends UpnpHeader> H getFirstHeader(UpnpHeader.Type headerType, Class<H> subtype) {
         return getInputMessage().getHeaders().getFirstHeader(headerType, subtype);

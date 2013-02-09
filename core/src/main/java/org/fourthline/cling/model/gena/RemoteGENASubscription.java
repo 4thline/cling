@@ -43,10 +43,6 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
 
     protected PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
 
-    protected RemoteGENASubscription(RemoteService service) {
-        super(service);
-    }
-
     protected RemoteGENASubscription(RemoteService service,
                                      int requestedDurationSeconds) {
         super(service, requestedDurationSeconds);

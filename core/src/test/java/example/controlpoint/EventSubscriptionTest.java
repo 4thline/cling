@@ -17,6 +17,7 @@ package example.controlpoint;
 import example.binarylight.BinaryLightSampleData;
 import example.binarylight.SwitchPower;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
+import org.fourthline.cling.mock.MockRouter;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.gena.CancelReason;
@@ -178,7 +179,7 @@ public class EventSubscriptionTest {
 
         assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT sequence!
         assert callback.getSubscription().getSubscriptionId().startsWith("uuid:");
-        
+
         // Actually, the local subscription we are testing here has an "unlimited" duration
         assertEquals(callback.getSubscription().getActualDurationSeconds(), Integer.MAX_VALUE);
 
@@ -189,16 +190,21 @@ public class EventSubscriptionTest {
             assert testAssertion;
         }
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     protected MockUpnpService createMockUpnpService() {
         return new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        createSubscribeResponseMessage(),
-                        createUnsubscribeResponseMessage()
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                                createSubscribeResponseMessage(),
+                                createUnsubscribeResponseMessage()
+                        };
+                    }
                 };
             }
         };

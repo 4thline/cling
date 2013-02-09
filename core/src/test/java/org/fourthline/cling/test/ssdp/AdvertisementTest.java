@@ -45,12 +45,14 @@ public class AdvertisementTest {
         SendingNotificationAlive prot = new SendingNotificationAlive(upnpService, rootDevice);
         prot.run();
 
-        for (OutgoingDatagramMessage msg : upnpService.getOutgoingDatagramMessages()) {
+        for (OutgoingDatagramMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertAliveMsgBasics(msg);
             //SampleData.debugMsg(msg);
         }
 
-        SampleUSNHeaders.assertUSNHeaders(upnpService.getOutgoingDatagramMessages(), rootDevice, embeddedDevice, UpnpHeader.Type.NT);
+        SampleUSNHeaders.assertUSNHeaders(
+            upnpService.getRouter().getOutgoingDatagramMessages(),
+            rootDevice, embeddedDevice, UpnpHeader.Type.NT);
     }
 
     @Test
@@ -64,12 +66,14 @@ public class AdvertisementTest {
         SendingNotificationByebye prot = new SendingNotificationByebye(upnpService, rootDevice);
         prot.run();
 
-        for (OutgoingDatagramMessage msg : upnpService.getOutgoingDatagramMessages()) {
+        for (OutgoingDatagramMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertByebyeMsgBasics(msg);
             //SampleData.debugMsg(msg);
         }
 
-        SampleUSNHeaders.assertUSNHeaders(upnpService.getOutgoingDatagramMessages(), rootDevice, embeddedDevice, UpnpHeader.Type.NT);
+        SampleUSNHeaders.assertUSNHeaders(
+            upnpService.getRouter().getOutgoingDatagramMessages(),
+            rootDevice, embeddedDevice, UpnpHeader.Type.NT);
     }
 
     protected void assertAliveMsgBasics(UpnpMessage msg) {

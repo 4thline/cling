@@ -33,6 +33,7 @@ import org.fourthline.cling.model.resource.IconResource;
 import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.resource.ServiceDescriptorResource;
 import org.fourthline.cling.protocol.ReceivingSync;
+import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
 import java.net.URI;
@@ -60,7 +61,7 @@ public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, Stre
         super(upnpService, inputMessage);
     }
 
-    protected StreamResponseMessage executeSync() {
+    protected StreamResponseMessage executeSync() throws RouterException {
 
         if (!getInputMessage().hasHostHeader()) {
             log.fine("Ignoring message, missing HOST header: " + getInputMessage());

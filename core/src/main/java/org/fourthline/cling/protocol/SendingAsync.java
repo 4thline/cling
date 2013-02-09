@@ -16,6 +16,11 @@
 package org.fourthline.cling.protocol;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.transport.RouterException;
+import org.seamless.util.Exceptions;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Supertype for all synchronously executing protocols, sending UPnP messages.
@@ -23,10 +28,16 @@ import org.fourthline.cling.UpnpService;
  * After instantiation by the {@link ProtocolFactory}, this protocol <code>run()</code>s and
  * calls its {@link #execute()} method.
  * </p>
+ * <p>
+ * A {@link RouterException} during execution will be wrapped in a fatal <code>RuntimeException</code>,
+ * unless its cause is an <code>InterruptedException</code>, in which case an INFO message will be logged.
+ * </p>
  *
  * @author Christian Bauer
  */
 public abstract class SendingAsync implements Runnable {
+
+    final private static Logger log = Logger.getLogger(UpnpService.class.getName());
 
     private final UpnpService upnpService;
 
@@ -39,10 +50,21 @@ public abstract class SendingAsync implements Runnable {
     }
 
     public void run() {
-        execute();
+        try {
+            execute();
+        } catch (Exception ex) {
+            Throwable cause = Exceptions.unwrap(ex);
+            if (cause instanceof InterruptedException) {
+                log.log(Level.INFO, "Interrupted protocol '" + getClass().getSimpleName() + "': " + ex, cause);
+            } else {
+                throw new RuntimeException(
+                    "Fatal error while executing protocol '" + getClass().getSimpleName() + "': " + ex, ex
+                );
+            }
+        }
     }
 
-    protected abstract void execute();
+    protected abstract void execute() throws RouterException;
 
     @Override
     public String toString() {

@@ -102,7 +102,7 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     @Test
@@ -123,7 +123,7 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     @Test
@@ -146,7 +146,7 @@ public class NotifyTest {
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
 
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     @Test

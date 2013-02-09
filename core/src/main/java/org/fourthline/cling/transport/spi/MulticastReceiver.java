@@ -48,10 +48,14 @@ public interface MulticastReceiver<C extends MulticastReceiverConfiguration> ext
      *
      * @param networkInterface The network interface on which to join the multicast group on.
      * @param router The router which handles received {@link org.fourthline.cling.model.message.IncomingDatagramMessage}s.
+     * @param networkAddressFactory The network address factory to use for local address lookup given a local interface and a remote address.
      * @param datagramProcessor Reads and writes datagrams.
      * @throws InitializationException If the service could not be initialized or started.
      */
-    public void init(NetworkInterface networkInterface, Router router, DatagramProcessor datagramProcessor) throws InitializationException;
+    public void init(NetworkInterface networkInterface,
+                     Router router,
+                     NetworkAddressFactory networkAddressFactory,
+                     DatagramProcessor datagramProcessor) throws InitializationException;
 
     /**
      * Stops the service, closes any listening sockets.

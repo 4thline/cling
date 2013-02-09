@@ -67,10 +67,10 @@ public class AndroidUpnpServiceImpl extends Service {
         return new AndroidUpnpServiceConfiguration();
     }
 
-    protected AndroidSwitchableRouter createRouter(UpnpServiceConfiguration configuration,
+    protected AndroidRouter createRouter(UpnpServiceConfiguration configuration,
                                                    ProtocolFactory protocolFactory,
                                                    Context context) {
-        return new AndroidSwitchableRouter(configuration, protocolFactory, context);
+        return new AndroidRouter(configuration, protocolFactory, context);
     }
 
     @Override

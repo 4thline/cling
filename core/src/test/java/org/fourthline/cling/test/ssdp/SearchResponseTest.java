@@ -59,7 +59,7 @@ public class SearchResponseTest {
 
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 1);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
     }
 
     @Test
@@ -73,14 +73,14 @@ public class SearchResponseTest {
         IncomingSearchResponse msg = createResponseMessage(new STAllHeader());
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
 
         // Missing location header
         msg = createResponseMessage(new STAllHeader());
         msg.getHeaders().add(UpnpHeader.Type.USN, new USNRootDeviceHeader(rd.getIdentity().getUdn()));
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
 
         // Missing max age header
         msg = createResponseMessage(new STAllHeader());
@@ -88,7 +88,7 @@ public class SearchResponseTest {
         msg.getHeaders().add(UpnpHeader.Type.LOCATION, new LocationHeader(SampleDeviceRoot.getDeviceDescriptorURL()));
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
 
     }
 
@@ -109,7 +109,7 @@ public class SearchResponseTest {
 
         upnpService.getProtocolFactory().createReceivingAsync(msg).run();
         Thread.sleep(100);
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     @Test

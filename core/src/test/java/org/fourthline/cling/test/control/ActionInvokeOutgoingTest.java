@@ -16,6 +16,7 @@
 package org.fourthline.cling.test.control;
 
 import org.fourthline.cling.controlpoint.ActionCallback;
+import org.fourthline.cling.mock.MockRouter;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.StreamRequestMessage;
@@ -45,9 +46,11 @@ import org.fourthline.cling.model.types.UDAServiceType;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.test.data.SampleServiceOne;
+import org.fourthline.cling.transport.RouterException;
 import org.testng.annotations.Test;
 
 import java.net.URI;
+import java.util.Arrays;
 
 import static org.testng.Assert.assertEquals;
 
@@ -55,55 +58,55 @@ import static org.testng.Assert.assertEquals;
 public class ActionInvokeOutgoingTest {
 
     public static final String RESPONSE_SUCCESSFUL = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:GetTargetResponse xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n" +
-            "       <RetTargetValue>0</RetTargetValue>\n" +
-            "     </u:GetTargetResponse>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+        " <s:Envelope\n" +
+        "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
+        "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
+        "   <s:Body>\n" +
+        "     <u:GetTargetResponse xmlns:u=\"urn:schemas-upnp-org:service:SwitchPower:1\">\n" +
+        "       <RetTargetValue>0</RetTargetValue>\n" +
+        "     </u:GetTargetResponse>\n" +
+        "   </s:Body>\n" +
+        " </s:Envelope>";
 
     public static final String RESPONSE_QUERY_VARIABLE = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:QueryStateVariableResponse xmlns:u=\"urn:schemas-upnp-org:control-1-0\">\n" +
-            "       <return>0</return>\n" +
-            "     </u:QueryStateVariableResponse>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+        " <s:Envelope\n" +
+        "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
+        "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
+        "   <s:Body>\n" +
+        "     <u:QueryStateVariableResponse xmlns:u=\"urn:schemas-upnp-org:control-1-0\">\n" +
+        "       <return>0</return>\n" +
+        "     </u:QueryStateVariableResponse>\n" +
+        "   </s:Body>\n" +
+        " </s:Envelope>";
 
     public static final String RESPONSE_FAILURE = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <s:Fault>\n" +
-            "       <faultcode>s:Client</faultcode>\n" +
-            "       <faultstring>UPnPError</faultstring>\n" +
-            "       <detail>\n" +
-            "         <UPnPError xmlns=\"urn:schemas-upnp-org:control-1-0\">\n" +
-            "           <errorCode>611</errorCode>\n" +
-            "           <errorDescription>A test string</errorDescription>\n" +
-            "         </UPnPError>\n" +
-            "       </detail>\n" +
-            "     </s:Fault>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+        " <s:Envelope\n" +
+        "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
+        "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
+        "   <s:Body>\n" +
+        "     <s:Fault>\n" +
+        "       <faultcode>s:Client</faultcode>\n" +
+        "       <faultstring>UPnPError</faultstring>\n" +
+        "       <detail>\n" +
+        "         <UPnPError xmlns=\"urn:schemas-upnp-org:control-1-0\">\n" +
+        "           <errorCode>611</errorCode>\n" +
+        "           <errorDescription>A test string</errorDescription>\n" +
+        "         </UPnPError>\n" +
+        "       </detail>\n" +
+        "     </s:Fault>\n" +
+        "   </s:Body>\n" +
+        " </s:Envelope>";
 
     public static final String RESPONSE_NEGATIVE_VALUE = "<?xml version=\"1.0\"?>\n" +
-            " <s:Envelope\n" +
-            "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
-            "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
-            "   <s:Body>\n" +
-            "     <u:GetNegativeValueResponse xmlns:u=\"urn:schemas-upnp-org:service:MyService:1\">\n" +
-            "       <Result>-1</Result>\n" + // That's an illegal value for this state var!
-            "     </u:GetNegativeValueResponse>\n" +
-            "   </s:Body>\n" +
-            " </s:Envelope>";
+        " <s:Envelope\n" +
+        "     xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\"\n" +
+        "     s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n" +
+        "   <s:Body>\n" +
+        "     <u:GetNegativeValueResponse xmlns:u=\"urn:schemas-upnp-org:service:MyService:1\">\n" +
+        "       <Result>-1</Result>\n" + // That's an illegal value for this state var!
+        "     </u:GetNegativeValueResponse>\n" +
+        "   </s:Body>\n" +
+        " </s:Envelope>";
 
     @Test
     public void callLocalGet() throws Exception {
@@ -134,7 +137,7 @@ public class ActionInvokeOutgoingTest {
         upnpService.getControlPoint().execute(callback);
 
         assert actionInvocation.getFailure() == null;
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
         assertEquals(assertions[0], true);
         assertEquals(actionInvocation.getOutput().length, 1);
         assertEquals(actionInvocation.getOutput()[0].toString(), "0");
@@ -185,13 +188,13 @@ public class ActionInvokeOutgoingTest {
         upnpService.getControlPoint().execute(callback);
 
         assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
         assertEquals(assertions[0], true);
 
         assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
         assertEquals(
-                actionInvocation.getFailure().getMessage(),
-                ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong."
+            actionInvocation.getFailure().getMessage(),
+            ErrorCode.ACTION_FAILED.getDescription() + ". Something is wrong."
         );
     }
 
@@ -200,9 +203,20 @@ public class ActionInvokeOutgoingTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        new StreamResponseMessage(RESPONSE_SUCCESSFUL)
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+
+                    @Override
+                    public StreamResponseMessage send(StreamRequestMessage msg) throws RouterException {
+                        return super.send(msg);
+                    }
+
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                            new StreamResponseMessage(RESPONSE_SUCCESSFUL)
+                        };
+                    }
                 };
             }
         };
@@ -240,10 +254,10 @@ public class ActionInvokeOutgoingTest {
         upnpService.getControlPoint().execute(callback);
 
         assert actionInvocation.getFailure() == null;
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 1);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
         assertEquals(assertions[0], true);
 
-        StreamRequestMessage request = upnpService.getSentStreamRequestMessages().get(0);
+        StreamRequestMessage request = upnpService.getRouter().getSentStreamRequestMessages().get(0);
 
         // Mandatory headers
         assertEquals(
@@ -275,9 +289,14 @@ public class ActionInvokeOutgoingTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.INTERNAL_SERVER_ERROR), RESPONSE_FAILURE)
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                            new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.INTERNAL_SERVER_ERROR), RESPONSE_FAILURE)
+                        };
+                    }
                 };
             }
         };
@@ -307,12 +326,12 @@ public class ActionInvokeOutgoingTest {
         upnpService.getControlPoint().execute(callback);
 
         assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 1);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
         assertEquals(assertions[0], true);
         assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.INVALID_CONTROL_URL.getCode());
         assertEquals(
-                actionInvocation.getFailure().getMessage(),
-                "A test string"
+            actionInvocation.getFailure().getMessage(),
+            "A test string"
         );
 
     }
@@ -322,9 +341,14 @@ public class ActionInvokeOutgoingTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.NOT_FOUND))
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                            new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.NOT_FOUND))
+                        };
+                    }
                 };
             }
         };
@@ -354,12 +378,12 @@ public class ActionInvokeOutgoingTest {
         upnpService.getControlPoint().execute(callback);
 
         assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 1);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
         assertEquals(assertions[0], true);
         assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
         assertEquals(
-                actionInvocation.getFailure().getMessage(),
-                ErrorCode.ACTION_FAILED.getDescription() + ". Non-recoverable remote execution failure: 404 Not Found."
+            actionInvocation.getFailure().getMessage(),
+            ErrorCode.ACTION_FAILED.getDescription() + ". Non-recoverable remote execution failure: 404 Not Found."
         );
 
     }
@@ -394,12 +418,12 @@ public class ActionInvokeOutgoingTest {
         upnpService.getControlPoint().execute(callback);
 
         assert actionInvocation.getFailure() != null;
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 1);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
         assertEquals(assertions[0], true);
         assertEquals(actionInvocation.getFailure().getErrorCode(), ErrorCode.ACTION_FAILED.getCode());
         assertEquals(
-                actionInvocation.getFailure().getMessage(),
-                ErrorCode.ACTION_FAILED.getDescription() + ". Connection error or no response received."
+            actionInvocation.getFailure().getMessage(),
+            ErrorCode.ACTION_FAILED.getDescription() + ". Connection error or no response received."
         );
     }
 
@@ -408,40 +432,45 @@ public class ActionInvokeOutgoingTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        new StreamResponseMessage(RESPONSE_NEGATIVE_VALUE)
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                            new StreamResponseMessage(RESPONSE_NEGATIVE_VALUE)
+                        };
+                    }
                 };
             }
         };
 
         // Registery remote device and its service
         RemoteDevice device = new RemoteDevice(
-                SampleData.createRemoteDeviceIdentity(),
-                new UDADeviceType("MyDevice"),
-                new DeviceDetails("JustATest"),
-                new RemoteService(
-                        new UDAServiceType("MyService"),
-                        new UDAServiceId("MyService"),
-                        URI.create("/scpd.xml"),
-                        URI.create("/control"),
-                        URI.create("/events"),
-                        new Action[]{
-                                new Action(
-                                        "GetNegativeValue",
-                                        new ActionArgument[]{
-                                                new ActionArgument("Result", "NegativeValue", ActionArgument.Direction.OUT)
-                                        }
-                                )
-                        },
-                        new StateVariable[]{
-                                new StateVariable(
-                                        "NegativeValue",
-                                        new StateVariableTypeDetails(Datatype.Builtin.UI4.getDatatype()),
-                                        new StateVariableEventDetails(false)
-                                )
+            SampleData.createRemoteDeviceIdentity(),
+            new UDADeviceType("MyDevice"),
+            new DeviceDetails("JustATest"),
+            new RemoteService(
+                new UDAServiceType("MyService"),
+                new UDAServiceId("MyService"),
+                URI.create("/scpd.xml"),
+                URI.create("/control"),
+                URI.create("/events"),
+                new Action[]{
+                    new Action(
+                        "GetNegativeValue",
+                        new ActionArgument[]{
+                            new ActionArgument("Result", "NegativeValue", ActionArgument.Direction.OUT)
                         }
-                )
+                    )
+                },
+                new StateVariable[]{
+                    new StateVariable(
+                        "NegativeValue",
+                        new StateVariableTypeDetails(Datatype.Builtin.UI4.getDatatype()),
+                        new StateVariableEventDetails(false)
+                    )
+                }
+            )
         );
 
         upnpService.getRegistry().addDevice(device);
@@ -604,9 +633,14 @@ public class ActionInvokeOutgoingTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        new StreamResponseMessage(RESPONSE_QUERY_VARIABLE)
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                            new StreamResponseMessage(RESPONSE_QUERY_VARIABLE)
+                        };
+                    }
                 };
             }
         };
@@ -636,15 +670,15 @@ public class ActionInvokeOutgoingTest {
         upnpService.getControlPoint().execute(callback);
 
         assert actionInvocation.getFailure() == null;
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 1);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 1);
         assertEquals(assertions[0], true);
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
-                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
+            upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getString(),
+            ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8.toString()
         );
         assertEquals(
-                upnpService.getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class).getString(),
-                "\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\""
+            upnpService.getRouter().getSentStreamRequestMessages().get(0).getHeaders().getFirstHeader(UpnpHeader.Type.SOAPACTION, SoapActionHeader.class).getString(),
+            "\"urn:schemas-upnp-org:control-1-0#QueryStateVariable\""
         );
         assertEquals(actionInvocation.getOutput().length, 1);
         assertEquals(actionInvocation.getOutput()[0].getArgument().getName(), "return");

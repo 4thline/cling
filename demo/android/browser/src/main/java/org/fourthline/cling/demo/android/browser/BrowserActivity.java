@@ -39,7 +39,8 @@ import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.registry.DefaultRegistryListener;
 import org.fourthline.cling.registry.Registry;
-import org.fourthline.cling.transport.SwitchableRouter;
+import org.fourthline.cling.transport.Router;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -140,13 +141,18 @@ public class BrowserActivity extends ListActivity {
             // DOC:OPTIONAL
             case 1:
                 if (upnpService != null) {
-                    SwitchableRouter router = (SwitchableRouter) upnpService.get().getRouter();
-                    if (router.isEnabled()) {
-                        Toast.makeText(this, R.string.disablingRouter, Toast.LENGTH_SHORT).show();
-                        router.disable();
-                    } else {
-                        Toast.makeText(this, R.string.enablingRouter, Toast.LENGTH_SHORT).show();
-                        router.enable();
+                    Router router = upnpService.get().getRouter();
+                    try {
+                        if (router.isEnabled()) {
+                            Toast.makeText(this, R.string.disablingRouter, Toast.LENGTH_SHORT).show();
+                            router.disable();
+                        } else {
+                            Toast.makeText(this, R.string.enablingRouter, Toast.LENGTH_SHORT).show();
+                            router.enable();
+                        }
+                    } catch (RouterException ex) {
+                        Toast.makeText(this, getText(R.string.errorSwitchingRouter) + ex.toString(), Toast.LENGTH_LONG).show();
+                        ex.printStackTrace(System.err);
                     }
                 }
                 break;

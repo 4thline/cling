@@ -22,6 +22,7 @@ import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.gena.IncomingSubscribeResponseMessage;
 import org.fourthline.cling.model.message.gena.OutgoingRenewalRequestMessage;
 import org.fourthline.cling.protocol.SendingSync;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -54,26 +55,19 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
         this.subscription = subscription;
     }
 
-    protected IncomingSubscribeResponseMessage executeSync() {
+    protected IncomingSubscribeResponseMessage executeSync() throws RouterException {
         log.fine("Sending subscription renewal request: " + getInputMessage());
 
-        StreamResponseMessage response = null;
+        StreamResponseMessage response;
         try {
             response = getUpnpService().getRouter().send(getInputMessage());
-        } catch (InterruptedException ex) {
-            log.warning("Sending renewal message was interrupted: " + ex);
+        } catch (RouterException ex) {
+            onRenewalFailure();
+            throw ex;
         }
 
         if (response == null) {
-            log.fine("Subscription renewal failed, no response received");
-            getUpnpService().getRegistry().removeRemoteSubscription(subscription);
-            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-                    new Runnable() {
-                        public void run() {
-                            subscription.end(CancelReason.RENEWAL_FAILED, null);
-                        }
-                    }
-            );
+            onRenewalFailure();
             return null;
         }
 
@@ -105,5 +99,17 @@ public class SendingRenewal extends SendingSync<OutgoingRenewalRequestMessage, I
         }
 
         return responseMessage;
+    }
+
+    protected void onRenewalFailure() {
+        log.fine("Subscription renewal failed, removing subscription from registry");
+        getUpnpService().getRegistry().removeRemoteSubscription(subscription);
+        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                new Runnable() {
+                    public void run() {
+                        subscription.end(CancelReason.RENEWAL_FAILED, null);
+                    }
+                }
+        );
     }
 }

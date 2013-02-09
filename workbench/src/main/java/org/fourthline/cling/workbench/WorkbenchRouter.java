@@ -17,7 +17,8 @@ package org.fourthline.cling.workbench;
 
 import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.protocol.ProtocolFactory;
-import org.fourthline.cling.transport.SwitchableRouterImpl;
+import org.fourthline.cling.transport.Router;
+import org.fourthline.cling.transport.RouterImpl;
 import org.fourthline.cling.transport.spi.InitializationException;
 
 import javax.enterprise.inject.Alternative;
@@ -32,7 +33,7 @@ import javax.inject.Inject;
  */
 @Alternative
 @Specializes
-public class WorkbenchRouter extends SwitchableRouterImpl {
+public class WorkbenchRouter extends RouterImpl {
 
     public WorkbenchRouter() {
     }

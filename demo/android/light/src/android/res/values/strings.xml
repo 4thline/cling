@@ -7,6 +7,7 @@
 
     <string name="enablingRouter">Enabling network router...</string>
     <string name="disablingRouter">Disabling network router...</string>
+    <string name="errorSwitchingRouter">Error switching router: </string>
     <string name="enablingDebugLogging">Enabling debug logging...</string>
     <string name="disablingDebugLogging">Disabling debug logging...</string>
 

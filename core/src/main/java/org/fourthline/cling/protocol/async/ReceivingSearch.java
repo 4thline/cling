@@ -46,6 +46,7 @@ import org.fourthline.cling.model.types.DeviceType;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.protocol.ReceivingAsync;
+import org.fourthline.cling.transport.RouterException;
 
 /**
  * Handles reception of search requests, responds for local registered devices.
@@ -71,7 +72,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         super(upnpService, new IncomingSearchRequest(inputMessage));
     }
 
-    protected void execute() {
+    protected void execute() throws RouterException {
         if (getUpnpService().getRouter() == null) {
             // TODO: http://mailinglists.945824.n3.nabble.com/rare-NPE-on-start-tp3078213p3142767.html
             log.fine("Router hasn't completed initialization, ignoring received search message");
@@ -127,7 +128,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         return true;
     }
 
-    protected void sendResponses(UpnpHeader searchTarget, NetworkAddress activeStreamServer) {
+    protected void sendResponses(UpnpHeader searchTarget, NetworkAddress activeStreamServer) throws RouterException {
         if (searchTarget instanceof STAllHeader) {
 
             sendSearchResponseAll(activeStreamServer);
@@ -153,7 +154,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         }
     }
 
-    protected void sendSearchResponseAll(NetworkAddress activeStreamServer) {
+    protected void sendSearchResponseAll(NetworkAddress activeStreamServer) throws RouterException {
         log.fine("Responding to 'all' search with advertisement messages for all local devices");
         for (LocalDevice localDevice : getUpnpService().getRegistry().getLocalDevices()) {
 
@@ -247,7 +248,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         return msgs;
     }
 
-    protected void sendSearchResponseRootDevices(NetworkAddress activeStreamServer) {
+    protected void sendSearchResponseRootDevices(NetworkAddress activeStreamServer) throws RouterException {
         log.fine("Responding to root device search with advertisement messages for all local root devices");
         for (LocalDevice device : getUpnpService().getRegistry().getLocalDevices()) {
 
@@ -265,7 +266,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         }
     }
 
-    protected void sendSearchResponseUDN(UDN udn, NetworkAddress activeStreamServer) {
+    protected void sendSearchResponseUDN(UDN udn, NetworkAddress activeStreamServer) throws RouterException {
         Device device = getUpnpService().getRegistry().getDevice(udn, false);
         if (device != null && device instanceof LocalDevice) {
 
@@ -284,7 +285,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         }
     }
 
-    protected void sendSearchResponseDeviceType(DeviceType deviceType, NetworkAddress activeStreamServer) {
+    protected void sendSearchResponseDeviceType(DeviceType deviceType, NetworkAddress activeStreamServer) throws RouterException{
         log.fine("Responding to device type search: " + deviceType);
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(deviceType);
         for (Device device : devices) {
@@ -306,7 +307,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
         }
     }
 
-    protected void sendSearchResponseServiceType(ServiceType serviceType, NetworkAddress activeStreamServer) {
+    protected void sendSearchResponseServiceType(ServiceType serviceType, NetworkAddress activeStreamServer) throws RouterException {
         log.fine("Responding to service type search: " + serviceType);
         Collection<Device> devices = getUpnpService().getRegistry().getDevices(serviceType);
         for (Device device : devices) {

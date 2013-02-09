@@ -17,6 +17,7 @@ package example.localservice;
 import example.binarylight.BinaryLightSampleData;
 import example.controlpoint.EventSubscriptionTest;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
+import org.fourthline.cling.mock.MockRouter;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
@@ -154,7 +155,7 @@ public class EventProviderTest extends EventSubscriptionTest {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     @Test
@@ -229,7 +230,7 @@ public class EventProviderTest extends EventSubscriptionTest {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     @Test
@@ -237,10 +238,15 @@ public class EventProviderTest extends EventSubscriptionTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        createSubscribeResponseMessage(),
-                        createUnsubscribeResponseMessage()
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                            createSubscribeResponseMessage(),
+                            createUnsubscribeResponseMessage()
+                        };
+                    }
                 };
             }
         };
@@ -338,7 +344,7 @@ public class EventProviderTest extends EventSubscriptionTest {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
     @Test
@@ -346,10 +352,15 @@ public class EventProviderTest extends EventSubscriptionTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                return new StreamResponseMessage[]{
-                        createSubscribeResponseMessage(),
-                        createUnsubscribeResponseMessage()
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        return new StreamResponseMessage[]{
+                            createSubscribeResponseMessage(),
+                            createUnsubscribeResponseMessage()
+                        };
+                    }
                 };
             }
         };
@@ -439,7 +450,7 @@ public class EventProviderTest extends EventSubscriptionTest {
             assertTrue(testAssertion);
         }
 
-        assertEquals(upnpService.getSentStreamRequestMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);
     }
 
 

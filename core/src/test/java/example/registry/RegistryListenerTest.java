@@ -14,6 +14,8 @@
  */
 package example.registry;
 
+import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
+import org.fourthline.cling.mock.MockRouter;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.header.ContentTypeHeader;
@@ -58,13 +60,17 @@ public class RegistryListenerTest {
     public interface RegistryListener {
 
         public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device);
+
         public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex);
 
         public void remoteDeviceAdded(Registry registry, RemoteDevice device);
+
         public void remoteDeviceUpdated(Registry registry, RemoteDevice device);
+
         public void remoteDeviceRemoved(Registry registry, RemoteDevice device);
 
         public void localDeviceAdded(Registry registry, LocalDevice device);
+
         public void localDeviceRemoved(Registry registry, LocalDevice device);
 
     }
@@ -94,29 +100,34 @@ public class RegistryListenerTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                try {
-                    String deviceDescriptorXML =
-                            getConfiguration().getDeviceDescriptorBinderUDA10().generate(
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        try {
+                            String deviceDescriptorXML =
+                                getConfiguration().getDeviceDescriptorBinderUDA10().generate(
                                     hydratedDevice,
                                     new RemoteClientInfo(),
                                     getConfiguration().getNamespace()
-                            );
-                    String serviceOneXML =
-                            getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[0]);
-                    String serviceTwoXML =
-                            getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[1]);
-                    String serviceThreeXML =
-                            getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[2]);
-                    return new StreamResponseMessage[] {
-                            new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            new StreamResponseMessage(serviceOneXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            new StreamResponseMessage(serviceTwoXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            new StreamResponseMessage(serviceThreeXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-                    };
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+                                );
+                            String serviceOneXML =
+                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[0]);
+                            String serviceTwoXML =
+                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[1]);
+                            String serviceThreeXML =
+                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[2]);
+                            return new StreamResponseMessage[]{
+                                new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                new StreamResponseMessage(serviceOneXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                new StreamResponseMessage(serviceTwoXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                new StreamResponseMessage(serviceThreeXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
+                            };
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                };
             }
         };
 
@@ -137,23 +148,30 @@ public class RegistryListenerTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                try {
-                    String deviceDescriptorXML =
-                            getConfiguration().getDeviceDescriptorBinderUDA10().generate(
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        String deviceDescriptorXML;
+                        DeviceDescriptorBinder binder = getConfiguration().getDeviceDescriptorBinderUDA10();
+                        try {
+                            deviceDescriptorXML =
+                                binder.generate(
                                     hydratedDevice,
                                     new RemoteClientInfo(),
                                     getConfiguration().getNamespace()
-                            );
-                    return new StreamResponseMessage[] {
+                                );
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                        return new StreamResponseMessage[]{
                             new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
                             null,
                             null,
                             null // Don't return any service descriptors, make it fail
-                    };
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+                        };
+                    }
+                };
             }
         };
 
@@ -176,7 +194,7 @@ public class RegistryListenerTest {
             assertEquals(device.findServices().length, 3);
 
             // But you can't use the services
-            for (RemoteService service: device.findServices()) {
+            for (RemoteService service : device.findServices()) {
                 assertEquals(service.getActions().length, 0);
                 assertEquals(service.getStateVariables().length, 0);
             }
@@ -219,29 +237,34 @@ public class RegistryListenerTest {
 
         MockUpnpService upnpService = new MockUpnpService() {
             @Override
-            public StreamResponseMessage[] getStreamResponseMessages() {
-                try {
-                    String deviceDescriptorXML =
-                            getConfiguration().getDeviceDescriptorBinderUDA10().generate(
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage[] getStreamResponseMessages() {
+                        try {
+                            String deviceDescriptorXML =
+                                getConfiguration().getDeviceDescriptorBinderUDA10().generate(
                                     hydratedDevice,
                                     new RemoteClientInfo(),
                                     getConfiguration().getNamespace()
-                            );
-                    String serviceOneXML =
-                            getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[0]);
-                    String serviceTwoXML =
-                            getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[1]);
-                    String serviceThreeXML =
-                            getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[2]);
-                    return new StreamResponseMessage[] {
-                            new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            new StreamResponseMessage(serviceOneXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            new StreamResponseMessage(serviceTwoXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            new StreamResponseMessage(serviceThreeXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
-                    };
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
-                }
+                                );
+                            String serviceOneXML =
+                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[0]);
+                            String serviceTwoXML =
+                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[1]);
+                            String serviceThreeXML =
+                                getConfiguration().getServiceDescriptorBinderUDA10().generate(hydratedDevice.findServices()[2]);
+                            return new StreamResponseMessage[]{
+                                new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                new StreamResponseMessage(serviceOneXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                new StreamResponseMessage(serviceTwoXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
+                                new StreamResponseMessage(serviceThreeXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8)
+                            };
+                        } catch (Exception ex) {
+                            throw new RuntimeException(ex);
+                        }
+                    }
+                };
             }
         };
 

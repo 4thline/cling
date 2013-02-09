@@ -30,6 +30,7 @@ import org.fourthline.cling.registry.event.LocalDeviceDiscovery;
 import org.fourthline.cling.registry.event.Phase;
 import org.fourthline.cling.registry.event.RemoteDeviceDiscovery;
 import org.fourthline.cling.transport.Router;
+import org.fourthline.cling.transport.RouterException;
 import org.fourthline.cling.workbench.Workbench;
 import org.fourthline.cling.workbench.browser.BrowserView;
 import org.fourthline.cling.workbench.browser.RootDeviceSelected;
@@ -107,8 +108,8 @@ public class BrowserPresenter implements BrowserView.Presenter {
             StreamResponseMessage responseMsg = null;
             try {
                 responseMsg = router.send(iconRetrievalMsg);
-            } catch (InterruptedException ex) {
-                Workbench.Log.MAIN.warning("Icon retrieval was interrupted: " + ex);
+            } catch (RouterException ex) {
+                Workbench.Log.MAIN.warning("Icon retrieval failed: " + ex);
             }
 
             if (responseMsg != null && !responseMsg.getOperation().isFailed()) {

@@ -21,6 +21,7 @@ import org.fourthline.cling.model.gena.RemoteGENASubscription;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.gena.OutgoingUnsubscribeRequestMessage;
 import org.fourthline.cling.protocol.SendingSync;
+import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
 
@@ -52,37 +53,38 @@ public class SendingUnsubscribe extends SendingSync<OutgoingUnsubscribeRequestMe
         this.subscription = subscription;
     }
 
-    protected StreamResponseMessage executeSync() {
+    protected StreamResponseMessage executeSync() throws RouterException {
 
         log.fine("Sending unsubscribe request: " + getInputMessage());
 
+        StreamResponseMessage response = null;
         try {
-            final StreamResponseMessage response = getUpnpService().getRouter().send(getInputMessage());
-
-            // Always remove from the registry and return the response status - even if it's failed
-            getUpnpService().getRegistry().removeRemoteSubscription(subscription);
-
-            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-                    new Runnable() {
-                        public void run() {
-                            if (response == null) {
-                                log.fine("Unsubscribe failed, no response received");
-                                subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
-                            } else if (response.getOperation().isFailed()) {
-                                log.fine("Unsubscribe failed, response was: " + response);
-                                subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
-                            } else {
-                                log.fine("Unsubscribe successful, response was: " + response);
-                                subscription.end(null, response.getOperation());
-                            }
-                        }
-                    }
-            );
-    
+            response = getUpnpService().getRouter().send(getInputMessage());
             return response;
-        } catch (InterruptedException ex) {
-            log.warning("Sending unsubscribe message was interrupted: " + ex);
-            return null;
+        } finally {
+            onUnsubscribe(response);
         }
+    }
+
+    protected void onUnsubscribe(final StreamResponseMessage response) {
+        // Always remove from the registry and end the subscription properly - even if it's failed
+        getUpnpService().getRegistry().removeRemoteSubscription(subscription);
+
+        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+            new Runnable() {
+                public void run() {
+                    if (response == null) {
+                        log.fine("Unsubscribe failed, no response received");
+                        subscription.end(CancelReason.UNSUBSCRIBE_FAILED, null);
+                    } else if (response.getOperation().isFailed()) {
+                        log.fine("Unsubscribe failed, response was: " + response);
+                        subscription.end(CancelReason.UNSUBSCRIBE_FAILED, response.getOperation());
+                    } else {
+                        log.fine("Unsubscribe successful, response was: " + response);
+                        subscription.end(null, response.getOperation());
+                    }
+                }
+            }
+        );
     }
 }

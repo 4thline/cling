@@ -27,6 +27,7 @@ import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.protocol.SendingSync;
 import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
 import java.net.URL;
@@ -58,11 +59,11 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
         this.actionInvocation = actionInvocation;
     }
 
-    protected IncomingActionResponseMessage executeSync() {
+    protected IncomingActionResponseMessage executeSync() throws RouterException {
         return invokeRemote(getInputMessage());
     }
 
-    protected IncomingActionResponseMessage invokeRemote(OutgoingActionRequestMessage requestMessage) {
+    protected IncomingActionResponseMessage invokeRemote(OutgoingActionRequestMessage requestMessage) throws RouterException {
         Device device = actionInvocation.getAction().getService().getDevice();
 
         log.fine("Sending outgoing action call '" + actionInvocation.getAction().getName() + "' to remote service of: " + device);
@@ -104,18 +105,24 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
         }
     }
 
-    protected StreamResponseMessage sendRemoteRequest(OutgoingActionRequestMessage requestMessage) throws ActionException {
+    protected StreamResponseMessage sendRemoteRequest(OutgoingActionRequestMessage requestMessage)
+        throws ActionException, RouterException {
+
         try {
             log.fine("Writing SOAP request body of: " + requestMessage);
             getUpnpService().getConfiguration().getSoapActionProcessor().writeBody(requestMessage, actionInvocation);
 
             log.fine("Sending SOAP body of message as stream to remote device");
             return getUpnpService().getRouter().send(requestMessage);
-        } catch (InterruptedException ex) {
-            if (log.isLoggable(Level.FINE)) {
-                log.fine("Sending action request message was interrupted: " + ex);
+        } catch (RouterException ex) {
+            Throwable cause = Exceptions.unwrap(ex);
+            if (cause instanceof InterruptedException) {
+                if (log.isLoggable(Level.FINE)) {
+                    log.fine("Sending action request message was interrupted: " + cause);
+                }
+                throw new ActionCancelledException((InterruptedException)cause);
             }
-            throw new ActionCancelledException(ex);
+            throw ex;
         } catch (UnsupportedDataException ex) {
             if (log.isLoggable(Level.FINE)) {
                 log.fine("Error writing SOAP body: " + ex);

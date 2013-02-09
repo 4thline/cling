@@ -62,8 +62,8 @@ public class LocalDeviceBindingAdvertisementTest {
 
         Thread.sleep(2000);
 
-        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 12);
-        for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
+        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 12);
+        for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, binaryLight, 1800);
         }
 
@@ -108,18 +108,18 @@ public class LocalDeviceBindingAdvertisementTest {
 
         // 30 from addDevice()
         // 30 from regular refresh
-        assertTrue(upnpService.getOutgoingDatagramMessages().size() >= 60);
-        for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
+        assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 60);
+        for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 3);
         }
 
-        upnpService.getOutgoingDatagramMessages().clear();
+        upnpService.getRouter().getOutgoingDatagramMessages().clear();
 
         upnpService.shutdown();
 
         // Check correct byebye
-        assertTrue(upnpService.getOutgoingDatagramMessages().size() >= 30);
-        for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
+        assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 30);
+        for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertByeByeMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 3);
         }
     }
@@ -150,8 +150,8 @@ public class LocalDeviceBindingAdvertisementTest {
         // 30 from addDevice()
         // 30 from first flood
         // 30 from second flood
-        assertTrue(upnpService.getOutgoingDatagramMessages().size() >= 90);
-        for (UpnpMessage msg : upnpService.getOutgoingDatagramMessages()) {
+        assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 90);
+        for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
             assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 1000);
         }
 
@@ -172,16 +172,16 @@ public class LocalDeviceBindingAdvertisementTest {
 
         Thread.sleep(2000);
 
-        assertTrue(upnpService.getOutgoingDatagramMessages().size() >= 60);
+        assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 60);
         // 30 BYEBYE
         // 30 ALIVE
         int i = 0;
         for (; i < 30; i++) {
-            UpnpMessage msg = upnpService.getOutgoingDatagramMessages().get(i);
+            UpnpMessage msg = upnpService.getRouter().getOutgoingDatagramMessages().get(i);
             assertByeByeMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 60);
         }
         for (; i < 60; i++) {
-            UpnpMessage msg = upnpService.getOutgoingDatagramMessages().get(i);
+            UpnpMessage msg = upnpService.getRouter().getOutgoingDatagramMessages().get(i);
             assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 60);
         }
 
@@ -199,7 +199,7 @@ public class LocalDeviceBindingAdvertisementTest {
 
         Thread.sleep(2000);
 
-        assertEquals(upnpService.getOutgoingDatagramMessages().size(), 0);
+        assertEquals(upnpService.getRouter().getOutgoingDatagramMessages().size(), 0);
 
         upnpService.shutdown();
     }
