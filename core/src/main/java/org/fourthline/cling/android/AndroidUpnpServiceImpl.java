@@ -72,6 +72,7 @@ public class AndroidUpnpServiceImpl extends Service {
                         getRegistry().shutdown();
                     }
                 };
+                registryShutdownThread.setDaemon(true);
                 registryShutdownThread.start();
                 try {
                     // Wait 5 seconds at most for the registry shutdown to complete
