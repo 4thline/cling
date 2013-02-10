@@ -93,7 +93,7 @@ public class BrowserActivity extends ListActivity {
             new org.seamless.android.FixedAndroidLogHandler()
         );
         // Now you can enable logging as needed for various categories of Cling:
-        // Logger.getLogger("org.fourthline.cling").setLevel(Level.INFO);
+        // Logger.getLogger("org.fourthline.cling").setLevel(Level.FINEST);
 
         listAdapter = new ArrayAdapter<DeviceDisplay>(this, android.R.layout.simple_list_item_1);
         setListAdapter(listAdapter);

@@ -69,13 +69,14 @@ public class RouterImpl implements Router {
 
     protected UpnpServiceConfiguration configuration;
     protected ProtocolFactory protocolFactory;
-    protected NetworkAddressFactory networkAddressFactory;
 
     protected volatile boolean enabled;
     protected ReentrantReadWriteLock routerLock = new ReentrantReadWriteLock(true);
     protected Lock readLock = routerLock.readLock();
     protected Lock writeLock = routerLock.writeLock();
 
+    // These are created/destroyed when the router is enabled/disabled
+    protected NetworkAddressFactory networkAddressFactory;
     protected StreamClient streamClient;
     protected final Map<NetworkInterface, MulticastReceiver> multicastReceivers = new HashMap();
     protected final Map<InetAddress, DatagramIO> datagramIOs = new HashMap();
@@ -85,9 +86,6 @@ public class RouterImpl implements Router {
     }
 
     /**
-     * Creates a {@link org.fourthline.cling.transport.spi.NetworkAddressFactory} from the given
-     * {@link org.fourthline.cling.UpnpServiceConfiguration}.
-     *
      * @param configuration   The configuration used by this router.
      * @param protocolFactory The protocol factory used by this router.
      */
@@ -96,7 +94,6 @@ public class RouterImpl implements Router {
         log.info("Creating Router: " + getClass().getName());
         this.configuration = configuration;
         this.protocolFactory = protocolFactory;
-        this.networkAddressFactory = getConfiguration().createNetworkAddressFactory();
     }
 
     public boolean enable(@Observes @Default EnableRouter event) throws RouterException {
@@ -129,6 +126,8 @@ public class RouterImpl implements Router {
             if (!enabled) {
                 try {
                     log.fine("Starting networking services...");
+                    networkAddressFactory = getConfiguration().createNetworkAddressFactory();
+
                     startInterfaceBasedTransports(networkAddressFactory.getNetworkInterfaces());
                     startAddressBasedTransports(networkAddressFactory.getBindAddresses());
 
@@ -160,6 +159,7 @@ public class RouterImpl implements Router {
         try {
             if (enabled) {
                 log.fine("Disabling network services...");
+
                 if (streamClient != null) {
                     log.fine("Stopping stream client connection management/pool");
                     streamClient.stop();
@@ -184,6 +184,7 @@ public class RouterImpl implements Router {
                 }
                 datagramIOs.clear();
 
+                networkAddressFactory = null;
                 enabled = false;
                 return true;
             }
@@ -515,9 +516,7 @@ public class RouterImpl implements Router {
     }
 
     /**
-     * @return Defaults to 6 seconds, should be longer than the HTTP client
-     *         request connection/data read timeouts. Should be longer than
-     *         it takes the router to be started/shutdown.
+     * @return Defaults to 6 seconds, should be longer than it takes the router to be enabled/disabled.
      */
     protected int getLockTimeoutMillis() {
         return 6000;

@@ -40,7 +40,8 @@ public interface ServletContainerAdapter {
     /**
      * Might be called several times to integrate the servlet container with Cling's executor
      * configuration. You can ignore this call if you want to configure the container's thread
-     * pooling independently from Cling.
+     * pooling independently from Cling. If you use the given Cling <code>ExecutorService</code>,
+     * make sure the Jetty container won't shut it down when {@link #stopIfRunning()} is called!
      *
      * @param executorService The service to use when spawning new servlet execution threads.
      */

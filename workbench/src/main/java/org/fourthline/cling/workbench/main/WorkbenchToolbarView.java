@@ -27,6 +27,11 @@ public interface WorkbenchToolbarView extends View<WorkbenchToolbarView.Presente
         void init();
 
         void onCreateDemoDevice();
+
+        void onDisableNetwork();
+
+        void onEnableNetwork();
     }
 
+    void onNetworkSwitch(boolean enabled);
 }

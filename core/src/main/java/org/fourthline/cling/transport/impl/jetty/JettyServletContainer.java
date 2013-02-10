@@ -61,7 +61,12 @@ public class JettyServletContainer implements ServletContainerAdapter {
     @Override
     synchronized public void setExecutorService(ExecutorService executorService) {
         if (INSTANCE.server.getThreadPool() == null) {
-            INSTANCE.server.setThreadPool(new ExecutorThreadPool(executorService));
+            INSTANCE.server.setThreadPool(new ExecutorThreadPool(executorService) {
+                @Override
+                protected void doStop() throws Exception {
+                    // Do nothing, don't shut down the Cling ExecutorService when Jetty stops!
+                }
+            });
         }
     }
 

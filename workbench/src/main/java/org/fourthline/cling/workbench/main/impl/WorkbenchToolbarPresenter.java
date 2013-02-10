@@ -16,6 +16,11 @@
 package org.fourthline.cling.workbench.main.impl;
 
 
+import org.fourthline.cling.transport.DisableRouter;
+import org.fourthline.cling.transport.EnableRouter;
+import org.fourthline.cling.transport.Router;
+import org.fourthline.cling.transport.RouterException;
+import org.fourthline.cling.workbench.Workbench;
 import org.fourthline.cling.workbench.main.CreateDemoDevice;
 import org.fourthline.cling.workbench.main.WorkbenchToolbarView;
 
@@ -35,6 +40,15 @@ public class WorkbenchToolbarPresenter implements WorkbenchToolbarViewImpl.Prese
     @Inject
     protected Event<CreateDemoDevice> createDemoDeviceEvent;
 
+    @Inject
+    protected Router router;
+
+    @Inject
+    protected Event<EnableRouter> enableRouterEvent;
+
+    @Inject
+    protected Event<DisableRouter> disableRouterEvent;
+
     @Override
     public void init() {
         view.setPresenter(this);
@@ -45,4 +59,23 @@ public class WorkbenchToolbarPresenter implements WorkbenchToolbarViewImpl.Prese
         createDemoDeviceEvent.fire(new CreateDemoDevice());
     }
 
+    @Override
+    public void onDisableNetwork() {
+        disableRouterEvent.fire(new DisableRouter());
+        try {
+            view.onNetworkSwitch(router.isEnabled());
+        } catch (RouterException ex) {
+            Workbench.Log.MAIN.warning("Can't get current router state: " + ex);
+        }
+    }
+
+    @Override
+    public void onEnableNetwork() {
+        enableRouterEvent.fire(new EnableRouter());
+        try {
+            view.onNetworkSwitch(router.isEnabled());
+        } catch (RouterException ex) {
+            Workbench.Log.MAIN.warning("Can't get current router state: " + ex);
+        }
+    }
 }

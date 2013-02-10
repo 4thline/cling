@@ -52,6 +52,7 @@ public class AndroidUpnpServiceImpl extends Service {
         super.onCreate();
 
         upnpService = new UpnpServiceImpl(createConfiguration()) {
+
             @Override
             protected Router createRouter(ProtocolFactory protocolFactory, Registry registry) {
                 return AndroidUpnpServiceImpl.this.createRouter(
@@ -59,6 +60,25 @@ public class AndroidUpnpServiceImpl extends Service {
                     protocolFactory,
                     AndroidUpnpServiceImpl.this
                 );
+            }
+
+            @Override
+            protected void shutdownRegistry() {
+                // Registry shutdown will send BYEBYE on network, can't use the network on the
+                // main thread on Android, so use a separate thread and wait for completion
+                Thread registryShutdownThread = new Thread() {
+                    @Override
+                    public void run() {
+                        getRegistry().shutdown();
+                    }
+                };
+                registryShutdownThread.start();
+                try {
+                    // Wait 5 seconds at most for the registry shutdown to complete
+                    registryShutdownThread.join(5000);
+                } catch (InterruptedException ex) {
+                    // Ignore
+                }
             }
         };
     }

@@ -67,7 +67,14 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
 
         // Jetty client needs threads for its internal expiration routines, which we don't need but
         // can't disable, so let's abuse the request executor service for this
-        client.setThreadPool(new ExecutorThreadPool(getConfiguration().getRequestExecutorService()));
+        client.setThreadPool(
+            new ExecutorThreadPool(getConfiguration().getRequestExecutorService()) {
+                @Override
+                protected void doStop() throws Exception {
+                    // Do nothing, don't shut down the Cling ExecutorService when Jetty stops!
+                }
+            }
+        );
 
         // These are some safety settings, we should never run into these timeouts as we
         // do our own expiration checking

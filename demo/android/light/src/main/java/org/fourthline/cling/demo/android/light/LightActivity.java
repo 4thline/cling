@@ -113,6 +113,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
         org.seamless.util.logging.LoggingUtil.resetRootHandler(
             new org.seamless.android.FixedAndroidLogHandler()
         );
+        // Logger.getLogger("org.fourthline.cling").setLevel(Level.FINEST);
         // DOC:LOGGING
 
         setContentView(R.layout.light);

@@ -37,6 +37,12 @@ public class WorkbenchToolbarViewImpl extends JToolBar implements WorkbenchToolb
     final protected JButton demoButton =
             new JButton("Create Demo Device", Application.createImageIcon(Workbench.class, "img/24/lightbulb.png"));
 
+    final protected JButton enableNetworkButton =
+            new JButton("Enable Network", Application.createImageIcon(Workbench.class, "img/24/run.png"));
+
+    final protected JButton disableNetworkButton =
+            new JButton("Disable Network", Application.createImageIcon(Workbench.class, "img/24/stop.png"));
+
     protected Presenter presenter;
 
     @PostConstruct
@@ -52,6 +58,24 @@ public class WorkbenchToolbarViewImpl extends JToolBar implements WorkbenchToolb
             }
         });
         add(demoButton);
+
+        enableNetworkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                presenter.onEnableNetwork();
+            }
+        });
+        enableNetworkButton.setVisible(false);
+        add(enableNetworkButton);
+
+        disableNetworkButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                presenter.onDisableNetwork();
+            }
+        });
+        disableNetworkButton.setVisible(true);
+        add(disableNetworkButton);
     }
 
     @Override
@@ -62,5 +86,11 @@ public class WorkbenchToolbarViewImpl extends JToolBar implements WorkbenchToolb
     @Override
     public void setPresenter(Presenter presenter) {
         this.presenter = presenter;
+    }
+
+    @Override
+    public void onNetworkSwitch(boolean enabled) {
+        enableNetworkButton.setVisible(!enabled);
+        disableNetworkButton.setVisible(enabled);
     }
 }

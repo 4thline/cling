@@ -134,9 +134,17 @@ public class UpnpServiceImpl implements UpnpService {
         // Well, since java.util.logging has its own shutdown hook, this
         // might actually make it into the log or not...
         log.info(">>> Shutting down UPnP service...");
+        shutdownRegistry();
+        shutdownRouter();
+        shutdownConfiguration();
+        log.info("<<< UPnP service shutdown completed");
+    }
 
+    protected void shutdownRegistry() {
         getRegistry().shutdown();
+    }
 
+    protected void shutdownRouter() {
         try {
             getRouter().shutdown();
         } catch (RouterException ex) {
@@ -147,10 +155,10 @@ public class UpnpServiceImpl implements UpnpService {
                 throw new RuntimeException("Router error on shutdown: " + ex, ex);
             }
         }
+    }
 
+    protected void shutdownConfiguration() {
         getConfiguration().shutdown();
-
-        log.info("<<< UPnP service shutdown completed");
     }
 
 }

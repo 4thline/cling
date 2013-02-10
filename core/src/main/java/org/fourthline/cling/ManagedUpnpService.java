@@ -86,10 +86,10 @@ public class ManagedUpnpService implements UpnpService {
     Instance<ControlPoint> controlPointInstance;
 
     @Inject
-    Event<EnableRouter> transportStartEvent;
+    Event<EnableRouter> enableRouterEvent;
 
     @Inject
-    Event<DisableRouter> transportStopEvent;
+    Event<DisableRouter> disableRouterEvent;
 
     @Override
     public UpnpServiceConfiguration getConfiguration() {
@@ -123,7 +123,7 @@ public class ManagedUpnpService implements UpnpService {
 
         getRegistry().addListener(registryListenerAdapter);
 
-        transportStartEvent.fire(new EnableRouter());
+        enableRouterEvent.fire(new EnableRouter());
 
         log.info("<<< Managed UPnP service started successfully");
     }
@@ -141,7 +141,8 @@ public class ManagedUpnpService implements UpnpService {
 
         // First stop the registry and announce BYEBYE on the transport
         getRegistry().shutdown();
-        transportStopEvent.fire(new DisableRouter());
+
+        disableRouterEvent.fire(new DisableRouter());
 
         getConfiguration().shutdown();
 
