@@ -63,23 +63,15 @@ public class AndroidUpnpServiceImpl extends Service {
             }
 
             @Override
-            protected void shutdownRegistry() {
-                // Registry shutdown will send BYEBYE on network, can't use the network on the
-                // main thread on Android, so use a separate thread and wait for completion
-                Thread registryShutdownThread = new Thread() {
-                    @Override
-                    public void run() {
-                        getRegistry().shutdown();
-                    }
-                };
-                registryShutdownThread.setDaemon(true);
-                registryShutdownThread.start();
-                try {
-                    // Wait 5 seconds at most for the registry shutdown to complete
-                    registryShutdownThread.join(5000);
-                } catch (InterruptedException ex) {
-                    // Ignore
-                }
+            public synchronized void shutdown() {
+                // First have to remove the receiver, so Android won't complain about it leaking
+                // when the main UI thread exits.
+                ((AndroidRouter)getRouter()).unregisterBroadcastReceiver();
+
+                // Now we can concurrently run the Cling shutdown code, without occupying the
+                // Android main UI thread. This will complete probably after the main UI thread
+                // is done.
+                super.shutdown(true);
             }
         };
     }

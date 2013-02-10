@@ -131,13 +131,26 @@ public class UpnpServiceImpl implements UpnpService {
     }
 
     synchronized public void shutdown() {
-        // Well, since java.util.logging has its own shutdown hook, this
-        // might actually make it into the log or not...
-        log.info(">>> Shutting down UPnP service...");
-        shutdownRegistry();
-        shutdownRouter();
-        shutdownConfiguration();
-        log.info("<<< UPnP service shutdown completed");
+        shutdown(false);
+    }
+
+    protected void shutdown(boolean separateThread) {
+        Runnable shutdown = new Runnable() {
+            @Override
+            public void run() {
+                log.info(">>> Shutting down UPnP service...");
+                shutdownRegistry();
+                shutdownRouter();
+                shutdownConfiguration();
+                log.info("<<< UPnP service shutdown completed");
+            }
+        };
+        if (separateThread) {
+            // This is not a daemon thread, it has to complete!
+            new Thread(shutdown).start();
+        } else {
+            shutdown.run();
+        }
     }
 
     protected void shutdownRegistry() {

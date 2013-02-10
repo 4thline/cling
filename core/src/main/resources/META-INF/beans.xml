@@ -18,7 +18,7 @@
             <weld:if-class-available name="!org.eclipse.jetty.client.HttpClient"/>
         </weld:exclude>
 
-        <weld:exclude name="org.fourthline.cling.transport.impl.jetty.JettyServletContainer">
+        <weld:exclude name="org.fourthline.cling.transport.impl.jetty.JettyServletContainer*">
             <weld:if-class-available name="!org.eclipse.jetty.server.Server"/>
         </weld:exclude>
 

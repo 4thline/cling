@@ -77,9 +77,7 @@ public class AndroidRouter extends RouterImpl {
     @Override
     public void shutdown() throws RouterException {
         super.shutdown();
-        if (broadcastReceiver != null) {
-            context.unregisterReceiver(broadcastReceiver);
-        }
+        unregisterBroadcastReceiver();
     }
 
     @Override
@@ -147,6 +145,13 @@ public class AndroidRouter extends RouterImpl {
             //	at android.net.wifi.WifiManager.setWifiEnabled(WifiManager.java:946)
             log.log(Level.WARNING, "SetWifiEnabled failed", t);
             return false;
+        }
+    }
+
+    public void unregisterBroadcastReceiver() {
+        if (broadcastReceiver != null) {
+            context.unregisterReceiver(broadcastReceiver);
+            broadcastReceiver = null;
         }
     }
 
