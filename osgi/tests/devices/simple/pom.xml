@@ -6,7 +6,7 @@
         <relativePath>../../</relativePath>
         <groupId>org.fourthline.cling</groupId>
         <artifactId>cling-osgi-tests</artifactId>
-        <version>2.0-SNAPSHOT</version>
+        <version>2.0-alpha2</version>
     </parent>
 
     <name>Cling OSGi Test Simple Device</name>
