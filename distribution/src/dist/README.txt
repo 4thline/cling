@@ -83,7 +83,7 @@ Additional dependencies of Cling Core on Android (not included):
 If you need the fixed Android java.util.logging Handler:
 
     +- org.seamless:seamless-android:jar:1.0-alpha2
-       \- android.support:compatibility-v13:jar:10
+       \- android.support:compatibility-v13:jar:10 (Exclude this in pom.xml)
 
 WARNING: Jetty JAR files each contain an 'about.html' file, you will get
 an error when trying to package your application with APK. Use the Android

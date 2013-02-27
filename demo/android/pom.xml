@@ -56,6 +56,13 @@
             <groupId>org.seamless</groupId>
             <artifactId>seamless-android</artifactId>
             <version>${seamless.version}</version>
+            <!-- Not needed for FixedAndroidLoggingHandler -->
+            <exclusions>
+                <exclusion>
+                    <groupId>android.support</groupId>
+                    <artifactId>compatibility-v13</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
