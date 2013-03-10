@@ -160,11 +160,11 @@ public class ActionCancellationTest {
 
         // DOC:EXECUTE_CANCEL
         Future future = upnpService.getControlPoint().execute(setTargetCallback);
-        Thread.sleep(1000); // DOC:WAIT_FOR_THREAD
+        Thread.sleep(500); // DOC:WAIT_FOR_THREAD
         future.cancel(true);
         // DOC:EXECUTE_CANCEL
 
-        Thread.sleep(1000);
+        Thread.sleep(500);
         for (boolean test : tests) {
             assertEquals(test, true);
         }

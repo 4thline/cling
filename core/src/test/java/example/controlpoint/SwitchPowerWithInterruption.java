@@ -160,17 +160,19 @@ public class SwitchPowerWithInterruption {
         status = newTargetValue;
         // DOC:ACTUAL_WORK
 
-        while (true) { // DOC:LOOP
+        boolean interrupted = false;
+        while (!interrupted) {
             // Do some long-running work and periodically test if you should continue...
 
             // ... for local service invocation
             if (Thread.interrupted())
-                throw new InterruptedException("Execution interrupted");
+                interrupted = true;
 
             // ... for remote service invocation
-            if (remoteClientInfo != null)
-                remoteClientInfo.throwIfRequestCancelled();
-        } // DOC:LOOP
+            if (remoteClientInfo != null && remoteClientInfo.isRequestCancelled())
+                interrupted = true;
+        }
+        throw new InterruptedException("Execution interrupted");
     }
     // DOC:ACTION_METHOD
 
