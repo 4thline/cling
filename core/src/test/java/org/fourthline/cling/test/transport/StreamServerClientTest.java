@@ -93,12 +93,14 @@ abstract public class StreamServerClientTest {
         configuration.getStreamServerExecutorService().execute(server);
 
         client = createStreamClient(configuration);
+        Thread.sleep(1000);
     }
 
     @AfterClass
     public void stop() throws Exception {
         server.stop();
         client.stop();
+        Thread.sleep(1000);
     }
 
     @BeforeMethod
