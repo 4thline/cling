@@ -267,4 +267,17 @@ public class UtilTest {
         return out.toString();
     }
 
+    @Test
+    public void parseTimeStrings() {
+        assertEquals(ModelUtil.fromTimeString("00:00:11.123"), 11);
+        assertEquals(ModelUtil.fromTimeString("00:00:11"), 11);
+        assertEquals(ModelUtil.fromTimeString("00:01:11"), 71);
+        assertEquals(ModelUtil.fromTimeString("01:01:11"), 3671);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void parseInvalidTimeString() {
+        assertEquals(ModelUtil.fromTimeString("00-00:11.123"), 11);
+    }
+
 }

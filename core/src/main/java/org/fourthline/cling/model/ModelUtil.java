@@ -184,7 +184,12 @@ public class ModelUtil {
      * @return The converted number of seconds.
      */
     public static long fromTimeString(String s) {
+        // Handle "00:00:00.000" pattern, drop the milliseconds
+        if (s.lastIndexOf(".") != -1)
+            s = s.substring(0, s.lastIndexOf("."));
         String[] split = s.split(":");
+        if (split.length != 3)
+            throw new IllegalArgumentException("Can't parse time string: " + s);
         return (Long.parseLong(split[0]) * 3600) +
                 (Long.parseLong(split[1]) * 60) +
                 (Long.parseLong(split[2]));
