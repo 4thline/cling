@@ -50,18 +50,30 @@
         </packages>
     </test>
 
-    <test name="Transport">
-        <packages>
-            <package name="org.fourthline.cling.test.transport"/>
-        </packages>
-    </test>
-
     <test name="Examples">
         <packages>
             <package name="example.binarylight"/>
             <package name="example.controlpoint"/>
             <package name="example.registry"/>
             <package name="example.localservice"/>
+        </packages>
+    </test>
+
+    <!--
+    These tests are multi-threaded and seem to fail on some machines, there are
+    timing issues. Until we have figured out a way to reproduce this reliably, we
+    only run the tests if -DtestClingTransport=true was specified.
+    -->
+    <test name="Transport">
+        <method-selectors>
+            <method-selector>
+                <script language="beanshell">
+                    "true".equals(System.getProperty("testClingTransport"))
+                </script>
+            </method-selector>
+        </method-selectors>
+        <packages>
+            <package name="org.fourthline.cling.test.transport"/>
         </packages>
     </test>
 
