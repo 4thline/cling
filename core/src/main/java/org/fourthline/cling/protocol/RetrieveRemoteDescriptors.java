@@ -155,8 +155,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
 
         if (deviceDescMsg == null) {
             log.warning(
-                "Device descriptor retrieval failed, no response for descriptor URL of: "
-                + rd.getIdentity().getDescriptorURL()
+                "Device descriptor retrieval failed, no response: " + rd.getIdentity().getDescriptorURL()
             );
             return;
         }
@@ -172,12 +171,20 @@ public class RetrieveRemoteDescriptors implements Runnable {
         }
 
         if (!deviceDescMsg.isContentTypeTextUDA()) {
-            log.fine("Received device descriptor without or with invalid Content-Type: " + rd.getIdentity().getDescriptorURL());
+            log.fine(
+                "Received device descriptor without or with invalid Content-Type: "
+                    + rd.getIdentity().getDescriptorURL());
             // We continue despite the invalid UPnP message because we can still hope to convert the content
         }
 
+        String descriptorContent = deviceDescMsg.getBodyString();
+        if (descriptorContent == null || descriptorContent.length() == 0) {
+            log.warning("Received empty device descriptor:" + rd.getIdentity().getDescriptorURL());
+            return;
+        }
+
         log.fine("Received root device descriptor: " + deviceDescMsg);
-        describe(deviceDescMsg.getBodyString());
+        describe(descriptorContent);
     }
 
     protected void describe(String descriptorXML) throws RouterException {
@@ -332,7 +339,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
 
         String descriptorContent = serviceDescMsg.getBodyString();
         if (descriptorContent == null || descriptorContent.length() == 0) {
-            log.warning("Received empty descriptor:" + descriptorURL);
+            log.warning("Received empty service descriptor:" + descriptorURL);
             return null;
         }
 
@@ -340,7 +347,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         ServiceDescriptorBinder serviceDescriptorBinder =
                 getUpnpService().getConfiguration().getServiceDescriptorBinderUDA10();
 
-        return serviceDescriptorBinder.describe(service, serviceDescMsg.getBodyString());
+        return serviceDescriptorBinder.describe(service, descriptorContent);
     }
 
     protected List<RemoteService> filterExclusiveServices(RemoteService[] services) {
