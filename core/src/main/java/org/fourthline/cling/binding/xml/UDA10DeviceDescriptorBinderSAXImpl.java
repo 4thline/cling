@@ -36,6 +36,7 @@ import org.xml.sax.SAXException;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -330,7 +331,16 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
 
         @Override
         public boolean isLastElement(ELEMENT element) {
-            return element.equals(EL);
+            boolean last = element.equals(EL);
+            if (last) {
+                Iterator<MutableService> it = getInstance().iterator();
+                while (it.hasNext()) {
+                    MutableService service = it.next();
+                    if (service.serviceType == null || service.serviceId == null)
+                        it.remove();
+                }
+            }
+            return last;
         }
     }
 
@@ -344,22 +354,28 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
 
         @Override
         public void endElement(ELEMENT element) throws SAXException {
-            switch (element) {
-                case serviceType:
-                    getInstance().serviceType = ServiceType.valueOf(getCharacters());
-                    break;
-                case serviceId:
-                    getInstance().serviceId = ServiceId.valueOf(getCharacters());
-                    break;
-                case SCPDURL:
-                    getInstance().descriptorURI = parseURI(getCharacters());
-                    break;
-                case controlURL:
-                    getInstance().controlURI = parseURI(getCharacters());
-                    break;
-                case eventSubURL:
-                    getInstance().eventSubscriptionURI = parseURI(getCharacters());
-                    break;
+            try {
+                switch (element) {
+                    case serviceType:
+                        getInstance().serviceType = ServiceType.valueOf(getCharacters());
+                        break;
+                    case serviceId:
+                        getInstance().serviceId = ServiceId.valueOf(getCharacters());
+                        break;
+                    case SCPDURL:
+                        getInstance().descriptorURI = parseURI(getCharacters());
+                        break;
+                    case controlURL:
+                        getInstance().controlURI = parseURI(getCharacters());
+                        break;
+                    case eventSubURL:
+                        getInstance().eventSubscriptionURI = parseURI(getCharacters());
+                        break;
+                }
+            } catch (InvalidValueException ex) {
+                log.warning(
+                    "UPnP specification violation, skipping invalid service declaration. " + ex.getMessage()
+                );
             }
         }
 

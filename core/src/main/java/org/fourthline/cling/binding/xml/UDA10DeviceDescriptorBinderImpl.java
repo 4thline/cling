@@ -315,31 +315,37 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
 
             if (ELEMENT.service.equals(serviceListNodeChild)) {
 
-                MutableService service = new MutableService();
-
                 NodeList serviceChildren = serviceListNodeChild.getChildNodes();
 
-                for (int x = 0; x < serviceChildren.getLength(); x++) {
-                    Node serviceChild = serviceChildren.item(x);
+                try {
+                    MutableService service = new MutableService();
 
-                    if (serviceChild.getNodeType() != Node.ELEMENT_NODE)
-                        continue;
+                    for (int x = 0; x < serviceChildren.getLength(); x++) {
+                        Node serviceChild = serviceChildren.item(x);
 
-                    if (ELEMENT.serviceType.equals(serviceChild)) {
-                        service.serviceType = (ServiceType.valueOf(XMLUtil.getTextContent(serviceChild)));
-                    } else if (ELEMENT.serviceId.equals(serviceChild)) {
-                        service.serviceId = (ServiceId.valueOf(XMLUtil.getTextContent(serviceChild)));
-                    } else if (ELEMENT.SCPDURL.equals(serviceChild)) {
-                        service.descriptorURI = parseURI(XMLUtil.getTextContent(serviceChild));
-                    } else if (ELEMENT.controlURL.equals(serviceChild)) {
-                        service.controlURI = parseURI(XMLUtil.getTextContent(serviceChild));
-                    } else if (ELEMENT.eventSubURL.equals(serviceChild)) {
-                        service.eventSubscriptionURI = parseURI(XMLUtil.getTextContent(serviceChild));
+                        if (serviceChild.getNodeType() != Node.ELEMENT_NODE)
+                            continue;
+
+                        if (ELEMENT.serviceType.equals(serviceChild)) {
+                            service.serviceType = (ServiceType.valueOf(XMLUtil.getTextContent(serviceChild)));
+                        } else if (ELEMENT.serviceId.equals(serviceChild)) {
+                            service.serviceId = (ServiceId.valueOf(XMLUtil.getTextContent(serviceChild)));
+                        } else if (ELEMENT.SCPDURL.equals(serviceChild)) {
+                            service.descriptorURI = parseURI(XMLUtil.getTextContent(serviceChild));
+                        } else if (ELEMENT.controlURL.equals(serviceChild)) {
+                            service.controlURI = parseURI(XMLUtil.getTextContent(serviceChild));
+                        } else if (ELEMENT.eventSubURL.equals(serviceChild)) {
+                            service.eventSubscriptionURI = parseURI(XMLUtil.getTextContent(serviceChild));
+                        }
+
                     }
 
+                    descriptor.services.add(service);
+                } catch (InvalidValueException ex) {
+                    log.warning(
+                        "UPnP specification violation, skipping invalid service declaration. " + ex.getMessage()
+                    );
                 }
-
-                descriptor.services.add(service);
             }
         }
     }

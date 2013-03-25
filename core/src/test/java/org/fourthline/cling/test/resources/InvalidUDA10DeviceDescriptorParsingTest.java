@@ -19,6 +19,7 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.binding.xml.DescriptorBindingException;
 import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
 import org.fourthline.cling.binding.xml.RecoveringUDA10DeviceDescriptorBinderImpl;
+import org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderSAXImpl;
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.mock.MockUpnpServiceConfiguration;
 import org.fourthline.cling.model.meta.RemoteDevice;
@@ -50,6 +51,7 @@ public class InvalidUDA10DeviceDescriptorParsingTest {
             {"/invalidxml/device/kodak.xml"},
             {"/invalidxml/device/plutinosoft.xml"},
             {"/invalidxml/device/samsung.xml"},
+            {"/invalidxml/device/philips_hue.xml"},
         };
     }
 
@@ -97,8 +99,21 @@ public class InvalidUDA10DeviceDescriptorParsingTest {
     /* ############################## TEST SUCCESS ############################ */
 
     @Test(dataProvider = "strict")
-    public void read(String strict) throws Exception {
+    public void readDefault(String strict) throws Exception {
         readDevice(strict, new MockUpnpService());
+    }
+
+    @Test(dataProvider = "strict")
+    public void readSAX(String strict) throws Exception {
+        readDevice(
+            strict,
+            new MockUpnpService(new MockUpnpServiceConfiguration() {
+                @Override
+                public DeviceDescriptorBinder getDeviceDescriptorBinderUDA10() {
+                    return new UDA10DeviceDescriptorBinderSAXImpl();
+                }
+            })
+        );
     }
 
     @Test(dataProvider = "strict")
