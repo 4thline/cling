@@ -242,12 +242,17 @@ public class AndroidRouter extends RouterImpl {
         }
     }
 
+    /**
+     * Handles errors when network has been switched, during reception of
+     * network switch broadcast. Logs a warning by default, override to
+     * change this behavior.
+     */
     protected void handleRouterExceptionOnNetworkTypeChange(RouterException ex) {
         Throwable cause = Exceptions.unwrap(ex);
         if (cause instanceof InterruptedException) {
             log.log(Level.INFO, "Router was interrupted: " + ex, cause);
         } else {
-            throw new RuntimeException("Router error on network change: " + ex, ex);
+            log.log(Level.WARNING, "Router error on network change: " + ex, ex);
         }
     }
 
