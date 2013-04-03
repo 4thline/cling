@@ -72,7 +72,7 @@ public abstract class SendingNotification extends SendingAsync {
             descriptorLocations.add(
                     new Location(
                             activeStreamServer,
-                            getUpnpService().getConfiguration().getNamespace().getDescriptorPath(getDevice())
+                            getUpnpService().getConfiguration().getNamespace().getDescriptorUriPath(getDevice())
                     )
             );
         }
