@@ -51,7 +51,7 @@ public class MulticastReceiverImpl implements MulticastReceiver<MulticastReceive
 
     protected NetworkInterface multicastInterface;
     protected InetSocketAddress multicastAddress;
-    private MulticastSocket socket;
+    protected MulticastSocket socket;
 
     public MulticastReceiverImpl(MulticastReceiverConfigurationImpl configuration) {
         this.configuration = configuration;
