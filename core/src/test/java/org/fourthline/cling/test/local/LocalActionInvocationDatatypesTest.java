@@ -25,7 +25,6 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.test.data.SampleData;
 import org.testng.annotations.Test;
@@ -119,7 +118,7 @@ public class LocalActionInvocationDatatypesTest {
         @UpnpStateVariable(sendEvents = false)
         private short three;
 
-        @UpnpStateVariable(sendEvents = false, datatype = "int")
+        @UpnpStateVariable(sendEvents = false, name = "four", datatype = "int")
         private int four;
 
         public LocalTestServiceOne() {

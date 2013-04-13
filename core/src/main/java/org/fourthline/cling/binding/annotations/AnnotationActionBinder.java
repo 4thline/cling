@@ -263,20 +263,20 @@ public class AnnotationActionBinder {
         StateVariable relatedStateVariable = null;
 
         if (declaredName != null && declaredName.length() > 0) {
-            String actualName = AnnotationLocalServiceBinder.toUpnpStateVariableName(declaredName);
-            log.finer("Finding related state variable with declared name: " + actualName);
-            relatedStateVariable = getStateVariable(actualName);
+            relatedStateVariable = getStateVariable(declaredName);
         }
 
         if (relatedStateVariable == null && argumentName != null && argumentName.length() > 0) {
-            log.finer("Finding related state variable with argument name: " + argumentName);
+            String actualName = AnnotationLocalServiceBinder.toUpnpStateVariableName(argumentName);
+            log.finer("Finding related state variable with argument name (converted to UPnP name): " + actualName);
             relatedStateVariable = getStateVariable(argumentName);
         }
 
         if (relatedStateVariable == null && argumentName != null && argumentName.length() > 0) {
             // Try with A_ARG_TYPE prefix
-            String actualName = Constants.ARG_TYPE_PREFIX + argumentName;
-            log.finer("Finding related state variable with prefixed argument name: " + actualName);
+            String actualName = AnnotationLocalServiceBinder.toUpnpStateVariableName(argumentName);
+            actualName = Constants.ARG_TYPE_PREFIX + actualName;
+            log.finer("Finding related state variable with prefixed argument name (converted to UPnP name): " + actualName);
             relatedStateVariable = getStateVariable(actualName);
         }
 
@@ -284,7 +284,7 @@ public class AnnotationActionBinder {
             // TODO: Well, this is often a nice shortcut but sometimes might have false positives
             String methodPropertyName = Reflections.getMethodPropertyName(methodName);
             if (methodPropertyName != null) {
-                log.finer("Finding related state varible with method property name: " + methodPropertyName);
+                log.finer("Finding related state variable with method property name: " + methodPropertyName);
                 relatedStateVariable =
                         getStateVariable(
                                 AnnotationLocalServiceBinder.toUpnpStateVariableName(methodPropertyName)
