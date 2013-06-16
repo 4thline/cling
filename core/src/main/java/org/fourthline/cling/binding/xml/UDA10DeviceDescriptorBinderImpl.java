@@ -49,6 +49,7 @@ import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDN;
 import org.seamless.util.Exceptions;
+import org.seamless.util.MimeType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -294,7 +295,13 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     } else if (ELEMENT.url.equals(iconChild)) {
                         icon.uri = parseURI(XMLUtil.getTextContent(iconChild));
                     } else if (ELEMENT.mimetype.equals(iconChild)) {
-                        icon.mimeType = XMLUtil.getTextContent(iconChild);
+                        try {
+                            icon.mimeType = XMLUtil.getTextContent(iconChild);
+                            MimeType.valueOf(icon.mimeType);
+                        } catch(IllegalArgumentException ex) {
+                            icon.mimeType = "";
+                            log.warning("Invalid Icon Mimetype");
+                        }
                     }
 
                 }
