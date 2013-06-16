@@ -244,7 +244,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
             } else if (ELEMENT.deviceList.equals(deviceNodeChild)) {
                 hydrateDeviceList(descriptor, deviceNodeChild);
             } else if (ELEMENT.X_DLNADOC.equals(deviceNodeChild) &&
-                    Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
+                Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
                 String txt = XMLUtil.getTextContent(deviceNodeChild);
                 try {
                     descriptor.dlnaDocs.add(DLNADoc.valueOf(txt));
@@ -252,7 +252,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     log.info("Invalid X_DLNADOC value, ignoring value: " + txt);
                 }
             } else if (ELEMENT.X_DLNACAP.equals(deviceNodeChild) &&
-                    Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
+                Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
                 descriptor.dlnaCaps = DLNACaps.valueOf(XMLUtil.getTextContent(deviceNodeChild));
             }
         }
