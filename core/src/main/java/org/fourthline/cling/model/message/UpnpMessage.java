@@ -133,11 +133,18 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
 
     public String getBodyString() {
         try {
-            return !hasBody() ? null :
-                    getBodyType().equals(BodyType.STRING)
-                            ? getBody().toString()
-                            : new String((byte[]) getBody(), "UTF-8"
-                    );
+                if(!hasBody()) {
+                    return null;
+                }
+                if(getBodyType().equals(BodyType.STRING)) {
+                    String body = ((String) getBody());
+                    if(body.charAt(0) == '\ufeff') { /* utf8 BOM */
+                        body = body.substring(1);
+                    }
+                    return body;
+                } else {
+                    return new String((byte[]) getBody(), "UTF-8");
+                }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
@@ -145,10 +152,14 @@ public abstract class UpnpMessage<O extends UpnpOperation> {
 
     public byte[] getBodyBytes() {
         try {
-            return !hasBody() ? null :
-                    getBodyType().equals(BodyType.STRING)
-                            ? ((String) getBody()).getBytes("UTF-8")
-                            : (byte[]) getBody();
+            if(!hasBody()) {
+                return null;
+            }
+            if(getBodyType().equals(BodyType.STRING)) {
+                return getBodyString().getBytes();
+            } else {
+                return (byte[]) getBody();
+            }
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }
