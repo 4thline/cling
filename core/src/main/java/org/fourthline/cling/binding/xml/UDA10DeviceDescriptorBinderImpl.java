@@ -49,6 +49,7 @@ import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDN;
 import org.seamless.util.Exceptions;
+import org.seamless.util.MimeType;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -244,7 +245,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
             } else if (ELEMENT.deviceList.equals(deviceNodeChild)) {
                 hydrateDeviceList(descriptor, deviceNodeChild);
             } else if (ELEMENT.X_DLNADOC.equals(deviceNodeChild) &&
-                    Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
+                Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
                 String txt = XMLUtil.getTextContent(deviceNodeChild);
                 try {
                     descriptor.dlnaDocs.add(DLNADoc.valueOf(txt));
@@ -252,7 +253,7 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     log.info("Invalid X_DLNADOC value, ignoring value: " + txt);
                 }
             } else if (ELEMENT.X_DLNACAP.equals(deviceNodeChild) &&
-                    Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
+                Descriptor.Device.DLNA_PREFIX.equals(deviceNodeChild.getPrefix())) {
                 descriptor.dlnaCaps = DLNACaps.valueOf(XMLUtil.getTextContent(deviceNodeChild));
             }
         }
@@ -294,7 +295,13 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                     } else if (ELEMENT.url.equals(iconChild)) {
                         icon.uri = parseURI(XMLUtil.getTextContent(iconChild));
                     } else if (ELEMENT.mimetype.equals(iconChild)) {
-                        icon.mimeType = XMLUtil.getTextContent(iconChild);
+                        try {
+                            icon.mimeType = XMLUtil.getTextContent(iconChild);
+                            MimeType.valueOf(icon.mimeType);
+                        } catch(IllegalArgumentException ex) {
+                            icon.mimeType = "";
+                            log.warning("Invalid Icon Mimetype");
+                        }
                     }
 
                 }
