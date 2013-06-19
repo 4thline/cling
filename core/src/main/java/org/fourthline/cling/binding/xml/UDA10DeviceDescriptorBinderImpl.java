@@ -299,8 +299,8 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                             icon.mimeType = XMLUtil.getTextContent(iconChild);
                             MimeType.valueOf(icon.mimeType);
                         } catch(IllegalArgumentException ex) {
+                            log.warning("Ignoring invalid icon mime type: " + icon.mimeType);
                             icon.mimeType = "";
-                            log.warning("Invalid Icon Mimetype");
                         }
                     }
 

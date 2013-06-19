@@ -61,7 +61,8 @@ public interface ServletContainerAdapter {
     int addConnector(String host, int port) throws IOException;
 
     /**
-     * Might be called several times register (the same) handler for UPnP requests, should only register it once.
+     * Might be called several times to register (the same) handler for UPnP
+     * requests, should only register it once.
      *
      * @param contextPath The context path prefix for all UPnP requests.
      * @param servlet The servlet handling all UPnP requests.
