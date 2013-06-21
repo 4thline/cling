@@ -138,15 +138,23 @@ public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
     }
 
     synchronized public void send(OutgoingDatagramMessage message) {
-        log.fine("Sending message from address: " + localAddress);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Sending message from address: " + localAddress);
+        }
         DatagramPacket packet = datagramProcessor.write(message);
-        log.fine("Sending UDP datagram packet to: " + message.getDestinationAddress() + ":" + message.getDestinationPort());
+
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Sending UDP datagram packet to: " + message.getDestinationAddress() + ":" + message.getDestinationPort());
+        }
+        
         send(packet);
     }
 
     synchronized public void send(DatagramPacket datagram) {
-        log.fine("Sending message from address: " + localAddress);
-
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Sending message from address: " + localAddress);
+        }
+            
         try {
             socket.send(datagram);
         } catch (SocketException ex) {

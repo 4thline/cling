@@ -26,6 +26,8 @@ public abstract class OutgoingDatagramMessage<O extends UpnpOperation> extends U
 
     private InetAddress destinationAddress;
     private int destinationPort;
+    // For performance reasons, headers of this message are not normalized
+    private UpnpHeaders headers = new UpnpHeaders(false);
 
     protected OutgoingDatagramMessage(O operation, InetAddress destinationAddress, int destinationPort) {
         super(operation);
@@ -45,5 +47,10 @@ public abstract class OutgoingDatagramMessage<O extends UpnpOperation> extends U
 
     public int getDestinationPort() {
         return destinationPort;
+    }
+    
+    @Override
+    public UpnpHeaders getHeaders() {
+        return this.headers;
     }
 }

@@ -54,6 +54,7 @@ import javax.inject.Inject;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -83,7 +84,9 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
     }
 
     public ReceivingAsync createReceivingAsync(IncomingDatagramMessage message) throws ProtocolCreationException {
-        log.fine("Creating protocol for incoming asynchronous: " + message);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Creating protocol for incoming asynchronous: " + message);
+        }
 
         if (message.getOperation() instanceof UpnpRequest) {
             IncomingDatagramMessage<UpnpRequest> incomingRequest = message;

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fourthline.cling.UpnpService;
@@ -65,6 +66,8 @@ import org.fourthline.cling.transport.RouterException;
 public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
     final private static Logger log = Logger.getLogger(ReceivingSearch.class.getName());
+
+    private static final boolean LOG_ENABLED = log.isLoggable(Level.FINE);
 
     final protected Random randomGenerator = new Random();
 
@@ -127,7 +130,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
         return true;
     }
-
+    
     protected void sendResponses(UpnpHeader searchTarget, NetworkAddress activeStreamServer) throws RouterException {
         if (searchTarget instanceof STAllHeader) {
 
@@ -155,14 +158,18 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
     }
 
     protected void sendSearchResponseAll(NetworkAddress activeStreamServer) throws RouterException {
-        log.fine("Responding to 'all' search with advertisement messages for all local devices");
+        if (LOG_ENABLED) {
+            log.fine("Responding to 'all' search with advertisement messages for all local devices");
+        }
         for (LocalDevice localDevice : getUpnpService().getRegistry().getLocalDevices()) {
 
             if (isAdvertisementDisabled(localDevice))
                 continue;
 
             // We are re-using the regular notification messages here but override the NT with the ST header
-            log.finer("Sending root device messages: " + localDevice);
+            if (LOG_ENABLED) {
+                log.finer("Sending root device messages: " + localDevice);
+            }
             List<OutgoingSearchResponse> rootDeviceMsgs =
                     createDeviceMessages(localDevice, activeStreamServer);
             for (OutgoingSearchResponse upnpMessage : rootDeviceMsgs) {
@@ -171,7 +178,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
             if (localDevice.hasEmbeddedDevices()) {
                 for (LocalDevice embeddedDevice : localDevice.findEmbeddedDevices()) {
-                    log.finer("Sending embedded device messages: " + embeddedDevice);
+                    if (LOG_ENABLED) {
+                        log.finer("Sending embedded device messages: " + embeddedDevice);
+                    }
                     List<OutgoingSearchResponse> embeddedDeviceMsgs =
                             createDeviceMessages(embeddedDevice, activeStreamServer);
                     for (OutgoingSearchResponse upnpMessage : embeddedDeviceMsgs) {
@@ -183,7 +192,9 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
             List<OutgoingSearchResponse> serviceTypeMsgs =
                     createServiceTypeMessages(localDevice, activeStreamServer);
             if (serviceTypeMsgs.size() > 0) {
-                log.finer("Sending service type messages");
+                if (LOG_ENABLED) {
+                    log.finer("Sending service type messages");
+                }
                 for (OutgoingSearchResponse upnpMessage : serviceTypeMsgs) {
                     getUpnpService().getRouter().send(upnpMessage);
                 }
@@ -333,7 +344,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
     protected Location getDescriptorLocation(NetworkAddress activeStreamServer, LocalDevice device) {
         return new Location(
                 activeStreamServer,
-                getUpnpService().getConfiguration().getNamespace().getDescriptorPath(device)
+                getUpnpService().getConfiguration().getNamespace().getDescriptorPathString(device)
         );
     }
 

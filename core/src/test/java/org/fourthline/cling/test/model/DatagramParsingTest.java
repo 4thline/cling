@@ -99,7 +99,7 @@ public class DatagramParsingTest {
                         NetworkAddressFactoryImpl.DEFAULT_TCP_HTTP_LISTEN_PORT,
                         HexBin.stringToBytes("00:17:AB:E9:65:A0", ":")
                 ),
-                URI.create("/some/path/123/desc/xml")
+                "/some/path/123/desc/xml"
         );
 
         OutgoingDatagramMessage msg =

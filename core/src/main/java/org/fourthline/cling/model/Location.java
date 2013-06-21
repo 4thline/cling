@@ -15,8 +15,7 @@
 
 package org.fourthline.cling.model;
 
-import org.seamless.util.URIUtil;
-
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 
@@ -34,19 +33,21 @@ import java.net.URL;
  */
 public class Location {
 
-    protected NetworkAddress networkAddress;
-    protected URI path;
+    protected final NetworkAddress networkAddress;
+    protected final String path;
+    protected final URL url;
 
-    public Location(NetworkAddress networkAddress, URI path) {
+    public Location(NetworkAddress networkAddress, String path) {
         this.networkAddress = networkAddress;
         this.path = path;
+        this.url = createAbsoluteURL(networkAddress.getAddress(), networkAddress.getPort(), path);
     }
 
     public NetworkAddress getNetworkAddress() {
         return networkAddress;
     }
 
-    public URI getPath() {
+    public String getPath() {
         return path;
     }
 
@@ -74,7 +75,15 @@ public class Location {
      * @return An HTTP URL with the address, port, and path of this location.
      */
     public URL getURL() {
-        return URIUtil.createAbsoluteURL(networkAddress.getAddress(), networkAddress.getPort(), path);
+        return url;
     }
 
+    // Performance optimization on Android
+    private static URL createAbsoluteURL(InetAddress address, int localStreamPort, String path) {
+        try {
+            return new URL("http", address.getHostAddress(), localStreamPort, path);
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Address, port, and URI can not be converted to URL", ex);
+        }
+    }
 }

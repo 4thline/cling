@@ -115,9 +115,20 @@ public class ServerClientTokens {
     }
 
     public String getHttpToken() {
-        return getOsName().replaceAll(" ", "_")+"/"+getOsVersion().replaceAll(" ", "_")
-                + " UPnP/" + getMajorVersion() + "." + getMinorVersion() + " "
-                + getProductName().replaceAll(" ", "_") + "/" + getProductVersion().replaceAll(" ", "_");
+        StringBuilder sb = new StringBuilder(256);
+        sb.append(osName.indexOf(' ') != -1 ? osName.replace(' ', '_') : osName);
+        sb.append('/');
+        sb.append(osVersion.indexOf(' ') != -1 ? osVersion.replace(' ', '_') : osVersion);
+        sb.append(" UPnP/");
+        sb.append(majorVersion);
+        sb.append('.');
+        sb.append(minorVersion);
+        sb.append(' ');
+        sb.append(productName.indexOf(' ') != -1 ? productName.replace(' ', '_') : productName);
+        sb.append('/');
+        sb.append(productVersion.indexOf(' ') != -1 ? productVersion.replace(' ', '_') : productVersion);
+
+        return sb.toString();
     }
 
     public String getOsToken() {
