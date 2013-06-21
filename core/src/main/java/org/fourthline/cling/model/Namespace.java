@@ -16,6 +16,7 @@
 package org.fourthline.cling.model;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -67,9 +68,11 @@ public class Namespace {
     public static final String CALLBACK_FILE = "/cb";
 
     final protected URI basePath;
+    
+    private final String decodedPath;
 
     public Namespace() {
-        this.basePath = URI.create("");
+        this("");
     }
 
     public Namespace(String basePath) {
@@ -78,6 +81,7 @@ public class Namespace {
 
     public Namespace(URI basePath) {
         this.basePath = basePath;
+        this.decodedPath = basePath.getPath();
     }
 
     public URI getBasePath() {
@@ -85,79 +89,48 @@ public class Namespace {
     }
 
     public URI getPath(Device device) {
-        if (device.getIdentity().getUdn() == null) {
-            throw new IllegalStateException("Can't generate local URI prefix without UDN");
-        }
-        StringBuilder s = new StringBuilder();
-        s.append(DEVICE).append("/");
-
-        s.append(URIUtil.encodePathSegment(device.getIdentity().getUdn().getIdentifierString()));
-
-        /*
-        We no longer need the hierarchical URIs, in fact, they are impossible to parse
-        with typical URI template support in various REST engines.
-        if (device.isRoot()) {
-            s.append(device.getIdentity().getUdn().getIdentifierString());
-        } else {
-            List<Device> devices = new ArrayList();
-            Device temp = device;
-            while (temp != null) {
-                devices.add(temp);
-                temp = temp.getParentDevice();
-            }
-            Collections.reverse(devices);
-            for (Device d : devices) {
-                if (d == device) continue;
-                s.append(d.getIdentity().getUdn().getIdentifierString());
-                s.append(EMBEDDED);
-                s.append("/");
-            }
-            s.append(device.getIdentity().getUdn().getIdentifierString());
-        }
-        */
-        return URI.create(getBasePath().toString() + s.toString());
+        return appendPathToBaseURI(getDevicePath(device));
     }
 
     public URI getPath(Service service) {
-        if (service.getServiceId() == null) {
-            throw new IllegalStateException("Can't generate local URI prefix without service ID");
-        }
-        StringBuilder s = new StringBuilder();
-        s.append(SERVICE);
-        s.append("/");
-        s.append(service.getServiceId().getNamespace());
-        s.append("/");
-        s.append(service.getServiceId().getId());
-        return URI.create(getPath(service.getDevice()).toString() + s.toString());
+        return appendPathToBaseURI(getServicePath(service));
     }
 
     public URI getDescriptorPath(Device device) {
-        return URI.create(getPath(device.getRoot()).toString() + DESCRIPTOR_FILE);
+        return appendPathToBaseURI(getDevicePath(device.getRoot()) + DESCRIPTOR_FILE);
+    }
+    
+    public String getDescriptorUriPath(Device device) {
+        return decodedPath + getDevicePath(device.getRoot()) + DESCRIPTOR_FILE;
     }
 
     public URI getDescriptorPath(Service service) {
-        return URI.create(getPath(service).toString() + DESCRIPTOR_FILE);
+        return appendPathToBaseURI(getServicePath(service) + DESCRIPTOR_FILE);
     }
 
     public URI getControlPath(Service service) {
-        return URI.create(getPath(service).toString() + CONTROL);
+        return appendPathToBaseURI(getServicePath(service) + CONTROL);
     }
     
     public URI getIconPath(Icon icon) {
-        return URI.create(getPath(icon.getDevice()).toString() + "/" + icon.getUri().toString());
+        return appendPathToBaseURI(getDevicePath(icon.getDevice()) + "/" + icon.getUri().toString());
     }
 
     public URI getEventSubscriptionPath(Service service) {
-        return URI.create(getPath(service).toString() + EVENTS);
+        return appendPathToBaseURI(getServicePath(service) + EVENTS);
     }
 
     public URI getEventCallbackPath(Service service) {
-        return URI.create(getEventSubscriptionPath(service).toString() + CALLBACK_FILE);
+        return appendPathToBaseURI(getServicePath(service) + EVENTS + CALLBACK_FILE);
+    }
+    
+    public String getEventCallbackUriPath(Service service) {
+        return decodedPath + getServicePath(service) + EVENTS + CALLBACK_FILE;
     }
 
     public URI prefixIfRelative(Device device, URI uri) {
         if (!uri.isAbsolute() && !uri.getPath().startsWith("/")) {
-            return URI.create(getPath(device).toString() + "/" + uri.toString());
+            return appendPathToBaseURI(getDevicePath(device) + "/" + uri);
         }
         return uri;
     }
@@ -199,6 +172,37 @@ public class Namespace {
         return resources.toArray(new Resource[resources.size()]);
     }
 
+    private URI appendPathToBaseURI(String path) {
+        try {
+            // not calling getBasePath() on purpose since we're not sure if all DalvikVMs will inline it correctly
+            URI result = new URI(basePath.getScheme(), null, basePath.getHost(), basePath.getPort(), decodedPath + path, null, null);
+            return result;
+        } catch (URISyntaxException e) {
+            return URI.create(basePath + path);
+        }
+    }
+    
+    private String getDevicePath(Device device) {
+        if (device.getIdentity().getUdn() == null) {
+            throw new IllegalStateException("Can't generate local URI prefix without UDN");
+        }
+        StringBuilder s = new StringBuilder();
+        s.append(DEVICE).append("/");
 
-
+        s.append(URIUtil.encodePathSegment(device.getIdentity().getUdn().getIdentifierString()));
+        return s.toString();
+    }
+    
+    private String getServicePath(Service service) {
+        if (service.getServiceId() == null) {
+            throw new IllegalStateException("Can't generate local URI prefix without service ID");
+        }
+        StringBuilder s = new StringBuilder();
+        s.append(SERVICE);
+        s.append("/");
+        s.append(service.getServiceId().getNamespace());
+        s.append("/");
+        s.append(service.getServiceId().getId());
+        return getDevicePath(service.getDevice()) + s.toString();
+    }
 }

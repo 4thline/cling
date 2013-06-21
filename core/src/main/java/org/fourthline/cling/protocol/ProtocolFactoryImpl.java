@@ -15,6 +15,15 @@
 
 package org.fourthline.cling.protocol;
 
+import java.net.URI;
+import java.net.URL;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.Namespace;
 import org.fourthline.cling.model.NetworkAddress;
@@ -49,13 +58,6 @@ import org.fourthline.cling.protocol.sync.SendingSubscribe;
 import org.fourthline.cling.protocol.sync.SendingUnsubscribe;
 import org.fourthline.cling.transport.RouterException;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import java.net.URI;
-import java.net.URL;
-import java.util.List;
-import java.util.logging.Logger;
-
 /**
  * Default implementation, directly instantiates the appropriate protocols.
  *
@@ -83,7 +85,9 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
     }
 
     public ReceivingAsync createReceivingAsync(IncomingDatagramMessage message) throws ProtocolCreationException {
-        log.fine("Creating protocol for incoming asynchronous: " + message);
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("Creating protocol for incoming asynchronous: " + message);
+        }
 
         if (message.getOperation() instanceof UpnpRequest) {
             IncomingDatagramMessage<UpnpRequest> incomingRequest = message;

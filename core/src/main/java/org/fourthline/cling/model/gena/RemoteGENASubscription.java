@@ -60,7 +60,7 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
             callbackURLs.add(
                     new Location(
                             activeStreamServer,
-                            namespace.getEventCallbackPath(getService())
+                            namespace.getEventCallbackUriPath(getService())
                     ).getURL());
         }
         return callbackURLs;
