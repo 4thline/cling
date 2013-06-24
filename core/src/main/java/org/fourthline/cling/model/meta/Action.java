@@ -167,12 +167,17 @@ public class Action<S extends Service> implements Validatable {
         for (ActionArgument actionArgument : getArguments()) {
             // Check retval
             if (actionArgument.isReturnValue()) {
-                if (retValueArgument != null) {
-                    log.warning("UPnP specification violation of: " + getService().getDevice());
-                    log.warning("Only one argument of action '" + getName() + "' can be <retval/>");
+                if (actionArgument.getDirection() == ActionArgument.Direction.IN) {
+                    log.warning("UPnP specification violation of :" + getService().getDevice());
+                    log.warning("Input argument can not have <retval/>");
+                } else {
+                    if (retValueArgument != null) {
+                        log.warning("UPnP specification violation of: " + getService().getDevice());
+                        log.warning("Only one argument of action '" + getName() + "' can be <retval/>");
+                    }
+                    retValueArgument = actionArgument;
+                    retValueArgumentIndex = i;
                 }
-                retValueArgument = actionArgument;
-                retValueArgumentIndex = i;
             }
             i++;
         }
