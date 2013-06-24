@@ -170,16 +170,15 @@ public abstract class Service<D extends Device, S extends Service> {
             ));
         }
         */
+        if (hasStateVariables()) {
+            for (StateVariable stateVariable : getStateVariables()) {
+                errors.addAll(stateVariable.validate());
+            }
+        }
 
         if (hasActions()) {
             for (Action action : getActions()) {
                 errors.addAll(action.validate());
-            }
-        }
-
-        if (hasStateVariables()) {
-            for (StateVariable stateVariable : getStateVariables()) {
-                errors.addAll(stateVariable.validate());
             }
         }
 
