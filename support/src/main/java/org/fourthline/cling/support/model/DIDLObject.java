@@ -21,6 +21,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author Christian Bauer
@@ -47,12 +48,12 @@ public abstract class DIDLObject {
 
         protected Property(V value, String descriptorName) {
             this.value = value;
-            this.descriptorName = descriptorName == null ? getClass().getSimpleName().toLowerCase() : descriptorName;
+            this.descriptorName = descriptorName == null ? getClass().getSimpleName().toLowerCase(Locale.ROOT) : descriptorName;
         }
 
         protected Property(V value, String descriptorName, List<Property<DIDLAttribute>> attributes) {
             this.value = value;
-            this.descriptorName = descriptorName == null ? getClass().getSimpleName().toLowerCase() : descriptorName;
+            this.descriptorName = descriptorName == null ? getClass().getSimpleName().toLowerCase(Locale.ROOT) : descriptorName;
             this.attributes.addAll(attributes);
         }
 
