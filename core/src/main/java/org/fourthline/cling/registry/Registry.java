@@ -413,17 +413,29 @@ public interface Registry {
      * <p>
      * When subscribing with a remote host, the remote host might send the
      * initial event message faster than the response for the subscription
-     * request. So we lock all subscriptions when the subscription procedure
-     * executes, which forces the incoming initial event message to wait until
-     * the subscription procedure is complete.
+     * request. This method register that the subscription procedure is
+     * executing.
      * </p>
      */
-    public void lockRemoteSubscriptions();
+    public void registerPendingRemoteSubscription(RemoteGENASubscription subscription);
 
     /**
      * Called internally by the UPnP stack, during GENA protocol execution.
+     * <p>
+     * Notify that the subscription procedure has terminated.
+     * </p>
      */
-    public void unlockRemoteSubscriptions();
+    public void unregisterPendingRemoteSubscription(RemoteGENASubscription subscription);
+
+    /**
+     * Called internally by the UPnP stack, during GENA protocol execution.
+     * <p>
+     * Get a remote subscription from its subscriptionId. If the subscription can't be found,
+     * wait for one of pending remote subscription procedures to terminate, until the subscription
+     * has been found or until there are no more pending subscription procedures.
+     * </p>
+     */
+    public RemoteGENASubscription getWaitRemoteSubscription(String subscriptionId);
 
     // #################################################################################################
 

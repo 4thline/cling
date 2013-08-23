@@ -59,7 +59,7 @@ public class RegistryImpl implements Registry {
 
     protected UpnpService upnpService;
     protected RegistryMaintainer registryMaintainer;
-    protected ReentrantLock remoteSubscriptionsLock = new ReentrantLock(true);
+    protected final Set<RemoteGENASubscription> pendingSubscriptionsLock = new HashSet();
 
     public RegistryImpl() {
     }
@@ -506,14 +506,39 @@ public class RegistryImpl implements Registry {
     }
     
  	@Override
-	public void lockRemoteSubscriptions() {
-		remoteSubscriptionsLock.lock();
+	public void registerPendingRemoteSubscription(RemoteGENASubscription subscription) {
+		synchronized (pendingSubscriptionsLock) {
+            pendingSubscriptionsLock.add(subscription);
+        }
 	}
 	
 	@Override
-	public void unlockRemoteSubscriptions() {
-		remoteSubscriptionsLock.unlock();
+	public void unregisterPendingRemoteSubscription(RemoteGENASubscription subscription) {
+        synchronized (pendingSubscriptionsLock) {
+            if(pendingSubscriptionsLock.remove(subscription)) {
+                pendingSubscriptionsLock.notifyAll();
+            }
+        }
 	}
 
+    @Override
+    public RemoteGENASubscription getWaitRemoteSubscription(String subscriptionId) {
+        synchronized (pendingSubscriptionsLock) {
+            do {
+                RemoteGENASubscription subscription = getRemoteSubscription(subscriptionId);
+                if (subscription != null) {
+                    return subscription;
+                }
+                if (!pendingSubscriptionsLock.isEmpty()) {
+                    try {
+                        log.finest("Subscription not found, waiting for pending subscription procedure to terminate." );
+                        pendingSubscriptionsLock.wait();
+                    } catch (InterruptedException e) {
+                    }
+                }
+            } while (!pendingSubscriptionsLock.isEmpty());
+        }
+        return null;
+    }
 
 }
