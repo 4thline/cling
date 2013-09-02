@@ -77,7 +77,7 @@
         <apache.httpcomponents.httpclient.version>4.2.2</apache.httpcomponents.httpclient.version>
         <apache.httpcomponents.httpcore.version>4.2.3</apache.httpcomponents.httpcore.version>
         <android.version>4.0.1.2</android.version>
-        <android.maven.plugin.version>3.6.0</android.maven.plugin.version>
+        <android.maven.plugin.version>3.6.1</android.maven.plugin.version>
         <jetty.version>8.1.8.v20121106</jetty.version>
         <cdi.api.version>1.0-SP4</cdi.api.version>
         <ejb.api.version>3.0</ejb.api.version>
