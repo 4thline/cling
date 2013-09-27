@@ -64,10 +64,14 @@ public class AndroidRouter extends RouterImpl {
 
         // Only register for network connectivity changes if we are not running on emulator
         if (!ModelUtil.ANDROID_EMULATOR) {
-            this.broadcastReceiver = new ConnectivityBroadcastReceiver();
+            this.broadcastReceiver = createConnectivityBroadcastReceiver();
             context.registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
         }
     }
+
+    protected BroadcastReceiver createConnectivityBroadcastReceiver() {
+		return new ConnectivityBroadcastReceiver();
+	}
 
     @Override
     protected int getLockTimeoutMillis() {
