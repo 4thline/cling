@@ -132,7 +132,15 @@ public class PositionInfo {
     public int getAbsCount() {
         return absCount;
     }
+    
+    public void setTrackDuration(String trackDuration) {
+       this.trackDuration = trackDuration;
+    }
 
+    public void setRelTime(String relTime) {
+       this.relTime = relTime;
+    }
+       
     public long getTrackDurationSeconds() {
         return getTrackDuration() == null ? 0 : ModelUtil.fromTimeString(getTrackDuration());
     }
