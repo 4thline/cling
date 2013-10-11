@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 /**
  * @author Christian Bauer
  */
-public abstract class Stopped<T extends AVTransport> extends AbstractState {
+public abstract class Stopped<T extends AVTransport> extends AbstractState<T> {
 
     final private static Logger log = Logger.getLogger(Stopped.class.getName());
 
@@ -52,12 +52,12 @@ public abstract class Stopped<T extends AVTransport> extends AbstractState {
         );
     }
 
-    public abstract Class<? extends AbstractState> setTransportURI(URI uri, String metaData);
-    public abstract Class<? extends AbstractState> stop();
-    public abstract Class<? extends AbstractState> play(String speed);
-    public abstract Class<? extends AbstractState> next();
-    public abstract Class<? extends AbstractState> previous();
-    public abstract Class<? extends AbstractState> seek(SeekMode unit, String target);
+    public abstract Class<? extends AbstractState<?>> setTransportURI(URI uri, String metaData);
+    public abstract Class<? extends AbstractState<?>> stop();
+    public abstract Class<? extends AbstractState<?>> play(String speed);
+    public abstract Class<? extends AbstractState<?>> next();
+    public abstract Class<? extends AbstractState<?>> previous();
+    public abstract Class<? extends AbstractState<?>> seek(SeekMode unit, String target);
 
     public TransportAction[] getCurrentTransportActions() {
         return new TransportAction[] {
