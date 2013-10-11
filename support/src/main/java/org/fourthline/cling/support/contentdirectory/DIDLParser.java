@@ -207,25 +207,25 @@ public class DIDLParser extends SAXParser {
         }
 
         if (attributes.getValue("size") != null)
-            res.setSize(Long.valueOf(attributes.getValue("size")));
+            res.setSize(asLong(attributes.getValue("size")));
 
         if (attributes.getValue("duration") != null)
             res.setDuration(attributes.getValue("duration"));
 
         if (attributes.getValue("bitrate") != null)
-            res.setBitrate(Long.valueOf(attributes.getValue("bitrate")));
+            res.setBitrate(asLong(attributes.getValue("bitrate")));
 
         if (attributes.getValue("sampleFrequency") != null)
-            res.setSampleFrequency(Long.valueOf(attributes.getValue("sampleFrequency")));
+            res.setSampleFrequency(asLong(attributes.getValue("sampleFrequency")));
 
         if (attributes.getValue("bitsPerSample") != null)
-            res.setBitsPerSample(Long.valueOf(attributes.getValue("bitsPerSample")));
+            res.setBitsPerSample(asLong(attributes.getValue("bitsPerSample")));
 
         if (attributes.getValue("nrAudioChannels") != null)
-            res.setNrAudioChannels(Long.valueOf(attributes.getValue("nrAudioChannels")));
+            res.setNrAudioChannels(asLong(attributes.getValue("nrAudioChannels")));
 
         if (attributes.getValue("colorDepth") != null)
-            res.setColorDepth(Long.valueOf(attributes.getValue("colorDepth")));
+            res.setColorDepth(asLong(attributes.getValue("colorDepth")));
 
         if (attributes.getValue("protection") != null)
             res.setProtection(attributes.getValue("protection"));
@@ -236,6 +236,15 @@ public class DIDLParser extends SAXParser {
         return res;
     }
 
+    private Long asLong(String value) {
+       try {
+          return Long.valueOf(value);
+       }
+       catch(NumberFormatException x) {
+          return Long.valueOf(0);
+       }
+    }
+        
     protected DescMeta createDescMeta(Attributes attributes) {
         DescMeta desc = new DescMeta();
 
