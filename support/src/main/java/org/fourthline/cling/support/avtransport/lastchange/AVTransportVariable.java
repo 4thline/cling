@@ -63,6 +63,10 @@ public class AVTransportVariable {
         add(AVTransportURIMetaData.class);
         add(NextAVTransportURIMetaData.class);
         add(CurrentTransportActions.class);
+        add(RelativeTimePosition.class);
+        add(AbsoluteTimePosition.class);
+        add(RelativeCounterPosition.class);
+        add(AbsoluteCounterPosition.class);
     }};
 
     public static class TransportState extends EventedValueEnum<org.fourthline.cling.support.model.TransportState> {
@@ -336,6 +340,46 @@ public class AVTransportVariable {
                 list.add(TransportAction.valueOf(s));
             }
             return list.toArray(new TransportAction[list.size()]);
+        }
+    }
+
+	public static class RelativeTimePosition extends EventedValueString {
+        public RelativeTimePosition(String value) {
+            super(value);
+        }
+
+        public RelativeTimePosition(Map.Entry<String, String>[] attributes) {
+            super(attributes);
+        }
+    }
+
+    public static class AbsoluteTimePosition extends EventedValueString {
+        public AbsoluteTimePosition(String value) {
+            super(value);
+        }
+
+        public AbsoluteTimePosition(Map.Entry<String, String>[] attributes) {
+            super(attributes);
+        }
+    }
+
+    public static class RelativeCounterPosition extends EventedValueString {
+        public RelativeCounterPosition(String value) {
+            super(value);
+        }
+
+        public RelativeCounterPosition(Map.Entry<String, String>[] attributes) {
+            super(attributes);
+        }
+    }
+
+    public static class AbsoluteCounterPosition extends EventedValueString {
+        public AbsoluteCounterPosition(String value) {
+            super(value);
+        }
+
+        public AbsoluteCounterPosition(Map.Entry<String, String>[] attributes) {
+            super(attributes);
         }
     }
 
