@@ -59,7 +59,7 @@ public abstract class UnsignedVariableInteger {
             log.warning("Invalid negative integer value '" + s + "', assuming value 0!");
             s = "0";
         }
-        setValue(Long.parseLong(s));
+        setValue(Long.parseLong(s.trim()));
     }
 
     protected UnsignedVariableInteger setValue(long value) {

@@ -22,7 +22,7 @@ import java.util.regex.Matcher;
 
 /**
  * Service type with a fixed <code>schemas-upnp-org</code> namespace.
- * 
+ *
  * @author Christian Bauer
  */
 public class UDAServiceType extends ServiceType {
@@ -43,11 +43,15 @@ public class UDAServiceType extends ServiceType {
 
     public static UDAServiceType valueOf(String s) throws InvalidValueException {
         Matcher matcher = UDAServiceType.PATTERN.matcher(s);
-        if (matcher.matches()) {
-            return new UDAServiceType(matcher.group(1), Integer.valueOf(matcher.group(2)));
-        } else {
-            throw new InvalidValueException("Can't parse UDA service type string (namespace/type/version): " + s);
+
+        try {
+            if (matcher.matches())
+                return new UDAServiceType(matcher.group(1), Integer.valueOf(matcher.group(2)));
+        } catch (RuntimeException e) {
+            throw new InvalidValueException(String.format(
+                "Can't parse UDA service type string (namespace/type/version) '%s': %s", s, e.toString()));
         }
+        throw new InvalidValueException("Can't parse UDA service type string (namespace/type/version): " + s);
     }
 
 }

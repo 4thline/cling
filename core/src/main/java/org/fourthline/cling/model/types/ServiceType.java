@@ -100,42 +100,48 @@ public class ServiceType {
             return serviceType;
 
         // Now try a generic ServiceType parse
-        Matcher matcher = ServiceType.PATTERN.matcher(s);
-        if (matcher.matches() && matcher.groupCount() >= 3) {
-            return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
-        }
+        try {
+            Matcher matcher = ServiceType.PATTERN.matcher(s);
+            if (matcher.matches() && matcher.groupCount() >= 3) {
+                return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
+            }
 
-        matcher = ServiceType.BROKEN_PATTERN.matcher(s);
-        if (matcher.matches() && matcher.groupCount() >= 3) {
-            return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
-        }
+            matcher = ServiceType.BROKEN_PATTERN.matcher(s);
+            if (matcher.matches() && matcher.groupCount() >= 3) {
+                return new ServiceType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)));
+            }
 
-        // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in service type token
-        // urn:schemas-microsoft-com:service:pbda:tuner:1
-        matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(.+?):([0-9]+).*").matcher(s);
-        if (matcher.matches() && matcher.groupCount() >= 3) {
-            String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-            log.warning(
-                "UPnP specification violation, replacing invalid service type token '"
+            // TODO: UPNP VIOLATION: EyeTV Netstream uses colons in service type token
+            // urn:schemas-microsoft-com:service:pbda:tuner:1
+            matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):service:(.+?):([0-9]+).*").matcher(s);
+            if (matcher.matches() && matcher.groupCount() >= 3) {
+                String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
+                log.warning(
+                    "UPnP specification violation, replacing invalid service type token '"
+                        + matcher.group(2)
+                        + "' with: "
+                        + cleanToken
+                );
+                return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
+            }
+
+            // TODO: UPNP VIOLATION: Ceyton InfiniTV uses colons in service type token and 'serviceId' instead of 'service'
+            // urn:schemas-opencable-com:serviceId:dri2:debug:1
+            matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(.+?):([0-9]+).*").matcher(s);
+            if (matcher.matches() && matcher.groupCount() >= 3) {
+                String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
+                log.warning(
+                    "UPnP specification violation, replacing invalid service type token '"
                     + matcher.group(2)
                     + "' with: "
                     + cleanToken
-            );
-            return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
-        }
-
-        // TODO: UPNP VIOLATION: Ceyton InfiniTV uses colons in service type token and 'serviceId' instead of 'service'
-        // urn:schemas-opencable-com:serviceId:dri2:debug:1
-        matcher = Pattern.compile("urn:(" + Constants.REGEX_NAMESPACE + "):serviceId:(.+?):([0-9]+).*").matcher(s);
-        if (matcher.matches() && matcher.groupCount() >= 3) {
-            String cleanToken = matcher.group(2).replaceAll("[^a-zA-Z_0-9\\-]", "-");
-            log.warning(
-                "UPnP specification violation, replacing invalid service type token '"
-                + matcher.group(2)
-                + "' with: "
-                + cleanToken
-            );
-            return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
+                );
+                return new ServiceType(matcher.group(1), cleanToken, Integer.valueOf(matcher.group(3)));
+            }
+        } catch (RuntimeException e) {
+            throw new InvalidValueException(String.format(
+                "Can't parse service type string (namespace/type/version) '%s': %s", s, e.toString()
+            ));
         }
 
         throw new InvalidValueException("Can't parse service type string (namespace/type/version): " + s);

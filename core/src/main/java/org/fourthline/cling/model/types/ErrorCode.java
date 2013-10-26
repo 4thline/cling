@@ -37,7 +37,9 @@ public enum ErrorCode {
     NOT_ENCRYPTED(609, "This action requires confidentiality but the action was not delivered encrypted"),
     INVALID_SEQUENCE(610, "The sequence provided was not valid"),
     INVALID_CONTROL_URL(611, "The controlURL within the freshness element does not match the controlURL of the action actually invoked"),
-    NO_SUCH_SESSION(612, "The session key reference is to a non-existent session");
+    NO_SUCH_SESSION(612, "The session key reference is to a non-existent session"),
+    TRANSPORT_LOCKED(705, "Transport locked"),
+    ILLEGAL_MIME_TYPE(714, "Illegal mime-type");
 
     private int code;
     private String description;

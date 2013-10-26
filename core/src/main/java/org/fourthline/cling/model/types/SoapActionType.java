@@ -75,15 +75,22 @@ public class SoapActionType {
 
     public static SoapActionType valueOf(String s) throws InvalidValueException {
         Matcher magicControlMatcher = SoapActionType.PATTERN_MAGIC_CONTROL.matcher(s);
-        if (magicControlMatcher.matches()) {
-            return new SoapActionType(MAGIC_CONTROL_NS, MAGIC_CONTROL_TYPE, null, magicControlMatcher.group(1));
+        
+        try {
+        	if (magicControlMatcher.matches()) {
+        		return new SoapActionType(MAGIC_CONTROL_NS, MAGIC_CONTROL_TYPE, null, magicControlMatcher.group(1)); // throws IllegalArgumentException
+        	}
+
+        	Matcher matcher = SoapActionType.PATTERN.matcher(s);
+        	if (matcher.matches())
+        		return new SoapActionType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)), matcher.group(4));
+
+        } catch(RuntimeException e) {
+        	throw new InvalidValueException(String.format(
+                "Can't parse action type string (namespace/type/version#actionName) '%s': %s", s, e.toString()
+            ));
         }
-        Matcher matcher = SoapActionType.PATTERN.matcher(s);
-        if (matcher.matches()) {
-            return new SoapActionType(matcher.group(1), matcher.group(2), Integer.valueOf(matcher.group(3)), matcher.group(4));
-        } else {
-            throw new InvalidValueException("Can't parse action type string (namespace/type/version#actionName): " + s);
-        }
+        throw new InvalidValueException("Can't parse action type string (namespace/type/version#actionName): " + s);
     }
 
     public ServiceType getServiceType() {
