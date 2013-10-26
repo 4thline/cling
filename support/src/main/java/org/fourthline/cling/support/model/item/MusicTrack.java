@@ -50,7 +50,7 @@ public class MusicTrack extends AudioItem {
     }
 
     public MusicTrack(String id, String parentID, String title, String creator, String album, String artist, Res... resource) {
-        this(id, parentID, title, creator, album, new PersonWithRole(artist), resource);
+        this(id, parentID, title, creator, album, artist == null ? null : new PersonWithRole(artist), resource);
     }
 
     public MusicTrack(String id, String parentID, String title, String creator, String album, PersonWithRole artist, Res... resource) {
