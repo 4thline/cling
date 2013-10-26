@@ -15,7 +15,12 @@
 
 package org.fourthline.cling.model.meta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.fourthline.cling.model.Constants;
+import org.fourthline.cling.model.Validatable;
+import org.fourthline.cling.model.ValidationError;
 import org.fourthline.cling.model.types.UDN;
 
 /**
@@ -23,7 +28,7 @@ import org.fourthline.cling.model.types.UDN;
  *
  * @author Christian Bauer
  */
-public class DeviceIdentity {
+public class DeviceIdentity implements Validatable {
 
     final private UDN udn;
     final private Integer maxAgeSeconds;
@@ -71,5 +76,20 @@ public class DeviceIdentity {
     @Override
     public String toString() {
         return "(" + getClass().getSimpleName() + ") UDN: " + getUdn();
+    }
+
+    @Override
+    public List<ValidationError> validate() {
+    	List<ValidationError> errors = new ArrayList<ValidationError>();
+
+    	if (getUdn() == null) {
+    		errors.add(new ValidationError(
+    				getClass(),
+    				"major",
+    				"Device has no UDN"
+    				));
+    	}
+
+    	return errors;
     }
 }
