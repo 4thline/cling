@@ -22,6 +22,7 @@ import org.fourthline.cling.model.message.control.IncomingActionResponseMessage;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.protocol.sync.SendingAction;
 
 import java.net.URL;
@@ -138,7 +139,13 @@ public abstract class ActionCallback implements Runnable {
             RemoteService remoteService = (RemoteService)service;
 
             // Figure out the remote URL where we'd like to send the action request to
-            URL controLURL = remoteService.getDevice().normalizeURI(remoteService.getControlURI());
+            URL controLURL;
+            try {
+            	controLURL = remoteService.getDevice().normalizeURI(remoteService.getControlURI());
+            } catch(IllegalArgumentException e) {
+            	failure(actionInvocation, null, "bad control URL: " + remoteService.getControlURI());
+            	return ;
+            }
 
             // Do it
             SendingAction prot = getControlPoint().getProtocolFactory().createSendingAction(actionInvocation, controLURL);
