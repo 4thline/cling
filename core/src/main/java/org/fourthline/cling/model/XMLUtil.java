@@ -15,11 +15,7 @@
 
 package org.fourthline.cling.model;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -137,18 +133,24 @@ public class XMLUtil {
             }
 
         } else if (node.getNodeValue() != null) {
-            b.append(encodeText(node.getNodeValue()));
+            b.append(encodeText(node.getNodeValue(), node instanceof Attr));
         }
 
         return b.toString();
     }
 
     public static String encodeText(String s) {
+        return encodeText(s, true);
+    }
+
+    public static String encodeText(String s, boolean encodeQuotes) {
         s = s.replaceAll("&", "&amp;");
         s = s.replaceAll("<", "&lt;");
         s = s.replaceAll(">", "&gt;");
-        s = s.replaceAll("'", "&apos;");
-        s = s.replaceAll("\"", "&quot;");
+        if(encodeQuotes) {
+        	s = s.replaceAll("'", "&apos;");
+        	s = s.replaceAll("\"", "&quot;");
+        }
         return s;
     }
 
