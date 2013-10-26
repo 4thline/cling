@@ -374,7 +374,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<ValidationError>();
 
         if (getType() != null) {
 
@@ -384,6 +384,10 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
             // type. Now that is a risky assumption...
 
             errors.addAll(getVersion().validate());
+            
+            if(getIdentity() != null) {
+            	errors.addAll(getIdentity().validate());
+            }
 
             if (getDetails() != null) {
                 errors.addAll(getDetails().validate());
