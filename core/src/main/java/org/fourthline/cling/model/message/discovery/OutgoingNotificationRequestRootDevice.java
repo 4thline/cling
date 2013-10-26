@@ -34,12 +34,14 @@ public class OutgoingNotificationRequestRootDevice extends OutgoingNotificationR
         getHeaders().add(UpnpHeader.Type.NT, new RootDeviceHeader());
         getHeaders().add(UpnpHeader.Type.USN, new USNRootDeviceHeader(device.getIdentity().getUdn()));
 
+        /*
         if (location.getNetworkAddress().getHardwareAddress() != null) {
             getHeaders().add(
                     UpnpHeader.Type.EXT_IFACE_MAC,
                      new InterfaceMacHeader(location.getNetworkAddress().getHardwareAddress())
             );
         }
+        */
     }
 
 }
