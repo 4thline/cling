@@ -236,16 +236,22 @@ public class StreamClientImpl extends AbstractStreamClient<StreamClientConfigura
 
                 // Body
                 HttpEntity entity = httpResponse.getEntity();
-                if (entity == null || entity.getContentLength() == 0) return responseMessage;
+                if (entity == null || entity.getContentLength() == 0) {
+                    log.fine("HTTP response message has no entity");
+                    return responseMessage;
+                }
 
-                if (responseMessage.isContentTypeMissingOrText()) {
-                    if (log.isLoggable(Level.FINE))
-                        log.fine("HTTP response message contains text entity");
-                    responseMessage.setBody(UpnpMessage.BodyType.STRING, EntityUtils.toString(entity));
+                byte data[] = EntityUtils.toByteArray(entity);
+                if(data != null) {
+                	if (responseMessage.isContentTypeMissingOrText()) {
+                		log.fine("HTTP response message contains text entity");
+                		responseMessage.setBodyCharacters(data);
+                	} else {
+                		log.fine("HTTP response message contains binary entity");
+                		responseMessage.setBody(UpnpMessage.BodyType.BYTES, data);
+                	}
                 } else {
-                    if (log.isLoggable(Level.FINE))
-                        log.fine("HTTP response message contains binary entity");
-                    responseMessage.setBody(UpnpMessage.BodyType.BYTES, EntityUtils.toByteArray(entity));
+                    log.fine("HTTP response message has no entity");
                 }
 
                 return responseMessage;
