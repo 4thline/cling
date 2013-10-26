@@ -43,12 +43,14 @@ public class OutgoingSearchResponse extends OutgoingDatagramMessage<UpnpResponse
         getHeaders().add(UpnpHeader.Type.SERVER, new ServerHeader());
         getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader());
 
+        /*
         if (location.getNetworkAddress().getHardwareAddress() != null) {
             getHeaders().add(
                     UpnpHeader.Type.EXT_IFACE_MAC,
                      new InterfaceMacHeader(location.getNetworkAddress().getHardwareAddress())
             );
         }
+        */
     }
 
 }
