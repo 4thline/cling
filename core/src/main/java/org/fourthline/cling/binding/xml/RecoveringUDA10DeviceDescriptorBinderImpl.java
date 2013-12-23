@@ -41,7 +41,8 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         try {
 
             try {
-                descriptorXml = descriptorXml.trim(); // Always trim whitespace
+                if (descriptorXml != null)
+                  descriptorXml = descriptorXml.trim(); // Always trim whitespace
                 device = super.describe(undescribedDevice, descriptorXml);
                 return device;
             } catch (DescriptorBindingException ex) {
