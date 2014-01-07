@@ -21,11 +21,14 @@ import org.fourthline.cling.transport.spi.InitializationException;
 import org.fourthline.cling.transport.spi.StreamServer;
 
 import javax.servlet.AsyncContext;
+import javax.servlet.AsyncEvent;
+import javax.servlet.AsyncListener;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -85,10 +88,16 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
         getConfiguration().getServletContainerAdapter().startIfNotRunning();
     }
 
+    private int mCounter = 0;
+
     protected Servlet createServlet(final Router router) {
         return new HttpServlet() {
             @Override
             protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+            	final long startTime = System.currentTimeMillis();
+            	final int counter = mCounter++;
+            	log.info(String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
                 if (log.isLoggable(Level.FINE))
                     log.fine(
                         "Handling Servlet request asynchronously: " + req
@@ -96,6 +105,37 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
 
                 AsyncContext async = req.startAsync();
                 async.setTimeout(getConfiguration().getAsyncTimeoutSeconds()*1000);
+
+                async.addListener(new AsyncListener() {
+
+                    @Override
+                    public void onTimeout(AsyncEvent arg0) throws IOException {
+                        long duration = System.currentTimeMillis() - startTime;
+                        log.warning(String.format("AsyncListener.onTimeout(): id: %3d, duration: %,4d, request: %s", counter, duration, arg0.getSuppliedRequest()));
+                    }
+
+
+                    @Override
+                    public void onStartAsync(AsyncEvent arg0) throws IOException {
+                        // useless
+                        log.info(String.format("AsyncListener.onStartAsync(): id: %3d, request: %s", counter, arg0.getSuppliedRequest()));
+                    }
+
+
+                    @Override
+                    public void onError(AsyncEvent arg0) throws IOException {
+                        long duration = System.currentTimeMillis() - startTime;
+                        log.warning(String.format("AsyncListener.onError(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
+                    }
+
+
+                    @Override
+                    public void onComplete(AsyncEvent arg0) throws IOException {
+                        long duration = System.currentTimeMillis() - startTime;
+                        log.info(String.format("AsyncListener.onComplete(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
+                    }
+
+                });
 
                 AsyncServletUpnpStream stream =
                     new AsyncServletUpnpStream(router.getProtocolFactory(), async, req) {
