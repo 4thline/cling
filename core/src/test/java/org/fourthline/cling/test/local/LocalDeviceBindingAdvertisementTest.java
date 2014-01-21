@@ -96,13 +96,13 @@ public class LocalDeviceBindingAdvertisementTest {
 
         LocalDevice ld =
             SampleData.createLocalDevice(
-                SampleData.createLocalDeviceIdentity(3)
+                SampleData.createLocalDeviceIdentity(1)
             );
 
         upnpService.getRegistry().addDevice(ld);
         assertEquals(upnpService.getRegistry().getLocalDevices().size(), 1);
 
-        Thread.sleep(5000);
+        Thread.sleep(2000);
 
         assertEquals(upnpService.getRegistry().getLocalDevices().size(), 1);
 
@@ -110,7 +110,7 @@ public class LocalDeviceBindingAdvertisementTest {
         // 30 from regular refresh
         assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 60);
         for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
-            assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 3);
+            assertAliveMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 1);
         }
 
         upnpService.getRouter().getOutgoingDatagramMessages().clear();
@@ -120,7 +120,7 @@ public class LocalDeviceBindingAdvertisementTest {
         // Check correct byebye
         assertTrue(upnpService.getRouter().getOutgoingDatagramMessages().size() >= 30);
         for (UpnpMessage msg : upnpService.getRouter().getOutgoingDatagramMessages()) {
-            assertByeByeMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 3);
+            assertByeByeMsgBasics(upnpService.getConfiguration().getNamespace(), msg, ld, 1);
         }
     }
 

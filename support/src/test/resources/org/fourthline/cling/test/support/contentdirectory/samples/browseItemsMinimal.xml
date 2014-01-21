@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/"
+           xmlns:dc="http://purl.org/dc/elements/1.1/"
+           xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
+
+    <item id="1" parentID="0">
+        <dc:title>Chloe Dancer</dc:title>
+        <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+
+        <!-- We need protocolInfo, everything else should result in 'null' in the model -->
+        <res protocolInfo="http-get:*:audio/x-ms-wma:*">http://10.0.0.1/somecontent.wma</res>
+    </item>
+
+</DIDL-Lite>
