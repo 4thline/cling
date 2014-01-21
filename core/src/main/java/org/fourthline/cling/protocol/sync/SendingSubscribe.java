@@ -24,8 +24,6 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.protocol.SendingSync;
 import org.fourthline.cling.transport.RouterException;
 
-import java.net.NetworkInterface;
-import java.net.URL;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -87,8 +85,9 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
         log.fine("Sending subscription request: " + getInputMessage());
 
         try {
-            // Block incoming (initial) event messages until the subscription is fully registered
-            getUpnpService().getRegistry().lockRemoteSubscriptions();
+            // register this pending Subscription to bloc if the notification is received before the
+            // registration result.
+            getUpnpService().getRegistry().registerPendingRemoteSubscription(subscription);
 
             StreamResponseMessage response = null;
             try {
@@ -142,7 +141,7 @@ public class SendingSubscribe extends SendingSync<OutgoingSubscribeRequestMessag
             }
             return responseMessage;
         } finally {
-            getUpnpService().getRegistry().unlockRemoteSubscriptions();
+            getUpnpService().getRegistry().unregisterPendingRemoteSubscription(subscription);
         }
     }
 

@@ -114,34 +114,27 @@ public class ReceivingEvent extends ReceivingSync<StreamRequestMessage, Outgoing
             return new OutgoingEventResponseMessage(new UpnpResponse(UpnpResponse.Status.INTERNAL_SERVER_ERROR));
         }
 
-        try {
-            // Prevent registration of outgoing subscriptions while this event is being processed, and
-            // block if there is an ongoing subscription procedure (most likely this is the initial
-            // event for this subscription)
-            getUpnpService().getRegistry().lockRemoteSubscriptions();
+        // get the remove subscription, if the subscription can't be found, wait for pending subscription
+        // requests to finish
+        final RemoteGENASubscription subscription =
+                getUpnpService().getRegistry().getWaitRemoteSubscription(requestMessage.getSubscrptionId());
 
-            final RemoteGENASubscription subscription =
-                    getUpnpService().getRegistry().getRemoteSubscription(requestMessage.getSubscrptionId());
-
-            if (subscription == null) {
-                log.severe("Invalid subscription ID, no active subscription: " + requestMessage);
-                return new OutgoingEventResponseMessage(new UpnpResponse(UpnpResponse.Status.PRECONDITION_FAILED));
-            }
-
-            getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
-                    new Runnable() {
-                        public void run() {
-                            log.fine("Calling active subscription with event state variable values");
-                            subscription.receive(
-                                    requestMessage.getSequence(),
-                                    requestMessage.getStateVariableValues()
-                            );
-                        }
-                    }
-            );
-        } finally {
-            getUpnpService().getRegistry().unlockRemoteSubscriptions();
+        if (subscription == null) {
+            log.severe("Invalid subscription ID, no active subscription: " + requestMessage);
+            return new OutgoingEventResponseMessage(new UpnpResponse(UpnpResponse.Status.PRECONDITION_FAILED));
         }
+
+        getUpnpService().getConfiguration().getRegistryListenerExecutor().execute(
+                new Runnable() {
+                    public void run() {
+                        log.fine("Calling active subscription with event state variable values");
+                        subscription.receive(
+                                requestMessage.getSequence(),
+                                requestMessage.getStateVariableValues()
+                        );
+                    }
+                }
+        );
 
         return new OutgoingEventResponseMessage();
 
