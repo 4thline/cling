@@ -29,7 +29,7 @@ import java.util.Set;
 public class AVTransportLastChangeParser extends LastChangeParser {
 
     public static final String NAMESPACE_URI = "urn:schemas-upnp-org:metadata-1-0/AVT/";
-    public static final String SCHEMA_RESOURCE = "org/fourthline/cling/support/avtransport/metadata-1.0-avt.xsd";
+    public static final String SCHEMA_RESOURCE = "org/fourthline/cling/support/avtransport/metadata-1.01-avt.xsd";
 
     @Override
     protected String getNamespace() {
