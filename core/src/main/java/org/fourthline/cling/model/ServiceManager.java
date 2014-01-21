@@ -33,7 +33,7 @@ import java.util.Collection;
  * UPnP control invocations. It's the service manager's job to translate
  * such an action invocation into an actual method invocation, or any other procedure
  * that satisfies the requirements. The {@link org.fourthline.cling.model.action.ActionExecutor}
- * works in conjuction with the manager, for example, the
+ * works together with the manager, for example, the
  * {@link org.fourthline.cling.model.action.MethodActionExecutor} expects that an action
  * method can be invoked through reflection on the instance returned by the manager's
  * {@link #getImplementation()} method. This is possible with the
@@ -44,7 +44,7 @@ import java.util.Collection;
  * The {@link org.fourthline.cling.model.state.StateVariableAccessor}s use the manager
  * to process UPnP state variable queries and GENA eventing. It's the service manager's
  * job to return an actual value when a state variable has to be read. The
- * {@link org.fourthline.cling.model.state.StateVariableAccessor} works in conjunction with
+ * {@link org.fourthline.cling.model.state.StateVariableAccessor} works together with
  * the service manager, for example, the {@link org.fourthline.cling.model.state.FieldStateVariableAccessor}
  * expects that a state variable value can be read through reflection on a field, of
  * the instance returned by {@link #getImplementation()}. This is possible with the
