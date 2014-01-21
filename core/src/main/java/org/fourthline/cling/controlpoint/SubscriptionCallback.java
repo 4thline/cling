@@ -361,7 +361,7 @@ public abstract class SubscriptionCallback implements Runnable {
         log.info("Invalid event message received, causing: " + ex);
         if (log.isLoggable(Level.FINE)) {
             log.fine("------------------------------------------------------------------------------");
-            log.fine(ex.getData().toString());
+            log.fine(ex.getData() != null ? ex.getData().toString() : "null");
             log.fine("------------------------------------------------------------------------------");
         }
     }

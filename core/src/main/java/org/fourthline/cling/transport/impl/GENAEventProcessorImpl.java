@@ -84,7 +84,7 @@ public class GENAEventProcessorImpl implements GENAEventProcessor, ErrorHandler 
         log.fine("Reading body of: " + requestMessage);
         if (log.isLoggable(Level.FINER)) {
             log.finer("===================================== GENA BODY BEGIN ============================================");
-            log.finer(requestMessage.getBody().toString());
+            log.finer(requestMessage.getBody() != null ? requestMessage.getBody().toString() : "null");
             log.finer("-===================================== GENA BODY END ============================================");
         }
 

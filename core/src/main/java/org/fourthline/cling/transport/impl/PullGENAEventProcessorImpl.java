@@ -15,6 +15,7 @@
 
 package org.fourthline.cling.transport.impl;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fourthline.cling.model.message.gena.IncomingEventRequestMessage;
@@ -45,6 +46,13 @@ public class PullGENAEventProcessorImpl extends GENAEventProcessorImpl {
 	private static Logger log = Logger.getLogger(GENAEventProcessor.class.getName());
 
 	public void readBody(IncomingEventRequestMessage requestMessage) throws UnsupportedDataException {
+        log.fine("Reading body of: " + requestMessage);
+        if (log.isLoggable(Level.FINER)) {
+            log.finer("===================================== GENA BODY BEGIN ============================================");
+            log.finer(requestMessage.getBody() != null ? requestMessage.getBody().toString() : null);
+            log.finer("-===================================== GENA BODY END ============================================");
+        }
+
         String body = getMessageBody(requestMessage);
 		try {
 			XmlPullParser xpp = XmlPullParserUtils.createParser(body);
