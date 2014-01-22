@@ -15,6 +15,7 @@
 
 package org.fourthline.cling.model.message.discovery;
 
+import org.fourthline.cling.model.Constants;
 import org.fourthline.cling.model.Location;
 import org.fourthline.cling.model.message.IncomingDatagramMessage;
 import org.fourthline.cling.model.message.OutgoingDatagramMessage;
@@ -43,14 +44,13 @@ public class OutgoingSearchResponse extends OutgoingDatagramMessage<UpnpResponse
         getHeaders().add(UpnpHeader.Type.SERVER, new ServerHeader());
         getHeaders().add(UpnpHeader.Type.EXT, new EXTHeader());
 
-        /*
-        if (location.getNetworkAddress().getHardwareAddress() != null) {
+        if ("true".equals(System.getProperty(Constants.SYSTEM_PROPERTY_ANNOUNCE_MAC_ADDRESS))
+            && location.getNetworkAddress().getHardwareAddress() != null) {
             getHeaders().add(
-                    UpnpHeader.Type.EXT_IFACE_MAC,
-                     new InterfaceMacHeader(location.getNetworkAddress().getHardwareAddress())
+                UpnpHeader.Type.EXT_IFACE_MAC,
+                new InterfaceMacHeader(location.getNetworkAddress().getHardwareAddress())
             );
         }
-        */
     }
 
 }

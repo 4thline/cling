@@ -22,6 +22,8 @@ package org.fourthline.cling.model;
  */
 public interface Constants {
 
+    public static final String SYSTEM_PROPERTY_ANNOUNCE_MAC_ADDRESS = "org.fourthline.cling.network.announceMACAddress";
+
     public static final int UPNP_MULTICAST_PORT = 1900;
 
     public static final String IPV4_UPNP_MULTICAST_GROUP = "239.255.255.250";
