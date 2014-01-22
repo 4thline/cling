@@ -46,7 +46,7 @@ import org.testng.annotations.Test;
 
 import java.net.URI;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 public class ActionXMLProcessingTest {
 
@@ -110,7 +110,7 @@ public class ActionXMLProcessingTest {
 
         upnpService.getConfiguration().getSoapActionProcessor().readBody(incomingCall, actionInvocation);
 
-        assert actionInvocation.getInput().length == 1;
+        assertEquals(actionInvocation.getInput().length, 1);
         assertEquals(actionInvocation.getInput()[0].getArgument().getName(), "NewTargetValue");
     }
 
@@ -278,6 +278,7 @@ public class ActionXMLProcessingTest {
 
         upnpService.getConfiguration().getSoapActionProcessor().writeBody(response, actionInvocation);
 
-        assert response.getBodyString().contains("<SomeValue>This is decoded: &amp;&lt;&gt;&apos;&quot;</SomeValue>");
+        // Note that quotes are not encoded because this text is not an XML attribute value!
+        assertTrue(response.getBodyString().contains("<SomeValue>This is decoded: &amp;&lt;&gt;'\"</SomeValue>"));
     }
 }
