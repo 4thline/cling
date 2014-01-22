@@ -191,14 +191,19 @@ public abstract class HttpServerConnectionUpnpStream extends UpnpStream {
                 
                 HttpEntity entity = entityEnclosingHttpRequest.getEntity();
 
-                if (requestMessage.isContentTypeMissingOrText()) {
-                    log.fine("HTTP request message contains text entity");
-                    requestMessage.setBody(UpnpMessage.BodyType.STRING, EntityUtils.toString(entity));
+                byte data[] = EntityUtils.toByteArray(entity);
+                if(data != null) {
+                	if (requestMessage.isContentTypeMissingOrText()) {
+                		log.fine("HTTP request message contains text entity");
+                		requestMessage.setBodyCharacters(data);
+                	} else {
+                		log.fine("HTTP request message contains binary entity");
+                		requestMessage.setBody(UpnpMessage.BodyType.BYTES, data);
+                	}
                 } else {
-                    log.fine("HTTP request message contains binary entity");
-                    requestMessage.setBody(UpnpMessage.BodyType.BYTES, EntityUtils.toByteArray(entity));
+                    log.fine("HTTP request message has no entity");
                 }
-                
+
 
             } else {
                 log.fine("Request did not contain entity body");
