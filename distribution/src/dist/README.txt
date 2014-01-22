@@ -40,7 +40,7 @@ Add this dependency to your pom.xml:
         <version>${project.version}</version>
     </dependency>
 
-The current unstable version is 2.0-SNAPSHOT.
+The current unstable version is 2.0-alpha3.
 
 For Cling on Android with Maven, please see the pom.xml example in the
 demo/android/ folder.
@@ -61,10 +61,10 @@ DEPENDENCIES
 
 Required dependencies of Cling Core (included with this distribution):
 
-    +- org.fourthline.cling:cling-core:jar:2.0-SNAPSHOT
-       +- org.seamless:seamless-util:jar:1.0-alpha2
-       +- org.seamless:seamless-http:jar:1.0-alpha2
-       \- org.seamless:seamless-xml:jar:1.0-alpha2
+    +- org.fourthline.cling:cling-core:jar:2.0-alpha3
+       +- org.seamless:seamless-util:jar:1.0-alpha3
+       +- org.seamless:seamless-http:jar:1.0-alpha3
+       \- org.seamless:seamless-xml:jar:1.0-alpha3
 
 Additional dependencies of Cling Core on Android (not included):
 
@@ -82,7 +82,7 @@ Additional dependencies of Cling Core on Android (not included):
 
 If you need the fixed Android java.util.logging Handler:
 
-    +- org.seamless:seamless-android:jar:1.0-alpha2
+    +- org.seamless:seamless-android:jar:1.0-alpha3
        \- android.support:compatibility-v13:jar:10 (Exclude this in pom.xml)
 
 WARNING: Jetty JAR files each contain an 'about.html' file, you will get
