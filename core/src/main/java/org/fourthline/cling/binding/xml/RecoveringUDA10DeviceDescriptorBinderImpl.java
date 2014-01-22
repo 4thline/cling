@@ -53,6 +53,16 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
             String fixedXml;
             // The following modifications are not cumulative!
 
+            fixedXml = fixGarbageLeadingChars(descriptorXml);
+            if (fixedXml != null) {
+                try {
+                    device = super.describe(undescribedDevice, fixedXml);
+                    return device;
+                } catch (DescriptorBindingException ex) {
+                    log.warning("Removing leading garbage didn't work: " + Exceptions.unwrap(ex).getMessage());
+                }
+            }
+
             fixedXml = fixGarbageTrailingChars(descriptorXml, originalException);
             if (fixedXml != null) {
                 try {
@@ -100,6 +110,29 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         }
         throw new IllegalStateException("No device produced, did you swallow exceptions in your subclass?");
     }
+
+    private String fixGarbageLeadingChars(String descriptorXml) {
+    		/* Recover this:
+
+    		HTTP/1.1 200 OK
+    		Content-Length: 4268
+    		Content-Type: text/xml; charset="utf-8"
+    		Server: Microsoft-Windows/6.2 UPnP/1.0 UPnP-Device-Host/1.0 Microsoft-HTTPAPI/2.0
+    		Date: Sun, 07 Apr 2013 02:11:30 GMT
+
+    		@7:5 in java.io.StringReader@407f6b00) : HTTP/1.1 200 OK
+    		Content-Length: 4268
+    		Content-Type: text/xml; charset="utf-8"
+    		Server: Microsoft-Windows/6.2 UPnP/1.0 UPnP-Device-Host/1.0 Microsoft-HTTPAPI/2.0
+    		Date: Sun, 07 Apr 2013 02:11:30 GMT
+
+    		<?xml version="1.0"?>...
+    	    */
+
+    		int index = descriptorXml.indexOf("<?xml");
+    		if(index == -1) return descriptorXml;
+    		return descriptorXml.substring(index);
+    	}
 
     protected String fixGarbageTrailingChars(String descriptorXml, DescriptorBindingException ex) {
         int index = descriptorXml.indexOf("</root>");
