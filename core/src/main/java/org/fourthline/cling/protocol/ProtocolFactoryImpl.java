@@ -177,7 +177,9 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
         } else {
 
             // TODO: UPNP VIOLATION: Onkyo devices send event messages with trailing garbage characters
-            // dev/1234/svc/upnp-org/MyService/event/callback192%2e168%2e10%2e38
+            // /dev/9bb022aa-e922-aab9-682b-aa09e9b9e059/svc/upnp-org/RenderingControl/event/cb192%2e168%2e10%2e38
+            // TODO: UPNP VIOLATION: Yamaha does the same
+            // /dev/9ab0c000-f668-11de-9976-00a0de870fd4/svc/upnp-org/RenderingControl/event/cb><http://10.189.150.197:42082/dev/9ab0c000-f668-11de-9976-00a0de870fd4/svc/upnp-org/RenderingControl/event/cb
             if (message.getUri().getPath().contains(Namespace.EVENTS + Namespace.CALLBACK_FILE)) {
                 log.warning("Fixing trailing garbage in event message path: " + message.getUri().getPath());
                 String invalid = message.getUri().toString();
