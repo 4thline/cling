@@ -28,7 +28,6 @@ import org.fourthline.cling.support.shared.TextExpandEvent;
 import org.seamless.swing.Application;
 import org.seamless.swing.DefaultEvent;
 import org.seamless.swing.DefaultEventListener;
-import org.seamless.util.Exceptions;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -141,8 +140,8 @@ public class MediaRendererController extends MainController {
                     MediaRenderer.APP.log(Level.INFO, "Initialization complete!");
 
                 } catch (Throwable t) {
-                    MediaRenderer.APP.log(Level.SEVERE, "Initialization failed: " + t);
-                    MediaRenderer.APP.log(Level.SEVERE, "Cause: " + Exceptions.unwrap(t));
+                    MediaRenderer.APP.log(Level.SEVERE, "Initialization of GStreamer backend failed: " + t);
+                    throw new RuntimeException("Initialization of GStreamer backend failed", t);
                 }
             }
         }.start();

@@ -218,9 +218,10 @@ public class GstMediaRenderer {
         String iconPath = "img/48/mediarenderer.png";
         try {
             return new Icon(
-                    "image/png",
-                    48, 48, 8,
-                    MediaRenderer.class.getResource(iconPath)
+                "image/png",
+                48, 48, 8,
+                MediaRenderer.class.getName(),
+                MediaRenderer.class.getResourceAsStream(iconPath)
             );
         } catch (IOException ex) {
             throw new RuntimeException("Could not load icon: " + iconPath, ex);
