@@ -94,19 +94,19 @@ public class InitialIntegrationTest extends BaseIntegration {
 						
 				mavenBundle().groupId("org.fourthline.cling")
 						.artifactId("cling-osgi-basedriver")
-						.version("2.0-alpha3"),
+						.version("2.0-SNAPSHOT"),
 						
 				mavenBundle().groupId("org.fourthline.cling")
 						.artifactId("cling-osgi-tests-devices-simple")
-						.version("2.0-alpha3"),
+						.version("2.0-SNAPSHOT"),
 
 				wrappedBundle(mavenBundle().groupId("org.fourthline.cling")
 						.artifactId("cling-osgi-tests-common")
-						.version("2.0-alpha3")),
+						.version("2.0-SNAPSHOT")),
 
 				wrappedBundle(mavenBundle().groupId("org.fourthline.cling")
 						.artifactId("cling-core")
-						.version("2.0-alpha3")),
+						.version("2.0-SNAPSHOT")),
 				wrappedBundle(mavenBundle().groupId("org.seamless")
 						.artifactId("seamless-http")
 						.version("1.0-SNAPSHOT")),
