@@ -160,19 +160,29 @@ public abstract class ItemFormPanel extends JPanel {
                     new JPopupMenuButton("Send to...", Application.createImageIcon(Workbench.class, "img/16/play.png"), menu);
             playButton.setFocusable(false);
 
-            final JButton copyButton =
+            final JButton copyURIButton =
                     new JButton("Copy URI to clipboard", Application.createImageIcon(Workbench.class, "img/16/copyclipboard.png"));
-            copyButton.setFocusable(false);
-            copyButton.addActionListener(new ActionListener() {
+            copyURIButton.setFocusable(false);
+            copyURIButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     Application.copyToClipboard(resource.getValue());
+                }
+            });
+
+            final JButton copyProtocolInfoButton =
+                    new JButton("Copy Protocol Info to clipboard", Application.createImageIcon(Workbench.class, "img/16/copyclipboard.png"));
+            copyProtocolInfoButton.setFocusable(false);
+            copyProtocolInfoButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    Application.copyToClipboard(resource.getProtocolInfo().toString());
                 }
             });
 
             JToolBar resourceToolBar = new JToolBar();
             resourceToolBar.setFloatable(false);
             resourceToolBar.add(playButton);
-            resourceToolBar.add(copyButton);
+            resourceToolBar.add(copyURIButton);
+            resourceToolBar.add(copyProtocolInfoButton);
 
             form.addLabelAndLastField("", resourceToolBar, this);
         }
