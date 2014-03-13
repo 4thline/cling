@@ -114,22 +114,31 @@ public class BrowserPresenter implements BrowserView.Presenter {
 
             if (responseMsg != null && !responseMsg.getOperation().isFailed()) {
 
-                MimeType contentType =
-                        responseMsg.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class).getValue();
+                ContentTypeHeader ctHeader =
+                    responseMsg.getHeaders().getFirstHeader(UpnpHeader.Type.CONTENT_TYPE, ContentTypeHeader.class);
 
-                if (isUsableImageType(contentType)) {
-                    byte[] imageBody = (byte[]) responseMsg.getBody();
-                    if (imageBody != null) {
-                        ImageIcon imageIcon = new ImageIcon(imageBody);
-                        deviceItem.setIcon(imageIcon);
+                if (ctHeader != null) {
+                    // TODO: We could guess the content type without the header, depending on file extension
+                    MimeType contentType = ctHeader.getValue();
+
+                    if (isUsableImageType(contentType)) {
+                        byte[] imageBody = (byte[]) responseMsg.getBody();
+                        if (imageBody != null) {
+                            ImageIcon imageIcon = new ImageIcon(imageBody);
+                            deviceItem.setIcon(imageIcon);
+                        } else {
+                            Workbench.Log.MAIN.warning(
+                                "Icon request did not return with response body '" + contentType + "': " + iconRetrievalMsg.getUri()
+                            );
+                        }
                     } else {
                         Workbench.Log.MAIN.warning(
-                            "Icon request did not return with response body '" + contentType + "': " + iconRetrievalMsg.getUri()
+                            "Icon was delivered with unsupported content type '" + contentType + "': " + iconRetrievalMsg.getUri()
                         );
                     }
                 } else {
                     Workbench.Log.MAIN.warning(
-                        "Icon was delivered with unsupported content type '" + contentType + "': " + iconRetrievalMsg.getUri()
+                        "Icon was delivered without content type header in HTTP response': " + iconRetrievalMsg.getUri()
                     );
                 }
 
