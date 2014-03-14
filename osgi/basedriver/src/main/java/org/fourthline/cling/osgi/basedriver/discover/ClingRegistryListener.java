@@ -64,15 +64,15 @@ class ClingRegistryListener extends DefaultRegistryListener {
     private UpnpService upnpService;
 
     class UPnPDeviceBinding {
-        private ServiceReference reference;
+        private ServiceRegistration reference;
         private ServiceTracker tracker;
 
-        UPnPDeviceBinding(ServiceReference reference, ServiceTracker tracker) {
+        UPnPDeviceBinding(ServiceRegistration reference, ServiceTracker tracker) {
             this.reference = reference;
             this.tracker = tracker;
         }
 
-        public ServiceReference getServiceReference() {
+        public ServiceRegistration getServiceRegistration() {
             return reference;
         }
 
@@ -106,7 +106,7 @@ class ClingRegistryListener extends DefaultRegistryListener {
                 tracker.open();
 
                 ServiceRegistration registration = context.registerService(UPnPDevice.class.getName(), upnpDevice, upnpDevice.getDescriptions(null));
-                deviceBindings.put(device, new UPnPDeviceBinding(registration.getReference(), tracker));
+                deviceBindings.put(device, new UPnPDeviceBinding(registration, tracker));
             } catch (InvalidSyntaxException e) {
                 log.severe(String.format("Cannot add remote device (%s).", device.getIdentity().getUdn().toString()));
                 log.severe(e.getMessage());
@@ -123,7 +123,7 @@ class ClingRegistryListener extends DefaultRegistryListener {
             if (data == null) {
                 log.warning(String.format("Unknown device %s removed.", device.getIdentity().getUdn().toString()));
             } else {
-                context.ungetService(data.getServiceReference());
+                data.getServiceRegistration().unregister();
                 data.getServiceTracker().close();
                 deviceBindings.remove(device);
             }
