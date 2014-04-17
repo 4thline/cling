@@ -10,7 +10,11 @@
 
     <name>Cling OSGi Test Common Library</name>
     <artifactId>cling-osgi-tests-common</artifactId>
-    <packaging>jar</packaging>
+    <packaging>bundle</packaging>
+
+    <properties>
+        <SymbolicName>org.fourthline.cling.osgi.upnp.test.common</SymbolicName>
+    </properties>
 
     <build>
         <resources>
@@ -23,6 +27,47 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <manifestLocation>META-INF</manifestLocation>
+                    <instructions>
+                        <Bundle-SymbolicName>${SymbolicName}</Bundle-SymbolicName>
+                        <Bundle-Name>${project.name}</Bundle-Name>
+                        <Bundle-Vendor>4th Line</Bundle-Vendor>
+                        <Bundle-Author>Bruce Green</Bundle-Author>
+                        <Bundle-Description>
+                            A test utility bundle to test Cling OSGi UPnP.
+                        </Bundle-Description>
+                        <Bundle-DocURL>http://4thline.org/projects/cling</Bundle-DocURL>
+                        <Bundle-Activator>org.fourthline.cling.osgi.test.activator.Activator</Bundle-Activator>
+                        <Import-Package>
+                            org.apache.commons.codec,
+                            org.apache.commons.codec.binary,
+                            org.osgi.framework,
+                            org.osgi.service.event,
+                            org.osgi.service.upnp,
+                        </Import-Package>
+                        <Export-Package>
+                            org.fourthline.cling.osgi.test.data,
+                            org.fourthline.cling.osgi.test.util,
+                        </Export-Package>
+                        <Embed-Transitive>false</Embed-Transitive>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>META-INF</directory>
+                        </fileset>
+                    </filesets>
                 </configuration>
             </plugin>
         </plugins>

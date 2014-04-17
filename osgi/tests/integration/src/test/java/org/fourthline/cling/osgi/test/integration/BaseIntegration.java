@@ -178,12 +178,12 @@ public class BaseIntegration {
 				value = ((Calendar) value).getTime();
 			}
 		}
-		else if (value instanceof Byte[]) {
+		else if (value instanceof byte[]) {
 			if (type.equals("bin.base64")) {
-				value = Base64.decodeBase64(toBytes((Byte[]) value));
+				value = Base64.decodeBase64((byte[])value);
 			}
 			else {
-				value = toBytes((Byte[]) value);
+				value = (byte[]) value;
 			}
 		}
 

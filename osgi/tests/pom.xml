@@ -14,6 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>seamless-osgi</module>
         <module>common</module>
         <module>devices/simple</module>
         <module>integration</module>

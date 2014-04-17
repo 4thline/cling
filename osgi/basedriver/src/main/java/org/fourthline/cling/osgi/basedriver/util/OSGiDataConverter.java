@@ -288,13 +288,13 @@ public class OSGiDataConverter {
         if (input == null) {
             output = new byte[0];
         } else {
-            if (input instanceof Byte[]) {
-                Byte[] Bytes = (Byte[]) input;
-                byte[] bytes = new byte[Bytes.length];
-                for (int i = 0; i < Bytes.length; i++) {
-                    bytes[i] = Bytes[i];
-                }
-                output = bytes;
+            if (input instanceof byte[]) {
+//                Byte[] Bytes = (Byte[]) input;
+//                byte[] bytes = new byte[Bytes.length];
+//                for (int i = 0; i < Bytes.length; i++) {
+//                    bytes[i] = Bytes[i];
+//                }
+                output = (byte[]) input;
             }
         }
 
@@ -306,7 +306,7 @@ public class OSGiDataConverter {
 
         if (input == null) {
             output = toByte(input);
-        } else if (input instanceof Byte[]) {
+        } else if (input instanceof byte[]) {
             output = toByte(input);
         }
 
@@ -349,11 +349,11 @@ public class OSGiDataConverter {
             }
 
             byte[] bytes = ((byte[]) value);
-            Byte[] Bytes = new Byte[bytes.length];
-            for (int i = 0; i < bytes.length; i++) {
-                Bytes[i] = bytes[i];
-            }
-            value = Bytes;
+//            Byte[] Bytes = new Byte[bytes.length];
+//            for (int i = 0; i < bytes.length; i++) {
+//                Bytes[i] = bytes[i];
+//            }
+            value = bytes;
         } else {
             value = value.toString();
         }
