@@ -15,23 +15,6 @@
 
 package org.fourthline.cling.osgi.test.integration;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.ops4j.pax.exam.CoreOptions.mavenBundle;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import static org.ops4j.pax.exam.CoreOptions.systemProperty;
-import static org.ops4j.pax.exam.CoreOptions.wrappedBundle;
-import static org.ops4j.pax.exam.container.def.PaxRunnerOptions.logProfile;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.ops4j.pax.exam.Inject;
-import org.ops4j.pax.exam.Option;
-import org.ops4j.pax.exam.junit.Configuration;
-import org.ops4j.pax.exam.junit.JUnit4TestRunner;
-import org.osgi.framework.BundleContext;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionArgumentValue;
 import org.fourthline.cling.model.action.ActionInvocation;
@@ -44,12 +27,40 @@ import org.fourthline.cling.model.types.InvalidValueException;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.osgi.test.data.TestData;
 import org.fourthline.cling.osgi.test.data.TestDataFactory;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.ops4j.pax.exam.Configuration;
+import org.ops4j.pax.exam.Option;
+import org.ops4j.pax.exam.junit.PaxExam;
+import org.ops4j.pax.exam.karaf.options.KarafDistributionOption;
+import org.ops4j.pax.exam.karaf.options.LogLevelOption;
+import org.ops4j.pax.exam.options.MavenArtifactUrlReference;
+import org.ops4j.pax.exam.options.MavenUrlReference;
+import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
+import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
+import javax.inject.Inject;
+import java.io.File;
+
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.ops4j.pax.exam.CoreOptions.*;
+import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
 
 /**
  * TODO: This is broken, probably. There are many error messages in between all
  * the OS-shit-eye junk. Test still completes successfully.
  */
-@RunWith(JUnit4TestRunner.class)
+@ExamReactorStrategy(PerClass.class)
+@RunWith(PaxExam.class)
 public class InitialIntegrationTest extends BaseIntegration {
 
 	static private final String INITIAL_TEST_DATA_ID = "initial";
@@ -70,72 +81,55 @@ public class InitialIntegrationTest extends BaseIntegration {
 		super.tearDown();
 	}
 
-	@Configuration
-	public static Option[] configure() {
-		return options(
-				// install log service using pax runners profile abstraction
-				// (there are more profiles, like DS)
-				logProfile(),
-				// this is how you set the default log level when using pax
-				// logging (logProfile)
-				systemProperty("org.ops4j.pax.logging.DefaultServiceLog.level")
-						.value("WARN"),
+    @org.ops4j.pax.exam.Configuration
+    public Option[] config() {
+        MavenArtifactUrlReference karafUrl = maven()
+                .groupId("org.apache.karaf")
+                .artifactId("apache-karaf")
+                .type("tar.gz")
+                .versionAsInProject();
 
-				systemProperty("org.fourthline.cling.osgi.test.data.factory.properties")
-						.value("cling/osgi/tests/common/data/test-data-factory.properties"),
+        MavenUrlReference karafStandardRepo = maven()
+                .groupId("org.apache.karaf.features")
+                .artifactId("standard")
+                .classifier("features")
+                .type("xml")
+                .versionAsInProject();
+        return new Option[] {
+                //debugConfiguration("5005", true),
+                karafDistributionConfiguration()
+                        .frameworkUrl(karafUrl)
+                        .unpackDirectory(new File("target/exam"))
+                        .useDeployFolder(false),
+                keepRuntimeFolder(),
+                logLevel(LogLevelOption.LogLevel.INFO),
+                KarafDistributionOption.features(karafStandardRepo, "scr, eventadmin"),
 
-				mavenBundle().groupId("org.apache.felix")
-						.artifactId("org.osgi.compendium")
-						.version("1.4.0"),
-						
-				mavenBundle().groupId("org.apache.felix")
-						.artifactId("org.apache.felix.eventadmin")
-						.version("1.2.8"),
-						
-				mavenBundle().groupId("org.fourthline.cling")
-						.artifactId("cling-osgi-basedriver")
-						.version("2.0-SNAPSHOT"),
-						
-				mavenBundle().groupId("org.fourthline.cling")
-						.artifactId("cling-osgi-tests-devices-simple")
-						.version("2.0-SNAPSHOT"),
+                mavenBundle().groupId("org.osgi").artifactId("org.osgi.core").versionAsInProject().start(),
+                mavenBundle().groupId("org.osgi").artifactId("org.osgi.compendium").versionAsInProject().start(),
 
-				wrappedBundle(mavenBundle().groupId("org.fourthline.cling")
-						.artifactId("cling-osgi-tests-common")
-						.version("2.0-SNAPSHOT")),
+                mavenBundle().groupId("org.fourthline.cling.osgi").artifactId("seamless-http").versionAsInProject().start(),
+                mavenBundle().groupId("org.fourthline.cling.osgi").artifactId("seamless-util").versionAsInProject().start(),
+                mavenBundle().groupId("org.fourthline.cling.osgi").artifactId("seamless-xml").versionAsInProject().start(),
 
-				wrappedBundle(mavenBundle().groupId("org.fourthline.cling")
-						.artifactId("cling-core")
-						.version("2.0-SNAPSHOT")),
-				wrappedBundle(mavenBundle().groupId("org.seamless")
-						.artifactId("seamless-http")
-						.version("1.0-SNAPSHOT")),
-                wrappedBundle(mavenBundle().groupId("org.seamless")
-                        .artifactId("seamless-util")
-                        .version("1.0-SNAPSHOT")),
-                wrappedBundle(mavenBundle().groupId("org.seamless")
-                        .artifactId("seamless-xml")
-                        .version("1.0-SNAPSHOT")),
+                mavenBundle().groupId("org.fourthline.cling.osgi").artifactId("httpcomponents-http-core").versionAsInProject().start(),
+                mavenBundle().groupId("org.fourthline.cling.osgi").artifactId("httpcomponents-http-client").versionAsInProject().start(),
 
-				wrappedBundle(mavenBundle()
-						.groupId("org.apache.httpcomponents")
-						.artifactId("httpcore")
-						.version("4.0.1")),
-				wrappedBundle(mavenBundle()
-						.groupId("org.apache.httpcomponents")
-						.artifactId("httpclient")
-						.version("4.0.1")),
+                mavenBundle().groupId("commons-codec").artifactId("commons-codec").versionAsInProject().start(),
 
-				wrappedBundle(mavenBundle()
-						.groupId("commons-codec")
-						.artifactId("commons-codec")
-						.version("1.4")),
+                mavenBundle().groupId("org.fourthline.cling").artifactId("cling-core").versionAsInProject().start(),
+                mavenBundle().groupId("org.fourthline.cling").artifactId("cling-osgi-tests-common").versionAsInProject().start(),
 
-				// a maven dependency. OSGi meta data (pacakge exports/imports)
-				// are being generated by bnd automatically.
-				wrappedBundle(mavenBundle().groupId("org.ops4j.base")
-						.artifactId("ops4j-base-util").version("0.5.3")));
-	}
+                mavenBundle().groupId("org.fourthline.cling").artifactId("cling-osgi-basedriver").versionAsInProject().start(),
+                mavenBundle().groupId("org.fourthline.cling").artifactId("cling-osgi-tests-devices-simple").versionAsInProject().start(),
+
+
+
+
+        };
+    }
+
+
 
 	static private final String DEVICE_TYPE = "urn:schemas-4thline-com:device:simple-test:1";
 	static private final String SERVICE_TYPE = "urn:schemas-4thline-com:service:SimpleTest:1";
@@ -151,18 +145,18 @@ public class InitialIntegrationTest extends BaseIntegration {
 	    }
 	}
 
-	public void doSimpleDeviceGetAction(final String name, String testDataId) {
-		Device device = getDevice(ServiceType.valueOf(SERVICE_TYPE));
-		assertNotNull(device);
-		Service service = getService(device, ServiceType.valueOf(SERVICE_TYPE));
-		assertNotNull(service);
-		Action action = getAction(service, name);
-		assertNotNull(action);
-		
-		final TestData data = TestDataFactory.getInstance().getTestData(testDataId);
-		assertNotNull(data);
+    public void doSimpleDeviceGetAction(final String name, String testDataId) {
+        Device device = getDevice(ServiceType.valueOf(SERVICE_TYPE));
+        assertNotNull(device);
+        Service service = getService(device, ServiceType.valueOf(SERVICE_TYPE));
+        assertNotNull(service);
+        Action action = getAction(service, name);
+        assertNotNull(action);
 
-        final boolean[] tests = new boolean[1];
+        final TestData data = TestDataFactory.getInstance().getTestData(testDataId);
+        assertNotNull(data);
+
+        final boolean[] tests = new boolean[24];
 
         ActionInvocation setTargetInvocation = new GetTargetActionInvocation(service, name);
         getUpnpService().getControlPoint().execute(
@@ -172,37 +166,54 @@ public class InitialIntegrationTest extends BaseIntegration {
                     public void success(ActionInvocation invocation) {
                         System.out.printf("Successfully called action: %s\n", name);
                         ActionArgumentValue[] outputs = invocation.getOutput();
+                        int i=0;
                         for (ActionArgumentValue output : outputs) {
-                        	ActionArgument argument = output.getArgument();
-                        	String name =  argument.getName();
-							String type = (String) name;
-                        	Object value = output.getValue();
-                    		Object desired = data.getOSGiUPnPValue(name, type);
+                            ActionArgument argument = output.getArgument();
+                            String name =  argument.getName();
+                            String type = (String) name;
+                            Object value = output.getValue();
+                            Object desired = data.getOSGiUPnPValue(name, type);
 
-							assertTrue(validate(name, type, value, desired));
-                            tests[1] = true;
+                            System.out.println("Name: " + name + " type: " + type + " value: " + value + " desired: " +desired);
+
+                            assertTrue(validate(name, type, value, desired));
+                            tests[i++] = true;
                         }
                     }
 
-					@Override
+                    @Override
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation,
                                         String defaultMsg) {
-                        tests[1] = false;
+                        System.out.printf("Failure called action: %s\n", name);
+                        ActionArgumentValue[] outputs = invocation.getOutput();
+                        for (ActionArgumentValue output : outputs) {
+                            ActionArgument argument = output.getArgument();
+                            String name = argument.getName();
+                            String type = (String) name;
+                            Object value = output.getValue();
+                            Object desired = data.getOSGiUPnPValue(name, type);
+
+                            System.out.println("Name: " + name + " type: " + type + " value: " + value + " desired: " + desired);
+
+                            assertTrue(validate(name, type, value, desired));
+
+                            tests[0] = false;
+                        }
                     }
                 }
         );
 
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         for (boolean test : tests) {
             assertTrue(test);
         }
-	}
+    }
 	
 	class SetTargetActionInvocation extends ActionInvocation {
 	    SetTargetActionInvocation(Service service, String name, TestData data) {

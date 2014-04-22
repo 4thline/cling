@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.fourthline.cling</groupId>
+        <artifactId>cling</artifactId>
+        <version>2.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+
+
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.fourthline.cling.osgi</groupId>
+    <artifactId>osgi-wrappers</artifactId>
+
+
+    <name>${project.artifactId}</name>
+
+    <packaging>pom</packaging>
+
+
+
+    <modules>
+        <module>seamless-util</module>
+        <module>seamless-http</module>
+        <module>seamless-xml</module>
+        <module>http-core</module>
+        <module>http-client</module>
+    </modules>
+
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <!--
+                 | the following instructions are optimized for wrapping third-party libraries as OSGi bundles
+                -->
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${bundle.symbolicName}</Bundle-SymbolicName>
+                        <Bundle-Version>${wrapped.version}</Bundle-Version>
+                        <!--
+                         | export wrapped contents: don't use Export-Package:* as this bundles everything on the classpath
+                        -->
+                        <_exportcontents>*</_exportcontents>
+                        <Private-Package>!*</Private-Package>
+                        <!--
+                         | each module can override these defaults in their osgi.bnd file
+                        -->
+                        <_include>-osgi.bnd</_include>
+                    </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.ops4j</groupId>
+                <artifactId>maven-pax-plugin</artifactId>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
+</project>

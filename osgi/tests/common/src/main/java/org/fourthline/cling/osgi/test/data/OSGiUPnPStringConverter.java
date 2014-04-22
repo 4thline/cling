@@ -525,12 +525,15 @@ public class OSGiUPnPStringConverter {
                 value = Base64.encodeBase64((byte[]) value);
             }
 
+//            byte[] bytes = ((byte[]) value);
+//            Byte[] Bytes = new Byte[bytes.length];
+//            for (int i = 0; i < bytes.length; i++) {
+//                Bytes[i] = bytes[i];
+//            }
+//            value = Bytes;
             byte[] bytes = ((byte[]) value);
-            Byte[] Bytes = new Byte[bytes.length];
-            for (int i = 0; i < bytes.length; i++) {
-                Bytes[i] = bytes[i];
-            }
-            value = Bytes;
+            value = bytes;
+
         } else {
             value = value.toString();
         }

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <parent>
+        <groupId>org.fourthline.cling.osgi</groupId>
+        <artifactId>osgi-wrappers</artifactId>
+        <version>2.0-SNAPSHOT</version>
+    </parent>
+
+    <properties>
+        <bundle.symbolicName>org.apache.httpcomponents.osgi.httpclient</bundle.symbolicName>
+        <wrapped.groupId>org.apache.httpcomponents</wrapped.groupId>
+        <wrapped.artifactId>httpclient</wrapped.artifactId>
+        <wrapped.version>${apache.httpcomponents.httpclient.version}</wrapped.version>
+    </properties>
+
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.fourthline.cling.osgi</groupId>
+    <artifactId>httpcomponents-http-client</artifactId>
+    <version>${wrapped.version}</version>
+
+
+    <name>${bundle.symbolicName} ${wrapped.version} [osgi]</name>
+
+    <packaging>bundle</packaging>
+
+
+
+
+    <dependencies>
+        <dependency>
+            <groupId>${wrapped.groupId}</groupId>
+            <artifactId>${wrapped.artifactId}</artifactId>
+            <version>${wrapped.version}</version>
+            <scope>compile</scope>
+            <optional>true</optional>
+            <exclusions>
+                <!-- Don't need these to compile/test Cling -->
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+</project>
+

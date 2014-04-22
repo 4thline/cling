@@ -1,0 +1,6 @@
+#-----------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the bundle
+#-----------------------------------------------------------------
+
+Export-Package: org.fourthline.cling, org.fourthline.cling.binding.*, org.fourthline.cling.controlpoint.*, org.fourthline.cling.mock, org.fourthline.cling.model.*, org.fourthline.cling.protocol.*, org.fourthline.cling.registry.*, org.fourthline.cling.transport.*
+Import-Package: *;resolution:=optional

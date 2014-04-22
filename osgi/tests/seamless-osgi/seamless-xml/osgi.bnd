@@ -1,0 +1,12 @@
+#--------------------------------------------------------------------------
+# Use this file to add customized Bnd instructions for the wrapped library
+#--------------------------------------------------------------------------
+
+#
+# this unpacks the contents of the wrapped jar artifact inside the bundle
+# to also inline dependencies of this artifact add Embed-Transitive: true
+#
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: !org.osgi.*,*
+Import-Package: *;resolution:=optional
+Embed-Dependency: *;scope=compile|runtime;type=!pom;inline=true

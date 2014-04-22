@@ -51,15 +51,12 @@
 							org.osgi.framework,
 							org.osgi.service.event,
 							org.osgi.service.upnp,
-							org.osgi.util.tracker
+							org.osgi.util.tracker,
+                            org.fourthline.cling.osgi.test.data,
+                            org.fourthline.cling.osgi.test.util,
 						</Import-Package>
 						<Export-Package>
 						</Export-Package>
-						<Embed-Transitive>false</Embed-Transitive>
-						<Embed-Dependency>
-							cling-osgi-tests-common,
-							commons-codec
-						</Embed-Dependency>
 					</instructions>
 				</configuration>
 			</plugin>
