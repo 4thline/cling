@@ -96,13 +96,13 @@ public class InitialIntegrationTest extends BaseIntegration {
                 .type("xml")
                 .versionAsInProject();
         return new Option[] {
-                debugConfiguration("5005", true),
+                //debugConfiguration("5005", true),
                 karafDistributionConfiguration()
                         .frameworkUrl(karafUrl)
                         .unpackDirectory(new File("target/exam"))
                         .useDeployFolder(false),
                 keepRuntimeFolder(),
-                logLevel(LogLevelOption.LogLevel.DEBUG),
+                logLevel(LogLevelOption.LogLevel.INFO),
                 KarafDistributionOption.features(karafStandardRepo, "scr, eventadmin"),
 
                 mavenBundle().groupId("org.osgi").artifactId("org.osgi.core").versionAsInProject().start(),
@@ -129,30 +129,7 @@ public class InitialIntegrationTest extends BaseIntegration {
         };
     }
 
-//        @Test
-//    public void testSomething() {
-//        Assert.assertNotNull(bundleContext);
-//        for( Bundle bundle : bundleContext.getBundles() )
-//        {
-//            System.out.println( "Checking state of bundle " + bundle.getSymbolicName() + bundle.getState() );
-//
-////            if(bundle.getState() != Bundle.ACTIVE) {
-////                try {
-////                    bundle.start();
-////                } catch (BundleException e) {
-////                    e.printStackTrace();
-////                }
-////            }
-//        }
-//
-//        // Dump OSGi Framework information
-//        String vendor = (String) bundleContext.getBundle(0).getHeaders().get(Constants.BUNDLE_VENDOR);
-//        if (vendor == null) {
-//            vendor = (String) bundleContext.getBundle(0).getHeaders().get(Constants.BUNDLE_SYMBOLICNAME);
-//        }
-//        String version = (String) bundleContext.getBundle(0).getHeaders().get(Constants.BUNDLE_VERSION);
-//        System.out.println("OSGi Framework : " + vendor + " - " + version);
-//    }
+
 
 	static private final String DEVICE_TYPE = "urn:schemas-4thline-com:device:simple-test:1";
 	static private final String SERVICE_TYPE = "urn:schemas-4thline-com:service:SimpleTest:1";
