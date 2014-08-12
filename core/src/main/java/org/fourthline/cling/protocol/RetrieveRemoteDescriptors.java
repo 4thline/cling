@@ -62,6 +62,7 @@ import org.seamless.util.Exceptions;
  * </p>
  *
  * @author Christian Bauer
+ * @author Kai Kreuzer - fixed service and embedded device processing
  */
 public class RetrieveRemoteDescriptors implements Runnable {
 
@@ -260,10 +261,9 @@ public class RetrieveRemoteDescriptors implements Runnable {
             List<RemoteService> filteredServices = filterExclusiveServices(currentDevice.getServices());
             for (RemoteService service : filteredServices) {
                 RemoteService svc = describeService(service);
-                if (svc == null) { // Something went wrong, bail out
-                    return null;
+                if (svc != null) {
+                    describedServices.add(svc);
                 }
-                describedServices.add(svc);
             }
         }
 
@@ -272,10 +272,9 @@ public class RetrieveRemoteDescriptors implements Runnable {
             for (RemoteDevice embeddedDevice : currentDevice.getEmbeddedDevices()) {
                 if (embeddedDevice == null) continue;
                 RemoteDevice describedEmbeddedDevice = describeServices(embeddedDevice);
-                if (describedEmbeddedDevice == null) { // Something was wrong, recursively
-                    return null;
+                if (describedEmbeddedDevice != null) {
+                    describedEmbeddedDevices.add(describedEmbeddedDevice);
                 }
-                describedEmbeddedDevices.add(describedEmbeddedDevice);
             }
         }
 
