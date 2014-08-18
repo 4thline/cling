@@ -16,6 +16,7 @@
 package org.fourthline.cling.transport.impl.jetty;
 
 import org.eclipse.jetty.server.AbstractHttpConnection;
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.bio.SocketConnector;
@@ -82,7 +83,39 @@ public class JettyServletContainer implements ServletContainerAdapter {
         // Only add if open() succeeded
         server.addConnector(connector);
 
+        // stats the connector if the server is started (server starts all connectors when started)
+        if (server.isStarted()) {
+            try {
+                connector.start();
+            } catch (Exception ex) {
+                log.severe("Couldn't start connector: " + connector + " " + ex);
+                throw new RuntimeException(ex);
+            }
+        }
         return connector.getLocalPort();
+    }
+
+    @Override
+    synchronized public void removeConnector(String host, int port)  {
+        Connector[] connectors = server.getConnectors();
+        for (Connector connector : connectors) {
+            if (connector.getHost().equals(host) && connector.getPort() == port) {
+                if (connector.isStarted() || connector.isStarting()) {
+                    try {
+                        connector.stop();
+                    } catch (Exception ex) {
+                        log.severe("Couldn't stop connector: " + connector + " " + ex);
+                        throw new RuntimeException(ex);
+                    }
+                }
+                server.removeConnector(connector);
+                if (connectors.length == 1) {
+                    log.info("No more connectors, stopping Jetty server");
+                    stopIfRunning();
+                }
+                break;
+            }
+        }
     }
 
     @Override

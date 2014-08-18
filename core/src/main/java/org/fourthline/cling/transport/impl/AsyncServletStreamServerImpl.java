@@ -46,6 +46,7 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
 
     final protected AsyncServletStreamServerConfigurationImpl configuration;
     protected int localPort;
+    protected String hostAddress;
 
     public AsyncServletStreamServerImpl(AsyncServletStreamServerConfigurationImpl configuration) {
         this.configuration = configuration;
@@ -63,8 +64,9 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
             );
 
             log.info("Adding connector: " + bindAddress + ":" + getConfiguration().getListenPort());
+            hostAddress = bindAddress.getHostAddress();
             localPort = getConfiguration().getServletContainerAdapter().addConnector(
-                bindAddress.getHostAddress(),
+                hostAddress,
                 getConfiguration().getListenPort()
             );
 
@@ -81,7 +83,7 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
     }
 
     synchronized public void stop() {
-        getConfiguration().getServletContainerAdapter().stopIfRunning();
+        getConfiguration().getServletContainerAdapter().removeConnector(hostAddress, localPort);
     }
 
     public void run() {
