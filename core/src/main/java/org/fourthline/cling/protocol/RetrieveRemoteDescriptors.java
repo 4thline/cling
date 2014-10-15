@@ -260,22 +260,24 @@ public class RetrieveRemoteDescriptors implements Runnable {
             List<RemoteService> filteredServices = filterExclusiveServices(currentDevice.getServices());
             for (RemoteService service : filteredServices) {
                 RemoteService svc = describeService(service);
-                if (svc == null) { // Something went wrong, bail out
-                    return null;
-                }
-                describedServices.add(svc);
+                 // Skip invalid services (yes, we can continue with only some services available)
+                if (svc != null)
+                    describedServices.add(svc);
+                else
+                    log.warning("Skipping invalid service '" + service + "' of: " + currentDevice);
             }
         }
 
         List<RemoteDevice> describedEmbeddedDevices = new ArrayList();
         if (currentDevice.hasEmbeddedDevices()) {
             for (RemoteDevice embeddedDevice : currentDevice.getEmbeddedDevices()) {
-                if (embeddedDevice == null) continue;
+                 // Skip invalid embedded device
+                if (embeddedDevice == null)
+                    continue;
                 RemoteDevice describedEmbeddedDevice = describeServices(embeddedDevice);
-                if (describedEmbeddedDevice == null) { // Something was wrong, recursively
-                    return null;
-                }
-                describedEmbeddedDevices.add(describedEmbeddedDevice);
+                 // Skip invalid embedded services
+                if (describedEmbeddedDevice != null)
+                    describedEmbeddedDevices.add(describedEmbeddedDevice);
             }
         }
 
