@@ -53,13 +53,6 @@
             <item name="Source" href="/projects/cling/mediarenderer/xref/index.html"/>
         </menu>
 
-        <menu>
-            <item name="OSGi Driver" href="/projects/cling/osgi/"/>
-            <item name="User Manual" href="/projects/cling/osgi/manual/cling-osgi-basedriver-manual.html"/>
-            <item name="API Documentation" href="/projects/cling/osgi/apidocs/index.html"/>
-            <item name="Source (Main)" href="/projects/cling/osgi/xref/index.html"/>
-        </menu>
-
     </body>
 
 </project>

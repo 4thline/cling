@@ -16,7 +16,6 @@
 
     <modules>
         <module>android</module>
-        <module>osgi</module>
     </modules>
 
     <properties>

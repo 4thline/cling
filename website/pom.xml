@@ -73,16 +73,6 @@
                                     </fileset>
                                 </copy>
 
-                                <copy todir="${project.reporting.outputDirectory}/osgi">
-                                    <fileset dir="../osgi/basedriver/target/site">
-                                        <include name="*.html"/>
-                                        <exclude name="project-reports.*"/>
-                                        <include name="manual/**/*"/>
-                                        <include name="apidocs/**/*"/>
-                                        <include name="xref/**/*"/>
-                                    </fileset>
-                                </copy>
-
                                 <!-- The Maven site plugin mangles all filenames, rename them back to .xhtml -->
                                 <move todir="${project.reporting.outputDirectory}">
                                     <fileset dir="${project.reporting.outputDirectory}">
@@ -119,11 +109,6 @@
         <dependency>
             <groupId>org.fourthline.cling</groupId>
             <artifactId>cling-mediarenderer</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.fourthline.cling</groupId>
-            <artifactId>cling-osgi-basedriver</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

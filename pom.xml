@@ -19,10 +19,6 @@
         <module>distribution</module>
         <module>support</module>
         <module>mediarenderer</module>
-        <!-- TODO: Disabled until we have time to upgrade Jetty and integrate UI from old workbench code
-        <module>bridge</module>
-        -->
-        <module>osgi</module>
     </modules>
 
     <!-- ##################################################################################################### -->
@@ -77,7 +73,7 @@
         <apache.httpcomponents.httpclient.version>4.2.2</apache.httpcomponents.httpclient.version>
         <apache.httpcomponents.httpcore.version>4.2.3</apache.httpcomponents.httpcore.version>
         <android.version>4.0.1.2</android.version>
-        <android.maven.plugin.version>3.8.2</android.maven.plugin.version>
+        <android.maven.plugin.version>4.0.0-rc.1</android.maven.plugin.version>
         <jetty.version>8.1.8.v20121106</jetty.version>
         <cdi.api.version>1.0-SP4</cdi.api.version>
         <ejb.api.version>3.0</ejb.api.version>
@@ -90,11 +86,8 @@
         <args4j.version>2.0.12</args4j.version>
         <weld.version>1.1.10.Final</weld.version>
         <javassist.version>3.14.0-GA</javassist.version>
-        <osgi.version>4.2.0</osgi.version>
         <commons.codec.version>1.4</commons.codec.version>
         <commons.logging.version>1.1.1</commons.logging.version>
-        <paxexam.version>1.2.4</paxexam.version>
-        <felix.version>1.4.0</felix.version>
         <kxml.version>2.3.0</kxml.version>
 
     </properties>
@@ -112,20 +105,6 @@
         <repository>
             <id>maven2-repository.dev.java.net</id>
             <url>http://download.java.net/maven/2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>restlet-repo</id>
-            <url>http://maven.restlet.org</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jboss-repo</id>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
@@ -235,13 +214,6 @@
                             <version>1.1.2</version>
                         </dependency>
                     </dependencies>
-                </plugin>
-
-                <!-- OSGi bundles -->
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>2.3.4</version>
                 </plugin>
 
                 <!-- One-JAR executable -->

@@ -17,6 +17,8 @@ Start the Cling MediaRenderer with:
     'java -Djna.library.path=<path to gstreamer> \
           -jar <cling-mediarenderer-standalone.jar>'
 
+Explore the Android demo applications in the demo/android/ folder.
+
 ==============================================================================
 MAVEN USAGE
 ==============================================================================
@@ -68,15 +70,8 @@ Required dependencies of Cling Core (included with this distribution):
 
 Additional dependencies of Cling Core on Android (not included):
 
-    +- org.eclipse.jetty:jetty-server:jar:8.1.8.v20121106
-    |  +- org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016
-    |  +- org.eclipse.jetty:jetty-continuation:jar:8.1.8.v20121106
-    |  \- org.eclipse.jetty:jetty-http:jar:8.1.8.v20121106
-    |     \- org.eclipse.jetty:jetty-io:jar:8.1.8.v20121106
-    |        \- org.eclipse.jetty:jetty-util:jar:8.1.8.v20121106
-    +- org.eclipse.jetty:jetty-servlet:jar:8.1.8.v20121106
-    |  \- org.eclipse.jetty:jetty-security:jar:8.1.8.v20121106
-    +- org.eclipse.jetty:jetty-client:jar:8.1.8.v20121106
+    TODO
+    jetty
     +- org.slf4j:slf4j-jdk14:jar:1.6.1  (or any other SLF4J implementation)
        \- org.slf4j:slf4j-api:jar:1.6.1
 

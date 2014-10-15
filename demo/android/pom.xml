@@ -59,8 +59,12 @@
             <!-- Not needed for FixedAndroidLoggingHandler -->
             <exclusions>
                 <exclusion>
-                    <groupId>android.support</groupId>
-                    <artifactId>compatibility-v13</artifactId>
+                    <groupId>com.android.support</groupId>
+                    <artifactId>support-v4</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.android.support</groupId>
+                    <artifactId>support-v13</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

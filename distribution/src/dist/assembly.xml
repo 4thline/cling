@@ -145,66 +145,6 @@
             </includes>
         </fileSet>
 
-        <!-- Cling OSGi -->
-        <!--
-        <fileSet>
-            <directory>osgi/basedriver/src</directory>
-            <outputDirectory>/osgi/src</outputDirectory>
-            <includes>
-                <include>main/**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>osgi/basedriver/target</directory>
-            <outputDirectory>/osgi</outputDirectory>
-            <includes>
-                <include>*.jar</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>osgi/basedriver/target/site/apidocs</directory>
-            <outputDirectory>/osgi/apidocs</outputDirectory>
-            <includes>
-                <include>**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>osgi/basedriver/target/manual</directory>
-            <outputDirectory>/osgi/manual</outputDirectory>
-            <includes>
-                <include>**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>osgi/samples/basicdevice/target</directory>
-            <outputDirectory>/osgi/samples/basicdevice</outputDirectory>
-            <includes>
-                <include>*.jar</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>osgi/samples/basicdevice/src</directory>
-            <outputDirectory>/osgi/samples/basicdevice/src</outputDirectory>
-            <includes>
-                <include>main/**</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>osgi/samples/lights/target</directory>
-            <outputDirectory>/osgi/samples/lights</outputDirectory>
-            <includes>
-                <include>*.jar</include>
-            </includes>
-        </fileSet>
-        <fileSet>
-            <directory>osgi/samples/lights/src</directory>
-            <outputDirectory>/osgi/samples/lights/src</outputDirectory>
-            <includes>
-                <include>main/**</include>
-            </includes>
-        </fileSet>
-    -->
-
     </fileSets>
 
     <dependencySets>
