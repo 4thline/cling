@@ -22,7 +22,7 @@ import org.fourthline.cling.model.types.UDN;
  * Combines a {@link org.fourthline.cling.model.types.UDN} and a {@link org.fourthline.cling.model.types.ServiceId}.
  * <p>
  * A service reference is useful to remember a service. For example, if a control point has accessed
- * a service one, it can remember the service with {@link org.fourthline.cling.model.meta.Service#getReference()}.
+ * a service once, it can remember the service with {@link org.fourthline.cling.model.meta.Service#getReference()}.
  * Before every action invocation, it can now resolve the reference to an actually registered service with
  * {@link org.fourthline.cling.registry.Registry#getService(ServiceReference)}. If the registry doesn't return
  * a service for the given reference, the service is currently not available.

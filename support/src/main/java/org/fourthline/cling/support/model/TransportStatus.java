@@ -21,7 +21,7 @@ package org.fourthline.cling.support.model;
 public enum TransportStatus {
 
     OK,
-    ERROR_OCCURED,
+    ERROR_OCCURRED,
     CUSTOM;
 
     String value;

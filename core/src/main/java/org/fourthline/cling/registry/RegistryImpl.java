@@ -43,7 +43,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -504,7 +503,7 @@ public class RegistryImpl implements Registry {
         }
 
     }
-    
+
  	@Override
 	public void registerPendingRemoteSubscription(RemoteGENASubscription subscription) {
 		synchronized (pendingSubscriptionsLock) {
