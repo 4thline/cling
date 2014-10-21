@@ -33,11 +33,10 @@ import static org.testng.Assert.assertEquals;
 /**
  * Working with enums
  * <p>
- * Java <code>enum</code>'s are special, unfortunately: You can't instantiate
- * an enum value through reflection. So Cling can convert your enum value
- * into a string for transport in UPnP messages, but you have to convert
- * it back manually from a string. This is shown in the following
- * service example:
+ * Java <code>enum</code>'s are special, unfortunately: Cling can convert
+ * your enum value into a string for transport in UPnP messages, but you
+ * have to convert it back manually from a string. This is shown in the
+ * following service example:
  * </p>
  * <a class="citation" href="javacode://example.localservice.MyServiceWithEnum" style="include: INC1"/>
  * <p>
