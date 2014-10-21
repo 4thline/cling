@@ -61,6 +61,15 @@ public interface ServletContainerAdapter {
     int addConnector(String host, int port) throws IOException;
 
     /**
+     * Removes a previously added connector. Implementation should close the corresponding 
+     * listening server socket. It may stop the server when the last connector is removed.
+     *
+     * @param host The host address of the socket.
+     * @param port The port of the connector
+     */
+    void removeConnector(String host, int port);
+
+    /**
      * Might be called several times to register (the same) handler for UPnP
      * requests, should only register it once.
      *

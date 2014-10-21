@@ -19,6 +19,7 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
 import org.fourthline.cling.mock.MockRouter;
 import org.fourthline.cling.mock.MockUpnpService;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.gena.RemoteGENASubscription;
@@ -36,7 +37,9 @@ import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.test.data.SampleData;
+import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
@@ -44,6 +47,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import static org.testng.Assert.assertEquals;
 
@@ -166,6 +170,144 @@ public class OutgoingSubscriptionLifecycleTest {
         );
     }
 
+    @Test
+    public void subscriptionLifecycleNotifyBeforeResponse() throws Exception {
+
+        final RemoteDevice device = SampleData.createRemoteDevice();
+        final RemoteService service = SampleData.getFirstService(device);
+
+        final StreamResponseMessage subscribeResponseMessage = createSubscribeResponseMessage();
+        final Semaphore subscribeResponseSemaphore = new Semaphore(0);
+
+        final MockUpnpService upnpService = new MockUpnpService() {
+            @Override
+            protected MockRouter createRouter() {
+                return new MockRouter(getConfiguration(), getProtocolFactory()) {
+                    @Override
+                    public StreamResponseMessage getStreamResponseMessage(StreamRequestMessage request) {
+                        try {
+                            // bloc subscription response until the first notification
+                            subscribeResponseSemaphore.acquire();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                        return subscribeResponseMessage;
+                    }
+                };
+            }
+        };
+
+        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> notificationCalled = new ArrayList();
+
+        // Register remote device and its service
+        upnpService.getRegistry().addDevice(device);
+
+        // send subscription request
+        final SubscriptionCallback callback = new SubscriptionCallback(service) {
+
+            @Override
+            protected void failed(GENASubscription subscription,
+                                  UpnpResponse responseStatus,
+                                  Exception exception,
+                                  String defaultMsg) {
+                testAssertions.add(false);
+            }
+
+            @Override
+            public void established(GENASubscription subscription) {
+                testAssertions.add(true);
+            }
+
+            @Override
+            public void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus) {
+            }
+
+            public void eventReceived(GENASubscription subscription) {
+                assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
+                assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
+                testAssertions.add(true);
+                notificationCalled.add(true);
+            }
+
+            public void eventsMissed(GENASubscription subscription, int numberOfMissedEvents) {
+                testAssertions.add(false);
+            }
+
+        };
+
+        // send subscription request is a separate thread
+        Thread subscribeThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                upnpService.getControlPoint().execute(callback);
+            }
+        });
+        subscribeThread.start();
+
+        // generate notification in a separate thread
+        // use a dummy GENASubscription for that to have a valid subscriptionId
+       final GENASubscription subscription = new RemoteGENASubscription(service, 180) {
+            @Override
+            public void established() {
+            }
+            @Override
+            public void eventReceived() {
+            }
+            @Override
+            public void invalidMessage(UnsupportedDataException ex) {
+            }
+            @Override
+            public void failed(UpnpResponse responseStatus) {
+            }
+            @Override
+            public void ended(CancelReason reason, UpnpResponse responseStatus) {
+
+            }
+            @Override
+            public void eventsMissed(int numberOfMissedEvents) {
+            }
+        };
+        subscription.setSubscriptionId("uuid:1234");
+
+        Thread notifyThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Simulate received event before the subscription response
+                try {
+                    upnpService.getProtocolFactory().createReceivingSync(
+                            createEventRequestMessage(upnpService, service, subscription)
+                    ).run();
+                } catch (ProtocolCreationException e) {
+                    testAssertions.add(false);
+                }
+
+            }
+        });
+        notifyThread.start();
+
+        // give time to process notification
+        Thread.sleep(1000);
+
+        // notification should not have been received before the subscribe response
+        assertEquals(0, notificationCalled.size());
+
+        // unlock subscription response
+        subscribeResponseSemaphore.release();
+
+        subscribeThread.join();
+        notifyThread.join();
+
+        // notification should have been received after the subscribe response
+        assertEquals(1, notificationCalled.size());
+
+        for (Boolean testAssertion : testAssertions) {
+            assert testAssertion;
+        }
+    }
+
+
+
     protected StreamResponseMessage createSubscribeResponseMessage() {
         StreamResponseMessage msg = new StreamResponseMessage(new UpnpResponse(UpnpResponse.Status.OK));
         msg.getHeaders().add(
@@ -206,4 +348,30 @@ public class OutgoingSubscriptionLifecycleTest {
         return new IncomingEventRequestMessage(outgoing, ((RemoteGENASubscription)callback.getSubscription()).getService());
     }
 
-}
+
+    protected IncomingEventRequestMessage createEventRequestMessage(final UpnpService upnpService, final RemoteService service, final GENASubscription subscription) {
+
+        List<StateVariableValue> values = new ArrayList();
+        values.add(
+                new StateVariableValue(service.getStateVariable("Status"), false)
+        );
+        values.add(
+                new StateVariableValue(service.getStateVariable("Target"), true)
+        );
+
+        OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(
+                subscription,
+                URIUtil.toURL(URI.create("http://10.0.0.123/this/is/ignored/anyway")),
+                new UnsignedIntegerFourBytes(0),
+                values
+        );
+        outgoing.getOperation().setUri(
+                upnpService.getConfiguration().getNamespace().getEventCallbackPath(service)
+        );
+
+        upnpService.getConfiguration().getGenaEventProcessor().writeBody(outgoing);
+
+        return new IncomingEventRequestMessage(outgoing, service);
+    }
+
+ }

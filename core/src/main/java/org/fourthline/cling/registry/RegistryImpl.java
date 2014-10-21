@@ -524,21 +524,17 @@ public class RegistryImpl implements Registry {
     @Override
     public RemoteGENASubscription getWaitRemoteSubscription(String subscriptionId) {
         synchronized (pendingSubscriptionsLock) {
-            do {
-                RemoteGENASubscription subscription = getRemoteSubscription(subscriptionId);
-                if (subscription != null) {
-                    return subscription;
+            RemoteGENASubscription subscription = getRemoteSubscription(subscriptionId);
+            while (subscription == null && !pendingSubscriptionsLock.isEmpty()) {
+                try {
+                    log.finest("Subscription not found, waiting for pending subscription procedure to terminate.");
+                    pendingSubscriptionsLock.wait();
+                } catch (InterruptedException e) {
                 }
-                if (!pendingSubscriptionsLock.isEmpty()) {
-                    try {
-                        log.finest("Subscription not found, waiting for pending subscription procedure to terminate." );
-                        pendingSubscriptionsLock.wait();
-                    } catch (InterruptedException e) {
-                    }
-                }
-            } while (!pendingSubscriptionsLock.isEmpty());
+                subscription = getRemoteSubscription(subscriptionId);
+            }
+            return subscription;
         }
-        return null;
     }
 
 }
