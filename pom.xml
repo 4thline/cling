@@ -77,17 +77,12 @@
         <jetty.version>8.1.8.v20121106</jetty.version>
         <cdi.api.version>1.0-SP4</cdi.api.version>
         <ejb.api.version>3.0</ejb.api.version>
-        <servlet.api.version>2.5</servlet.api.version>
-        <resteasy.version>2.0.1.GA</resteasy.version>
         <slf4j.version>1.6.1</slf4j.version>
-        <slf4j.bridge.version>1.5.11</slf4j.bridge.version>
         <jna.version>3.2.5</jna.version>
         <gstreamer.version>1.4</gstreamer.version>
         <args4j.version>2.0.12</args4j.version>
         <weld.version>1.1.10.Final</weld.version>
         <javassist.version>3.14.0-GA</javassist.version>
-        <commons.codec.version>1.4</commons.codec.version>
-        <commons.logging.version>1.1.1</commons.logging.version>
         <kxml.version>2.3.0</kxml.version>
 
     </properties>

@@ -6,11 +6,9 @@ https://github.com/4thline/cling/blob/master/distribution/src/dist/README.txt
 Building Cling
 ---------------------
 
-* Install Maven 3.1.1 or newer.
+* Install Maven 3.2.3 or newer.
 
 * Install the Android SDK and set the ANDROID_HOME environment variable to the SDK install directory.
-
-* Copy the Android SDK's Maven extras `$ANDROID_HOME/extras/android/m2repository` to your local Maven repository `~/.m2`.
 
 * Clone the Cling source:
 

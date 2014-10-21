@@ -30,6 +30,7 @@ import org.fourthline.cling.registry.DefaultRegistryListener;
 import org.fourthline.cling.registry.Registry;
 import org.fourthline.cling.test.data.SampleData;
 import org.testng.annotations.Test;
+import org.xml.sax.SAXParseException;
 
 import static org.testng.Assert.assertEquals;
 
@@ -166,9 +167,10 @@ public class RegistryListenerTest {
                         }
                         return new StreamResponseMessage[]{
                             new StreamResponseMessage(deviceDescriptorXML, ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8),
-                            null,
-                            null,
-                            null // Don't return any service descriptors, make it fail
+                            new StreamResponseMessage(
+                                "<?xml>THIS SHOULD BE SERVER DESCRIPTOR XML, BUT WE WANT IT TO FAIL WITH SAXParseException.",
+                                ContentTypeHeader.DEFAULT_CONTENT_TYPE_UTF8
+                            ),
                         };
                     }
                 };
@@ -212,7 +214,8 @@ public class RegistryListenerTest {
 
         @Override
         public void remoteDeviceDiscoveryFailed(Registry registry, RemoteDevice device, Exception ex) {
-            valid = true;
+            if(ex.getCause() instanceof SAXParseException)
+                valid = true;
         }
     }
 
