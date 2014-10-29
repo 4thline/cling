@@ -361,7 +361,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
     public Document buildDOM(Service service) throws DescriptorBindingException {
 
         try {
-            log.fine("Generting XML descriptor from service model: " + service);
+            log.fine("Generating XML descriptor from service model: " + service);
 
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setNamespaceAware(true);
