@@ -70,6 +70,11 @@ public class ContainerFormPanel extends JPanel {
         if (container.getWriteStatus() != null)
             form.addLabelAndLastField("UPnP Write Status:", container.getWriteStatus().toString(), this);
 
+        form.addSeparator(this);
+
+        if (container.hasProperty(DIDLObject.Property.UPNP.ALBUM_ART_URI.class))
+            form.addLabelAndLastField("UPnP Album Art URI:", container.getFirstProperty(DIDLObject.Property.UPNP.ALBUM_ART_URI.class).toString(), this);
+
         for (DIDLObject.Class searchClass : container.getSearchClasses()) {
             form.addSeparator(this);
 

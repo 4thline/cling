@@ -90,9 +90,17 @@ public abstract class ItemFormPanel extends JPanel {
         if (item.hasProperty(DIDLObject.Property.DC.RIGHTS.class))
             form.addLabelAndLastField("DC Rights:", item.getFirstProperty(DIDLObject.Property.DC.RELATION.class).toString(), this);
 
+        if (item.hasProperty(DIDLObject.Property.UPNP.ARTIST.class))
+            form.addLabelAndLastField("UPnP Artist:", item.getFirstProperty(DIDLObject.Property.UPNP.ARTIST.class).toString(), this);
 
         if (item.hasProperty(DIDLObject.Property.UPNP.ALBUM.class))
             form.addLabelAndLastField("UPnP Album:", item.getFirstProperty(DIDLObject.Property.UPNP.ALBUM.class).toString(), this);
+
+        if (item.hasProperty(DIDLObject.Property.UPNP.ALBUM_ART_URI.class))
+            form.addLabelAndLastField("UPnP Album Art URI:", item.getFirstProperty(DIDLObject.Property.UPNP.ALBUM_ART_URI.class).toString(), this);
+
+        if (item.hasProperty(DIDLObject.Property.UPNP.LYRICS_URI.class))
+            form.addLabelAndLastField("UPnP Lyrics URI:", item.getFirstProperty(DIDLObject.Property.UPNP.LYRICS_URI.class).toString(), this);
 
         if (item.hasProperty(DIDLObject.Property.UPNP.GENRE.class))
             form.addLabelAndLastField("UPnP Genre:", item.getFirstProperty(DIDLObject.Property.UPNP.GENRE.class).toString(), this);
