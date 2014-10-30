@@ -17,6 +17,7 @@ package org.fourthline.cling.workbench.plugins.contentdirectory.impl;
 
 import org.fourthline.cling.support.model.DIDLObject;
 import org.fourthline.cling.support.model.container.Container;
+import org.fourthline.cling.workbench.plugins.contentdirectory.SelectableFieldsForm;
 import org.seamless.swing.Form;
 
 import javax.swing.JPanel;
@@ -35,62 +36,62 @@ public class ContainerFormPanel extends JPanel {
 
         this.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        Form form = new Form(5);
+        SelectableFieldsForm form = new SelectableFieldsForm(5);
 
-        form.addLabelAndLastField("Title:", container.getTitle(), this);
+        form.addLabelAndSelectableLastField("Title:", container.getTitle(), this);
 
         if (container.getCreator() != null) {
-            form.addLabelAndLastField("DC Creator:", container.getCreator(), this);
+            form.addLabelAndSelectableLastField("DC Creator:", container.getCreator(), this);
         }
 
-        form.addLabelAndLastField("UPnP Class:", container.getClazz().getValue(), this);
-        form.addLabelAndLastField("ID:", container.getId(), this);
-        form.addLabelAndLastField("Parent ID:", container.getParentID(), this);
+        form.addLabelAndSelectableLastField("UPnP Class:", container.getClazz().getValue(), this);
+        form.addLabelAndSelectableLastField("ID:", container.getId(), this);
+        form.addLabelAndSelectableLastField("Parent ID:", container.getParentID(), this);
 
         Integer childCount = container.getChildCount();
-        form.addLabelAndLastField("Child Count:", childCount != null ? childCount.toString() : "-", this);
-        form.addLabelAndLastField("Restricted?", Boolean.toString(container.isRestricted()), this);
-        form.addLabelAndLastField("Searchable?", Boolean.toString(container.isSearchable()), this);
+        form.addLabelAndSelectableLastField("Child Count:", childCount != null ? childCount.toString() : "-", this);
+        form.addLabelAndSelectableLastField("Restricted?", Boolean.toString(container.isRestricted()), this);
+        form.addLabelAndSelectableLastField("Searchable?", Boolean.toString(container.isSearchable()), this);
 
         if (container.hasProperty(DIDLObject.Property.UPNP.STORAGE_FREE.class))
-            form.addLabelAndLastField("UPnP Storage Free:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_FREE.class).toString(), this);
+            form.addLabelAndSelectableLastField("UPnP Storage Free:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_FREE.class).toString(), this);
 
         if (container.hasProperty(DIDLObject.Property.UPNP.STORAGE_MAX_PARTITION.class))
-            form.addLabelAndLastField("UPnP Max Partition:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_MAX_PARTITION.class).toString(), this);
+            form.addLabelAndSelectableLastField("UPnP Max Partition:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_MAX_PARTITION.class).toString(), this);
 
         if (container.hasProperty(DIDLObject.Property.UPNP.STORAGE_TOTAL.class))
-            form.addLabelAndLastField("UPnP Storage Total:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_TOTAL.class).toString(), this);
+            form.addLabelAndSelectableLastField("UPnP Storage Total:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_TOTAL.class).toString(), this);
 
         if (container.hasProperty(DIDLObject.Property.UPNP.STORAGE_USED.class))
-            form.addLabelAndLastField("UPnP Storage Used:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_USED.class).toString(), this);
+            form.addLabelAndSelectableLastField("UPnP Storage Used:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_USED.class).toString(), this);
 
         if (container.hasProperty(DIDLObject.Property.UPNP.STORAGE_MEDIUM.class))
-            form.addLabelAndLastField("UPnP Storage Medium:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_MEDIUM.class).toString(), this);
+            form.addLabelAndSelectableLastField("UPnP Storage Medium:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_MEDIUM.class).toString(), this);
 
         if (container.getWriteStatus() != null)
-            form.addLabelAndLastField("UPnP Write Status:", container.getWriteStatus().toString(), this);
+            form.addLabelAndSelectableLastField("UPnP Write Status:", container.getWriteStatus().toString(), this);
 
         form.addSeparator(this);
 
         if (container.hasProperty(DIDLObject.Property.UPNP.ALBUM_ART_URI.class))
-            form.addLabelAndLastField("UPnP Album Art URI:", container.getFirstProperty(DIDLObject.Property.UPNP.ALBUM_ART_URI.class).toString(), this);
+            form.addLabelAndSelectableLastField("UPnP Album Art URI:", container.getFirstProperty(DIDLObject.Property.UPNP.ALBUM_ART_URI.class).toString(), this);
 
         for (DIDLObject.Class searchClass : container.getSearchClasses()) {
             form.addSeparator(this);
 
-            form.addLabelAndLastField(
+            form.addLabelAndSelectableLastField(
                     "UPnP Search Class:",
                     searchClass.getValue(),
                     this
             );
             if (searchClass.getFriendlyName() != null) {
-                form.addLabelAndLastField(
+                form.addLabelAndSelectableLastField(
                         "Friendly Name:",
                         searchClass.getFriendlyName(),
                         this
                 );
             }
-            form.addLabelAndLastField(
+            form.addLabelAndSelectableLastField(
                     "Includes Derived?",
                     Boolean.toString(searchClass.isIncludeDerived()),
                     this
@@ -100,19 +101,19 @@ public class ContainerFormPanel extends JPanel {
         for (DIDLObject.Class createClass : container.getCreateClasses()) {
             form.addSeparator(this);
 
-            form.addLabelAndLastField(
+            form.addLabelAndSelectableLastField(
                     "UPnP Create Class:",
                     createClass.getValue(),
                     this
             );
             if (createClass.getFriendlyName() != null) {
-                form.addLabelAndLastField(
+                form.addLabelAndSelectableLastField(
                         "Friendly Name:",
                         createClass.getFriendlyName(),
                         this
                 );
             }
-            form.addLabelAndLastField(
+            form.addLabelAndSelectableLastField(
                     "Includes Derived?",
                     Boolean.toString(createClass.isIncludeDerived()),
                     this
