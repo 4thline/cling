@@ -53,8 +53,8 @@ import java.util.logging.Logger;
  * registry.
  * </p>
  * <p>
- * Even better, you can listen to GENA UPnP events with the same API - although
- * this will require some magic for subscription...
+ * Even better, in the future you might be able to listen to GENA UPnP events with
+ * the same API - although this will require some magic for subscription...
  * </p>
  * <p>
  * TODO: This is a work in progress.

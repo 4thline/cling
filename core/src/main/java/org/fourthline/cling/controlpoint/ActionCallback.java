@@ -22,7 +22,6 @@ import org.fourthline.cling.model.message.control.IncomingActionResponseMessage;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.ErrorCode;
 import org.fourthline.cling.protocol.sync.SendingAction;
 
 import java.net.URL;
