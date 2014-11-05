@@ -29,6 +29,8 @@ public class SwitchPower {
 
     @UpnpAction(out = @UpnpOutputArgument(name = "ResultStatus"))
     public boolean getStatus() {
+        // If you want to pass extra UPnP information on error:
+        // throw new ActionException(ErrorCode.ACTION_NOT_AUTHORIZED);
         return status;
     }
 
