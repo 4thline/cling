@@ -48,12 +48,18 @@ public abstract class DIDLObject {
 
         protected Property(V value, String descriptorName) {
             this.value = value;
-            this.descriptorName = descriptorName == null ? getClass().getSimpleName().toLowerCase(Locale.ROOT) : descriptorName;
+            // TODO Not sure this is a good fix for https://github.com/4thline/cling/issues/62
+            this.descriptorName = descriptorName == null
+                ? getClass().getSimpleName().toLowerCase(Locale.ROOT).replace("didlobject$property$upnp$", "")
+                : descriptorName;
         }
 
         protected Property(V value, String descriptorName, List<Property<DIDLAttribute>> attributes) {
             this.value = value;
-            this.descriptorName = descriptorName == null ? getClass().getSimpleName().toLowerCase(Locale.ROOT) : descriptorName;
+            // TODO Not sure this is a good fix for https://github.com/4thline/cling/issues/62
+            this.descriptorName = descriptorName == null
+                ? getClass().getSimpleName().toLowerCase(Locale.ROOT).replace("didlobject$property$upnp$", "")
+                : descriptorName;
             this.attributes.addAll(attributes);
         }
 
