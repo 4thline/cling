@@ -18,7 +18,6 @@
 
         <menu>
             <item name="Overview" href="/projects/cling/"/>
-            <item name="Changelog" href="/projects/cling/changelog.txt"/>
             <item name="Road Map" href="/projects/cling/roadmap.html"/>
             <item name="FAQ" href="/projects/cling/faq.html"/>
             <item name="In Production" href="/projects/cling/inproduction.html"/>
@@ -44,7 +43,6 @@
             <item name="App: Workbench" href="/projects/cling/workbench/"/>
             <item name="Screenshots" href="/projects/cling/workbench/screenshots.html"/>
             <item name="Source" href="/projects/cling/workbench/xref/index.html"/>
-            <item name="WAN Bridge" href="/projects/cling/workbench/wanbridge.html"/>
         </menu>
 
         <menu>

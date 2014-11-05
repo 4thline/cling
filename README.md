@@ -24,6 +24,8 @@ git clone https://github.com/4thline/cling.git
 mvn clean install
 ````
 
+If your build fails with Android/dex packaging errors, you forgot the clean.
+
 * Use Cling in your pom.xml with:
 
 ````
@@ -31,7 +33,7 @@ mvn clean install
   <dependency>
     <groupId>org.fourthline.cling</groupId>
     <artifactId>cling-core</artifactId>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0.0</version>
   </dependency>
 </dependencies>
 ````

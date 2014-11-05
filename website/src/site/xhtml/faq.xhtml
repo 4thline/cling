@@ -25,13 +25,13 @@
             <p>
                 Cling Core is compatible with the
                 <a href="http://upnp.org/specs/arch/UPnP-arch-DeviceArchitecture-v1.0.pdf">
-                UPnP Device Architecture 1.0</a>.
+                    UPnP Device Architecture 1.0</a>.
             </p>
         </dd>
         <dt>
             <a id="g2"/>
             <a href="#g2">
-            <em>Can I use Cling to access a UPnP/DLNA MediaServer in Android?</em>
+                <em>Can I use Cling to access a UPnP/DLNA MediaServer in Android?</em>
             </a>
         </dt>
         <dd>
@@ -45,7 +45,7 @@
         <dt>
             <a id="g3"/>
             <a href="#g3">
-            <em>Can I use Cling in my commercial application or device?</em>
+                <em>Can I use Cling in my commercial application or device?</em>
             </a>
         </dt>
         <dd>
@@ -61,20 +61,40 @@
                     Free Software.
                 </li>
                 <li>
-                    You have to allow replacement of the Cling library in your distributed application. This means
-                    replacement of the JAR file (e.g. in a WAR or EAR package) or replacement of Cling .class files
-                    in the Android APK package (dex2jar). You can not lock your distribution package with any kind
-                    of obfuscation or DRM scheme.
+                    You have to allow replacement of the Cling library in your distributed application. This
+                    means allowing replacement of the Cling JAR or JVM binary class file(s) in, for example, a
+                    WAR or EAR package.
                 </li>
                 <li>
-                    If you modify Cling source code, and you distribute a binary compiled from this modified source
-                    code, you have to distribute your changed source code as well under the LGPL (upon request).
-                    Typically this means you contribute your changes  back to the Cling project, to be included in
-                    an official Cling release.
+                    For Cling 1.x, the following <strong>exception for static linking of an executable</strong>
+                    (see <a href="https://www.gnu.org/licenses/lgpl.html">LGPLv3 clause 4</a> or LGPLv2 clause 6b)
+                    applies to Cling
+                    usage within <strong>Android applications</strong> and the DEX instead of the JVM binary
+                    format: Converting Cling's binary JVM class files to the DEX format, and distributing a
+                    combined work as an Android APK does not affect the licensing of other resources within that
+                    DEX or APK archive. You must however allow re-packaging/conversion of the DEX and APK with
+                    tools such as <a href="http://code.google.com/p/dex2jar/">dex2jar</a>. Anyone receiving your
+                    APK must be able to replace the Cling binary code with a compatible version. You can
+                    <em>not</em> lock your APK with any kind of obfuscation or DRM scheme, or otherwise prevent
+                    unpacking and reassembly of the DEX containing Cling binaries. Alternatively, consider
+                    <a href="http://android-developers.blogspot.ch/2011/07/custom-class-loading-in-dalvik.html">
+                        dynamic loading of libraries on Android</a>.
+                </li>
+                <li>
+                    For Cling 2.x, you may at your option license Cling under CDDL instead of the LGPL. You
+                    can convert to DEX and package Cling 2.x within an APK without affect on other files in
+                    that APK. You can obfuscate the source in the APK and lock it with digital restrictions.
+                </li>
+                <li>
+                    If you modify Cling source code, and you distribute a binary compiled from this modified
+                    source code, you have to distribute your changed source code as well under the LGPL or
+                    CDDL (upon request). Typically this means you contribute your changes back to the Cling
+                    project, to be included in an official Cling release.
                 </li>
             </ul>
             <p>
-                <a href="mailto:license(at)4thline.com">Contact us</a> if you have questions about the licensing of Cling.
+                <a class="externalLink" href="mailto:license(at)4thline.com">Contact us</a> if you have
+                questions about the licensing of Cling and/or require a proprietary license.
             </p>
         </dd>
     </dl>
@@ -85,7 +105,7 @@
         <dt>
             <a id="t1"/>
             <a href="#t1">
-            <em>What are the dependencies of Cling Core?</em>
+                <em>What are the dependencies of Cling Core?</em>
             </a>
         </dt>
         <dd>
@@ -93,27 +113,27 @@
                 Cling Core is distributed as a single JAR file. It only has one other
                 dependency, the <code>seamless-*</code> libraries. All JAR files are
                 typically packaged next to each other in the ZIP distribution. You
-                have to add these JAR files to your classpath.
+                have to add them to your classpath.
             </p>
         </dd>
         <dt>
             <a id="t2"/>
             <a href="#t2">
-            <em>How can I access the services of a device?</em>
+                <em>How can I access the services of a device?</em>
             </a>
         </dt>
         <dd>
             <p>
                 First write a control point and a <code>RegistryListener</code> as explained
                 <a href="/projects/cling/core/manual/cling-core-manual.html#section.BinaryLightClient">in
-                the manual</a>. Then call <code>device.getServices()</code> when a device has
+                    the manual</a>. Then call <code>device.getServices()</code> when a device has
                 been discovered.
             </p>
         </dd>
         <dt>
             <a id="t3"/>
             <a href="#t3">
-            <em>Cling doesn't work if I start my application on Tomcat/JBoss/Glassfish/etc?!</em>
+                <em>Cling doesn't work if I start my application on Tomcat/JBoss/Glassfish/etc?!</em>
             </a>
         </dt>
         <dd>
@@ -123,14 +143,15 @@
                 an old and badly designed part of the JDK: Only "one application" in the whole
                 JVM can configure it. You have to switch Cling to an alternative HTTP client,
                 e.g. the other bundled implementation based on Apache HTTP Core. This is explained
-                in more detail in <a href="/projects/cling/core/manual/cling-core-manual.html#section.BasicAPI.UpnpService.Configuration">
+                in more detail in <a
+                    href="/projects/cling/core/manual/cling-core-manual.html#section.BasicAPI.UpnpService.Configuration">
                 the user manual</a>.
             </p>
         </dd>
         <dt>
             <a id="t4"/>
             <a href="#t4">
-            <em>Is IPv6 supported?</em>
+                <em>Is IPv6 supported?</em>
             </a>
         </dt>
         <dd>
@@ -146,7 +167,7 @@
         <dt>
             <a id="t5"/>
             <a href="#t5">
-            <em>I don't see debug log messages on Android?</em>
+                <em>I don't see debug log messages on Android?</em>
             </a>
         </dt>
         <dd>
@@ -154,7 +175,46 @@
                 The java.util.logging implementation on Android is broken, it does not allow you to print
                 debug-level messages easily. See
                 <a href="http://mailinglists.945824.n3.nabble.com/Setting-Cling-Log-Levels-in-Android-tp2010097p2010097.html">this
-                discussion</a> for a simple solution.
+                    discussion</a> for a simple solution.
+            </p>
+        </dd>
+        <dt>
+            <a id="t6"/>
+            <a href="#t6">
+                <em>Where can I find the source for Cling 1.x and teleal-common?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                <a href="/projects/download/archive/">Here.</a>
+            </p>
+        </dd>
+        <dt>
+            <a id="t7"/>
+            <a href="#t7">
+                <em>Wich version of Android (API) is supported by Cling?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                Cling 1.0 supports Android 2.1. With Cling 2.0, we currently require platform level 15 (Android 4.0.3).
+            </p>
+        </dd>
+        <dt>
+            <a id="t8"/>
+            <a href="#t8">
+                <em>I get a lock acquisition timeout exception?</em>
+            </a>
+        </dt>
+        <dd>
+            <p>
+                Your service receives a subscription, then this happens:
+            </p>
+            <pre>RuntimeException at org.teleal.cling.protocol.sync.ReceivingSubscribe.responseSent(ReceivingSubscribe.java:177)</pre>
+            <p>
+                Your service was already being used by something else and didn't give up the lock during the 500
+                millisecond default wait time. Increase the wait time by overriding DefaultServiceManager in
+                LocalService. Or don't block the service action/methods for a long time.
             </p>
         </dd>
     </dl>

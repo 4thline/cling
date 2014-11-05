@@ -21,20 +21,20 @@
     <hr/>
 
     <h2>
-        Cling 2.0
+        Cling 2.0.1
     </h2>
 
     <ul>
         <li>
-            <strong>Integration with and for CDI (IN PROGRESS)</strong>
-            <p>
-                Currently all modules (transport, protocol, registry, binding) of Cling are wired through
-                constructor injection from a single UpnpService entry point constructor. We can keep this
-                flexibility (easy overriding by developers of create() methods) but at the same time enable
-                dependency injection frameworks. This is mostly adding CDI annotations on core classes and
-                testing Cling Core with <a href="http://seamframework.org/Weld">Weld</a>.
-            </p>
+            <strong>Minor bugfixes</strong>
         </li>
+    </ul>
+
+    <h2>
+        Future
+    </h2>
+
+    <ul>
         <li>
             <strong>Client/server profile system</strong>
             <p>
@@ -55,10 +55,10 @@
             </p>
         </li>
         <li>
-            <strong>GENA eventing support in the HTTP bridge</strong>
+            <strong>GENA eventing support in (and reactivating) the HTTP bridge</strong>
             <p>
                 This has already been designed and needs to be implemented,
-                see <a href="/svn/cling/trunk/misc/Bridge%20Architecture.graffle">Bridge Architecture.graffle</a> in SVN.
+                see <a href="https://github.com/4thline/cling/raw/master/misc/Bridge%20Architecture.graffle">Bridge Architecture.graffle</a>.
             </p>
         </li>
     </ul>

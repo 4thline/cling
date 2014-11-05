@@ -5,11 +5,24 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ##################################################################################################### -->
+    <!--
+
+    BUILD NOTES
+
+    Build only the manual of core (or other module), in root pom.xml's current directory (output in ./target/manual/)
+
+        mvn -N clean org.fourthline.lemma:lemma-maven-plugin:manual \
+            -Dmanual.templateFilename=cling-core-manual.xhtml \
+            -Dmanual.manualSourceDirectory=core/src/manual \
+            -Dmanual.testSourceDirectory=core/src/test
+
+    -->
+    <!-- ##################################################################################################### -->
 
     <groupId>org.fourthline.cling</groupId>
     <artifactId>cling</artifactId>
     <packaging>pom</packaging>
-    <version>2.0-SNAPSHOT</version>
+    <version>2.0.0</version>
 
     <modules>
         <module>core</module>
@@ -67,8 +80,8 @@
         <maven.compiler.source>6</maven.compiler.source>
         <maven.compiler.target>6</maven.compiler.target>
 
-        <seamless.version>1.0-alpha3</seamless.version>
-        <lemma.version>1.1-SNAPSHOT</lemma.version>
+        <seamless.version>1.0.0</seamless.version>
+        <lemma.version>1.1.0</lemma.version>
         <testng.version>6.2</testng.version>
         <apache.httpcomponents.httpclient.version>4.2.2</apache.httpcomponents.httpclient.version>
         <apache.httpcomponents.httpcore.version>4.2.3</apache.httpcomponents.httpcore.version>
@@ -94,7 +107,7 @@
             <id>4thline-repo</id>
             <url>http://4thline.org/m2</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
         </repository>
         <repository>
@@ -111,7 +124,7 @@
             <id>4thline-repo</id>
             <url>http://4thline.org/m2</url>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
         <pluginRepository>
@@ -191,16 +204,10 @@
                     <version>2.4.1</version>
                 </plugin>
 
-                <!-- WAR bundle for bridge -->
-                <plugin>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.1</version>
-                </plugin>
-
                 <!-- Website lifecycle -->
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.0-beta-3</version>
+                    <version>3.3</version>
                     <dependencies>
                         <!-- We have raw XHTML files -->
                         <dependency>
@@ -216,13 +223,6 @@
                     <groupId>org.dstovall</groupId>
                     <artifactId>onejar-maven-plugin</artifactId>
                     <version>1.4.4</version>
-                </plugin>
-
-                <!-- OS X executable -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>osxappbundle-maven-plugin</artifactId>
-                    <version>1.0-alpha-2</version>
                 </plugin>
 
                 <!-- Manual generation settings -->
@@ -301,14 +301,5 @@
     </dependencies>
 
     <!-- ##################################################################################################### -->
-
-    <!--
-        Build only the core (or other module) manual, parent pom.xml's current directory (output in ./target/manual/)
-
-        mvn -N clean org.fourthline.lemma:lemma-maven-plugin:manual \
-            -Dmanual.templateFilename=cling-core-manual.xhtml \
-            -Dmanual.manualSourceDirectory=core/src/manual \
-            -Dmanual.testSourceDirectory=core/src/test
-    -->
 
 </project>

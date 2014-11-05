@@ -42,8 +42,6 @@ Add this dependency to your pom.xml:
         <version>${project.version}</version>
     </dependency>
 
-The current unstable version is 2.0-SNAPSHOT.
-
 For Cling on Android with Maven, please see the pom.xml example in the
 demo/android/ folder.
 
@@ -51,11 +49,7 @@ demo/android/ folder.
 BUILDING CLING
 ==============================================================================
 
-To build the source of 2.0-SNAPSHOT, clone it with:
-
-    git clone https://github.com/4thline/cling.git'
-
-Run "mvn install" to build the JAR files and store them in your local repo.
+See https://github.com/4thline/cling
 
 ==============================================================================
 DEPENDENCIES
@@ -63,21 +57,28 @@ DEPENDENCIES
 
 Required dependencies of Cling Core (included with this distribution):
 
-    +- org.fourthline.cling:cling-core:jar:2.0-SNAPSHOT
-       +- org.seamless:seamless-util:jar:1.0-alpha3
-       +- org.seamless:seamless-http:jar:1.0-alpha3
-       \- org.seamless:seamless-xml:jar:1.0-alpha3
+    +- org.fourthline.cling:cling-core:jar:2.0.0
+       +- org.seamless:seamless-util:jar:1.0.0
+       +- org.seamless:seamless-http:jar:1.0.0
+       \- org.seamless:seamless-xml:jar:1.0.0
 
 Additional dependencies of Cling Core on Android (not included):
 
-    TODO
-    jetty
+    +- org.eclipse.jetty:jetty-server:jar:8.1.8.v20121106
+    |  +- org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016
+    |  +- org.eclipse.jetty:jetty-continuation:jar:8.1.8.v20121106
+    |  \- org.eclipse.jetty:jetty-http:jar:8.1.8.v20121106
+    |     \- org.eclipse.jetty:jetty-io:jar:8.1.8.v20121106
+    |        \- org.eclipse.jetty:jetty-util:jar:8.1.8.v20121106
+    +- org.eclipse.jetty:jetty-servlet:jar:8.1.8.v20121106
+    |  \- org.eclipse.jetty:jetty-security:jar:8.1.8.v20121106
+    +- org.eclipse.jetty:jetty-client:jar:8.1.8.v20121106
     +- org.slf4j:slf4j-jdk14:jar:1.6.1  (or any other SLF4J implementation)
        \- org.slf4j:slf4j-api:jar:1.6.1
 
 If you need the fixed Android java.util.logging Handler:
 
-    +- org.seamless:seamless-android:jar:1.0-alpha3
+    +- org.seamless:seamless-android:jar:1.0.0
        \- android.support:compatibility-v13:jar:10 (Exclude this in pom.xml)
 
 WARNING: Jetty JAR files each contain an 'about.html' file, you will get
@@ -89,7 +90,7 @@ JAR files and remove 'about.html'.
 
 Feedback, bug reports: http://4thline.org/projects/mailinglists.html
 
-Copyright 2013, 4th Line GmbH, Switzerland, http://4thline.com/
+Copyright 2014, 4th Line GmbH, Switzerland, http://4thline.com/
 
 You may at your option receive a license to this program under EITHER
 the terms of the GNU Lesser General Public License (LGPL) OR the

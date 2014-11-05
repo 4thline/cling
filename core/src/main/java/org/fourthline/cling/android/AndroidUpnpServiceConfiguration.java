@@ -44,7 +44,7 @@ import org.fourthline.cling.transport.spi.StreamServer;
  * client and server. The servlet context path for UPnP is set to <code>/upnp</code>.
  * </p>
  * <p>
- * The kxml2 implementation of <code>org.xmlpull</code> is available Android, therefore
+ * The kxml2 implementation of <code>org.xmlpull</code> is available on Android, therefore
  * this configuration uses {@link RecoveringUDA10DeviceDescriptorBinderImpl},
  * {@link RecoveringSOAPActionProcessorImpl}, and {@link RecoveringGENAEventProcessorImpl}.
  * </p>
