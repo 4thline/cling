@@ -47,6 +47,11 @@ import org.xml.sax.SAXException;
  * Validates against a schema if the {@link #getSchemaSources()} method
  * doesn't return <code>null</code>.
  * </p>
+ * <p>
+ * Note: This is broken on most devices and with most services out in the wild. In fact,
+ * you might want to use polling the service with actions, to get its status, instead of
+ * GENA. Polling can be expensive on low-power control points, however.
+ * </p>
  *
  * @author Christian Bauer
  */
