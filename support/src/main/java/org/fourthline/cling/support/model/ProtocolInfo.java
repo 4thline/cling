@@ -39,7 +39,7 @@ public class ProtocolInfo {
         if (split.length != 4) {
             throw new InvalidValueException("Can't parse ProtocolInfo string: " + s);
         }
-        this.protocol = Protocol.valueOrNullOf(split[0]);
+        this.protocol = Protocol.value(split[0]);
         this.network = split[1];
         this.contentFormat = split[2];
         this.additionalInfo = split[3];

@@ -15,8 +15,10 @@
 
 package org.fourthline.cling.support.model;
 
+import java.util.logging.Logger;
+
 /**
- *
+ * @author Christian Bauer
  */
 public enum Protocol {
 
@@ -24,7 +26,11 @@ public enum Protocol {
     HTTP_GET("http-get"),
     RTSP_RTP_UDP("rtsp-rtp-udp"),
     INTERNAL("internal"),
-    IEC61883("iec61883");
+    IEC61883("iec61883"),
+    XBMC_GET("xbmc-get"),
+    OTHER("other");
+
+    private static final Logger LOG = Logger.getLogger(Protocol.class.getName());
 
     private String protocolString;
 
@@ -37,13 +43,14 @@ public enum Protocol {
         return protocolString;
     }
 
-    public static Protocol valueOrNullOf(String s) {
+    public static Protocol value(String s) {
         for (Protocol protocol : values()) {
             if (protocol.toString().equals(s)) {
                 return protocol;
             }
         }
-        return null;
+        LOG.info("Unsupported OTHER protocol string: " + s);
+        return OTHER;
     }
 
 }
