@@ -41,27 +41,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Build an OS X application and disk image -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>osxappbundle-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>bundle</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <mainClass>org.fourthline.cling.mediarenderer.MediaRenderer</mainClass>
-                    <iconFile>${basedir}/src/main/resources/MediaRendererIcon.icns</iconFile>
-                    <jvmVersion>1.6+</jvmVersion>
-                    <javaApplicationStub>${basedir}/../misc/JavaApplicationStub</javaApplicationStub>
-                    <vmOptions>-Djna.library.path=/opt/local/lib</vmOptions>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
