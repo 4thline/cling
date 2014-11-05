@@ -165,7 +165,7 @@ public class UpnpServiceImpl implements UpnpService {
             if (cause instanceof InterruptedException) {
                 log.log(Level.INFO, "Router shutdown was interrupted: " + ex, cause);
             } else {
-                throw new RuntimeException("Router error on shutdown: " + ex, ex);
+                log.log(Level.SEVERE, "Router error on shutdown: " + ex, cause);
             }
         }
     }
