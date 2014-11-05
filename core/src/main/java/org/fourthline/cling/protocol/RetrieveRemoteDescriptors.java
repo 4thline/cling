@@ -217,14 +217,14 @@ public class RetrieveRemoteDescriptors implements Runnable {
                             new DescriptorBindingException("Device service description failed: " + rd)
                     );
                 return;
+            } else {
+                log.fine("Adding fully hydrated remote device to registry: " + hydratedDevice);
+                // The registry will do the right thing: A new root device is going to be added, if it's
+                // already present or we just received the descriptor again (because we got an embedded
+                // devices' notification), it will simply update the expiration timestamp of the root
+                // device.
+                getUpnpService().getRegistry().addDevice(hydratedDevice);
             }
-
-            log.fine("Adding fully hydrated remote device to registry: " + hydratedDevice);
-            // The registry will do the right thing: A new root device is going to be added, if it's
-            // already present or we just received the descriptor again (because we got an embedded
-            // devices' notification), it will simply update the expiration timestamp of the root
-            // device.
-            getUpnpService().getRegistry().addDevice(hydratedDevice);
 
         } catch (ValidationException ex) {
     		// Avoid error log spam each time device is discovered, errors are logged once per device.
