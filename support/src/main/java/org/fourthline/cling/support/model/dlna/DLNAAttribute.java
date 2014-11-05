@@ -17,6 +17,7 @@ package org.fourthline.cling.support.model.dlna;
 import org.seamless.util.Exceptions;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,7 +53,7 @@ public abstract class DLNAAttribute<T> {
         private static Map<String, Type> byName = new HashMap<String, Type>() {
             {
                 for (Type t : Type.values()) {
-                    put(t.getAttributeName().toUpperCase(), t);
+                    put(t.getAttributeName().toUpperCase(Locale.ROOT), t);
                 }
             }
         };
@@ -77,7 +78,7 @@ public abstract class DLNAAttribute<T> {
             if (attributeName == null) {
                 return null;
             }
-            return byName.get(attributeName.toUpperCase());
+            return byName.get(attributeName.toUpperCase(Locale.ROOT));
         }
     }
 

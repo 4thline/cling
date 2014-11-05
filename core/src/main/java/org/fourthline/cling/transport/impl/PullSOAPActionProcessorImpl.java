@@ -15,11 +15,7 @@
 
 package org.fourthline.cling.transport.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 import org.fourthline.cling.model.action.ActionArgumentValue;
@@ -123,9 +119,9 @@ public class PullSOAPActionProcessorImpl extends SOAPActionProcessorImpl {
         // This is a case-insensitive search!
         List<String> names = new ArrayList<String>();
         for (ActionArgument argument : args) {
-            names.add(argument.getName().toUpperCase());
+            names.add(argument.getName().toUpperCase(Locale.ROOT));
             for (String alias : Arrays.asList(argument.getAliases())) {
-                names.add(alias.toUpperCase());
+                names.add(alias.toUpperCase(Locale.ROOT));
             }
         }
 
@@ -136,7 +132,7 @@ public class PullSOAPActionProcessorImpl extends SOAPActionProcessorImpl {
         int event;
         do {
             event = xpp.next();
-            if(event == XmlPullParser.START_TAG && names.contains(xpp.getName().toUpperCase())) {
+            if(event == XmlPullParser.START_TAG && names.contains(xpp.getName().toUpperCase(Locale.ROOT))) {
                 matches.put(xpp.getName(), xpp.nextText());
             }
 

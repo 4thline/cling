@@ -22,6 +22,7 @@ import org.seamless.xml.ParserException;
 import org.seamless.xml.XmlPullParserUtils;
 import org.xml.sax.SAXParseException;
 
+import java.util.Locale;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -195,7 +196,7 @@ public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescri
         // Add missing namespace, it only matters that it is defined, not that it is correct
         return "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>"
             + "<root "
-            + String.format("xmlns:%s=\"urn:schemas-dlna-org:device-1-0\"", missingNS) + rootAttributes + ">"
+            + String.format(Locale.ROOT, "xmlns:%s=\"urn:schemas-dlna-org:device-1-0\"", missingNS) + rootAttributes + ">"
             + rootBody
             + "</root>";
 

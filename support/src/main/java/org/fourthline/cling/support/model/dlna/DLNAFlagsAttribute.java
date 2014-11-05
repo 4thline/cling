@@ -15,6 +15,7 @@
 package org.fourthline.cling.support.model.dlna;
 
 import java.util.EnumSet;
+import java.util.Locale;
 
 /**
  * @author Mario Franco
@@ -61,6 +62,6 @@ public class DLNAFlagsAttribute extends DLNAAttribute<EnumSet<DLNAFlags>> {
         for (DLNAFlags op : getValue()) {
             code |= op.getCode();
         }
-        return String.format("%08x%024x", code, 0);
+        return String.format(Locale.ROOT, "%08x%024x", code, 0);
     }
 }

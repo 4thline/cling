@@ -123,7 +123,7 @@ public abstract class UpnpHeader<T> {
          */
         public static Type getByHttpName(String httpName) {
             if (httpName == null) return null;
-        	return byName.get(httpName.toUpperCase(Locale.ENGLISH));
+        	return byName.get(httpName.toUpperCase(Locale.ROOT));
         }
     }
 

@@ -39,7 +39,7 @@ public class MaxAgeHeader extends UpnpHeader<Integer> {
 
     public void setString(String s) throws InvalidHeaderException {
 
-        Matcher matcher = MAX_AGE_REGEX.matcher(s.toLowerCase(Locale.ENGLISH));
+        Matcher matcher = MAX_AGE_REGEX.matcher(s.toLowerCase(Locale.ROOT));
         if (!matcher.matches()){
             throw new InvalidHeaderException("Invalid cache-control value, can't parse max-age seconds: " + s);
         }

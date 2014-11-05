@@ -348,23 +348,23 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             return false;
         }
 
-        if (iface.getName().toLowerCase(Locale.ENGLISH).startsWith("vmnet") ||
-        		(iface.getDisplayName() != null &&  iface.getDisplayName().toLowerCase(Locale.ENGLISH).contains("vmnet"))) {
+        if (iface.getName().toLowerCase(Locale.ROOT).startsWith("vmnet") ||
+        		(iface.getDisplayName() != null &&  iface.getDisplayName().toLowerCase(Locale.ROOT).contains("vmnet"))) {
             log.finer("Skipping network interface (VMWare): " + iface.getDisplayName());
             return false;
         }
 
-        if (iface.getName().toLowerCase(Locale.ENGLISH).startsWith("vnic")) {
+        if (iface.getName().toLowerCase(Locale.ROOT).startsWith("vnic")) {
             log.finer("Skipping network interface (Parallels): " + iface.getDisplayName());
             return false;
         }
 
-        if (iface.getName().toLowerCase(Locale.ENGLISH).contains("virtual")) {
+        if (iface.getName().toLowerCase(Locale.ROOT).contains("virtual")) {
             log.finer("Skipping network interface (named '*virtual*'): " + iface.getDisplayName());
             return false;
         }
 
-        if (iface.getName().toLowerCase(Locale.ENGLISH).startsWith("ppp")) {
+        if (iface.getName().toLowerCase(Locale.ROOT).startsWith("ppp")) {
             log.finer("Skipping network interface (PPP): " + iface.getDisplayName());
             return false;
         }

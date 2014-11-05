@@ -42,7 +42,7 @@ public class Base64Datatype extends AbstractDatatype<byte[]> {
     public String getString(byte[] value) throws InvalidValueException {
         if (value == null) return "";
         try {
-            return new String(Base64Coder.encode(value));
+            return new String(Base64Coder.encode(value), "UTF-8");
         } catch (Exception ex) {
             throw new InvalidValueException(ex.getMessage(), ex);
         }

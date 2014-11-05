@@ -14,6 +14,7 @@
  */
 package org.fourthline.cling.support.model.dlna.types;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,9 +94,9 @@ public class NormalPlayTime {
                 seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds));
                 long hours = TimeUnit.MILLISECONDS.toHours(milliseconds);
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(milliseconds));
-                return String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, ms);
+                return String.format(Locale.ROOT, "%d:%02d:%02d.%03d", hours, minutes, seconds, ms);
             default:
-                return String.format("%d.%03d", seconds, ms);
+                return String.format(Locale.ROOT, "%d.%03d", seconds, ms);
         }
     }
 

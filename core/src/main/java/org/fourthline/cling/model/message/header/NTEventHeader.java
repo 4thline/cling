@@ -27,7 +27,7 @@ public class NTEventHeader extends UpnpHeader<String> {
     }
 
     public void setString(String s) throws InvalidHeaderException {
-        if (!s.toLowerCase(Locale.ENGLISH).equals(getValue())) {
+        if (!s.toLowerCase(Locale.ROOT).equals(getValue())) {
             throw new InvalidHeaderException("Invalid event NT header value: " + s);
         }
     }

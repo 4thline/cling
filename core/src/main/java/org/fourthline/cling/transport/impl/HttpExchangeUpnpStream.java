@@ -77,7 +77,7 @@ public abstract class HttpExchangeUpnpStream extends UpnpStream {
 
             // Protocol
             requestMessage.getOperation().setHttpMinorVersion(
-                    getHttpExchange().getProtocol().toUpperCase(Locale.ENGLISH).equals("HTTP/1.1") ? 1 : 0
+                    getHttpExchange().getProtocol().toUpperCase(Locale.ROOT).equals("HTTP/1.1") ? 1 : 0
             );
 
             log.fine("Created new request message: " + requestMessage);

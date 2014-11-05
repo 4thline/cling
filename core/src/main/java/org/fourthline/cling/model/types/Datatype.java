@@ -141,9 +141,9 @@ public interface Datatype<V> {
         private static Map<String, Builtin> byName = new HashMap<String, Builtin>() {{
             for (Builtin b : Builtin.values()) {
                 // Lowercase descriptor name!
-                if (containsKey(b.getDescriptorName().toLowerCase(Locale.ENGLISH)))
+                if (containsKey(b.getDescriptorName().toLowerCase(Locale.ROOT)))
                     continue; // Ignore double-declarations, take first one only
-                put(b.getDescriptorName().toLowerCase(Locale.ENGLISH), b);
+                put(b.getDescriptorName().toLowerCase(Locale.ROOT), b);
             }
         }};
 
@@ -169,7 +169,7 @@ public interface Datatype<V> {
             // they are case sensitive. But we want to work with broken devices, which of
             // course produce mixed upper/lowercase values.
             if (descriptorName == null) return null;
-            return byName.get(descriptorName.toLowerCase(Locale.ENGLISH));
+            return byName.get(descriptorName.toLowerCase(Locale.ROOT));
         }
 
         public static boolean isNumeric(Builtin builtin) {

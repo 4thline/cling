@@ -49,7 +49,7 @@ public class DatagramProcessorImpl implements DatagramProcessor {
 
             if (log.isLoggable(Level.FINER)) {
                 log.finer("===================================== DATAGRAM BEGIN ============================================");
-                log.finer(new String(datagram.getData()));
+                log.finer(new String(datagram.getData(), "UTF-8"));
                 log.finer("-===================================== DATAGRAM END =============================================");
             }
 
@@ -130,7 +130,7 @@ public class DatagramProcessorImpl implements DatagramProcessor {
         // Assemble message
         IncomingDatagramMessage requestMessage;
         UpnpRequest upnpRequest = new UpnpRequest(UpnpRequest.Method.getByHttpName(requestMethod));
-        upnpRequest.setHttpMinorVersion(httpProtocol.toUpperCase(Locale.ENGLISH).equals("HTTP/1.1") ? 1 : 0);
+        upnpRequest.setHttpMinorVersion(httpProtocol.toUpperCase(Locale.ROOT).equals("HTTP/1.1") ? 1 : 0);
         requestMessage = new IncomingDatagramMessage(upnpRequest, datagram.getAddress(), datagram.getPort(), receivedOnAddress);
 
         requestMessage.setHeaders(headers);
@@ -151,7 +151,7 @@ public class DatagramProcessorImpl implements DatagramProcessor {
         // Assemble the message
         IncomingDatagramMessage responseMessage;
         UpnpResponse upnpResponse = new UpnpResponse(statusCode, statusMessage);
-        upnpResponse.setHttpMinorVersion(httpProtocol.toUpperCase(Locale.ENGLISH).equals("HTTP/1.1") ? 1 : 0);
+        upnpResponse.setHttpMinorVersion(httpProtocol.toUpperCase(Locale.ROOT).equals("HTTP/1.1") ? 1 : 0);
         responseMessage = new IncomingDatagramMessage(upnpResponse, datagram.getAddress(), datagram.getPort(), receivedOnAddress);
 
         responseMessage.setHeaders(headers);

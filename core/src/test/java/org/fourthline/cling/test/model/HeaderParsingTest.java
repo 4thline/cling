@@ -494,7 +494,7 @@ public class HeaderParsingTest {
     public void parseInterfaceMacAddress() {
         InterfaceMacHeader header = new InterfaceMacHeader("00:17:ab:e9:65:a0");
         assertEquals(header.getValue().length, 6);
-        assertEquals(header.getString().toUpperCase(Locale.ENGLISH), "00:17:AB:E9:65:A0");
+        assertEquals(header.getString().toUpperCase(Locale.ROOT), "00:17:AB:E9:65:A0");
     }
 
     @Test

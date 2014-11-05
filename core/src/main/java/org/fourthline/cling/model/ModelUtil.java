@@ -85,7 +85,7 @@ public class ModelUtil {
         if (ANDROID_RUNTIME) {
             return name != null && name.length() != 0;
         }
-        return name != null && name.length() != 0 && !name.toLowerCase(Locale.ENGLISH).startsWith("xml") && name.matches(Constants.REGEX_UDA_NAME);
+        return name != null && name.length() != 0 && !name.toLowerCase(Locale.ROOT).startsWith("xml") && name.matches(Constants.REGEX_UDA_NAME);
     }
 
     /**

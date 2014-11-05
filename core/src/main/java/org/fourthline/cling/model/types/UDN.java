@@ -107,7 +107,7 @@ public class UDN {
             } catch (Exception ex) {
                 // Could not find local host name, try to get the MAC address of loopback interface
                 try {
-                    systemSalt.append(new String(ModelUtil.getFirstNetworkInterfaceHardwareAddress()));
+                    systemSalt.append(new String(ModelUtil.getFirstNetworkInterfaceHardwareAddress(), "UTF-8"));
                 } catch (Throwable ex1) {
                     // Ignore, we did everything we can
                     log.severe(
@@ -126,7 +126,7 @@ public class UDN {
         systemSalt.append(System.getProperty("os.name"));
         systemSalt.append(System.getProperty("os.version"));
         try {
-            byte[] hash = MessageDigest.getInstance("MD5").digest(systemSalt.toString().getBytes());
+            byte[] hash = MessageDigest.getInstance("MD5").digest(systemSalt.toString().getBytes("UTF-8"));
             return new UDN(
                     new UUID(
                             new BigInteger(-1, hash).longValue(),

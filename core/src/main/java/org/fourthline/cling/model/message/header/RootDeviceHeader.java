@@ -27,7 +27,7 @@ public class RootDeviceHeader extends UpnpHeader<String> {
     }
 
     public void setString(String s) throws InvalidHeaderException {
-        if (!s.toLowerCase(Locale.ENGLISH).equals(getValue())) {
+        if (!s.toLowerCase(Locale.ROOT).equals(getValue())) {
             throw new InvalidHeaderException("Invalid root device NT header value: " + s);
         }
     }

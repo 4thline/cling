@@ -28,6 +28,7 @@ import org.fourthline.cling.transport.spi.UpnpStream;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -180,7 +181,11 @@ public class StreamServerImpl implements StreamServer<StreamServerConfigurationI
      * </p>
      */
     protected boolean isConnectionOpen(Socket socket) {
-        return isConnectionOpen(socket, " ".getBytes());
+        try {
+            return isConnectionOpen(socket, " ".getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     protected boolean isConnectionOpen(Socket socket, byte[] heartbeat) {

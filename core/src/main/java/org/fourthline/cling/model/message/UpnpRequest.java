@@ -57,7 +57,7 @@ public class UpnpRequest extends UpnpOperation {
 
         public static Method getByHttpName(String httpName) {
             if (httpName == null) return UNKNOWN;
-        	Method m = byName.get(httpName.toUpperCase(Locale.ENGLISH));
+        	Method m = byName.get(httpName.toUpperCase(Locale.ROOT));
             return m != null ? m : UNKNOWN;
         }
     }
