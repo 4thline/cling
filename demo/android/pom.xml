@@ -22,7 +22,7 @@
         <pluginManagement>
             <plugins>
                 <plugin>
-                    <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                    <groupId>com.simpligility.maven.plugins</groupId>
                     <artifactId>android-maven-plugin</artifactId>
                     <version>${android.maven.plugin.version}</version>
                     <extensions>true</extensions>
@@ -56,15 +56,12 @@
             <groupId>org.seamless</groupId>
             <artifactId>seamless-android</artifactId>
             <version>${seamless.version}</version>
+            <type>aar</type>
             <!-- Not needed for FixedAndroidLoggingHandler -->
             <exclusions>
                 <exclusion>
-                    <groupId>com.android.support</groupId>
-                    <artifactId>support-v4</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.android.support</groupId>
-                    <artifactId>support-v13</artifactId>
+                    <groupId>android.support</groupId>
+                    <artifactId>compatibility-v13</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
