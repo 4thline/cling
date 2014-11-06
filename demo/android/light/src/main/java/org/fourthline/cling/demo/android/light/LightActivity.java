@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
+import org.fourthline.cling.android.FixedAndroidLogHandler;
 import org.fourthline.cling.binding.LocalServiceBindingException;
 import org.fourthline.cling.binding.annotations.AnnotationLocalServiceBinder;
 import org.fourthline.cling.model.DefaultServiceManager;
@@ -110,9 +111,9 @@ public class LightActivity extends Activity implements PropertyChangeListener {
         super.onCreate(savedInstanceState);
         // DOC:LOGGING
         // Fix the logging integration between java.util.logging and Android internal logging
-        org.seamless.util.logging.LoggingUtil.resetRootHandler(
-            new org.seamless.android.FixedAndroidLogHandler()
-        );
+        // org.seamless.util.logging.LoggingUtil.resetRootHandler(
+        //    new FixedAndroidLogHandler()
+        // );
         // Logger.getLogger("org.fourthline.cling").setLevel(Level.FINEST);
         // DOC:LOGGING
 

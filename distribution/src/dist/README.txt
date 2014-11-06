@@ -57,7 +57,7 @@ DEPENDENCIES
 
 Required dependencies of Cling Core (included with this distribution):
 
-    +- org.fourthline.cling:cling-core:jar:2.0.0
+    +- org.fourthline.cling:cling-core:jar:2.0.1
        +- org.seamless:seamless-util:jar:1.0.0
        +- org.seamless:seamless-http:jar:1.0.0
        \- org.seamless:seamless-xml:jar:1.0.0
@@ -75,11 +75,6 @@ Additional dependencies of Cling Core on Android (not included):
     +- org.eclipse.jetty:jetty-client:jar:8.1.8.v20121106
     +- org.slf4j:slf4j-jdk14:jar:1.6.1  (or any other SLF4J implementation)
        \- org.slf4j:slf4j-api:jar:1.6.1
-
-If you need the fixed Android java.util.logging Handler:
-
-    +- org.seamless:seamless-android:jar:1.0.0
-       \- android.support:compatibility-v13:jar:10 (Exclude this in pom.xml)
 
 WARNING: Jetty JAR files each contain an 'about.html' file, you will get
 an error when trying to package your application with APK. Use the Android

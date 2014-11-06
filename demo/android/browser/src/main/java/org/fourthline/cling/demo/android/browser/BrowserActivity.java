@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import org.fourthline.cling.android.AndroidUpnpService;
 import org.fourthline.cling.android.AndroidUpnpServiceImpl;
+import org.fourthline.cling.android.FixedAndroidLogHandler;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.RemoteDevice;
@@ -90,7 +91,7 @@ public class BrowserActivity extends ListActivity {
 
         // Fix the logging integration between java.util.logging and Android internal logging
         org.seamless.util.logging.LoggingUtil.resetRootHandler(
-            new org.seamless.android.FixedAndroidLogHandler()
+            new FixedAndroidLogHandler()
         );
         // Now you can enable logging as needed for various categories of Cling:
         // Logger.getLogger("org.fourthline.cling").setLevel(Level.FINEST);

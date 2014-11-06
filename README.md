@@ -33,7 +33,7 @@ If your build fails with Android/dex packaging errors, you forgot the clean.
   <dependency>
     <groupId>org.fourthline.cling</groupId>
     <artifactId>cling-core</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
   </dependency>
 </dependencies>
 ````
