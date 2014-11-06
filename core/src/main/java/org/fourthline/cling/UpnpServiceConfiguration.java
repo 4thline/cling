@@ -35,7 +35,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 
 /**
- * Shared configuration data of the UPnP stack..
+ * Shared configuration data of the UPnP stack.
  * <p>
  * This interface offers methods for retrieval of configuration data by the
  * {@link org.fourthline.cling.transport.Router} and the {@link org.fourthline.cling.registry.Registry},
@@ -185,7 +185,7 @@ public interface UpnpServiceConfiguration {
      * remote device disappears from the network and you will not receive its periodic heartbeat
      * alive messages. Only an initial search response (UDP unicast) has been received from the
      * remote device, with its proposed maximum age. To avoid (early) expiration of the remote
-     * device, you can override its maxium age with this configuration setting, ignoring the
+     * device, you can override its maximum age with this configuration setting, ignoring the
      * initial maximum age sent by the device. You most likely want to return
      * <code>0</code> in this case, so that the remote device is never expired unless you
      * manually remove it from the {@link org.fourthline.cling.registry.Registry}. You typically remove
