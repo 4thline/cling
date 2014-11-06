@@ -55,6 +55,20 @@ public class InstanceViewImpl extends JPanel implements InstanceView {
                 new Object[]{this}
         );
 
+        playerPanel.getPreviousButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                presenter.onPreviousSelected(getInstanceId());
+            }
+        });
+
+        playerPanel.getNextButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                presenter.onNextSelected(getInstanceId());
+            }
+        });
+
         playerPanel.getFwdButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
