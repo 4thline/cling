@@ -36,6 +36,8 @@ public class PlayerPanel extends JPanel {
     public static String[] ACTION_STOP = {"Stop", "avTransportStop"};
     public static String[] ACTION_SKIP_FW = {"Skip +15s", "avTransportSkipFW"};
     public static String[] ACTION_SKIP_REW = {"Skip -15s", "avTransportSkipREW"};
+    public static String[] ACTION_PREVIOUS= {"Previous", "avTransportPrevious"};
+    public static String[] ACTION_NEXT= {"Next", "avTransportNext"};
 
     class PlayerButton extends JButton {
         PlayerButton(String text, String icon) {
@@ -46,11 +48,13 @@ public class PlayerPanel extends JPanel {
         }
     }
 
+    final private PlayerButton previousButton = new PlayerButton(ACTION_PREVIOUS[0], "img/32/player_previous.png");
     final private PlayerButton rewButton = new PlayerButton(ACTION_SKIP_REW[0], "img/32/player_rew.png");
     final private PlayerButton pauseButton = new PlayerButton(ACTION_PAUSE[0], "img/32/player_pause.png");
     final private PlayerButton playButton = new PlayerButton(ACTION_PLAY[0], "img/32/player_play.png");
     final private PlayerButton stopButton= new PlayerButton(ACTION_STOP[0], "img/32/player_stop.png");
     final private PlayerButton fwdButton = new PlayerButton(ACTION_SKIP_FW[0], "img/32/player_fwd.png");
+    final private PlayerButton nextButton = new PlayerButton(ACTION_NEXT[0], "img/32/player_next.png");
 
     public PlayerPanel() {
         super();
@@ -60,11 +64,13 @@ public class PlayerPanel extends JPanel {
 
         add(Box.createHorizontalGlue());
 
+        add(previousButton);
         add(rewButton);
         add(stopButton);
         add(pauseButton);
         add(playButton);
         add(fwdButton);
+        add(nextButton);
 
         add(Box.createHorizontalGlue());
 
@@ -72,16 +78,22 @@ public class PlayerPanel extends JPanel {
     }
 
     public void setAllButtons(boolean enabled) {
+        previousButton.setEnabled(enabled);
         rewButton.setEnabled(enabled);
         pauseButton.setEnabled(enabled);
         playButton.setEnabled(enabled);
         stopButton.setEnabled(enabled);
         fwdButton.setEnabled(enabled);
+        nextButton.setEnabled(enabled);
     }
 
     public void togglePause() {
         playButton.setVisible(!playButton.isVisible());
         pauseButton.setVisible(!pauseButton.isVisible());
+    }
+
+    public PlayerButton getPreviousButton() {
+        return previousButton;
     }
 
     public JButton getRewButton() {
@@ -102,5 +114,9 @@ public class PlayerPanel extends JPanel {
 
     public JButton getFwdButton() {
         return fwdButton;
+    }
+
+    public PlayerButton getNextButton() {
+        return nextButton;
     }
 }

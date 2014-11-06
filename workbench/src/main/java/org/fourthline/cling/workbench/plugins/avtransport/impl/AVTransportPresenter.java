@@ -25,8 +25,10 @@ import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.support.avtransport.callback.GetMediaInfo;
 import org.fourthline.cling.support.avtransport.callback.GetPositionInfo;
 import org.fourthline.cling.support.avtransport.callback.GetTransportInfo;
+import org.fourthline.cling.support.avtransport.callback.Next;
 import org.fourthline.cling.support.avtransport.callback.Pause;
 import org.fourthline.cling.support.avtransport.callback.Play;
+import org.fourthline.cling.support.avtransport.callback.Previous;
 import org.fourthline.cling.support.avtransport.callback.Seek;
 import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
 import org.fourthline.cling.support.avtransport.callback.Stop;
@@ -244,6 +246,49 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
             targetSeconds = Math.min(0, currentSeconds - deltaSeconds);
         }
         onSeekSelected(instanceId, ModelUtil.toTimeString(targetSeconds));
+    }
+
+
+    @Override
+    public void onPreviousSelected(int instanceId) {
+        controlPoint.execute(
+                new Previous(new UnsignedIntegerFourBytes(instanceId), service) {
+                    @Override
+                    public void success(ActionInvocation invocation) {
+                        AVTransportControlPoint.LOGGER.info(
+                                "Called 'Previous' action successfully"
+                        );
+                    }
+
+                    @Override
+                    public void failure(ActionInvocation invocation,
+                                        UpnpResponse operation,
+                                        String defaultMsg) {
+                        AVTransportControlPoint.LOGGER.severe(defaultMsg);
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onNextSelected(int instanceId) {
+        controlPoint.execute(
+                new Next(new UnsignedIntegerFourBytes(instanceId), service) {
+                    @Override
+                    public void success(ActionInvocation invocation) {
+                        AVTransportControlPoint.LOGGER.info(
+                                "Called 'Next' action successfully"
+                        );
+                    }
+
+                    @Override
+                    public void failure(ActionInvocation invocation,
+                                        UpnpResponse operation,
+                                        String defaultMsg) {
+                        AVTransportControlPoint.LOGGER.severe(defaultMsg);
+                    }
+                }
+        );
     }
 
     @Override

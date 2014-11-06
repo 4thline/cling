@@ -36,6 +36,9 @@ public class PausedPlay extends InstanceViewState {
                 view.getPlayerPanel().getStopButton().setEnabled(true);
                 view.getPlayerPanel().getPlayButton().setEnabled(true);
                 view.getProgressPanel().getPositionSlider().setEnabled(true);
+
+                view.getPlayerPanel().getPreviousButton().setEnabled(true);
+                view.getPlayerPanel().getNextButton().setEnabled(true);
             }
         };
     }

@@ -38,6 +38,10 @@ public interface InstanceView extends View<InstanceView.Presenter> {
 
         void onSeekSelected(int instanceId, int deltaSeconds, boolean forwards);
 
+        void onPreviousSelected(int instanceId);
+
+        void onNextSelected(int instanceId);
+
         void onUpdatePositionInfo(int instanceId);
     }
 
