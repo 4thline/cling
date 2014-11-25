@@ -15,6 +15,7 @@
 
 package org.fourthline.cling.workbench.plugins.avtransport;
 
+import org.fourthline.cling.support.model.PlayMode;
 import org.fourthline.cling.support.model.PositionInfo;
 import org.fourthline.cling.support.model.TransportState;
 import org.fourthline.cling.support.shared.View;
@@ -43,11 +44,15 @@ public interface InstanceView extends View<InstanceView.Presenter> {
         void onNextSelected(int instanceId);
 
         void onUpdatePositionInfo(int instanceId);
+
+        void onSetPlayModeSelected(int instanceId, PlayMode playMode);
     }
 
     void init(int instanceId);
 
     void setState(TransportState state);
+
+    void setPlayMode(PlayMode playMode);
 
     PositionInfo getProgress();
 
