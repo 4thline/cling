@@ -76,23 +76,23 @@ public abstract class SubscriptionCallback implements Runnable {
 
     protected static Logger log = Logger.getLogger(SubscriptionCallback.class.getName());
 
-    protected final Service service;
+    protected final Service<?, ?> service;
     protected final Integer requestedDurationSeconds;
 
     private ControlPoint controlPoint;
-    private GENASubscription subscription;
+    private GENASubscription<?> subscription;
 
-    protected SubscriptionCallback(Service service) {
+    protected SubscriptionCallback(Service<?, ?> service) {
         this.service = service;
         this.requestedDurationSeconds = UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS;
     }
 
-    protected SubscriptionCallback(Service service, int requestedDurationSeconds) {
+    protected SubscriptionCallback(Service<?, ?> service, int requestedDurationSeconds) {
         this.service = service;
         this.requestedDurationSeconds = requestedDurationSeconds;
     }
 
-    public Service getService() {
+    public Service<?, ?> getService() {
         return service;
     }
 
@@ -104,11 +104,11 @@ public abstract class SubscriptionCallback implements Runnable {
         this.controlPoint = controlPoint;
     }
 
-    synchronized public GENASubscription getSubscription() {
+    synchronized public GENASubscription<?> getSubscription() {
         return subscription;
     }
 
-    synchronized public void setSubscription(GENASubscription subscription) {
+    synchronized public void setSubscription(GENASubscription<?> subscription) {
         this.subscription = subscription;
     }
 
@@ -269,7 +269,7 @@ public abstract class SubscriptionCallback implements Runnable {
         );
     }
 
-    protected void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception) {
+    protected void failed(GENASubscription<?> subscription, UpnpResponse responseStatus, Exception exception) {
         failed(subscription, responseStatus, exception, createDefaultFailureMessage(responseStatus, exception));
     }
 
@@ -284,14 +284,14 @@ public abstract class SubscriptionCallback implements Runnable {
      * @param defaultMsg     A user-friendly error message.
      * @see #createDefaultFailureMessage
      */
-    protected abstract void failed(GENASubscription subscription, UpnpResponse responseStatus, Exception exception, String defaultMsg);
+    protected abstract void failed(GENASubscription<?> subscription, UpnpResponse responseStatus, Exception exception, String defaultMsg);
 
     /**
      * Called when a local or remote subscription was successfully established.
      *
      * @param subscription The successful subscription.
      */
-    protected abstract void established(GENASubscription subscription);
+    protected abstract void established(GENASubscription<?> subscription);
 
     /**
      * Called when a local or remote subscription ended, either on user request or because of a failure.
@@ -301,18 +301,18 @@ public abstract class SubscriptionCallback implements Runnable {
      * @param responseStatus For a remote subscription, if the cause implies a remopte response and it was
      *                       received, this is it (e.g. renewal failure response).
      */
-    protected abstract void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus);
+    protected abstract void ended(GENASubscription<?> subscription, CancelReason reason, UpnpResponse responseStatus);
 
     /**
      * Called when an event for an established subscription has been received.
      * <p>
-     * Use the {@link org.fourthline.cling.model.gena.GENASubscription#getCurrentValues()} method to obtain
+     * Use the {@link org.fourthline.cling.model.gena.GENASubscription<?>#getCurrentValues()} method to obtain
      * the evented state variable values.
      * </p>
      *
      * @param subscription The established subscription with fresh state variable values.
      */
-    protected abstract void eventReceived(GENASubscription subscription);
+    protected abstract void eventReceived(GENASubscription<?> subscription);
 
     /**
      * Called when a received event was out of sequence, indicating that events have been missed.
@@ -322,7 +322,7 @@ public abstract class SubscriptionCallback implements Runnable {
      * @param subscription The established subscription.
      * @param numberOfMissedEvents The number of missed events.
      */
-    protected abstract void eventsMissed(GENASubscription subscription, int numberOfMissedEvents);
+    protected abstract void eventsMissed(GENASubscription<?> subscription, int numberOfMissedEvents);
 
     /**
      * @param responseStatus The (HTTP) response or <code>null</code> if there was no response.
