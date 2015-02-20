@@ -109,7 +109,8 @@ public class IGDSampleData {
             @UpnpStateVariable(name = "ConnectionStatus", datatype = "string", sendEvents = false),
             @UpnpStateVariable(name = "LastConnectionError", datatype = "string", sendEvents = false),
             @UpnpStateVariable(name = "Uptime", datatype = "ui4", sendEvents = false),
-            @UpnpStateVariable(name = "ExternalIPAddress", datatype = "string", sendEvents = false)
+            @UpnpStateVariable(name = "ExternalIPAddress", datatype = "string", sendEvents = false),
+            @UpnpStateVariable(name = "PortMappingIndex", datatype = "ui2", sendEvents = false)
 
     })
     public static class WANIPConnectionService {
@@ -156,6 +157,22 @@ public class IGDSampleData {
             } catch (Exception ex) {
                 throw new ActionException(ErrorCode.ACTION_FAILED, "Can't convert port mapping: " + ex.toString(), ex);
             }
+        }
+
+        @UpnpAction(out = {
+                @UpnpOutputArgument(name = "NewRemoteHost", stateVariable = "RemoteHost", getterName = "getRemoteHost"),
+                @UpnpOutputArgument(name = "NewExternalPort", stateVariable = "ExternalPort", getterName = "getExternalPort"),
+                @UpnpOutputArgument(name = "NewProtocol", stateVariable = "PortMappingProtocol", getterName = "getProtocol"),
+                @UpnpOutputArgument(name = "NewInternalPort", stateVariable = "InternalPort", getterName = "getInternalPort"),
+                @UpnpOutputArgument(name = "NewInternalClient", stateVariable = "InternalClient", getterName = "getInternalClient"),
+                @UpnpOutputArgument(name = "NewEnabled", stateVariable = "PortMappingEnabled", getterName = "isEnabled"),
+                @UpnpOutputArgument(name = "NewPortMappingDescription", stateVariable = "PortMappingDescription", getterName = "getDescription"),
+                @UpnpOutputArgument(name = "NewLeaseDuration", stateVariable = "PortMappingLeaseDuration", getterName = "getLeaseDurationSeconds")
+        })
+        public PortMapping getGenericPortMappingEntry(
+                @UpnpInputArgument(name = "NewPortMappingIndex", stateVariable = "PortMappingIndex") UnsignedIntegerTwoBytes index
+        ) throws ActionException {
+            return null;
         }
 
         protected void addPortMapping(PortMapping portMapping) {
