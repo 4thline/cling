@@ -3,6 +3,12 @@ Read the README.txt
 
 https://github.com/4thline/cling/blob/master/distribution/src/dist/README.txt
 
+About this build
+----------------
+
+This cling branch will merge a various PRs intended for the central cling repository at https://github.com/4thline/cling.
+
+
 Building Cling
 ---------------------
 
