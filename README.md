@@ -11,6 +11,7 @@ This cling branch will merge a various PRs intended for the central cling reposi
 Included:
 
 * https://github.com/4thline/cling/pull/105
+* https://github.com/4thline/cling/pull/106
 
 Building Cling
 ---------------------
