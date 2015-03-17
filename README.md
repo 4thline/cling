@@ -13,6 +13,7 @@ Included:
 * https://github.com/4thline/cling/pull/105
 * https://github.com/4thline/cling/pull/106
 * https://github.com/4thline/cling/pull/108
+* https://github.com/4thline/cling/pull/109
 
 Building Cling
 ---------------------
