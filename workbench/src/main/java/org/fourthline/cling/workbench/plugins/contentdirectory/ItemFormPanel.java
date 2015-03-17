@@ -114,6 +114,9 @@ public abstract class ItemFormPanel extends JPanel {
         if (item.hasProperty(DIDLObject.Property.UPNP.REGION.class))
             form.addLabelAndSelectableLastField("UPnP Region:", item.getFirstProperty(DIDLObject.Property.UPNP.REGION.class).toString(), this);
 
+        if (item.hasProperty(DIDLObject.Property.UPNP.ORIGINAL_TRACK_NUMBER.class))
+            form.addLabelAndSelectableLastField("UPnP Track:", item.getFirstProperty(DIDLObject.Property.UPNP.ORIGINAL_TRACK_NUMBER.class).toString(), this);
+
         for (final Res resource : item.getResources()) {
 
             form.addSeparator(this);
