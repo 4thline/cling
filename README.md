@@ -8,6 +8,9 @@ About this build
 
 This cling branch will merge a various PRs intended for the central cling repository at https://github.com/4thline/cling.
 
+Included:
+
+* https://github.com/4thline/cling/pull/105
 
 Building Cling
 ---------------------
