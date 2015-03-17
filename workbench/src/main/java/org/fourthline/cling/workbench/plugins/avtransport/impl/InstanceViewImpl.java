@@ -16,6 +16,7 @@
 package org.fourthline.cling.workbench.plugins.avtransport.impl;
 
 import org.fourthline.cling.model.ModelUtil;
+import org.fourthline.cling.support.model.PlayMode;
 import org.fourthline.cling.support.model.PositionInfo;
 import org.fourthline.cling.support.model.TransportState;
 import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
@@ -28,6 +29,8 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.net.URI;
 
 /**
@@ -36,12 +39,14 @@ import java.net.URI;
 public class InstanceViewImpl extends JPanel implements InstanceView {
 
     final protected PlayerPanel playerPanel = new PlayerPanel();
+    final protected PlayModePanel playModePanel = new PlayModePanel();
     final protected ProgressPanel progressPanel = new ProgressPanel();
     final protected URIPanel uriPanel = new URIPanel();
 
     protected InstanceViewStateMachine viewStateMachine;
     protected int instanceId;
     protected Presenter presenter;
+    private ItemListener playModeSpinnerItemListener;
 
     @Override
     public void init(int instanceId) {
@@ -102,9 +107,19 @@ public class InstanceViewImpl extends JPanel implements InstanceView {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 presenter.onPlaySelected(getInstanceId());
-
             }
         });
+
+        playModeSpinnerItemListener = new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent event) {
+                if (event.getStateChange() == ItemEvent.SELECTED) {
+                    final PlayMode playMode = (PlayMode) event.getItem();
+                    presenter.onSetPlayModeSelected(getInstanceId(), playMode);
+                }
+            }
+        };
+        playModePanel.getPlayModeSpinner().addItemListener(playModeSpinnerItemListener);
 
         progressPanel.getPositionSlider().addChangeListener(new ChangeListener() {
             @Override
@@ -144,6 +159,7 @@ public class InstanceViewImpl extends JPanel implements InstanceView {
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         add(playerPanel);
+        add(playModePanel);
         add(progressPanel);
         add(uriPanel);
     }
@@ -172,6 +188,13 @@ public class InstanceViewImpl extends JPanel implements InstanceView {
                 );
             }
         }
+    }
+
+    @Override
+    synchronized public void setPlayMode(PlayMode playMode) {
+        playModePanel.getPlayModeSpinner().removeItemListener(playModeSpinnerItemListener);
+        playModePanel.getPlayModeSpinner().setSelectedItem(playMode);
+        playModePanel.getPlayModeSpinner().addItemListener(playModeSpinnerItemListener);
     }
 
     @Override

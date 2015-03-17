@@ -31,8 +31,10 @@ import org.fourthline.cling.support.avtransport.callback.Play;
 import org.fourthline.cling.support.avtransport.callback.Previous;
 import org.fourthline.cling.support.avtransport.callback.Seek;
 import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
+import org.fourthline.cling.support.avtransport.callback.SetPlayMode;
 import org.fourthline.cling.support.avtransport.callback.Stop;
 import org.fourthline.cling.support.model.MediaInfo;
+import org.fourthline.cling.support.model.PlayMode;
 import org.fourthline.cling.support.model.PositionInfo;
 import org.fourthline.cling.support.model.TransportInfo;
 import org.fourthline.cling.support.model.TransportState;
@@ -76,6 +78,11 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
             @Override
             protected void onStateChange(int instanceId, TransportState state) {
                 view.getInstanceView(instanceId).setState(state);
+            }
+
+            @Override
+            protected void onPlayModeChange(int instanceId, PlayMode playMode) {
+                view.getInstanceView(instanceId).setPlayMode(playMode);
             }
 
             @Override
@@ -303,6 +310,28 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
                                 view.getInstanceView(instanceId).setProgress(positionInfo);
                             }
                         });
+                    }
+
+                    @Override
+                    public void failure(ActionInvocation invocation,
+                                        UpnpResponse operation,
+                                        String defaultMsg) {
+                        // TODO: Is this really severe?
+                        AVTransportControlPoint.LOGGER.severe("Can't retrieve PositionInfo: " + defaultMsg);
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void onSetPlayModeSelected(final int instanceId, PlayMode playMode) {
+        controlPoint.execute(
+                new SetPlayMode(new UnsignedIntegerFourBytes(instanceId), service, playMode) {
+                    @Override
+                    public void success(ActionInvocation invocation) {
+                        AVTransportControlPoint.LOGGER.info(
+                                "Called 'SetPlayMode' action successfully"
+                        );
                     }
 
                     @Override
