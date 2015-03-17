@@ -99,7 +99,7 @@ public class JettyServletContainer implements ServletContainerAdapter {
     synchronized public void removeConnector(String host, int port)  {
         Connector[] connectors = server.getConnectors();
         for (Connector connector : connectors) {
-            if (connector.getHost().equals(host) && connector.getPort() == port) {
+            if (connector.getHost().equals(host) && connector.getLocalPort() == port) {
                 if (connector.isStarted() || connector.isStarting()) {
                     try {
                         connector.stop();
