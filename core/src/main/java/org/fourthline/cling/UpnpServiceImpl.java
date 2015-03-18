@@ -74,7 +74,7 @@ public class UpnpServiceImpl implements UpnpService {
 
         // Instantiation order is important: Router needs to start its network services after registry is ready
 
-        this.protocolFactory = createProtocolFactory();
+        this.protocolFactory = configuration.createProtocolFactory(this);
 
         this.registry = createRegistry(protocolFactory);
         for (RegistryListener registryListener : registryListeners) {
@@ -92,10 +92,6 @@ public class UpnpServiceImpl implements UpnpService {
         this.controlPoint = createControlPoint(protocolFactory, registry);
 
         log.info("<<< UPnP service started successfully");
-    }
-
-    protected ProtocolFactory createProtocolFactory() {
-        return new ProtocolFactoryImpl(this);
     }
 
     protected Registry createRegistry(ProtocolFactory protocolFactory) {
