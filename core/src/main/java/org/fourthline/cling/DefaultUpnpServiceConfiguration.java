@@ -25,6 +25,8 @@ import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.ServiceType;
+import org.fourthline.cling.protocol.ProtocolFactory;
+import org.fourthline.cling.protocol.ProtocolFactoryImpl;
 import org.fourthline.cling.transport.impl.DatagramIOConfigurationImpl;
 import org.fourthline.cling.transport.impl.DatagramIOImpl;
 import org.fourthline.cling.transport.impl.DatagramProcessorImpl;
@@ -174,6 +176,10 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
                         networkAddressFactory.getStreamListenPort()
                 )
         );
+    }
+
+    public ProtocolFactory createProtocolFactory(UpnpService upnpService) {
+        return new ProtocolFactoryImpl(upnpService);
     }
 
     public Executor getMulticastReceiverExecutor() {
