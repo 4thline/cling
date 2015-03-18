@@ -18,6 +18,22 @@ Included:
 * https://github.com/4thline/cling/pull/114
 * https://github.com/4thline/cling/pull/116
 
+Also provided is a *temporary* maven repository. Sample inclusion for gradle:
+
+````
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://raw.github.com/ened/cling/mvn-repo'
+    }
+}
+
+dependencies {
+    compile('org.fourthline.cling:cling-core:2.0.1-SR-SNAPSHOT')
+    compile('org.fourthline.cling:cling-support:2.0.1-SR-SNAPSHOT')
+}
+````
+
 Building Cling
 ---------------------
 
