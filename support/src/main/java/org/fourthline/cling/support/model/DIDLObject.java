@@ -454,10 +454,11 @@ public abstract class DIDLObject {
 
             static public class ICON extends Property<URI> implements NAMESPACE {
                 public ICON() {
+                    this(null);
                 }
 
                 public ICON(URI value) {
-                    super(value, null);
+                    super(value, "icon");
                 }
             }
 
