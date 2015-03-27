@@ -24,6 +24,7 @@ import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
 import org.fourthline.cling.support.lastchange.LastChange;
+import org.fourthline.cling.support.model.PlayMode;
 import org.fourthline.cling.support.model.TransportState;
 import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
 import org.seamless.util.Exceptions;
@@ -106,6 +107,22 @@ abstract public class AVTransportCallback extends SubscriptionCallback {
                         );
                     }
 
+                    AVTransportVariable.CurrentPlayMode currentPlayMode =
+                            lastChange.getEventedValue(
+                                    instanceId,
+                                    AVTransportVariable.CurrentPlayMode.class
+                            );
+
+                    if (currentPlayMode != null) {
+                        AVTransportControlPoint.LOGGER.fine(
+                                "AVTransport service CurrentPlayMode change to: " + currentPlayMode.getValue());
+                        onPlayModeChange(
+                                new Long(instanceId.getValue()).intValue(),
+                                currentPlayMode.getValue()
+                        );
+                    }
+
+
                     AVTransportVariable.CurrentTrackURI currentTrackURI =
                             lastChange.getEventedValue(instanceId, AVTransportVariable.CurrentTrackURI.class);
                     if (currentTrackURI != null) {
@@ -131,6 +148,8 @@ abstract public class AVTransportCallback extends SubscriptionCallback {
     abstract protected void onDisconnect(CancelReason reason);
 
     abstract protected void onStateChange(int instanceId, TransportState state);
+
+    abstract protected void onPlayModeChange(int instanceId, PlayMode playMode);
 
     abstract protected void onCurrentTrackURIChange(int instanceId, String uri);
 
