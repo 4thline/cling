@@ -22,7 +22,9 @@ import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.UDAServiceId;
+import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.registry.RegistryListener;
+import org.fourthline.cling.support.igd.callback.PortMappingEntryGet;
 import org.fourthline.cling.support.igd.callback.PortMappingAdd;
 import org.fourthline.cling.support.model.PortMapping;
 import org.fourthline.cling.support.igd.callback.PortMappingDelete;
@@ -30,6 +32,7 @@ import org.fourthline.cling.support.igd.PortMappingListener;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 /**
  * Mapping a NAT port
@@ -137,6 +140,28 @@ public class PortMappingTest {
             }
         );
 
+        final PortMapping[] mapping = {null};
+        upnpService.getControlPoint().execute(
+                new PortMappingEntryGet(service, 0L) {
+
+                    @Override
+                    public void success(PortMapping portMapping) {
+                        // All OK
+                        mapping[0] = portMapping;                                       // DOC: EXC1
+                    }
+
+                    @Override
+                    public void failure(ActionInvocation invocation,
+                                        UpnpResponse operation,
+                                        String defaultMsg) {
+                        // Something is wrong
+                    }
+                }
+        );
+        assertEquals(mapping[0].getInternalClient(), "192.168.0.123");
+        assertEquals(mapping[0].getInternalPort().getValue().longValue(), 8123);
+        assertTrue(mapping[0].isEnabled());
+
         upnpService.getControlPoint().execute(
             new PortMappingDelete(service, desiredMapping) {
 
@@ -187,6 +212,16 @@ public class PortMappingTest {
             assertEquals(portMapping.getProtocol(), PortMapping.Protocol.TCP);
             assertEquals(portMapping.hasRemoteHost(), false);
             tests[1] = true;
+        }
+
+        public PortMapping getGenericPortMappingEntry(UnsignedIntegerTwoBytes index) {
+            assertEquals(index.getValue().longValue(), 0);
+            return new PortMapping(
+                    8123,
+                    "192.168.0.123",
+                    PortMapping.Protocol.TCP,
+                    "My Port Mapping"
+            );
         }
     }
 
