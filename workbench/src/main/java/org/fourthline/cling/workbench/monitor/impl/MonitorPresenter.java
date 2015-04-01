@@ -79,7 +79,7 @@ public class MonitorPresenter implements MonitorView.Presenter {
 
             SwingUtilities.invokeLater(new Runnable() {
                 public void run() {
-                    List<StateVariableValue> values = new ArrayList();
+                    List<StateVariableValue> values = new ArrayList<>();
                     for (Map.Entry<String, StateVariableValue> entry :
                             ((Map<String, StateVariableValue>) subscription.getCurrentValues()).entrySet()) {
                         values.add(entry.getValue());

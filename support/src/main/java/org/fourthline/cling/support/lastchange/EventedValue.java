@@ -47,7 +47,7 @@ public abstract class EventedValue<V> {
 
     public Map.Entry<String, String>[] getAttributes() {
         return new Map.Entry[] {
-            new AbstractMap.SimpleEntry<String, String>("val", toString())
+            new AbstractMap.SimpleEntry<>("val", toString())
         };
     }
 

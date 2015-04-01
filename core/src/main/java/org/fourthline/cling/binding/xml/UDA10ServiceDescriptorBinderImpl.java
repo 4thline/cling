@@ -298,7 +298,7 @@ public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder
                 stateVariable.defaultValue = XMLUtil.getTextContent(stateVariableChild);
             } else if (ELEMENT.allowedValueList.equals(stateVariableChild)) {
 
-                List<String> allowedValues = new ArrayList();
+                List<String> allowedValues = new ArrayList<>();
 
                 NodeList allowedValueListChildren = stateVariableChild.getChildNodes();
                 for (int j = 0; j < allowedValueListChildren.getLength(); j++) {

@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public class DLNAProtocolInfo extends ProtocolInfo {
 
-    protected final Map<DLNAAttribute.Type, DLNAAttribute> attributes = new EnumMap(DLNAAttribute.Type.class);
+    protected final Map<DLNAAttribute.Type, DLNAAttribute> attributes = new EnumMap<>(DLNAAttribute.Type.class);
 
     public DLNAProtocolInfo(String s) throws InvalidValueException {
         super(s);

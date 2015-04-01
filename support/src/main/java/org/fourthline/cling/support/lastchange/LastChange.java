@@ -87,7 +87,7 @@ public class LastChange {
     }
 
     synchronized public UnsignedIntegerFourBytes[] getInstanceIDs() {
-        List<UnsignedIntegerFourBytes> list = new ArrayList();
+        List<UnsignedIntegerFourBytes> list = new ArrayList<>();
         for (InstanceID instanceID : event.getInstanceIDs()) {
             list.add(instanceID.getId());
         }

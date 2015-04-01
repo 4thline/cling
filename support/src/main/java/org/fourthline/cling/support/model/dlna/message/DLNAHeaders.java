@@ -55,7 +55,7 @@ public class DLNAHeaders extends UpnpHeaders {
         if (parsedHeaders == null) super.parseHeaders();
         
         // This runs as late as possible and only when necessary (getter called and map is dirty)
-        parsedDLNAHeaders = new LinkedHashMap();
+        parsedDLNAHeaders = new LinkedHashMap<>();
         log.log(Level.FINE, "Parsing all HTTP headers for known UPnP headers: {0}", size());
         for (Entry<String, List<String>> entry : entrySet()) {
 
@@ -82,7 +82,7 @@ public class DLNAHeaders extends UpnpHeaders {
         log.log(Level.FINE, "Adding parsed header: {0}", value);
         List<UpnpHeader> list = parsedDLNAHeaders.get(type);
         if (list == null) {
-            list = new LinkedList();
+            list = new LinkedList<>();
             parsedDLNAHeaders.put(type, list);
         }
         list.add(value);

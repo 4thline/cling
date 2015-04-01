@@ -96,7 +96,7 @@ public class BrowserActivity extends ListActivity {
         // Now you can enable logging as needed for various categories of Cling:
         // Logger.getLogger("org.fourthline.cling").setLevel(Level.FINEST);
 
-        listAdapter = new ArrayAdapter<DeviceDisplay>(this, android.R.layout.simple_list_item_1);
+        listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
         setListAdapter(listAdapter);
 
         // This will start the UPnP service if it wasn't already started

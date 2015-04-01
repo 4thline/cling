@@ -106,7 +106,7 @@ public class AnnotationActionBinder {
 
     protected List<ActionArgument> createInputArguments() throws LocalServiceBindingException {
 
-        List<ActionArgument> list = new ArrayList();
+        List<ActionArgument> list = new ArrayList<>();
 
         // Input arguments are always method parameters
         int annotatedParams = 0;
@@ -159,7 +159,7 @@ public class AnnotationActionBinder {
 
     protected Map<ActionArgument<LocalService>, StateVariableAccessor> createOutputArguments() throws LocalServiceBindingException {
 
-        Map<ActionArgument<LocalService>, StateVariableAccessor> map = new LinkedHashMap(); // !!! Insertion order!
+        Map<ActionArgument<LocalService>, StateVariableAccessor> map = new LinkedHashMap<>(); // !!! Insertion order!
 
         UpnpAction actionAnnotation = getMethod().getAnnotation(UpnpAction.class);
         if (actionAnnotation.out().length == 0) return map;

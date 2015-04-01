@@ -148,7 +148,7 @@ public class PortMappingPresenterImpl implements PortMappingPresenter {
                 WANIPConnectionControlPoint.LOGGER.info(
                     "Updating list of port mappings"
                 );
-                final List<PortMapping> mappings = new ArrayList();
+                final List<PortMapping> mappings = new ArrayList<>();
                 for (int i = 0; i < 65535; i++) { // You can't have more than 65535 port mappings
                     // Synchronous execution! And we stop when we hit a 713 response code because there
                     // is no other way to retrieve all mappings. The designers of this service are morons.

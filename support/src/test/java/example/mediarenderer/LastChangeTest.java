@@ -140,7 +140,7 @@ public class LastChangeTest {
 
         MockUpnpService upnpService = new MockUpnpService();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         LocalDevice device = MediaRendererSampleData.createDevice();
         upnpService.getRegistry().addDevice(device);
@@ -224,7 +224,7 @@ public class LastChangeTest {
 
         MockUpnpService upnpService = new MockUpnpService();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         LocalDevice device = MediaRendererSampleData.createDevice();
         upnpService.getRegistry().addDevice(device);

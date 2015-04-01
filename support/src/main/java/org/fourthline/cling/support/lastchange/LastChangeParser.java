@@ -168,7 +168,7 @@ public abstract class LastChangeParser extends SAXParser {
             Map.Entry[] attributeMap = new Map.Entry[attributes.getLength()];
             for (int i = 0; i < attributeMap.length; i++) {
                 attributeMap[i] =
-                        new AbstractMap.SimpleEntry<String, String>(
+                        new AbstractMap.SimpleEntry<>(
                                 attributes.getLocalName(i),
                                 attributes.getValue(i)
                         );

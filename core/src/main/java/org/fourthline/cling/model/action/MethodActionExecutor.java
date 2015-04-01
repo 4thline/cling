@@ -130,7 +130,7 @@ public class MethodActionExecutor extends AbstractActionExecutor {
 
         LocalService service = actionInvocation.getAction().getService();
 
-        List values = new ArrayList();
+        List values = new ArrayList<>();
         int i = 0;
         for (ActionArgument<LocalService> argument : actionInvocation.getAction().getInputArguments()) {
 

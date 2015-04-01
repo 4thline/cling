@@ -43,7 +43,7 @@ public class RenderingControlViewImpl extends JDialog implements RenderingContro
     @Inject
     protected Instance<InstanceView> renderingControlViewInstance;
 
-    final Map<Integer, InstanceView> controlViews = new LinkedHashMap();
+    final Map<Integer, InstanceView> controlViews = new LinkedHashMap<>();
 
     public void init(StateVariableAllowedValueRange volumeRange) {
         addWindowListener(

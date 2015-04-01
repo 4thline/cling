@@ -112,7 +112,7 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getName() == null || getName().length() == 0) {
             errors.add(new ValidationError(
@@ -148,7 +148,7 @@ public class ActionArgument<S extends Service> implements Validatable {
     }
 
     public ActionArgument<S> deepCopy() {
-        return new ActionArgument<S>(
+        return new ActionArgument<>(
                 getName(),
                 getAliases(),
                 getRelatedStateVariableName(),

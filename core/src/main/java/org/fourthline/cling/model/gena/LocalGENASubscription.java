@@ -60,8 +60,8 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
     final List<URL> callbackURLs;
 
     // Moderation history
-    final Map<String, Long> lastSentTimestamp = new HashMap();
-    final Map<String, Long> lastSentNumericValue = new HashMap();
+    final Map<String, Long> lastSentTimestamp = new HashMap<>();
+    final Map<String, Long> lastSentNumericValue = new HashMap<>();
 
     protected LocalGENASubscription(LocalService service, List<URL> callbackURLs) throws Exception {
         super(service);
@@ -177,7 +177,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
      */
     synchronized protected Set<String> moderateStateVariables(long currentTime, Collection<StateVariableValue> values) {
 
-        Set<String> excludedVariables = new HashSet();
+        Set<String> excludedVariables = new HashSet<>();
 
         // Moderate event variables that have a maximum rate or minimum delta
         for (StateVariableValue stateVariableValue : values) {

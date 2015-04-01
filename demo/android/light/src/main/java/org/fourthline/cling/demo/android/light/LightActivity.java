@@ -232,7 +232,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
                 new AnnotationLocalServiceBinder().read(SwitchPower.class);
 
         service.setManager(
-                new DefaultServiceManager<SwitchPower>(service, SwitchPower.class)
+                new DefaultServiceManager<>(service, SwitchPower.class)
         );
 
         return new LocalDevice(

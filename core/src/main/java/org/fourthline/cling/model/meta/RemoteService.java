@@ -77,7 +77,7 @@ public class RemoteService extends Service<RemoteDevice, RemoteService> {
     }
 
     public List<ValidationError> validateThis() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getDescriptorURI() == null) {
             errors.add(new ValidationError(

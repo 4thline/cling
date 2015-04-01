@@ -37,7 +37,7 @@ import java.util.Map;
 public class DevicesViewImpl extends JPanel implements DevicesView {
 
     final protected JTabbedPane tabbedPane = new JTabbedPane();
-    final Map<DeviceView, Component> tabs = new HashMap(); // Map back from UI component to DeviceView
+    final Map<DeviceView, Component> tabs = new HashMap<>(); // Map back from UI component to DeviceView
 
     protected Presenter presenter;
 

@@ -71,7 +71,7 @@ public abstract class ContentBrowseActionCallback extends Browse {
 
     public void received(final ActionInvocation actionInvocation, DIDLContent didl) {
         log.fine("Received browse action DIDL descriptor, creating tree nodes");
-        final List<DefaultMutableTreeNode> childNodes = new ArrayList();
+        final List<DefaultMutableTreeNode> childNodes = new ArrayList<>();
 
         try {
 

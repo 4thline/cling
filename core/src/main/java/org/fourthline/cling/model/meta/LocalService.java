@@ -50,9 +50,9 @@ public class LocalService<T> extends Service<LocalDevice, LocalService> {
                         Action[] actions, StateVariable[] stateVariables) throws ValidationException {
         super(serviceType, serviceId, actions, stateVariables);
         this.manager = null;
-        this.actionExecutors = new HashMap();
-        this.stateVariableAccessors = new HashMap();
-        this.stringConvertibleTypes = new HashSet();
+        this.actionExecutors = new HashMap<>();
+        this.stateVariableAccessors = new HashMap<>();
+        this.stringConvertibleTypes = new HashSet<>();
         this.supportsQueryStateVariables = true;
     }
 

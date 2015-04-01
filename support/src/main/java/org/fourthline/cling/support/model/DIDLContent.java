@@ -53,9 +53,9 @@ public class DIDLContent {
     public static final String NAMESPACE_URI = "urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/";
     public static final String DESC_WRAPPER_NAMESPACE_URI = "urn:fourthline-org:cling:support:content-directory-desc-1-0";
 
-    protected List<Container> containers = new ArrayList();
-    protected List<Item> items = new ArrayList();
-    protected List<DescMeta> descMetadata = new ArrayList();
+    protected List<Container> containers = new ArrayList<>();
+    protected List<Item> items = new ArrayList<>();
+    protected List<DescMeta> descMetadata = new ArrayList<>();
 
     public Container getFirstContainer() {
         return getContainers().get(0);
@@ -118,7 +118,7 @@ public class DIDLContent {
     }
 
     protected List<Item> replaceGenericItems(List<Item> genericItems) {
-        List<Item> specificItems = new ArrayList();
+        List<Item> specificItems = new ArrayList<>();
 
         for (Item genericItem : genericItems) {
             String genericType = genericItem.getClazz().getValue();
@@ -161,7 +161,7 @@ public class DIDLContent {
     }
 
     protected List<Container> replaceGenericContainers(List<Container> genericContainers) {
-        List<Container> specificContainers = new ArrayList();
+        List<Container> specificContainers = new ArrayList<>();
 
         for (Container genericContainer : genericContainers) {
             String genericType = genericContainer.getClazz().getValue();

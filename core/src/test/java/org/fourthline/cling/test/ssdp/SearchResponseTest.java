@@ -143,7 +143,7 @@ public class SearchResponseTest {
 
     protected IncomingSearchResponse createResponseMessage(UpnpHeader stHeader) throws UnknownHostException {
         IncomingSearchResponse msg = new IncomingSearchResponse(
-                new IncomingDatagramMessage<UpnpResponse>(
+                new IncomingDatagramMessage<>(
                         new UpnpResponse(UpnpResponse.Status.OK),
                         InetAddress.getByName("127.0.0.1"),
                         Constants.UPNP_MULTICAST_PORT,

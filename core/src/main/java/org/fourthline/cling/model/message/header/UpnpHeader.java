@@ -96,6 +96,7 @@ public abstract class UpnpHeader<T> {
         private String httpName;
         private Class<? extends UpnpHeader>[] headerTypes;
 
+        @SafeVarargs
         private Type(String httpName, Class<? extends UpnpHeader>... headerClass) {
             this.httpName = httpName;
             this.headerTypes = headerClass;

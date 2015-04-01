@@ -68,7 +68,7 @@ public class MediaRendererSampleData {
         LastChangeParser lastChangeParser = new RenderingControlLastChangeParser();
 
         service.setManager(
-                new LastChangeAwareServiceManager<AudioRenderingControlService>(
+                new LastChangeAwareServiceManager<>(
                         service,
                         AudioRenderingControlService.class,
                         lastChangeParser

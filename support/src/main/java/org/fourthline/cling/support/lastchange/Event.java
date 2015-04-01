@@ -26,7 +26,7 @@ import java.util.List;
  */
 public class Event {
 
-    protected List<InstanceID> instanceIDs = new ArrayList();
+    protected List<InstanceID> instanceIDs = new ArrayList<>();
 
     public Event() {
     }
@@ -47,7 +47,7 @@ public class Event {
     }
 
     public void clear() {
-        instanceIDs = new ArrayList();
+        instanceIDs = new ArrayList<>();
     }
 
     public void setEventedValue(UnsignedIntegerFourBytes id, EventedValue ev) {

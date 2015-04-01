@@ -36,7 +36,7 @@ public abstract class DIDLObject {
 
         private V value;
         final private String descriptorName;
-        final private List<Property<DIDLAttribute>> attributes = new ArrayList<Property<DIDLAttribute>>();
+        final private List<Property<DIDLAttribute>> attributes = new ArrayList<>();
 
         protected Property() {
             this(null, null);
@@ -646,10 +646,10 @@ public abstract class DIDLObject {
     protected WriteStatus writeStatus; // UPNP
     protected Class clazz; // UPNP
 
-    protected List<Res> resources = new ArrayList();
-    protected List<Property> properties = new ArrayList();
+    protected List<Res> resources = new ArrayList<>();
+    protected List<Property> properties = new ArrayList<>();
 
-    protected List<DescMeta> descMetadata = new ArrayList();
+    protected List<DescMeta> descMetadata = new ArrayList<>();
 
     protected DIDLObject() {
     }
@@ -836,7 +836,7 @@ public abstract class DIDLObject {
     }
 
     public <V> Property<V>[] getProperties(java.lang.Class<? extends Property<V>> propertyClass) {
-        List<Property<V>> list = new ArrayList();
+        List<Property<V>> list = new ArrayList<>();
         for (Property property : getProperties()) {
             if (propertyClass.isInstance(property))
                 list.add(property);
@@ -845,7 +845,7 @@ public abstract class DIDLObject {
     }
 
     public <V> Property<V>[] getPropertiesByNamespace(java.lang.Class<? extends Property.NAMESPACE> namespace) {
-        List<Property<V>> list = new ArrayList();
+        List<Property<V>> list = new ArrayList<>();
         for (Property property : getProperties()) {
             if (namespace.isInstance(property))
                 list.add(property);
@@ -859,7 +859,7 @@ public abstract class DIDLObject {
     }
 
     public <V> List<V> getPropertyValues(java.lang.Class<? extends Property<V>> propertyClass) {
-        List<V> list = new ArrayList();
+        List<V> list = new ArrayList<>();
         for (Property property : getProperties(propertyClass)) {
             list.add((V) property.getValue());
         }
