@@ -56,11 +56,11 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
 
     private static Logger log = Logger.getLogger(NetworkAddressFactoryImpl.class.getName());
 
-    final protected Set<String> useInterfaces = new HashSet<String>();
-    final protected Set<String> useAddresses = new HashSet<String>();
+    final protected Set<String> useInterfaces = new HashSet<>();
+    final protected Set<String> useAddresses = new HashSet<>();
 
-    final protected List<NetworkInterface> networkInterfaces = new ArrayList<NetworkInterface>();
-    final protected List<InetAddress> bindAddresses = new ArrayList<InetAddress>();
+    final protected List<NetworkInterface> networkInterfaces = new ArrayList<>();
+    final protected List<InetAddress> bindAddresses = new ArrayList<>();
 
     protected int streamListenPort;
 

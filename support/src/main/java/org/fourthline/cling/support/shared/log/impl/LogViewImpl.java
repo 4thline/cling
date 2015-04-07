@@ -310,7 +310,7 @@ public class LogViewImpl extends JPanel implements LogView {
     }
 
     protected List<LogMessage> getSelectedMessages() {
-        List<LogMessage> messages = new ArrayList();
+        List<LogMessage> messages = new ArrayList<>();
         for (int row : logTable.getSelectedRows()) {
             messages.add((LogMessage) logTableModel.getValueAt(row, 0));
         }

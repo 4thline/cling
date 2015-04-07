@@ -51,7 +51,7 @@ public class UDAVersion implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getMajor() != 1) {
             errors.add(new ValidationError(

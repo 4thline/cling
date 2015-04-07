@@ -220,7 +220,7 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
 
     @Override
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
         errors.addAll(super.validate());
 
         // We have special rules for local icons, the URI must always be a relative path which will
@@ -256,7 +256,7 @@ public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalServic
 
     @Override
     public Resource[] discoverResources(Namespace namespace) {
-        List<Resource> discovered = new ArrayList();
+        List<Resource> discovered = new ArrayList<>();
 
         // Device
         if (isRoot()) {

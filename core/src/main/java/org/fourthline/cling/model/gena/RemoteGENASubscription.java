@@ -55,7 +55,7 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
     }
 
     synchronized public List<URL> getEventCallbackURLs(List<NetworkAddress> activeStreamServers, Namespace namespace) {
-        List<URL> callbackURLs = new ArrayList();
+        List<URL> callbackURLs = new ArrayList<>();
         for (NetworkAddress activeStreamServer : activeStreamServers) {
             callbackURLs.add(
                     new Location(

@@ -73,7 +73,7 @@ public class OutgoingSubscriptionLifecycleTest {
             }
         };
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register remote device and its service
         RemoteDevice device = SampleData.createRemoteDevice();
@@ -197,8 +197,8 @@ public class OutgoingSubscriptionLifecycleTest {
             }
         };
 
-        final List<Boolean> testAssertions = new ArrayList();
-        final List<Boolean> notificationCalled = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
+        final List<Boolean> notificationCalled = new ArrayList<>();
 
         // Register remote device and its service
         upnpService.getRegistry().addDevice(device);
@@ -325,7 +325,7 @@ public class OutgoingSubscriptionLifecycleTest {
 
     protected IncomingEventRequestMessage createEventRequestMessage(final UpnpService upnpService, final SubscriptionCallback callback) {
 
-        List<StateVariableValue> values = new ArrayList();
+        List<StateVariableValue> values = new ArrayList<>();
         values.add(
                 new StateVariableValue(callback.getService().getStateVariable("Status"), false)
         );
@@ -351,7 +351,7 @@ public class OutgoingSubscriptionLifecycleTest {
 
     protected IncomingEventRequestMessage createEventRequestMessage(final UpnpService upnpService, final RemoteService service, final GENASubscription subscription) {
 
-        List<StateVariableValue> values = new ArrayList();
+        List<StateVariableValue> values = new ArrayList<>();
         values.add(
                 new StateVariableValue(service.getStateVariable("Status"), false)
         );

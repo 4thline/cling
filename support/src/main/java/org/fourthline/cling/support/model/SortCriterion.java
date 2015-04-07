@@ -47,7 +47,7 @@ public class SortCriterion {
 
     public static SortCriterion[] valueOf(String s) {
         if (s == null || s.length() == 0) return new SortCriterion[0];
-        List<SortCriterion> list = new ArrayList();
+        List<SortCriterion> list = new ArrayList<>();
         String[] criteria = s.split(",");
         for (String criterion : criteria) {
             list.add(new SortCriterion(criterion.trim()));

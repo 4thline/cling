@@ -304,7 +304,7 @@ public class SearchReceivedTest {
 
     protected IncomingSearchRequest createRequestMessage() throws UnknownHostException {
         return new IncomingSearchRequest(
-                new IncomingDatagramMessage<UpnpRequest>(
+                new IncomingDatagramMessage<>(
                         new UpnpRequest(UpnpRequest.Method.MSEARCH),
                         InetAddress.getByName("127.0.0.1"),
                         Constants.UPNP_MULTICAST_PORT,

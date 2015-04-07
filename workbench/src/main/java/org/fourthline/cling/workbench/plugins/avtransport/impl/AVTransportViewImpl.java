@@ -43,7 +43,7 @@ public class AVTransportViewImpl extends JDialog implements AVTransportView {
     @Inject
     protected Instance<InstanceView> avTransportViewInstance;
 
-    final Map<Integer, InstanceView> transportViews = new LinkedHashMap();
+    final Map<Integer, InstanceView> transportViews = new LinkedHashMap<>();
 
     @PostConstruct
     public void init() {

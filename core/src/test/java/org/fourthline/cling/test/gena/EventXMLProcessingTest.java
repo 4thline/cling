@@ -93,7 +93,7 @@ public class EventXMLProcessingTest {
         LocalDevice localDevice = GenaSampleData.createTestDevice(GenaSampleData.LocalTestService.class);
         LocalService localService = localDevice.getServices()[0];
 
-        List<URL> urls = new ArrayList() {{
+        List<URL> urls = new ArrayList<URL>() {{
             add(SampleData.getLocalBaseURL());
         }};
         

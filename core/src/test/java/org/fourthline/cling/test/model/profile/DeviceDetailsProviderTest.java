@@ -36,7 +36,7 @@ public class DeviceDetailsProviderTest {
         DeviceDetails dd1 = new DeviceDetails("My Testdevice 1");
         DeviceDetails dd2 = new DeviceDetails("My Testdevice 2");
 
-        Map<HeaderDeviceDetailsProvider.Key, DeviceDetails> headerDetails = new HashMap();
+        Map<HeaderDeviceDetailsProvider.Key, DeviceDetails> headerDetails = new HashMap<>();
 
         headerDetails.put(new HeaderDeviceDetailsProvider.Key("User-Agent", "Xbox.*"), dd1);
         headerDetails.put(new HeaderDeviceDetailsProvider.Key("X-AV-Client-Info", ".*PLAYSTATION 3.*"), dd2);

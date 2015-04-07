@@ -26,10 +26,10 @@ import java.util.List;
 public class InstanceID {
 
     protected UnsignedIntegerFourBytes id;
-    protected List<EventedValue> values = new ArrayList();
+    protected List<EventedValue> values = new ArrayList<>();
 
     public InstanceID(UnsignedIntegerFourBytes id) {
-        this(id, new ArrayList());
+        this(id, new ArrayList<EventedValue>());
     }
 
     public InstanceID(UnsignedIntegerFourBytes id, List<EventedValue> values) {

@@ -73,7 +73,7 @@ public class DLNAProtocolTest {
         DLNAProtocolInfo dp = new DLNAProtocolInfo(DLNAProfiles.JPEG_TN);
         assertEquals(dp.toString(), "http-get:*:image/jpeg:DLNA.ORG_PN=JPEG_TN");
 
-        EnumMap<DLNAAttribute.Type, DLNAAttribute> attributes = new EnumMap<DLNAAttribute.Type, DLNAAttribute>(DLNAAttribute.Type.class);
+        EnumMap<DLNAAttribute.Type, DLNAAttribute> attributes = new EnumMap<>(DLNAAttribute.Type.class);
         attributes.put(Type.DLNA_ORG_PS, new DLNAPlaySpeedAttribute(new String[] {"1"}));
         dp = new DLNAProtocolInfo(DLNAProfiles.MATROSKA_MKV, attributes);
         assertEquals(dp.toString(), "http-get:*:video/x-mkv:DLNA.ORG_PN=MATROSKA");

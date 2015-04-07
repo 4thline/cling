@@ -137,7 +137,7 @@ public class MusicAlbum extends Album {
     }
 
     public MusicTrack[] getMusicTracks() {
-        List<MusicTrack> list = new ArrayList();
+        List<MusicTrack> list = new ArrayList<>();
         for (Item item : getItems()) {
             if (item instanceof MusicTrack) list.add((MusicTrack)item);
         }

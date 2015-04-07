@@ -74,7 +74,7 @@ public class ConnectionManagerSimpleTest {
                 new AnnotationLocalServiceBinder().read(ConnectionManagerService.class);
 
         service.setManager(
-                new DefaultServiceManager<ConnectionManagerService>(
+                new DefaultServiceManager<>(
                         service,
                         ConnectionManagerService.class
                 )

@@ -184,7 +184,7 @@ public class NotifyTest {
 
     protected IncomingNotificationRequest createRequestMessage() throws UnknownHostException {
         IncomingNotificationRequest msg = new IncomingNotificationRequest(
-                new IncomingDatagramMessage<UpnpRequest>(
+                new IncomingDatagramMessage<>(
                         new UpnpRequest(UpnpRequest.Method.NOTIFY),
                         InetAddress.getByName("127.0.0.1"),
                         Constants.UPNP_MULTICAST_PORT,

@@ -205,7 +205,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
     protected List<OutgoingSearchResponse> createDeviceMessages(LocalDevice device,
                                                                 NetworkAddress activeStreamServer) {
-        List<OutgoingSearchResponse> msgs = new ArrayList<OutgoingSearchResponse>();
+        List<OutgoingSearchResponse> msgs = new ArrayList<>();
 
         // See the tables in UDA 1.0 section 1.1.2
 
@@ -244,7 +244,7 @@ public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
     protected List<OutgoingSearchResponse> createServiceTypeMessages(LocalDevice device,
                                                                      NetworkAddress activeStreamServer) {
-        List<OutgoingSearchResponse> msgs = new ArrayList<OutgoingSearchResponse>();
+        List<OutgoingSearchResponse> msgs = new ArrayList<>();
         for (ServiceType serviceType : device.findServiceTypes()) {
             OutgoingSearchResponse message =
                 new OutgoingSearchResponseServiceType(

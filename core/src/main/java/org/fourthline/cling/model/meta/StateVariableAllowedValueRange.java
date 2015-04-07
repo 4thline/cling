@@ -71,7 +71,7 @@ public class StateVariableAllowedValueRange implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        return new ArrayList();
+        return new ArrayList<>();
     }
 
     @Override

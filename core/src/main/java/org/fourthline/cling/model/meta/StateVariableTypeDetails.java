@@ -66,7 +66,7 @@ public class StateVariableTypeDetails implements Validatable {
     public String[] getAllowedValues() {
         // TODO: UPNP VIOLATION: DirecTV HR23/700 High Definition DVR Receiver has invalid default value
         if (!foundDefaultInAllowedValues(defaultValue, allowedValues)) {
-            List<String> list = new ArrayList<String>(Arrays.asList(allowedValues));
+            List<String> list = new ArrayList<>(Arrays.asList(allowedValues));
             list.add(getDefaultValue());
             return list.toArray(new String[list.size()]);
         }
@@ -86,7 +86,7 @@ public class StateVariableTypeDetails implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getDatatype() == null) {
             errors.add(new ValidationError(
