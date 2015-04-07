@@ -59,6 +59,24 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>sh.tak.appbundler</groupId>
+                <artifactId>appbundle-maven-plugin</artifactId>
+                <version>1.0.2</version>
+                <configuration>
+                    <mainClass>org.fourthline.cling.workbench.Workbench</mainClass>
+                    <iconFile>src/main/resources/WorkbenchIcon.icns</iconFile>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>bundle</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
 
