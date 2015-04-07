@@ -175,7 +175,7 @@ public class RemoteDevice extends Device<RemoteDeviceIdentity, RemoteDevice, Rem
 
     @Override
     public Resource[] discoverResources(Namespace namespace) {
-        List<Resource> discovered = new ArrayList();
+        List<Resource> discovered = new ArrayList<>();
 
         // Services
         for (RemoteService service : getServices()) {

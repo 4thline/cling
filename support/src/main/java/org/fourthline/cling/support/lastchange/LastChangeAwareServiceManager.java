@@ -99,7 +99,7 @@ public class LastChangeAwareServiceManager<T extends LastChangeDelegator> extend
 
         // Sum it all up and return it in the initial event to the GENA subscriber
         StateVariable variable = getService().getStateVariable("LastChange");
-        Collection<StateVariableValue> values = new ArrayList();
+        Collection<StateVariableValue> values = new ArrayList<>();
         values.add(new StateVariableValue(variable, lc.toString()));
         return values;
     }

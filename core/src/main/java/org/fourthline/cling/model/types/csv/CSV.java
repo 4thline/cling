@@ -54,7 +54,7 @@ public abstract class CSV<T> extends ArrayList<T> {
 
     protected List parseString(String s) throws InvalidValueException {
         String[] strings = ModelUtil.fromCommaSeparatedList(s);
-        List values = new ArrayList();
+        List values = new ArrayList<>();
         for (String string : strings) {
             values.add(datatype.getDatatype().valueOf(string));
         }
@@ -72,7 +72,7 @@ public abstract class CSV<T> extends ArrayList<T> {
 
     @Override
     public String toString() {
-        List<String> stringValues = new ArrayList();
+        List<String> stringValues = new ArrayList<>();
         for (T t : this) {
             stringValues.add(datatype.getDatatype().getString(t));
         }

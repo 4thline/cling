@@ -71,7 +71,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
     private RemoteDevice rd;
 
     private static final Set<URL> activeRetrievals = new CopyOnWriteArraySet();
-    protected List<UDN> errorsAlreadyLogged = new ArrayList<UDN>();
+    protected List<UDN> errorsAlreadyLogged = new ArrayList<>();
 
     public RetrieveRemoteDescriptors(UpnpService upnpService, RemoteDevice rd) {
         this.upnpService = upnpService;
@@ -255,7 +255,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
     protected RemoteDevice describeServices(RemoteDevice currentDevice)
             throws RouterException, DescriptorBindingException, ValidationException {
 
-        List<RemoteService> describedServices = new ArrayList();
+        List<RemoteService> describedServices = new ArrayList<>();
         if (currentDevice.hasServices()) {
             List<RemoteService> filteredServices = filterExclusiveServices(currentDevice.getServices());
             for (RemoteService service : filteredServices) {
@@ -268,7 +268,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
             }
         }
 
-        List<RemoteDevice> describedEmbeddedDevices = new ArrayList();
+        List<RemoteDevice> describedEmbeddedDevices = new ArrayList<>();
         if (currentDevice.hasEmbeddedDevices()) {
             for (RemoteDevice embeddedDevice : currentDevice.getEmbeddedDevices()) {
                  // Skip invalid embedded device
@@ -358,7 +358,7 @@ public class RetrieveRemoteDescriptors implements Runnable {
         if (exclusiveTypes == null || exclusiveTypes.length == 0)
             return Arrays.asList(services);
 
-        List<RemoteService> exclusiveServices = new ArrayList();
+        List<RemoteService> exclusiveServices = new ArrayList<>();
         for (RemoteService discoveredService : services) {
             for (ServiceType exclusiveType : exclusiveTypes) {
                 if (discoveredService.getServiceType().implementsVersion(exclusiveType)) {

@@ -59,7 +59,7 @@ public class DetailPresenter implements DetailView.Presenter {
 
     protected DetailView view;
 
-    final protected Map<Device, List<ProtocolInfo>> availableRenderers = new HashMap();
+    final protected Map<Device, List<ProtocolInfo>> availableRenderers = new HashMap<>();
 
     @Override
     public void init(DetailView view) {

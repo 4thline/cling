@@ -41,8 +41,8 @@ public abstract class Service<D extends Device, S extends Service> {
     final private ServiceId serviceId;
 
 
-    final private Map<String, Action> actions = new HashMap();
-    final private Map<String, StateVariable> stateVariables = new HashMap();
+    final private Map<String, Action> actions = new HashMap<>();
+    final private Map<String, StateVariable> stateVariables = new HashMap<>();
 
     // Package mutable state
     private D device;
@@ -142,7 +142,7 @@ public abstract class Service<D extends Device, S extends Service> {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getServiceType() == null) {
             errors.add(new ValidationError(

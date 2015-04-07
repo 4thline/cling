@@ -90,7 +90,7 @@ public class EventProviderTest extends EventSubscriptionTest {
 
         MockUpnpService upnpService = createMockUpnpService();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerWithPropertyChangeSupport.class);
@@ -163,7 +163,7 @@ public class EventProviderTest extends EventSubscriptionTest {
 
         MockUpnpService upnpService = createMockUpnpService();
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerWithBundledPropertyChange.class);
@@ -251,7 +251,7 @@ public class EventProviderTest extends EventSubscriptionTest {
             }
         };
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerModerated.class);
@@ -365,7 +365,7 @@ public class EventProviderTest extends EventSubscriptionTest {
             }
         };
 
-        final List<Boolean> testAssertions = new ArrayList();
+        final List<Boolean> testAssertions = new ArrayList<>();
 
         // Register local device and its service
         LocalDevice device = BinaryLightSampleData.createDevice(SwitchPowerModerated.class);

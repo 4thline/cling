@@ -173,19 +173,19 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         public void startElement(ELEMENT element, Attributes attributes) throws SAXException {
 
             if (element.equals(IconListHandler.EL)) {
-                List<MutableIcon> icons = new ArrayList();
+                List<MutableIcon> icons = new ArrayList<>();
                 getInstance().icons = icons;
                 new IconListHandler(icons, this);
             }
 
             if (element.equals(ServiceListHandler.EL)) {
-                List<MutableService> services = new ArrayList();
+                List<MutableService> services = new ArrayList<>();
                 getInstance().services = services;
                 new ServiceListHandler(services, this);
             }
 
             if (element.equals(DeviceListHandler.EL)) {
-                List<MutableDevice> devices = new ArrayList();
+                List<MutableDevice> devices = new ArrayList<>();
                 getInstance().embeddedDevices = devices;
                 new DeviceListHandler(devices, this);
             }

@@ -80,7 +80,7 @@ public class PortMappingListener extends DefaultRegistryListener {
     protected PortMapping[] portMappings;
 
     // The key of the map is Service and equality is object identity, this is by-design
-    protected Map<Service, List<PortMapping>> activePortMappings = new HashMap();
+    protected Map<Service, List<PortMapping>> activePortMappings = new HashMap<>();
 
     public PortMappingListener(PortMapping portMapping) {
         this(new PortMapping[]{portMapping});
@@ -98,7 +98,7 @@ public class PortMappingListener extends DefaultRegistryListener {
 
         log.fine("Activating port mappings on: " + connectionService);
 
-        final List<PortMapping> activeForService = new ArrayList();
+        final List<PortMapping> activeForService = new ArrayList<>();
         for (final PortMapping pm : portMappings) {
             new PortMappingAdd(connectionService, registry.getUpnpService().getControlPoint(), pm) {
 

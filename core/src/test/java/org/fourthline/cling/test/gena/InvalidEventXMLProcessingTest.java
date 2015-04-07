@@ -195,7 +195,7 @@ public class InvalidEventXMLProcessingTest {
 
     protected Map<String, Object> parseLastChangeXML(String lastChange) throws Exception {
         // All we do here is trying to parse some XML looking for any element with a 'val' attribute
-        Map<String, Object> values = new HashMap<String, Object>();
+        Map<String, Object> values = new HashMap<>();
         XmlPullParser xpp = XmlPullParserUtils.createParser(lastChange);
         xpp.nextTag();
         int event;

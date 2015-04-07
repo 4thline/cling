@@ -88,7 +88,7 @@ public class DetailViewImpl extends JPanel implements DetailView {
         ItemFormPanel itemFormPanel = new ItemFormPanel(item) {
 
             public List<JMenuItem> createSendToMenuItems(final Res resource) {
-                List<JMenuItem> menuItems = new ArrayList();
+                List<JMenuItem> menuItems = new ArrayList<>();
 
                 for (Map.Entry<Device, List<ProtocolInfo>> entry : mediaRenderers.entrySet()) {
 

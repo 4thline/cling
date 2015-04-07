@@ -78,16 +78,16 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>6</maven.compiler.source>
-        <maven.compiler.target>6</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
 
         <seamless.version>1.1.0</seamless.version>
         <lemma.version>1.1.0</lemma.version>
         <testng.version>6.2</testng.version>
         <apache.httpcomponents.httpclient.version>4.2.2</apache.httpcomponents.httpclient.version>
         <apache.httpcomponents.httpcore.version>4.2.3</apache.httpcomponents.httpcore.version>
-        <android.version>4.0.1.2</android.version>
-        <android.maven.plugin.version>4.0.0-rc.1</android.maven.plugin.version>
+        <android.version>4.1.1.4</android.version>
+        <android.maven.plugin.version>4.1.0</android.maven.plugin.version>
         <jetty.version>8.1.8.v20121106</jetty.version>
         <cdi.api.version>1.0-SP4</cdi.api.version>
         <ejb.api.version>3.0</ejb.api.version>
@@ -259,6 +259,10 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.0</version>
+                    <configuration>
+                        <source>${maven.compiler.source}</source>
+                        <target>${maven.compiler.target}</target>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

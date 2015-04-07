@@ -52,11 +52,11 @@ public class MutableDevice {
     public String serialNumber;
     public String upc;
     public URI presentationURI;
-    public List<DLNADoc> dlnaDocs = new ArrayList();
+    public List<DLNADoc> dlnaDocs = new ArrayList<>();
     public DLNACaps dlnaCaps;
-    public List<MutableIcon> icons = new ArrayList();
-    public List<MutableService> services = new ArrayList();
-    public List<MutableDevice> embeddedDevices = new ArrayList();
+    public List<MutableIcon> icons = new ArrayList<>();
+    public List<MutableService> services = new ArrayList<>();
+    public List<MutableDevice> embeddedDevices = new ArrayList<>();
     public MutableDevice parentDevice;
 
     public Device build(Device prototype) throws ValidationException {
@@ -66,7 +66,7 @@ public class MutableDevice {
 
     public Device build(Device prototype, UDAVersion deviceVersion, URL baseURL) throws ValidationException {
 
-        List<Device> embeddedDevicesList = new ArrayList();
+        List<Device> embeddedDevicesList = new ArrayList<>();
         for (MutableDevice embeddedDevice : embeddedDevices) {
             embeddedDevicesList.add(embeddedDevice.build(prototype, deviceVersion, baseURL));
         }

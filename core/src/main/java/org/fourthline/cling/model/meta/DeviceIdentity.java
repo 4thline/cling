@@ -80,7 +80,7 @@ public class DeviceIdentity implements Validatable {
 
     @Override
     public List<ValidationError> validate() {
-    	List<ValidationError> errors = new ArrayList<ValidationError>();
+    	List<ValidationError> errors = new ArrayList<>();
 
     	if (getUdn() == null) {
     		errors.add(new ValidationError(

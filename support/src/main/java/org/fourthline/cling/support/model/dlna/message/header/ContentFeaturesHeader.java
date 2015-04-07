@@ -24,7 +24,7 @@ import org.fourthline.cling.support.model.dlna.DLNAAttribute;
 public class ContentFeaturesHeader extends DLNAHeader<EnumMap<DLNAAttribute.Type, DLNAAttribute>> {
 
     public ContentFeaturesHeader() {
-        setValue(new EnumMap(DLNAAttribute.Type.class));
+        setValue(new EnumMap<DLNAAttribute.Type, DLNAAttribute>(DLNAAttribute.Type.class));
     }
 
     @Override

@@ -155,8 +155,8 @@ public class Namespace {
     public Resource[] getResources(Device device) throws ValidationException {
         if (!device.isRoot()) return null;
 
-        Set<Resource> resources = new HashSet<Resource>();
-        List<ValidationError> errors = new ArrayList<ValidationError>();
+        Set<Resource> resources = new HashSet<>();
+        List<ValidationError> errors = new ArrayList<>();
 
         log.fine("Discovering local resources of device graph");
         Resource[] discoveredResources = device.discoverResources(this);

@@ -38,8 +38,8 @@ public class MutableService {
     public URI controlURI;
     public URI eventSubscriptionURI;
 
-    public List<MutableAction> actions = new ArrayList();
-    public List<MutableStateVariable> stateVariables = new ArrayList();
+    public List<MutableAction> actions = new ArrayList<>();
+    public List<MutableStateVariable> stateVariables = new ArrayList<>();
 
     public Service build(Device prototype) throws ValidationException {
         return prototype.newInstance(

@@ -81,7 +81,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
         // We don't fail device validation if icons were invalid, only log a warning. To
         // comply with mutability rules (can't set icons field in validate() method), we
         // validate the icons here before we set the field value
-        List<Icon> validIcons = new ArrayList<Icon>();
+        List<Icon> validIcons = new ArrayList<>();
         if (icons != null) {
             for (Icon icon : icons) {
                 if (icon != null) {
@@ -202,7 +202,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     public Icon[] findIcons() {
-        List<Icon> icons = new ArrayList();
+        List<Icon> icons = new ArrayList<>();
         if (hasIcons()) {
             icons.addAll(Arrays.asList(getIcons()));
         }
@@ -237,7 +237,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     protected Collection<D> findEmbeddedDevices(D current) {
-        Collection<D> devices = new HashSet();
+        Collection<D> devices = new HashSet<>();
         if (!current.isRoot() && current.getIdentity().getUdn() != null)
             devices.add(current);
 
@@ -250,7 +250,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     protected Collection<D> find(DeviceType deviceType, D current) {
-        Collection<D> devices = new HashSet();
+        Collection<D> devices = new HashSet<>();
         // Type might be null if we just discovered the device and it hasn't yet been hydrated
         if (current.getType() != null && current.getType().implementsVersion(deviceType)) {
             devices.add(current);
@@ -265,7 +265,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
     protected Collection<D> find(ServiceType serviceType, D current) {
         Collection<S> services = findServices(serviceType, null, current);
-        Collection<D> devices = new HashSet();
+        Collection<D> devices = new HashSet<>();
         for (Service service : services) {
             devices.add((D) service.getDevice());
         }
@@ -273,7 +273,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     protected Collection<S> findServices(ServiceType serviceType, ServiceId serviceId, D current) {
-        Collection services = new HashSet();
+        Collection services = new HashSet<>();
         if (current.hasServices()) {
             for (Service service : current.getServices()) {
                 if (isMatch(service, serviceType, serviceId))
@@ -306,7 +306,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
 
     public ServiceType[] findServiceTypes() {
         Collection<S> services = findServices(null, null, (D) this);
-        Collection<ServiceType> col = new HashSet();
+        Collection<ServiceType> col = new HashSet<>();
         for (S service : services) {
             col.add(service.getServiceType());
         }
@@ -376,7 +376,7 @@ public abstract class Device<DI extends DeviceIdentity, D extends Device, S exte
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList<ValidationError>();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getType() != null) {
 

@@ -8,11 +8,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-    <uses-sdk android:targetSdkVersion="15"
-              android:minSdkVersion="15"/>
+    <uses-sdk
+            android:targetSdkVersion="22"
+            android:minSdkVersion="15"/>
 
-    <application android:icon="@drawable/appicon"
-                 android:label="@string/appName">
+    <application
+            android:icon="@drawable/appicon"
+            android:label="@string/appName"
+            android:allowBackup="false">
 
         <activity android:name=".BrowserActivity">
             <intent-filter>

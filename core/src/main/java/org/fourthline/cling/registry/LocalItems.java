@@ -42,7 +42,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     private static Logger log = Logger.getLogger(Registry.class.getName());
     
-    protected Map<UDN, DiscoveryOptions> discoveryOptions = new HashMap<UDN, DiscoveryOptions>();
+    protected Map<UDN, DiscoveryOptions> discoveryOptions = new HashMap<>();
     protected long lastAliveIntervalTimestamp = 0;
 
     LocalItems(RegistryImpl registry) {
@@ -99,7 +99,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
         log.fine("Adding item to registry with expiration in seconds: " + localDevice.getIdentity().getMaxAgeSeconds());
 
-        RegistryItem<UDN, LocalDevice> localItem = new RegistryItem<UDN, LocalDevice>(
+        RegistryItem<UDN, LocalDevice> localItem = new RegistryItem<>(
                 localDevice.getIdentity().getUdn(),
                 localDevice,
                 localDevice.getIdentity().getMaxAgeSeconds()
@@ -127,7 +127,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
     }
 
     Collection<LocalDevice> get() {
-        Set<LocalDevice> c = new HashSet();
+        Set<LocalDevice> c = new HashSet<>();
         for (RegistryItem<UDN, LocalDevice> item : getDeviceItems()) {
             c.add(item.getItem());
         }
@@ -224,7 +224,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
 
     	if(getDeviceItems().isEmpty()) return ;
 
-        Set<RegistryItem<UDN, LocalDevice>> expiredLocalItems = new HashSet();
+        Set<RegistryItem<UDN, LocalDevice>> expiredLocalItems = new HashSet<>();
 
         // "Flooding" is enabled, check if we need to send advertisements for all devices
         int aliveIntervalMillis = registry.getConfiguration().getAliveIntervalMillis();
@@ -260,7 +260,7 @@ class LocalItems extends RegistryItems<LocalDevice, LocalGENASubscription> {
         }
 
         // Expire incoming subscriptions
-        Set<RegistryItem<String, LocalGENASubscription>> expiredIncomingSubscriptions = new HashSet();
+        Set<RegistryItem<String, LocalGENASubscription>> expiredIncomingSubscriptions = new HashSet<>();
         for (RegistryItem<String, LocalGENASubscription> item : getSubscriptionItems()) {
             if (item.getExpirationDetails().hasExpired(false)) {
                 expiredIncomingSubscriptions.add(item);

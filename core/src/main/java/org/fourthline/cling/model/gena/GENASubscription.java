@@ -40,7 +40,7 @@ public abstract class GENASubscription<S extends Service> {
     protected int requestedDurationSeconds = UserConstants.DEFAULT_SUBSCRIPTION_DURATION_SECONDS;
     protected int actualDurationSeconds;
     protected UnsignedIntegerFourBytes currentSequence;
-    protected Map<String, StateVariableValue<S>> currentValues = new LinkedHashMap();
+    protected Map<String, StateVariableValue<S>> currentValues = new LinkedHashMap<>();
 
     /**
      * Defaults to {@link org.fourthline.cling.model.UserConstants#DEFAULT_SUBSCRIPTION_DURATION_SECONDS}.

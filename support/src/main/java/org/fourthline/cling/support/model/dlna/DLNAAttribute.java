@@ -61,6 +61,7 @@ public abstract class DLNAAttribute<T> {
         private String attributeName;
         private Class<? extends DLNAAttribute>[] attributeTypes;
 
+        @SafeVarargs
         private Type(String attributeName, Class<? extends DLNAAttribute>... attributeClass) {
             this.attributeName = attributeName;
             this.attributeTypes = attributeClass;

@@ -159,7 +159,7 @@ public class Icon implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getMimeType() == null) {
             log.warning("UPnP specification violation of: " + getDevice());

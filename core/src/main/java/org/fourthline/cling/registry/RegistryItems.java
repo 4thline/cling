@@ -37,8 +37,8 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
 
     protected final RegistryImpl registry;
 
-    protected final Set<RegistryItem<UDN, D>> deviceItems = new HashSet();
-    protected final Set<RegistryItem<String, S>> subscriptionItems = new HashSet();
+    protected final Set<RegistryItem<UDN, D>> deviceItems = new HashSet<>();
+    protected final Set<RegistryItem<String, S>> subscriptionItems = new HashSet<>();
 
     RegistryItems(RegistryImpl registry) {
         this.registry = registry;
@@ -91,7 +91,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
      * @return Any registered root or embedded device with a compatible type.
      */
     Collection<D> get(DeviceType deviceType) {
-        Collection<D> devices = new HashSet();
+        Collection<D> devices = new HashSet<>();
         for (RegistryItem<UDN, D> item : deviceItems) {
             D[] d = (D[])item.getItem().findDevices(deviceType);
             if (d != null) {
@@ -108,7 +108,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
      * @return Any registered root or embedded device with at least one matching service.
      */
     Collection<D> get(ServiceType serviceType) {
-        Collection<D> devices = new HashSet();
+        Collection<D> devices = new HashSet<>();
         for (RegistryItem<UDN, D> item : deviceItems) {
 
             D[] d = (D[])item.getItem().findDevices(serviceType);
@@ -120,7 +120,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
     }
 
     Collection<D> get() {
-        Collection<D> devices = new HashSet();
+        Collection<D> devices = new HashSet<>();
         for (RegistryItem<UDN, D> item : deviceItems) {
             devices.add(item.getItem());
         }
@@ -138,7 +138,7 @@ abstract class RegistryItems<D extends Device, S extends GENASubscription> {
     void addSubscription(S subscription) {
 
         RegistryItem<String, S> subscriptionItem =
-                new RegistryItem<String, S>(
+                new RegistryItem<>(
                         subscription.getSubscriptionId(),
                         subscription,
                         subscription.getActualDurationSeconds()

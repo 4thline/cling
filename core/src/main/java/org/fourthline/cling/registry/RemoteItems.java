@@ -134,7 +134,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
             }
 
             // Override the device's maximum age if configured (systems without multicast support)
-            final RegistryItem<UDN, RemoteDevice> item = new RegistryItem<UDN, RemoteDevice>(
+            final RegistryItem<UDN, RemoteDevice> item = new RegistryItem<>(
                     registeredRemoteDevice.getIdentity().getUdn(),
                     registeredRemoteDevice,
                     registry.getConfiguration().getRemoteDeviceMaxAgeSeconds() != null
@@ -253,7 +253,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         if (getDeviceItems().isEmpty()) return;
 
         // Remove expired remote devices
-        Map<UDN, RemoteDevice> expiredRemoteDevices = new HashMap();
+        Map<UDN, RemoteDevice> expiredRemoteDevices = new HashMap<>();
         for (RegistryItem<UDN, RemoteDevice> remoteItem : getDeviceItems()) {
             if (log.isLoggable(Level.FINEST))
                 log.finest("Device '" + remoteItem.getItem() + "' expires in seconds: "
@@ -269,7 +269,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
         }
 
         // Renew outgoing subscriptions
-        Set<RemoteGENASubscription> expiredOutgoingSubscriptions = new HashSet();
+        Set<RemoteGENASubscription> expiredOutgoingSubscriptions = new HashSet<>();
         for (RegistryItem<String, RemoteGENASubscription> item : getSubscriptionItems()) {
             if (item.getExpirationDetails().hasExpired(true)) {
                 expiredOutgoingSubscriptions.add(item.getItem());
@@ -284,7 +284,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
     public void resume() {
         log.fine("Updating remote device expiration timestamps on resume");
-        List<RemoteDeviceIdentity> toUpdate = new ArrayList<RemoteDeviceIdentity>();
+        List<RemoteDeviceIdentity> toUpdate = new ArrayList<>();
         for (RegistryItem<UDN, RemoteDevice> remoteItem : getDeviceItems()) {
             toUpdate.add(remoteItem.getItem().getIdentity());
         }
@@ -295,7 +295,7 @@ class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
     void shutdown() {
         log.fine("Cancelling all outgoing subscriptions to remote devices during shutdown");
-        List<RemoteGENASubscription> remoteSubscriptions = new ArrayList();
+        List<RemoteGENASubscription> remoteSubscriptions = new ArrayList<>();
         for (RegistryItem<String, RemoteGENASubscription> item : getSubscriptionItems()) {
             remoteSubscriptions.add(item.getItem());
         }

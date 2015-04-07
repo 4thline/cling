@@ -53,11 +53,11 @@ public class EventedValueChannelLoudness extends EventedValue<ChannelLoudness> {
     @Override
     public Map.Entry<String, String>[] getAttributes() {
         return new Map.Entry[]{
-                new AbstractMap.SimpleEntry<String, String>(
+                new AbstractMap.SimpleEntry<>(
                         "val",
                         new BooleanDatatype().getString(getValue().getLoudness())
                 ),
-                new AbstractMap.SimpleEntry<String, String>(
+                new AbstractMap.SimpleEntry<>(
                         "channel",
                         getValue().getChannel().name()
                 )

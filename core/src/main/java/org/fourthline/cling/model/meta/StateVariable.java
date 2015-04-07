@@ -74,7 +74,7 @@ public class StateVariable<S extends Service> implements Validatable {
     }
 
     public List<ValidationError> validate() {
-        List<ValidationError> errors = new ArrayList();
+        List<ValidationError> errors = new ArrayList<>();
 
         if (getName() == null || getName().length() == 0) {
             errors.add(new ValidationError(

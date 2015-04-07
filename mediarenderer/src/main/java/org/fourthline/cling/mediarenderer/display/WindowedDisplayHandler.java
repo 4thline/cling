@@ -36,7 +36,7 @@ public class WindowedDisplayHandler implements DisplayHandler {
 
     final private static Logger log = Logger.getLogger(WindowedDisplayHandler.class.getName());
 
-    final protected Map<UnsignedIntegerFourBytes, JFrame> playerWindows = new HashMap();
+    final protected Map<UnsignedIntegerFourBytes, JFrame> playerWindows = new HashMap<>();
 
     public WindowedDisplayHandler() {
         MediaRenderer.APP.log(Level.INFO, "Enabling window handler for each player instance");

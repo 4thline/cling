@@ -56,13 +56,13 @@ public class EventedValueChannelVolume extends EventedValue<ChannelVolume> {
     @Override
     public Map.Entry<String, String>[] getAttributes() {
         return new Map.Entry[]{
-                new AbstractMap.SimpleEntry<String, String>(
+                new AbstractMap.SimpleEntry<>(
                         "val",
                         new UnsignedIntegerTwoBytesDatatype().getString(
                                 new UnsignedIntegerTwoBytes(getValue().getVolume())
                         )
                 ),
-                new AbstractMap.SimpleEntry<String, String>(
+                new AbstractMap.SimpleEntry<>(
                         "channel",
                         getValue().getChannel().name()
                 )

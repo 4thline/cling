@@ -34,7 +34,7 @@ import java.util.ArrayList;
  */
 public class IncomingEventRequestMessage extends StreamRequestMessage {
 
-    final private List<StateVariableValue> stateVariableValues = new ArrayList();
+    final private List<StateVariableValue> stateVariableValues = new ArrayList<>();
     final private RemoteService service;
 
     public IncomingEventRequestMessage(StreamRequestMessage source, RemoteService service) {

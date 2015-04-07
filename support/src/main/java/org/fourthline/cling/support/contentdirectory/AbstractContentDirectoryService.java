@@ -114,7 +114,7 @@ public abstract class AbstractContentDirectoryService {
     final protected PropertyChangeSupport propertyChangeSupport;
 
     protected AbstractContentDirectoryService() {
-        this(new ArrayList(), new ArrayList(), null);
+        this(new ArrayList<String>(), new ArrayList<String>(), null);
     }
 
     protected AbstractContentDirectoryService(List<String> searchCapabilities, List<String> sortCapabilities) {

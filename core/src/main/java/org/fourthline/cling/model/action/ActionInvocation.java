@@ -37,8 +37,8 @@ public class ActionInvocation<S extends Service> {
 
     // We don't necessarily have to preserve insertion order but it's nicer if the arrays returned
     // by the getters are reliable
-    protected Map<String, ActionArgumentValue<S>> input = new LinkedHashMap();
-    protected Map<String, ActionArgumentValue<S>> output = new LinkedHashMap();
+    protected Map<String, ActionArgumentValue<S>> input = new LinkedHashMap<>();
+    protected Map<String, ActionArgumentValue<S>> output = new LinkedHashMap<>();
 
     protected ActionException failure = null;
 
