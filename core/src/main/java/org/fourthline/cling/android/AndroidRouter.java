@@ -31,7 +31,6 @@ import org.fourthline.cling.transport.RouterImpl;
 import org.fourthline.cling.transport.spi.InitializationException;
 import org.seamless.util.Exceptions;
 
-import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -183,7 +182,7 @@ public class AndroidRouter extends RouterImpl {
 
     protected void setWifiLock(boolean enable) {
         if (wifiLock == null) {
-            wifiLock = createWiFiLock();
+            wifiLock = wifiManager.createWifiLock(WifiManager.WIFI_MODE_FULL_HIGH_PERF, getClass().getSimpleName());
         }
 
         if (enable) {
@@ -201,21 +200,6 @@ public class AndroidRouter extends RouterImpl {
                 log.warning("WiFi lock already released");
             }
         }
-    }
-
-    protected WifiManager.WifiLock createWiFiLock() {
-        int wifiMode = WifiManager.WIFI_MODE_FULL;
-        try {
-            // TODO: What's this?
-            Field f = WifiManager.class.getField("WIFI_MODE_FULL_HIGH_PERF");
-            wifiMode = f.getInt(null);
-        } catch (Exception e) {
-            // Ignore
-        }
-        WifiManager.WifiLock wifiLock =
-            wifiManager.createWifiLock(wifiMode, getClass().getSimpleName());
-        log.info("Created WiFi lock, mode: " + wifiMode);
-        return wifiLock;
     }
 
     /**
