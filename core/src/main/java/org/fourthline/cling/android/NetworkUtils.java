@@ -31,9 +31,6 @@ public class NetworkUtils {
 
     final private static Logger log = Logger.getLogger(NetworkUtils.class.getName());
 
-    private final static int CONNECTIVITY_TYPE_WIMAX = 6; // Since API 8
-    private final static int CONNECTIVITY_TYPE_ETHERNET = 9; // Since API 13
-
     static public NetworkInfo getConnectedNetworkInfo(Context context) {
 
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -49,10 +46,10 @@ public class NetworkUtils {
         networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) return networkInfo;
 
-        networkInfo = connectivityManager.getNetworkInfo(CONNECTIVITY_TYPE_WIMAX);
+        networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIMAX);
         if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) return networkInfo;
 
-        networkInfo = connectivityManager.getNetworkInfo(CONNECTIVITY_TYPE_ETHERNET);
+        networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
         if (networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected()) return networkInfo;
 
         log.info("Could not find any connected network...");
@@ -61,7 +58,7 @@ public class NetworkUtils {
     }
 
     static public boolean isEthernet(NetworkInfo networkInfo) {
-        return isNetworkType(networkInfo, CONNECTIVITY_TYPE_ETHERNET);
+        return isNetworkType(networkInfo, ConnectivityManager.TYPE_ETHERNET);
     }
 
     static public boolean isWifi(NetworkInfo networkInfo) {
@@ -69,7 +66,7 @@ public class NetworkUtils {
     }
 
     static public boolean isMobile(NetworkInfo networkInfo) {
-        return isNetworkType(networkInfo, ConnectivityManager.TYPE_MOBILE) || isNetworkType(networkInfo, CONNECTIVITY_TYPE_WIMAX);
+        return isNetworkType(networkInfo, ConnectivityManager.TYPE_MOBILE) || isNetworkType(networkInfo, ConnectivityManager.TYPE_WIMAX);
     }
 
     static public boolean isNetworkType(NetworkInfo networkInfo, int type) {

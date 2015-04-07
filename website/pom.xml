@@ -26,7 +26,7 @@
 
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.3</version>
+                <version>${maven.site.plugin.version}</version>
             </plugin>
 
             <plugin>
