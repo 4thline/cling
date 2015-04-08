@@ -16,7 +16,6 @@
 package org.fourthline.cling.android;
 
 import org.fourthline.cling.transport.impl.NetworkAddressFactoryImpl;
-import org.fourthline.cling.transport.spi.InitializationException;
 
 import java.lang.reflect.Field;
 import java.net.Inet4Address;
@@ -77,17 +76,5 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
                 return localAddress;
         }
         throw new IllegalStateException("Can't find any IPv4 or IPv6 address on interface: " + networkInterface.getDisplayName());
-    }
-
-    @Override
-    protected void discoverNetworkInterfaces() throws InitializationException {
-        try {
-            super.discoverNetworkInterfaces();
-        } catch (Exception ex) {
-            // TODO: ICS bug on some models with network interface disappearing while enumerated
-            // http://code.google.com/p/android/issues/detail?id=33661
-            log.warning("Exception while enumerating network interfaces, trying once more: " + ex);
-            super.discoverNetworkInterfaces();
-        }
     }
 }
