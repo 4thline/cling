@@ -6,3 +6,5 @@
 target
 MANIFEST.MF
 out
+
+gen-external-apklibs

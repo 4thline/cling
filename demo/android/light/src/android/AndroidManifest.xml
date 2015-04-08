@@ -10,7 +10,7 @@
 
     <uses-sdk
             android:targetSdkVersion="22"
-            android:minSdkVersion="15"/>
+            android:minSdkVersion="16"/>
 
     <application
             android:icon="@drawable/appicon"

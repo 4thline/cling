@@ -16,6 +16,7 @@
 	<modules>
 		<module>browser</module>
         <module>light</module>
+        <module>wifidirect</module>
 	</modules>
 
     <build>
@@ -57,6 +58,12 @@
             <artifactId>android</artifactId>
             <version>${android.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- For Android we use the Jetty transport in Cling -->

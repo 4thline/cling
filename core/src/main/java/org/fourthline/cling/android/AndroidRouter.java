@@ -22,6 +22,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
+import android.net.wifi.p2p.WifiP2pInfo;
+import android.net.wifi.p2p.WifiP2pManager;
 import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.protocol.ProtocolFactory;
@@ -47,10 +49,12 @@ public class AndroidRouter extends RouterImpl {
     final private Context context;
 
     final private WifiManager wifiManager;
+    final private WifiP2pManager wifiP2pManager;
     protected WifiManager.MulticastLock multicastLock;
     protected WifiManager.WifiLock wifiLock;
     protected NetworkInfo networkInfo;
     protected BroadcastReceiver broadcastReceiver;
+    protected BroadcastReceiver wifiP2pBroadcastReceiver;
 
     public AndroidRouter(UpnpServiceConfiguration configuration,
                          ProtocolFactory protocolFactory,
@@ -60,17 +64,25 @@ public class AndroidRouter extends RouterImpl {
         this.context = context;
         this.wifiManager = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE));
         this.networkInfo = NetworkUtils.getConnectedNetworkInfo(context);
+        this.wifiP2pManager = (WifiP2pManager) context.getSystemService(Context.WIFI_P2P_SERVICE);
 
         // Only register for network connectivity changes if we are not running on emulator
         if (!ModelUtil.ANDROID_EMULATOR) {
             this.broadcastReceiver = createConnectivityBroadcastReceiver();
-            context.registerReceiver(broadcastReceiver, new IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"));
+            context.registerReceiver(broadcastReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+            this.wifiP2pBroadcastReceiver = createWifiP2pBroadcastReceiver();
+            context.registerReceiver(wifiP2pBroadcastReceiver, new IntentFilter(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION));
         }
     }
 
     protected BroadcastReceiver createConnectivityBroadcastReceiver() {
-		return new ConnectivityBroadcastReceiver();
-	}
+        return new ConnectivityBroadcastReceiver();
+    }
+
+    protected BroadcastReceiver createWifiP2pBroadcastReceiver() {
+        return new WifiP2pBroadcastReceiver();
+    }
 
     @Override
     protected int getLockTimeoutMillis() {
@@ -156,6 +168,11 @@ public class AndroidRouter extends RouterImpl {
             context.unregisterReceiver(broadcastReceiver);
             broadcastReceiver = null;
         }
+
+        if (wifiP2pBroadcastReceiver != null) {
+            context.unregisterReceiver(wifiP2pBroadcastReceiver);
+            wifiP2pBroadcastReceiver = null;
+        }
     }
 
     protected void setWiFiMulticastLock(boolean enable) {
@@ -209,13 +226,13 @@ public class AndroidRouter extends RouterImpl {
      */
     protected void onNetworkTypeChange(NetworkInfo oldNetwork, NetworkInfo newNetwork) throws RouterException {
         log.info(String.format("Network type changed %s => %s",
-            oldNetwork == null ? "" : oldNetwork.getTypeName(),
-            newNetwork == null ? "NONE" : newNetwork.getTypeName()));
+                oldNetwork == null ? "" : oldNetwork.getTypeName(),
+                newNetwork == null ? "NONE" : newNetwork.getTypeName()));
 
         if (disable()) {
             log.info(String.format(
-                "Disabled router on network type change (old network: %s)",
-                oldNetwork == null ? "NONE" : oldNetwork.getTypeName()
+                    "Disabled router on network type change (old network: %s)",
+                    oldNetwork == null ? "NONE" : oldNetwork.getTypeName()
             ));
         }
 
@@ -224,8 +241,8 @@ public class AndroidRouter extends RouterImpl {
             // Can return false (via earlier InitializationException thrown by NetworkAddressFactory) if
             // no bindable network address found!
             log.info(String.format(
-                "Enabled router on network type change (new network: %s)",
-                newNetwork == null ? "NONE" : newNetwork.getTypeName()
+                    "Enabled router on network type change (new network: %s)",
+                    newNetwork == null ? "NONE" : newNetwork.getTypeName()
             ));
         }
     }
@@ -270,8 +287,8 @@ public class AndroidRouter extends RouterImpl {
                         return;
                     }
                     log.warning(String.format(
-                        "%s => NONE network transition, waiting for new network... retry #%d",
-                        networkInfo.getTypeName(), i
+                            "%s => NONE network transition, waiting for new network... retry #%d",
+                            networkInfo.getTypeName(), i
                     ));
                     newNetworkInfo = NetworkUtils.getConnectedNetworkInfo(context);
                     if (newNetworkInfo != null)
@@ -288,14 +305,6 @@ public class AndroidRouter extends RouterImpl {
                     handleRouterExceptionOnNetworkTypeChange(ex);
                 }
             }
-        }
-
-        protected boolean isSameNetworkType(NetworkInfo network1, NetworkInfo network2) {
-            if (network1 == null && network2 == null)
-                return true;
-            if (network1 == null || network2 == null)
-                return false;
-            return network1.getType() == network2.getType();
         }
 
         protected void displayIntentInfo(Intent intent) {
@@ -317,4 +326,51 @@ public class AndroidRouter extends RouterImpl {
 
     }
 
+    private static boolean isConnectionStateEqual(NetworkInfo network1, NetworkInfo network2) {
+        if (network1 == null && network2 == null)
+            return true;
+
+        return network1 != null && network1.isConnectedOrConnecting() == network2.isConnectedOrConnecting();
+    }
+
+    class WifiP2pBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (!intent.getAction().equals(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION))
+                return;
+
+            displayIntentInfo(intent);
+
+            final NetworkInfo newNetworkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+
+            if (isSameNetworkType(networkInfo, newNetworkInfo) && isConnectionStateEqual(networkInfo, newNetworkInfo)) {
+                log.info("No actual P2P network change... ignoring event! This is likely caused by a connecting/disconnecting client.");
+            } else {
+                try {
+                    onNetworkTypeChange(networkInfo, newNetworkInfo);
+                } catch (RouterException ex) {
+                    handleRouterExceptionOnNetworkTypeChange(ex);
+                }
+            }
+        }
+
+        protected void displayIntentInfo(Intent intent) {
+            final NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+            final WifiP2pInfo p2pInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_WIFI_P2P_INFO);
+
+            log.info("P2P Connectivity change detected...");
+            log.info("EXTRA_NETWORK_INFO : " + (networkInfo == null ? "none" : networkInfo));
+            log.info("EXTRA_WIFI_P2P_INFO: " + (p2pInfo == null ? "none" : p2pInfo));
+        }
+    }
+
+    protected static boolean isSameNetworkType(NetworkInfo network1, NetworkInfo network2) {
+        if (network1 == null && network2 == null)
+            return true;
+        if (network1 == null || network2 == null)
+            return false;
+        return network1.getType() == network2.getType();
+    }
 }

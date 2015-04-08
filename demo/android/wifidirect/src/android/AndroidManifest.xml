@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.fourthline.cling.demo.android.browser">
+          package="org.fourthline.cling.demo.android.wifidirect">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
@@ -17,18 +18,16 @@
             android:label="@string/appName"
             android:allowBackup="false">
 
-        <activity android:name=".BrowserActivity">
+        <activity android:name=".LightActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
+        <activity android:name=".WifiDirectBrowserActivity"/>
 
-        <!-- Or a custom service configuration, also use this class in bindService()!
-        <service android:name=".BrowserUpnpService"/>
-        -->
+        <service android:name="org.fourthline.cling.android.AndroidUpnpServiceImpl"/>
 
     </application>
 
