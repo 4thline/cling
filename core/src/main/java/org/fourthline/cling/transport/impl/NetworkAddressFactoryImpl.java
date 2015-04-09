@@ -87,6 +87,10 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
             useAddresses.addAll(Arrays.asList(useAddressesStrings));
         }
 
+        this.streamListenPort = streamListenPort;
+    }
+
+    public void initializeDiscovery() {
         discoverNetworkInterfaces();
         discoverBindAddresses();
 
@@ -98,8 +102,12 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
                 );
         	}
         }
+    }
 
-        this.streamListenPort = streamListenPort;
+    @Override
+    public void reset() {
+        networkInterfaces.clear();
+        bindAddresses.clear();
     }
 
     /**

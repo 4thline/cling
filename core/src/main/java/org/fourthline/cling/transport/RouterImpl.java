@@ -94,6 +94,7 @@ public class RouterImpl implements Router {
         log.info("Creating Router: " + getClass().getName());
         this.configuration = configuration;
         this.protocolFactory = protocolFactory;
+        this.networkAddressFactory = getConfiguration().createNetworkAddressFactory();
     }
 
     public boolean enable(@Observes @Default EnableRouter event) throws RouterException {
@@ -126,7 +127,8 @@ public class RouterImpl implements Router {
             if (!enabled) {
                 try {
                     log.fine("Starting networking services...");
-                    networkAddressFactory = getConfiguration().createNetworkAddressFactory();
+
+                    networkAddressFactory.initializeDiscovery();
 
                     startInterfaceBasedTransports(networkAddressFactory.getNetworkInterfaces());
                     startAddressBasedTransports(networkAddressFactory.getBindAddresses());
@@ -134,7 +136,7 @@ public class RouterImpl implements Router {
                     // The transports possibly removed some unusable network interfaces/addresses
                     if (!networkAddressFactory.hasUsableNetwork()) {
                         throw new NoNetworkException(
-                            "No usable network interface and/or addresses available, check the log for errors."
+                                "No usable network interface and/or addresses available, check the log for errors."
                         );
                     }
 
@@ -184,8 +186,10 @@ public class RouterImpl implements Router {
                 }
                 datagramIOs.clear();
 
-                networkAddressFactory = null;
                 enabled = false;
+
+                networkAddressFactory.reset();
+
                 return true;
             }
             return false;
@@ -197,6 +201,9 @@ public class RouterImpl implements Router {
     @Override
     public void shutdown() throws RouterException {
         disable();
+
+        // TODO: Check for side effects.
+        networkAddressFactory = null;
     }
 
     @Override
@@ -222,14 +229,14 @@ public class RouterImpl implements Router {
 
                 StreamServer preferredServer;
                 if (preferredAddress != null &&
-                    (preferredServer = streamServers.get(preferredAddress)) != null) {
+                        (preferredServer = streamServers.get(preferredAddress)) != null) {
                     streamServerAddresses.add(
-                        new NetworkAddress(
-                            preferredAddress,
-                            preferredServer.getPort(),
-                            networkAddressFactory.getHardwareAddress(preferredAddress)
+                            new NetworkAddress(
+                                    preferredAddress,
+                                    preferredServer.getPort(),
+                                    networkAddressFactory.getHardwareAddress(preferredAddress)
 
-                        )
+                            )
                     );
                     return streamServerAddresses;
                 }
@@ -237,7 +244,7 @@ public class RouterImpl implements Router {
                 for (Map.Entry<InetAddress, StreamServer> entry : streamServers.entrySet()) {
                     byte[] hardwareAddress = networkAddressFactory.getHardwareAddress(entry.getKey());
                     streamServerAddresses.add(
-                        new NetworkAddress(entry.getKey(), entry.getValue().getPort(), hardwareAddress)
+                            new NetworkAddress(entry.getKey(), entry.getValue().getPort(), hardwareAddress)
                     );
                 }
                 return streamServerAddresses;
@@ -321,7 +328,7 @@ public class RouterImpl implements Router {
      *
      * @param msg The TCP (HTTP) stream message to send.
      * @return The return value of the {@link org.fourthline.cling.transport.spi.StreamClient#sendRequest(StreamRequestMessage)}
-     *         method or <code>null</code> if no <code>StreamClient</code> is available.
+     * method or <code>null</code> if no <code>StreamClient</code> is available.
      */
     public StreamResponseMessage send(StreamRequestMessage msg) throws RouterException {
         lock(readLock);
@@ -388,10 +395,10 @@ public class RouterImpl implements Router {
                     if (log.isLoggable(Level.FINE))
                         log.fine("Init multicast receiver on interface: " + networkInterface.getDisplayName());
                     multicastReceiver.init(
-                        networkInterface,
-                        this,
-                        networkAddressFactory,
-                        getConfiguration().getDatagramProcessor()
+                            networkInterface,
+                            this,
+                            networkAddressFactory,
+                            getConfiguration().getDatagramProcessor()
                     );
 
                     multicastReceivers.put(networkInterface, multicastReceiver);
@@ -495,13 +502,13 @@ public class RouterImpl implements Router {
                 log.finest("Acquired router lock: " + lock.getClass().getSimpleName());
             } else {
                 throw new RouterException(
-                    "Router wasn't available exclusively after waiting " + timeoutMilliseconds + "ms, lock failed: "
-                        + lock.getClass().getSimpleName()
+                        "Router wasn't available exclusively after waiting " + timeoutMilliseconds + "ms, lock failed: "
+                                + lock.getClass().getSimpleName()
                 );
             }
         } catch (InterruptedException ex) {
             throw new RouterException(
-                "Interruption while waiting for exclusive access: " + lock.getClass().getSimpleName(), ex
+                    "Interruption while waiting for exclusive access: " + lock.getClass().getSimpleName(), ex
             );
         }
     }

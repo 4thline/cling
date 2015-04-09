@@ -15,6 +15,7 @@
 
 package org.fourthline.cling.android;
 
+import android.net.ConnectivityManager;
 import android.os.Build;
 import org.fourthline.cling.DefaultUpnpServiceConfiguration;
 import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
@@ -61,6 +62,13 @@ import org.fourthline.cling.transport.spi.StreamServer;
  */
 public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
+    /**
+     * ConnectityManager.TYPE_ constant, which is somehow missing in the latest Android SDKs.
+     * <p/>
+     * This constant is used to indicate a WiFi P2P (WiFi Direct) connection.
+     */
+    public static final int CONNECTIVITY_TYPE_WIFI_P2P = 13;
+
     public AndroidUpnpServiceConfiguration() {
         this(0); // Ephemeral port
     }
@@ -74,7 +82,7 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
 
     @Override
     protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort) {
-        return new AndroidNetworkAddressFactory(streamListenPort);
+        return new AndroidNetworkAddressFactory(streamListenPort, getAllowedNetworkTypes());
     }
 
     @Override
@@ -87,20 +95,20 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
     public StreamClient createStreamClient() {
         // Use Jetty
         return new StreamClientImpl(
-            new StreamClientConfigurationImpl(
-                getSyncProtocolExecutorService()
-            ) {
-                @Override
-                public String getUserAgentValue(int majorVersion, int minorVersion) {
-                    // TODO: UPNP VIOLATION: Synology NAS requires User-Agent to contain
-                    // "Android" to return DLNA protocolInfo required to stream to Samsung TV
-			        // see: http://two-play.com/forums/viewtopic.php?f=6&t=81
-                    ServerClientTokens tokens = new ServerClientTokens(majorVersion, minorVersion);
-                    tokens.setOsName("Android");
-                    tokens.setOsVersion(Build.VERSION.RELEASE);
-                    return tokens.toString();
+                new StreamClientConfigurationImpl(
+                        getSyncProtocolExecutorService()
+                ) {
+                    @Override
+                    public String getUserAgentValue(int majorVersion, int minorVersion) {
+                        // TODO: UPNP VIOLATION: Synology NAS requires User-Agent to contain
+                        // "Android" to return DLNA protocolInfo required to stream to Samsung TV
+                        // see: http://two-play.com/forums/viewtopic.php?f=6&t=81
+                        ServerClientTokens tokens = new ServerClientTokens(majorVersion, minorVersion);
+                        tokens.setOsName("Android");
+                        tokens.setOsVersion(Build.VERSION.RELEASE);
+                        return tokens.toString();
+                    }
                 }
-            }
         );
     }
 
@@ -108,10 +116,10 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
     public StreamServer createStreamServer(NetworkAddressFactory networkAddressFactory) {
         // Use Jetty, start/stop a new shared instance of JettyServletContainer
         return new AsyncServletStreamServerImpl(
-            new AsyncServletStreamServerConfigurationImpl(
-                JettyServletContainer.INSTANCE,
-                networkAddressFactory.getStreamListenPort()
-            )
+                new AsyncServletStreamServerConfigurationImpl(
+                        JettyServletContainer.INSTANCE,
+                        networkAddressFactory.getStreamListenPort()
+                )
         );
     }
 
@@ -140,4 +148,12 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
         return 3000; // Preserve battery on Android, only run every 3 seconds
     }
 
+    /**
+     * Android specific method that defines the available connectivity types.
+     * <p/>
+     * Adjust these, if you want Cling to run on more or less interfaces.
+     */
+    public int[] getAllowedNetworkTypes() {
+        return new int[]{ConnectivityManager.TYPE_ETHERNET, ConnectivityManager.TYPE_WIFI, CONNECTIVITY_TYPE_WIFI_P2P};
+    }
 }

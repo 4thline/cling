@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="appName">Cling Wifi Direct</string>
+
+    <string name="switchRouter">Network On/Off</string>
+    <string name="toggleDebugLogging">Toggle debug logging</string>
+
+    <string name="enablingRouter">Enabling network router...</string>
+    <string name="disablingRouter">Disabling network router...</string>
+    <string name="errorSwitchingRouter">Error switching router: </string>
+    <string name="enablingDebugLogging">Enabling debug logging...</string>
+    <string name="disablingDebugLogging">Disabling debug logging...</string>
+
+    <string name="registeringDevice">Registering UPnP BinaryLight device...</string>
+    <string name="createDeviceFailed">Creating of BinaryLight failed, check the log!</string>
+    <string name="toggleWifiDirectGroup">Toggle WiFi direct group</string>
+    <string name="resetLog">Reset Log</string>
+    <string name="wifiDirectBrowser">WiFi direct Browser</string>
+
+</resources>
