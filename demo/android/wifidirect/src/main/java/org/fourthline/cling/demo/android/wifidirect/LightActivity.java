@@ -31,9 +31,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.fourthline.cling.android.AndroidUpnpService;
@@ -166,7 +164,6 @@ public class LightActivity extends Activity implements PropertyChangeListener {
                     @Override
                     public void run() {
                         logTextView.append(logRecord.getMessage() + "\n");
-                        ((ScrollView) logTextView.getParent()).fullScroll(View.FOCUS_DOWN);
                     }
                 });
             }
@@ -201,7 +198,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
     protected void onDestroy() {
         super.onDestroy();
 
-        if (wifiP2pState.ordinal() >= P2PState.ChannelConnected.ordinal()) {
+        if (wifiP2pState.ordinal() > P2PState.ChannelConnected.ordinal()) {
             wifiP2pManager.removeGroup(p2pChannel, new WifiP2pManager.ActionListener() {
                 @Override
                 public void onSuccess() {
@@ -210,7 +207,7 @@ public class LightActivity extends Activity implements PropertyChangeListener {
 
                 @Override
                 public void onFailure(final int reason) {
-                    log.log(Level.WARNING, "Can not destroy the P2P group: {0}");
+                    log.log(Level.WARNING, "Can not destroy the P2P group: " + reason);
                 }
             });
         }
