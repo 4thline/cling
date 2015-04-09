@@ -56,6 +56,7 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
     static {
         networkInterfaceToTypeMap.put("wlan0", ConnectivityManager.TYPE_WIFI);
         networkInterfaceToTypeMap.put("eth0", ConnectivityManager.TYPE_ETHERNET);
+        networkInterfaceToTypeMap.put("p2p0", AndroidUpnpServiceConfiguration.CONNECTIVITY_TYPE_WIFI_P2P);
 
         // Even better, the wlan-p2p interface has a different name for every connection, but hopefully the stays equal.
         networkInterfaceToTypeMap.put("p2p-wlan", AndroidUpnpServiceConfiguration.CONNECTIVITY_TYPE_WIFI_P2P);
