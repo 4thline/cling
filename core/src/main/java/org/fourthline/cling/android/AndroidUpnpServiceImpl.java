@@ -34,7 +34,7 @@ import org.fourthline.cling.transport.Router;
  * {@link org.fourthline.cling.android.AndroidUpnpService} interface for a usage example.
  * </p>
  * <p/>
- * Override the {@link #createRouter(org.fourthline.cling.android.AndroidUpnpServiceConfiguration, org.fourthline.cling.protocol.ProtocolFactory, android.content.Context)}
+ * Override the {@link #createRouter(org.fourthline.cling.UpnpServiceConfiguration, org.fourthline.cling.protocol.ProtocolFactory, android.content.Context)}
  * and {@link #createConfiguration()} methods to customize the service.
  *
  * @author Christian Bauer
@@ -56,9 +56,9 @@ public class AndroidUpnpServiceImpl extends Service {
             @Override
             protected Router createRouter(ProtocolFactory protocolFactory, Registry registry) {
                 return AndroidUpnpServiceImpl.this.createRouter(
-                        (AndroidUpnpServiceConfiguration) getConfiguration(),
-                        protocolFactory,
-                        AndroidUpnpServiceImpl.this
+                    getConfiguration(),
+                    protocolFactory,
+                    AndroidUpnpServiceImpl.this
                 );
             }
 
@@ -66,7 +66,7 @@ public class AndroidUpnpServiceImpl extends Service {
             public synchronized void shutdown() {
                 // First have to remove the receiver, so Android won't complain about it leaking
                 // when the main UI thread exits.
-                ((AndroidRouter) getRouter()).unregisterBroadcastReceiver();
+                ((AndroidRouter)getRouter()).unregisterBroadcastReceiver();
 
                 // Now we can concurrently run the Cling shutdown code, without occupying the
                 // Android main UI thread. This will complete probably after the main UI thread
@@ -80,9 +80,9 @@ public class AndroidUpnpServiceImpl extends Service {
         return new AndroidUpnpServiceConfiguration();
     }
 
-    protected AndroidRouter createRouter(AndroidUpnpServiceConfiguration configuration,
-                                         ProtocolFactory protocolFactory,
-                                         Context context) {
+    protected AndroidRouter createRouter(UpnpServiceConfiguration configuration,
+                                                   ProtocolFactory protocolFactory,
+                                                   Context context) {
         return new AndroidRouter(configuration, protocolFactory, context);
     }
 

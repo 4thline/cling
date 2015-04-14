@@ -33,15 +33,6 @@ public interface NetworkAddressFactory {
     public static final String SYSTEM_PROPERTY_NET_IFACES = "org.fourthline.cling.network.useInterfaces";
     public static final String SYSTEM_PROPERTY_NET_ADDRESSES = "org.fourthline.cling.network.useAddresses";
 
-    /**
-     * Starts the discovery.
-     */
-    public void initializeDiscovery();
-
-    /**
-     * Remove all connected interfaces (until the next discovery).
-     */
-    public void reset();
 
     /**
      * @return The UDP multicast group to join.
