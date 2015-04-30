@@ -22,11 +22,14 @@ import org.seamless.swing.Application;
 
 import javax.annotation.PostConstruct;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JToolBar;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -35,6 +38,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +58,11 @@ public class MonitorViewImpl extends JDialog implements MonitorView {
     protected StateVariableTable stateVariablesTable;
 
     protected Presenter presenter;
+
+    final protected JToolBar toolBar = new JToolBar();
+
+    final protected JButton copyButton =
+            new JButton("Copy", Application.createImageIcon(Workbench.class, "img/copyclipboard.png"));
 
     @Override
     public Component asUIComponent() {
@@ -101,12 +110,36 @@ public class MonitorViewImpl extends JDialog implements MonitorView {
         monitoringToolBar.add(stopButton);
 
         stateVariablesTable = new StateVariableTable(null);
+        stateVariablesTable.getSelectionModel().addListSelectionListener(
+                new ListSelectionListener() {
+                    public void valueChanged(ListSelectionEvent e) {
+
+                        if (e.getValueIsAdjusting()) return;
+
+                        if (e.getSource() == stateVariablesTable.getSelectionModel()) {
+                            int[] rows = stateVariablesTable.getSelectedRows();
+
+                            if (rows == null || rows.length == 0) {
+                                copyButton.setEnabled(false);
+                            } else if (rows.length == 1) {
+                                copyButton.setEnabled(true);
+                            } else {
+                                copyButton.setEnabled(true);
+                            }
+                        }
+                    }
+                }
+        );
+
         stateVariablesScrollPane = new JScrollPane(stateVariablesTable);
+
+        initializeLoggingToolbar();
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         mainPanel.add(monitoringToolBar, BorderLayout.NORTH);
         mainPanel.add(stateVariablesScrollPane, BorderLayout.CENTER);
+        mainPanel.add(toolBar, BorderLayout.SOUTH);
         add(mainPanel);
 
         setResizable(true);
@@ -114,6 +147,37 @@ public class MonitorViewImpl extends JDialog implements MonitorView {
         setPreferredSize(new Dimension(450, 150));
         pack();
         setVisible(true);
+    }
+
+    protected void initializeLoggingToolbar() {
+        toolBar.setMargin(new Insets(5, 0, 5, 0));
+        toolBar.setFloatable(false);
+        toolBar.add(copyButton);
+
+        copyButton.setFocusable(false);
+        copyButton.setEnabled(false);
+        copyButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                StringBuilder sb = new StringBuilder();
+                List<StateVariableValue> messages = getSelectedValue();
+                for (StateVariableValue message : messages) {
+                    sb.append(message.toString()).append("\n");
+                }
+                Application.copyToClipboard(sb.toString());
+            }
+        });
+
+        toolBar.setFloatable(false);
+        toolBar.add(copyButton);
+        toolBar.add(Box.createHorizontalGlue());
+    }
+
+    protected List<StateVariableValue> getSelectedValue() {
+        List<StateVariableValue> messages = new ArrayList<>();
+        for (int row : stateVariablesTable.getSelectedRows()) {
+            messages.add((StateVariableValue) stateVariablesTable.getValueAt(row, 1));
+        }
+        return messages;
     }
 
     @Override
