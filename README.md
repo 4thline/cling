@@ -3,6 +3,38 @@ Read the README.txt
 
 https://github.com/4thline/cling/blob/master/distribution/src/dist/README.txt
 
+About this build
+----------------
+
+This cling branch will merge a various PRs intended for the central cling repository at https://github.com/4thline/cling.
+
+Included:
+
+* https://github.com/4thline/cling/pull/105
+* https://github.com/4thline/cling/pull/106
+* https://github.com/4thline/cling/pull/108
+* https://github.com/4thline/cling/pull/109
+* https://github.com/4thline/cling/pull/110
+* https://github.com/4thline/cling/pull/114
+* https://github.com/4thline/cling/pull/116
+* https://github.com/4thline/cling/pull/120
+
+Also provided is a *temporary* maven repository. Sample inclusion for gradle:
+
+````
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://raw.github.com/ened/cling/mvn-repo'
+    }
+}
+
+dependencies {
+    compile('org.fourthline.cling:cling-core:2.0.1-SR-SNAPSHOT')
+    compile('org.fourthline.cling:cling-support:2.0.1-SR-SNAPSHOT')
+}
+````
+
 Building Cling
 ---------------------
 

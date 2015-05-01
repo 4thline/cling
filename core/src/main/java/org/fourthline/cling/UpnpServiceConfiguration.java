@@ -22,6 +22,7 @@ import org.fourthline.cling.model.message.UpnpHeaders;
 import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.types.ServiceType;
+import org.fourthline.cling.protocol.ProtocolFactory;
 import org.fourthline.cling.transport.spi.DatagramIO;
 import org.fourthline.cling.transport.spi.DatagramProcessor;
 import org.fourthline.cling.transport.spi.GENAEventProcessor;
@@ -74,6 +75,12 @@ public interface UpnpServiceConfiguration {
      * @return A new instance of the {@link org.fourthline.cling.transport.spi.StreamClient} interface.
      */
     public StreamClient createStreamClient();
+
+    /**
+     * @param upnpService Instance of a {@link org.fourthline.cling.UpnpService} which will provide context to the factory.
+     * @return A new instance of the {@link org.fourthline.cling.protocol.ProtocolFactory} interface.
+     */
+    public ProtocolFactory createProtocolFactory(UpnpService upnpService);
 
     /**
      * @param networkAddressFactory The configured {@link org.fourthline.cling.transport.spi.NetworkAddressFactory}.
