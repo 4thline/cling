@@ -18,7 +18,6 @@ package org.fourthline.cling.workbench.plugins.contentdirectory.impl;
 import org.fourthline.cling.support.model.DIDLObject;
 import org.fourthline.cling.support.model.container.Container;
 import org.fourthline.cling.workbench.plugins.contentdirectory.SelectableFieldsForm;
-import org.seamless.swing.Form;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -52,6 +51,9 @@ public class ContainerFormPanel extends JPanel {
         form.addLabelAndSelectableLastField("Child Count:", childCount != null ? childCount.toString() : "-", this);
         form.addLabelAndSelectableLastField("Restricted?", Boolean.toString(container.isRestricted()), this);
         form.addLabelAndSelectableLastField("Searchable?", Boolean.toString(container.isSearchable()), this);
+
+        if (container.hasProperty(DIDLObject.Property.UPNP.ICON.class))
+            form.addLabelAndSelectableLastField("UPnP Icon:", container.getFirstProperty(DIDLObject.Property.UPNP.ICON.class).toString(), this);
 
         if (container.hasProperty(DIDLObject.Property.UPNP.STORAGE_FREE.class))
             form.addLabelAndSelectableLastField("UPnP Storage Free:", container.getFirstProperty(DIDLObject.Property.UPNP.STORAGE_FREE.class).toString(), this);
