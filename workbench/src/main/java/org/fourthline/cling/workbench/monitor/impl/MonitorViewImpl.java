@@ -62,7 +62,7 @@ public class MonitorViewImpl extends JDialog implements MonitorView {
     final protected JToolBar toolBar = new JToolBar();
 
     final protected JButton copyButton =
-            new JButton("Copy", Application.createImageIcon(Workbench.class, "img/copyclipboard.png"));
+            new JButton("Copy", Application.createImageIcon(Workbench.class, "img/16/copyclipboard.png"));
 
     @Override
     public Component asUIComponent() {
