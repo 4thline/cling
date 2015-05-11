@@ -33,10 +33,9 @@ public class StateVariableTable extends JTable {
         this.valuesModel = new StateVariableValuesTableModel(values);
 
         setRowHeight(25);
-        setRowSelectionAllowed(false);
+        setRowSelectionAllowed(true);
         setColumnSelectionAllowed(false);
-        setCellSelectionEnabled(false);
-        setFocusable(false);
+        setCellSelectionEnabled(true);
 
         setModel(valuesModel);
 
