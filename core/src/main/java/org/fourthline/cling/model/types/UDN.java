@@ -18,6 +18,7 @@ package org.fourthline.cling.model.types;
 import org.fourthline.cling.model.ModelUtil;
 
 
+import java.io.UnsupportedEncodingException;
 import java.util.UUID;
 import java.security.MessageDigest;
 import java.math.BigInteger;
@@ -72,13 +73,13 @@ public class UDN {
     }
 
     /**
-     * Generates a global unique identifier that is the same every time this method is invoked on the same machine.
+     * Generates a global unique identifier that is the same every time this method is invoked on the same machine with
+     * the same argument.
      * <p>
-     * This method discovers various pieces of information about the local system such
-     * as hostname, MAC address, OS name and version. It then combines this information with the
-     * given salt to generate a globally unique identifier. In other words, every time you
-     * call this method with the same salt on the same machine, you get the same identifier.
-     * If you use the same salt on a different machine, a different identifier will be generated.
+     * This method combines the first non-loopback network interface's MAC address with given salt to generate a
+     * globally unique identifier. In other words, every time you call this method with the same salt on the same
+     * machine, you get the same identifier. If you use the same salt on a different machine, a different identifier
+     * will be generated.
      * </p>
      * <p>
      * Note for Android users: This method does not generate unique identifiers on Android devices and will
@@ -92,29 +93,19 @@ public class UDN {
      * your device is powered up.
      * </p>
      *
-     * @param salt An arbitrary string that uniquely identifies the devices on the current system, e.g. "MyMediaServer".
+     * @param salt An arbitrary string that uniquely identifies the device on the current system, e.g. "MyMediaServer".
      * @return A global unique identifier, stable for the current system and salt.
      */
     public static UDN uniqueSystemIdentifier(String salt) {
         StringBuilder systemSalt = new StringBuilder();
 
-        // Bug: I've seen InetAddress.getLocalHost() block *forever* on Android, until device is rebooted
         // Bug: On Android, NetworkInterface.isLoopback() isn't implemented
         if (!ModelUtil.ANDROID_RUNTIME) {
             try {
-                java.net.InetAddress i = java.net.InetAddress.getLocalHost();
-                systemSalt.append(i.getHostName()).append(i.getHostAddress());
-            } catch (Exception ex) {
-                // Could not find local host name, try to get the MAC address of loopback interface
-                try {
-                    systemSalt.append(new String(ModelUtil.getFirstNetworkInterfaceHardwareAddress(), "UTF-8"));
-                } catch (Throwable ex1) {
-                    // Ignore, we did everything we can
-                    log.severe(
-                        "Couldn't get host/network interface information on this machine, " +
-                            "generated UDN might not be unique!"
-                    );
-                }
+                systemSalt.append(new String(ModelUtil.getFirstNetworkInterfaceHardwareAddress(), "UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                // If your JVM doesn't support utf-8, you have bigger problems
+                throw new RuntimeException(ex);
             }
         } else {
             throw new RuntimeException(
@@ -123,8 +114,6 @@ public class UDN {
             );
         }
 
-        systemSalt.append(System.getProperty("os.name"));
-        systemSalt.append(System.getProperty("os.version"));
         try {
             byte[] hash = MessageDigest.getInstance("MD5").digest(systemSalt.toString().getBytes("UTF-8"));
             return new UDN(
