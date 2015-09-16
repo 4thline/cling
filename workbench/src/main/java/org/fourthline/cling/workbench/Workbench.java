@@ -37,10 +37,10 @@ public class Workbench extends Main {
 
     public static final String APPNAME = "Cling Workbench";
 
-    public static interface Log {
-        final public static Logger MAIN = Logger.getLogger("Workbench");
-        final public static Logger ACTION_INVOCATION = Logger.getLogger("Action Invocation");
-        final public static Logger EVENT_MONITOR = Logger.getLogger("Event Monitor");
+    public interface Log {
+        Logger MAIN = Logger.getLogger("Workbench");
+        Logger ACTION_INVOCATION = Logger.getLogger("Action Invocation");
+        Logger EVENT_MONITOR = Logger.getLogger("Event Monitor");
     }
 
     public static final Weld weld = new Weld() {

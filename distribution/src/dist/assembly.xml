@@ -13,12 +13,10 @@
     <files>
         <file>
             <source>src/dist/README.txt</source>
-            <outputDirectory>/</outputDirectory>
             <filtered>true</filtered>
         </file>
         <file>
             <source>src/dist/LICENSE.txt</source>
-            <outputDirectory>/</outputDirectory>
         </file>
     </files>
 
@@ -27,7 +25,7 @@
         <!-- Cling Core -->
         <fileSet>
             <directory>core/src</directory>
-            <outputDirectory>/core/src</outputDirectory>
+            <outputDirectory>core/src</outputDirectory>
             <includes>
                 <include>main/**</include>
                 <include>test/**</include>
@@ -35,21 +33,21 @@
         </fileSet>
         <fileSet>
             <directory>core/target</directory>
-            <outputDirectory>/core</outputDirectory>
+            <outputDirectory>core</outputDirectory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>core/target/site/apidocs</directory>
-            <outputDirectory>/core/apidocs</outputDirectory>
+            <outputDirectory>core/apidocs</outputDirectory>
             <includes>
                 <include>**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>core/target/manual</directory>
-            <outputDirectory>/core/manual</outputDirectory>
+            <outputDirectory>core/manual</outputDirectory>
             <includes>
                 <include>**</include>
             </includes>
@@ -58,21 +56,21 @@
         <!-- Cling Demo Android -->
         <fileSet>
             <directory>demo/android</directory>
-            <outputDirectory>/demo/android</outputDirectory>
+            <outputDirectory>demo/android</outputDirectory>
             <includes>
                 <include>pom.xml</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>demo/android/browser/target</directory>
-            <outputDirectory>/demo/android/browser</outputDirectory>
+            <outputDirectory>demo/android/browser</outputDirectory>
             <includes>
                 <include>*.apk</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>demo/android/browser/src</directory>
-            <outputDirectory>/demo/android/browser/src</outputDirectory>
+            <outputDirectory>demo/android/browser/src</outputDirectory>
             <includes>
                 <include>android/**</include>
                 <include>main/**</include>
@@ -81,14 +79,14 @@
         </fileSet>
         <fileSet>
             <directory>demo/android/light/target</directory>
-            <outputDirectory>/demo/android/light</outputDirectory>
+            <outputDirectory>demo/android/light</outputDirectory>
             <includes>
                 <include>*.apk</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>demo/android/light/src</directory>
-            <outputDirectory>/demo/android/light/src</outputDirectory>
+            <outputDirectory>demo/android/light/src</outputDirectory>
             <includes>
                 <include>android/**</include>
                 <include>main/**</include>
@@ -99,7 +97,7 @@
         <!-- Cling Support -->
         <fileSet>
             <directory>support/src</directory>
-            <outputDirectory>/support/src</outputDirectory>
+            <outputDirectory>support/src</outputDirectory>
             <includes>
                 <include>main/**</include>
                 <include>test/**</include>
@@ -107,21 +105,21 @@
         </fileSet>
         <fileSet>
             <directory>support/target</directory>
-            <outputDirectory>/support</outputDirectory>
+            <outputDirectory>support</outputDirectory>
             <includes>
                 <include>*.jar</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>support/target/site/apidocs</directory>
-            <outputDirectory>/support/apidocs</outputDirectory>
+            <outputDirectory>support/apidocs</outputDirectory>
             <includes>
                 <include>**</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>support/target/manual</directory>
-            <outputDirectory>/support/manual</outputDirectory>
+            <outputDirectory>support/manual</outputDirectory>
             <includes>
                 <include>**</include>
             </includes>
@@ -130,7 +128,6 @@
         <!-- Cling Workbench -->
         <fileSet>
             <directory>workbench/target</directory>
-            <outputDirectory>/</outputDirectory>
             <includes>
                 <include>*-standalone.jar</include>
             </includes>
@@ -139,7 +136,6 @@
         <!-- Cling MediaRenderer -->
         <fileSet>
             <directory>mediarenderer/target</directory>
-            <outputDirectory>/</outputDirectory>
             <includes>
                 <include>*-standalone.jar</include>
             </includes>
@@ -150,7 +146,7 @@
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>
-            <outputDirectory>/core/</outputDirectory>
+            <outputDirectory>core/</outputDirectory>
             <includes>
                 <include>org.seamless:seamless-util:jar</include>
                 <include>org.seamless:seamless-http:jar</include>

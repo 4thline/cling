@@ -10,10 +10,6 @@
         <weld:exclude name="android.**"/>
         <weld:exclude name="org.fourthline.cling.android.**"/>
 
-        <weld:exclude name="org.fourthline.cling.transport.impl.apache.**">
-            <weld:if-class-available name="!org.apache.http.HttpVersion"/>
-        </weld:exclude>
-
         <weld:exclude name="org.fourthline.cling.transport.impl.jetty.StreamClient*">
             <weld:if-class-available name="!org.eclipse.jetty.client.HttpClient"/>
         </weld:exclude>

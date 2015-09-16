@@ -15,7 +15,6 @@
 
 package org.fourthline.cling.workbench.main.impl;
 
-import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.support.shared.CenterWindow;
 import org.fourthline.cling.support.shared.TextExpand;
 import org.fourthline.cling.support.shared.TextExpandDialog;
