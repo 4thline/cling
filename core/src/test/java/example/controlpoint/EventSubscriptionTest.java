@@ -134,7 +134,7 @@ public class EventSubscriptionTest {
             }
 
             @Override
-            public void eventReceived(GENASubscription sub) {
+            public void eventReceived(GENASubscription sub, Map<String, StateVariableValue<?>> changedValues) {
 
                 System.out.println("Event: " + sub.getCurrentSequence().getValue());
 

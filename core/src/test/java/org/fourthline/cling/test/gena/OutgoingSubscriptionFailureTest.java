@@ -38,7 +38,6 @@ import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.fourthline.cling.test.data.SampleData;
-import org.fourthline.cling.transport.Router;
 import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
@@ -47,6 +46,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
 
@@ -109,7 +109,7 @@ public class OutgoingSubscriptionFailureTest {
                 testAssertions.add(false);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 testAssertions.add(false);
             }
 
@@ -177,7 +177,7 @@ public class OutgoingSubscriptionFailureTest {
                 testAssertions.add(true);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
                 assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
                 testAssertions.add(true);

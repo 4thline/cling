@@ -39,7 +39,6 @@ import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.test.data.SampleData;
-import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
@@ -47,6 +46,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import static org.testng.Assert.assertEquals;
@@ -103,7 +103,7 @@ public class OutgoingSubscriptionLifecycleTest {
                 testAssertions.add(true);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
                 assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
                 testAssertions.add(true);
@@ -223,7 +223,7 @@ public class OutgoingSubscriptionLifecycleTest {
             public void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus) {
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
                 assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
                 testAssertions.add(true);
@@ -252,7 +252,7 @@ public class OutgoingSubscriptionLifecycleTest {
             public void established() {
             }
             @Override
-            public void eventReceived() {
+            public void eventReceived(Map<String, StateVariableValue<?>> changedValues) {
             }
             @Override
             public void invalidMessage(UnsupportedDataException ex) {

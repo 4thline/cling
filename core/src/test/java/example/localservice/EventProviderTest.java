@@ -25,12 +25,14 @@ import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
+import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.test.data.SampleData;
 import org.seamless.util.Reflections;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.testng.Assert.*;
 
@@ -121,7 +123,7 @@ public class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
                     assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
                     testAssertions.add(true);
@@ -194,7 +196,7 @@ public class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
                     assertEquals(subscription.getCurrentValues().get("Target").toString(), "0");
                     assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
@@ -282,7 +284,7 @@ public class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
 
                     // Initial event contains all evented variables, snapshot of the service state
@@ -396,7 +398,7 @@ public class EventProviderTest extends EventSubscriptionTest {
                 testAssertions.add(true);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 if (subscription.getCurrentSequence().getValue() == 0) {
 
                     // Initial event contains all evented variables, snapshot of the service state

@@ -25,12 +25,14 @@ import org.fourthline.cling.model.message.gena.IncomingSubscribeRequestMessage;
 import org.fourthline.cling.model.message.gena.OutgoingSubscribeResponseMessage;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.resource.ServiceEventSubscriptionResource;
+import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -135,13 +137,13 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
             return new OutgoingSubscribeResponseMessage(UpnpResponse.Status.PRECONDITION_FAILED);
         }
 
-        Integer timeoutSeconds; 
+        Integer timeoutSeconds;
         if(getUpnpService().getConfiguration().isReceivedSubscriptionTimeoutIgnored()) {
         	timeoutSeconds = null; // Use default value
         } else {
         	timeoutSeconds = requestMessage.getRequestedTimeoutSeconds();
         }
-        
+
         try {
             subscription = new LocalGENASubscription(service, timeoutSeconds, callbackURLs) {
                 public void established() {
@@ -150,7 +152,7 @@ public class ReceivingSubscribe extends ReceivingSync<StreamRequestMessage, Outg
                 public void ended(CancelReason reason) {
                 }
 
-                public void eventReceived() {
+                public void eventReceived(Map<String, StateVariableValue<?>> changedValues) {
                     // The only thing we are interested in, sending an event when the state changes
                     getUpnpService().getConfiguration().getSyncProtocolExecutorService().execute(
                             getUpnpService().getProtocolFactory().createSendingEvent(this)

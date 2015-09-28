@@ -25,11 +25,13 @@ import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.Service;
+import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.protocol.sync.SendingSubscribe;
 import org.seamless.util.Exceptions;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -162,10 +164,10 @@ public abstract class SubscriptionCallback implements Runnable {
                             }
                         }
 
-                        public void eventReceived() {
+                        public void eventReceived(Map<String, StateVariableValue<?>> changedValues) {
                             synchronized (SubscriptionCallback.this) {
                                 log.fine("Local service state updated, notifying callback, sequence is: " + getCurrentSequence());
-                                SubscriptionCallback.this.eventReceived(this);
+                                SubscriptionCallback.this.eventReceived(this, changedValues);
                                 incrementSequence();
                             }
                         }
@@ -178,7 +180,7 @@ public abstract class SubscriptionCallback implements Runnable {
             localSubscription.establish();
 
             log.fine("Simulating first initial event for local subscription callback, sequence: " + localSubscription.getCurrentSequence());
-            eventReceived(localSubscription);
+            eventReceived(localSubscription, getSubscription().getCurrentValues());
             localSubscription.incrementSequence();
 
             log.fine("Starting to monitor state changes of local service");
@@ -218,9 +220,9 @@ public abstract class SubscriptionCallback implements Runnable {
                         }
                     }
 
-                    public void eventReceived() {
+                    public void eventReceived(Map<String, StateVariableValue<?>> changedValues) {
                         synchronized (SubscriptionCallback.this) {
-                            SubscriptionCallback.this.eventReceived(this);
+                            SubscriptionCallback.this.eventReceived(this, changedValues);
                         }
                     }
 
@@ -312,7 +314,7 @@ public abstract class SubscriptionCallback implements Runnable {
      *
      * @param subscription The established subscription with fresh state variable values.
      */
-    protected abstract void eventReceived(GENASubscription subscription);
+    protected abstract void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues);
 
     /**
      * Called when a received event was out of sequence, indicating that events have been missed.
