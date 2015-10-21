@@ -38,6 +38,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 public class MediaRendererController extends MainController {
@@ -118,14 +119,12 @@ public class MediaRendererController extends MainController {
                 MediaRenderer.APP.log(Level.INFO, "Initializing GStreamer backend and registering MediaRenderer device...");
 
                 try {
-                    fullscreenCheckbox.setSelected(
-                            args.length != 1 || !args[0].equals(ARG_USE_WINDOWS)
-                    );
-
                     // Pick a display method
-                    DisplayHandler displayHandler = args.length == 1 && args[0].equals(ARG_USE_WINDOWS)
-                            ? new WindowedDisplayHandler()
-                            : new FullscreenDisplayHandler();
+                    boolean fullscreen = args == null || !Arrays.asList(args).contains(ARG_USE_WINDOWS);
+                    fullscreenCheckbox.setSelected(fullscreen);
+                    DisplayHandler displayHandler = fullscreen
+                            ? new FullscreenDisplayHandler()
+                            : new WindowedDisplayHandler();
 
                     // Initialize the GStreamer backend (this also sets log level to WARNING for org.gstreamer)
                     Gst.init(MediaRenderer.APPNAME, args);
