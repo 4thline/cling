@@ -31,7 +31,7 @@ public class BooleanDatatype extends AbstractDatatype<Boolean> {
     }
 
     public Boolean valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s == null || s.equals("")) return null;
         if (s.equals("1") || s.toUpperCase(Locale.ROOT).equals("YES") || s.toUpperCase(Locale.ROOT).equals("TRUE")) {
             return true;
         } else if (s.equals("0") || s.toUpperCase(Locale.ROOT).equals("NO") || s.toUpperCase(Locale.ROOT).equals("FALSE")) {

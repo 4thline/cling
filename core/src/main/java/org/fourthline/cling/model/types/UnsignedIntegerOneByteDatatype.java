@@ -21,7 +21,7 @@ package org.fourthline.cling.model.types;
 public class UnsignedIntegerOneByteDatatype extends AbstractDatatype<UnsignedIntegerOneByte> {
 
     public UnsignedIntegerOneByte valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s == null || s.equals("")) return null;
         try {
             return new UnsignedIntegerOneByte(s);
         } catch (NumberFormatException ex) {

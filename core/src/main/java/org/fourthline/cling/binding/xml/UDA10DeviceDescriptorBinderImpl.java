@@ -186,15 +186,15 @@ public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, 
                 continue;
 
             if (ELEMENT.major.equals(specVersionChild)) {
-                String version = XMLUtil.getTextContent(specVersionChild).trim();
-                if (!version.equals("1")) {
+                String version = XMLUtil.getTextContent(specVersionChild) == null ? "0" : XMLUtil.getTextContent(specVersionChild).trim();
+                if (!"1".equals(version)) {
                     log.warning("Unsupported UDA major version, ignoring: " + version);
                     version = "1";
                 }
                 descriptor.udaVersion.major = Integer.valueOf(version);
             } else if (ELEMENT.minor.equals(specVersionChild)) {
-                String version = XMLUtil.getTextContent(specVersionChild).trim();
-                if (!version.equals("0")) {
+                String version = XMLUtil.getTextContent(specVersionChild) == null ? "0" : XMLUtil.getTextContent(specVersionChild).trim();
+                if (!"0".equals(version)) {
                     log.warning("Unsupported UDA minor version, ignoring: " + version);
                     version = "0";
                 }

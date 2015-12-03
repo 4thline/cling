@@ -250,7 +250,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandle
 
         Element envelopeElement = d.getDocumentElement();
         
-        if (envelopeElement == null || !getUnprefixedNodeName(envelopeElement).equals("Envelope")) {
+        if (envelopeElement == null || !"Envelope".equals(getUnprefixedNodeName(envelopeElement))) {
             throw new RuntimeException("Response root element was not 'Envelope'");
         }
 
@@ -261,7 +261,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandle
             if (envelopeChild.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
-            if (getUnprefixedNodeName(envelopeChild).equals("Body")) {
+            if ("Body".equals(getUnprefixedNodeName(envelopeChild))) {
                 return (Element) envelopeChild;
             }
         }
@@ -439,7 +439,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandle
             if (bodyChild.getNodeType() != Node.ELEMENT_NODE)
                 continue;
 
-            if (getUnprefixedNodeName(bodyChild).equals("Fault")) {
+            if ("Fault".equals(getUnprefixedNodeName(bodyChild))) {
 
                 receivedFaultElement = true;
 
@@ -451,7 +451,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandle
                     if (faultChild.getNodeType() != Node.ELEMENT_NODE)
                         continue;
 
-                    if (getUnprefixedNodeName(faultChild).equals("detail")) {
+                    if ("detail".equals(getUnprefixedNodeName(faultChild))) {
 
                         NodeList detailChildren = faultChild.getChildNodes();
                         for (int x = 0; x < detailChildren.getLength(); x++) {
@@ -460,7 +460,7 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandle
                             if (detailChild.getNodeType() != Node.ELEMENT_NODE)
                                 continue;
 
-                            if (getUnprefixedNodeName(detailChild).equals("UPnPError")) {
+                            if ("UPnPError".equals(getUnprefixedNodeName(detailChild))) {
 
                                 NodeList errorChildren = detailChild.getChildNodes();
                                 for (int y = 0; y < errorChildren.getLength(); y++) {
@@ -469,10 +469,10 @@ public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandle
                                     if (errorChild.getNodeType() != Node.ELEMENT_NODE)
                                         continue;
 
-                                    if (getUnprefixedNodeName(errorChild).equals("errorCode"))
+                                    if ("errorCode".equals(getUnprefixedNodeName(errorChild)))
                                         errorCode = XMLUtil.getTextContent(errorChild);
 
-                                    if (getUnprefixedNodeName(errorChild).equals("errorDescription"))
+                                    if ("errorDescription".equals(getUnprefixedNodeName(errorChild)))
                                         errorDescription = XMLUtil.getTextContent(errorChild);
                                 }
                             }

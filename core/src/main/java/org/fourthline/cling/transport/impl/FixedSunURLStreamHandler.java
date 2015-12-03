@@ -79,7 +79,7 @@ public class FixedSunURLStreamHandler implements URLStreamHandlerFactory {
             OutputStream os;
             String savedMethod = method;
             // see if the method supports output
-            if (method.equals("PUT") || method.equals("POST") || method.equals("NOTIFY")) {
+            if ("PUT".equals(method) || "POST".equals(method) || "NOTIFY".equals(method)) {
                 // fake the method so the superclass method sets its instance variables
                 method = "PUT";
             } else {

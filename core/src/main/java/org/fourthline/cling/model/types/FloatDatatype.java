@@ -29,7 +29,7 @@ public class FloatDatatype extends AbstractDatatype<Float> {
     }
 
     public Float valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s == null || s.equals("")) return null;
         try {
             return Float.parseFloat(s.trim());
         } catch (NumberFormatException ex) {

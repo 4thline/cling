@@ -215,7 +215,7 @@ public class IncompatibilityTest {
 
         boolean foundA = false;
         for (String s : stateVariable.getTypeDetails().getAllowedValues()) {
-            if (s.equals("A")) foundA = true;
+            if ("A".equals(s)) foundA = true;
         }
         assertEquals(foundA, true);
         assertEquals(stateVariable.getTypeDetails().getAllowedValues().length, 3);

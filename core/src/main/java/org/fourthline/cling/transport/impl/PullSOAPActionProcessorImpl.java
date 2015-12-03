@@ -191,9 +191,9 @@ public class PullSOAPActionProcessorImpl extends SOAPActionProcessorImpl {
             event = xpp.next();
             if (event == XmlPullParser.START_TAG) {
                 String tag = xpp.getName();
-                if (tag.equals("errorCode")) {
+                if ("errorCode".equals(tag)) {
                     errorCode = xpp.nextText();
-                } else if (tag.equals("errorDescription")) {
+                } else if ("errorDescription".equals(tag)) {
                     errorDescription = xpp.nextText();
                 }
             }

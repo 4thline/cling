@@ -137,16 +137,16 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
         public void endElement(ELEMENT element) throws SAXException {
             switch (element) {
                 case major:
-                    String majorVersion = getCharacters().trim();
-                    if (!majorVersion.equals("1")) {
+                    String majorVersion = getCharacters() == null ? "0" : getCharacters().trim();
+                    if (!"1".equals(majorVersion)) {
                         log.warning("Unsupported UDA major version, ignoring: " + majorVersion);
                         majorVersion = "1";
                     }
                     getInstance().major = Integer.valueOf(majorVersion);
                     break;
                 case minor:
-                    String minorVersion = getCharacters().trim();
-                    if (!minorVersion.equals("0")) {
+                    String minorVersion = getCharacters() == null ? "0" : getCharacters().trim();
+                    if (!"0".equals(minorVersion)) {
                         log.warning("Unsupported UDA minor version, ignoring: " + minorVersion);
                         minorVersion = "0";
                     }
