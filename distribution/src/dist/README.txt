@@ -57,7 +57,7 @@ DEPENDENCIES
 
 Required dependencies of Cling Core (included with this distribution):
 
-    +- org.fourthline.cling:cling-core:jar:2.1.0-SNAPSHOT
+    +- org.fourthline.cling:cling-core:jar:2.1.0
        +- org.seamless:seamless-util:jar:1.1.1
        +- org.seamless:seamless-http:jar:1.1.1
        \- org.seamless:seamless-xml:jar:1.1.1
