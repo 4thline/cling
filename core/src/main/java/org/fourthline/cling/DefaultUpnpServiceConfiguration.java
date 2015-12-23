@@ -349,7 +349,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
         protected final ThreadGroup group;
         protected final AtomicInteger threadNumber = new AtomicInteger(1);
-        protected final String namePrefix = "cling-";
+        protected static final String namePrefix = "cling-";
 
         public ClingThreadFactory() {
             SecurityManager s = System.getSecurityManager();
