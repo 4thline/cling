@@ -87,8 +87,8 @@ public class AndroidRouter extends RouterImpl {
     public boolean enable() throws RouterException {
         lock(writeLock);
         try {
-            boolean enabled;
-            if ((enabled = super.enable())) {
+            boolean enabled = super.enable();
+            if (enabled) {
                 // Enable multicast on the WiFi network interface,
                 // requires android.permission.CHANGE_WIFI_MULTICAST_STATE
                 if (isWifi()) {
