@@ -36,10 +36,9 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.test.data.SampleData;
-import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
@@ -336,7 +335,7 @@ public class OutgoingSubscriptionLifecycleTest {
         OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(
                 callback.getSubscription(),
                 URIUtil.toURL(URI.create("http://10.0.0.123/this/is/ignored/anyway")),
-                new UnsignedIntegerFourBytes(0),
+                new UnsignedIntegerEightBytes(0),
                 values
         );
         outgoing.getOperation().setUri(
@@ -362,7 +361,7 @@ public class OutgoingSubscriptionLifecycleTest {
         OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(
                 subscription,
                 URIUtil.toURL(URI.create("http://10.0.0.123/this/is/ignored/anyway")),
-                new UnsignedIntegerFourBytes(0),
+                new UnsignedIntegerEightBytes(0),
                 values
         );
         outgoing.getOperation().setUri(

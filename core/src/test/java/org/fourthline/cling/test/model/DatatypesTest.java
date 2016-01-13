@@ -15,26 +15,12 @@
 
 package org.fourthline.cling.test.model;
 
-import org.fourthline.cling.model.types.Base64Datatype;
-import org.fourthline.cling.model.types.DLNADoc;
-import org.fourthline.cling.model.types.Datatype;
-import org.fourthline.cling.model.types.DateTimeDatatype;
-import org.fourthline.cling.model.types.DoubleDatatype;
-import org.fourthline.cling.model.types.FloatDatatype;
-import org.fourthline.cling.model.types.IntegerDatatype;
-import org.fourthline.cling.model.types.InvalidValueException;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytesDatatype;
-import org.fourthline.cling.model.types.UnsignedIntegerOneByteDatatype;
-import org.fourthline.cling.model.types.UnsignedIntegerTwoBytesDatatype;
+import org.fourthline.cling.model.types.*;
 import org.fourthline.cling.model.types.csv.CSVBoolean;
 import org.fourthline.cling.model.types.csv.CSVString;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 import static org.testng.Assert.assertEquals;
 
@@ -59,12 +45,16 @@ public class DatatypesTest {
         UnsignedIntegerTwoBytesDatatype typeTwo = new UnsignedIntegerTwoBytesDatatype();
         assertEquals(typeTwo.valueOf("257").getValue(), Long.valueOf(257l));
 
-        UnsignedIntegerFourBytesDatatype typeFour = new UnsignedIntegerFourBytesDatatype();
+        UnsignedIntegerEightBytesDatatype typeEight = new UnsignedIntegerEightBytesDatatype();
+        assertEquals(typeEight.valueOf("9223372036854775807").getValue(), Long.valueOf(9223372036854775807L));
+        assertEquals(typeEight.valueOf("4294967296").getValue(), Long.valueOf(4294967296L));
+
+        UnsignedIntegerFourDatatype typeFour = new UnsignedIntegerFourDatatype();
         assertEquals(typeFour.valueOf("65536").getValue(), Long.valueOf(65536l));
-        assertEquals(typeFour.valueOf("4294967295").getValue(), Long.valueOf(4294967295l));
+        assertEquals(typeFour.valueOf("4294967295").getValue(), Long.valueOf(4294967295L));
 
         // Well, no need to write another test for that
-        assertEquals(typeFour.valueOf("4294967295").increment(true).getValue(), Long.valueOf(1));
+        assertEquals(typeEight.valueOf(Long.valueOf(0xffffffffffffffffL+1).toString()).increment(true).getValue(), Long.valueOf(1));
 
     }
 

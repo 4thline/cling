@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.lastchange;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -75,10 +75,10 @@ public class LastChange {
     }
 
     synchronized public void setEventedValue(int instanceID, EventedValue... ev) {
-        setEventedValue(new UnsignedIntegerFourBytes(instanceID), ev);
+        setEventedValue(new UnsignedIntegerEightBytes(instanceID), ev);
     }
 
-    synchronized public void setEventedValue(UnsignedIntegerFourBytes instanceID, EventedValue... ev) {
+    synchronized public void setEventedValue(UnsignedIntegerEightBytes instanceID, EventedValue... ev) {
         for (EventedValue eventedValue : ev) {
             if (eventedValue != null)
                 event.setEventedValue(instanceID, eventedValue);
@@ -86,24 +86,24 @@ public class LastChange {
         }
     }
 
-    synchronized public UnsignedIntegerFourBytes[] getInstanceIDs() {
-        List<UnsignedIntegerFourBytes> list = new ArrayList<>();
+    synchronized public UnsignedIntegerEightBytes[] getInstanceIDs() {
+        List<UnsignedIntegerEightBytes> list = new ArrayList<>();
         for (InstanceID instanceID : event.getInstanceIDs()) {
             list.add(instanceID.getId());
         }
-        return list.toArray(new UnsignedIntegerFourBytes[list.size()]);
+        return list.toArray(new UnsignedIntegerEightBytes[list.size()]);
     }
 
-    synchronized EventedValue[] getEventedValues(UnsignedIntegerFourBytes instanceID) {
+    synchronized EventedValue[] getEventedValues(UnsignedIntegerEightBytes instanceID) {
         InstanceID inst = event.getInstanceID(instanceID);
         return inst != null ? inst.getValues().toArray(new EventedValue[inst.getValues().size()]) : null;
     }
 
     synchronized public <EV extends EventedValue> EV getEventedValue(int instanceID, Class<EV> type) {
-        return getEventedValue(new UnsignedIntegerFourBytes(instanceID), type);
+        return getEventedValue(new UnsignedIntegerEightBytes(instanceID), type);
     }
 
-    synchronized public <EV extends EventedValue> EV getEventedValue(UnsignedIntegerFourBytes id, Class<EV> type) {
+    synchronized public <EV extends EventedValue> EV getEventedValue(UnsignedIntegerEightBytes id, Class<EV> type) {
         return event.getEventedValue(id, type);
     }
 

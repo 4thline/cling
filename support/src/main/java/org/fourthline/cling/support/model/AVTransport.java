@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.model;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.lastchange.LastChange;
 
 /**
@@ -25,19 +25,19 @@ import org.fourthline.cling.support.lastchange.LastChange;
  */
 public class AVTransport {
 
-    final protected UnsignedIntegerFourBytes instanceID;
-    final protected LastChange lastChange;
-    protected MediaInfo mediaInfo;
-    protected TransportInfo transportInfo;
-    protected PositionInfo positionInfo;
-    protected DeviceCapabilities deviceCapabilities;
-    protected TransportSettings transportSettings;
+    final protected UnsignedIntegerEightBytes instanceID;
+    final protected LastChange                lastChange;
+    protected       MediaInfo                 mediaInfo;
+    protected       TransportInfo             transportInfo;
+    protected       PositionInfo              positionInfo;
+    protected       DeviceCapabilities        deviceCapabilities;
+    protected       TransportSettings         transportSettings;
 
-    public AVTransport(UnsignedIntegerFourBytes instanceID, LastChange lastChange, StorageMedium possiblePlayMedium) {
+    public AVTransport(UnsignedIntegerEightBytes instanceID, LastChange lastChange, StorageMedium possiblePlayMedium) {
         this(instanceID, lastChange, new StorageMedium[]{possiblePlayMedium});
     }
 
-    public AVTransport(UnsignedIntegerFourBytes instanceID, LastChange lastChange, StorageMedium[] possiblePlayMedia) {
+    public AVTransport(UnsignedIntegerEightBytes instanceID, LastChange lastChange, StorageMedium[] possiblePlayMedia) {
         this.instanceID = instanceID;
         this.lastChange = lastChange;
         setDeviceCapabilities(new DeviceCapabilities(possiblePlayMedia));
@@ -47,7 +47,7 @@ public class AVTransport {
         setTransportSettings(new TransportSettings());
     }
 
-    public UnsignedIntegerFourBytes getInstanceId() {
+    public UnsignedIntegerEightBytes getInstanceId() {
         return instanceID;
     }
 

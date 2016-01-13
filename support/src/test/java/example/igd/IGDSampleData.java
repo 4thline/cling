@@ -14,26 +14,14 @@
  */
 package example.igd;
 
-import org.fourthline.cling.binding.annotations.AnnotationLocalServiceBinder;
-import org.fourthline.cling.binding.annotations.UpnpAction;
-import org.fourthline.cling.binding.annotations.UpnpInputArgument;
-import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
-import org.fourthline.cling.binding.annotations.UpnpService;
-import org.fourthline.cling.binding.annotations.UpnpServiceId;
-import org.fourthline.cling.binding.annotations.UpnpServiceType;
-import org.fourthline.cling.binding.annotations.UpnpStateVariable;
-import org.fourthline.cling.binding.annotations.UpnpStateVariables;
+import org.fourthline.cling.binding.annotations.*;
 import org.fourthline.cling.model.DefaultServiceManager;
 import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.DeviceIdentity;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UDADeviceType;
-import org.fourthline.cling.model.types.UDN;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
+import org.fourthline.cling.model.types.*;
 import org.fourthline.cling.support.model.Connection;
 import org.fourthline.cling.support.model.PortMapping;
 
@@ -124,7 +112,7 @@ public class IGDSampleData {
                 @UpnpInputArgument(name = "NewInternalClient", stateVariable = "InternalClient") String internalClient,
                 @UpnpInputArgument(name = "NewEnabled", stateVariable = "PortMappingEnabled") Boolean enabled,
                 @UpnpInputArgument(name = "NewPortMappingDescription", stateVariable = "PortMappingDescription") String description,
-                @UpnpInputArgument(name = "NewLeaseDuration", stateVariable = "PortMappingLeaseDuration") UnsignedIntegerFourBytes leaseDuration
+                @UpnpInputArgument(name = "NewLeaseDuration", stateVariable = "PortMappingLeaseDuration") UnsignedIntegerEightBytes leaseDuration
         ) throws ActionException {
             try {
                 addPortMapping(new PortMapping(

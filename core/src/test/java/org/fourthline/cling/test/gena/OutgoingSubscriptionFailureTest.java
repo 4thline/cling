@@ -35,10 +35,9 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.fourthline.cling.test.data.SampleData;
-import org.fourthline.cling.transport.Router;
 import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
@@ -260,7 +259,7 @@ public class OutgoingSubscriptionFailureTest {
         OutgoingEventRequestMessage outgoing = new OutgoingEventRequestMessage(
                 callback.getSubscription(),
                 URIUtil.toURL(URI.create("http://10.0.0.123/some/callback")),
-                new UnsignedIntegerFourBytes(sequence),
+                new UnsignedIntegerEightBytes(sequence),
                 values
         );
         outgoing.getOperation().setUri(

@@ -16,13 +16,13 @@
 package org.fourthline.cling.mediarenderer.gstreamer;
 
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.support.lastchange.LastChange;
+import org.fourthline.cling.support.model.Channel;
 import org.fourthline.cling.support.renderingcontrol.AbstractAudioRenderingControl;
 import org.fourthline.cling.support.renderingcontrol.RenderingControlErrorCode;
 import org.fourthline.cling.support.renderingcontrol.RenderingControlException;
-import org.fourthline.cling.support.model.Channel;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -34,18 +34,18 @@ public class GstAudioRenderingControl extends AbstractAudioRenderingControl {
 
     final private static Logger log = Logger.getLogger(GstAudioRenderingControl.class.getName());
 
-    final private Map<UnsignedIntegerFourBytes, GstMediaPlayer> players;
+    final private Map<UnsignedIntegerEightBytes, GstMediaPlayer> players;
 
-    protected GstAudioRenderingControl(LastChange lastChange, Map<UnsignedIntegerFourBytes, GstMediaPlayer> players) {
+    protected GstAudioRenderingControl(LastChange lastChange, Map<UnsignedIntegerEightBytes, GstMediaPlayer> players) {
         super(lastChange);
         this.players = players;
     }
 
-    protected Map<UnsignedIntegerFourBytes, GstMediaPlayer> getPlayers() {
+    protected Map<UnsignedIntegerEightBytes, GstMediaPlayer> getPlayers() {
         return players;
     }
 
-    protected GstMediaPlayer getInstance(UnsignedIntegerFourBytes instanceId) throws RenderingControlException {
+    protected GstMediaPlayer getInstance(UnsignedIntegerEightBytes instanceId) throws RenderingControlException {
         GstMediaPlayer player = getPlayers().get(instanceId);
         if (player == null) {
             throw new RenderingControlException(RenderingControlErrorCode.INVALID_INSTANCE_ID);
@@ -60,20 +60,20 @@ public class GstAudioRenderingControl extends AbstractAudioRenderingControl {
     }
 
     @Override
-    public boolean getMute(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
+    public boolean getMute(UnsignedIntegerEightBytes instanceId, String channelName) throws RenderingControlException {
         checkChannel(channelName);
         return getInstance(instanceId).getVolume() == 0;
     }
 
     @Override
-    public void setMute(UnsignedIntegerFourBytes instanceId, String channelName, boolean desiredMute) throws RenderingControlException {
+    public void setMute(UnsignedIntegerEightBytes instanceId, String channelName, boolean desiredMute) throws RenderingControlException {
         checkChannel(channelName);
         log.fine("Setting backend mute to: " + desiredMute);
         getInstance(instanceId).setMute(desiredMute);
     }
 
     @Override
-    public UnsignedIntegerTwoBytes getVolume(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
+    public UnsignedIntegerTwoBytes getVolume(UnsignedIntegerEightBytes instanceId, String channelName) throws RenderingControlException {
         checkChannel(channelName);
         int vol = (int) (getInstance(instanceId).getVolume() * 100);
         log.fine("Getting backend volume: " + vol);
@@ -81,7 +81,7 @@ public class GstAudioRenderingControl extends AbstractAudioRenderingControl {
     }
 
     @Override
-    public void setVolume(UnsignedIntegerFourBytes instanceId, String channelName, UnsignedIntegerTwoBytes desiredVolume) throws RenderingControlException {
+    public void setVolume(UnsignedIntegerEightBytes instanceId, String channelName, UnsignedIntegerTwoBytes desiredVolume) throws RenderingControlException {
         checkChannel(channelName);
         double vol = desiredVolume.getValue() / 100d;
         log.fine("Setting backend volume to: " + vol);
@@ -96,10 +96,10 @@ public class GstAudioRenderingControl extends AbstractAudioRenderingControl {
     }
 
     @Override
-    public UnsignedIntegerFourBytes[] getCurrentInstanceIds() {
-        UnsignedIntegerFourBytes[] ids = new UnsignedIntegerFourBytes[getPlayers().size()];
+    public UnsignedIntegerEightBytes[] getCurrentInstanceIds() {
+        UnsignedIntegerEightBytes[] ids = new UnsignedIntegerEightBytes[getPlayers().size()];
         int i = 0;
-        for (UnsignedIntegerFourBytes id : getPlayers().keySet()) {
+        for (UnsignedIntegerEightBytes id : getPlayers().keySet()) {
             ids[i] = id;
             i++;
         }

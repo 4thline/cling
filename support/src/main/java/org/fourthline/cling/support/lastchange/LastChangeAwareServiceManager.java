@@ -19,7 +19,7 @@ import org.fourthline.cling.model.DefaultServiceManager;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.StateVariable;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -86,15 +86,15 @@ public class LastChangeAwareServiceManager<T extends LastChangeDelegator> extend
         LastChange lc = new LastChange(getLastChangeParser());
 
         // Get the current "logical" instances of the service
-        UnsignedIntegerFourBytes[] ids = getImplementation().getCurrentInstanceIds();
+        UnsignedIntegerEightBytes[] ids = getImplementation().getCurrentInstanceIds();
         if (ids.length > 0) {
-            for (UnsignedIntegerFourBytes instanceId : ids) {
+            for (UnsignedIntegerEightBytes instanceId : ids) {
                 // Iterate through all "logical" instances and ask them what their state is
                 getImplementation().appendCurrentState(lc, instanceId);
             }
         } else {
             // Use the default "logical" instance with ID 0
-            getImplementation().appendCurrentState(lc, new UnsignedIntegerFourBytes(0));
+            getImplementation().appendCurrentState(lc, new UnsignedIntegerEightBytes(0));
         }
 
         // Sum it all up and return it in the initial event to the GENA subscriber

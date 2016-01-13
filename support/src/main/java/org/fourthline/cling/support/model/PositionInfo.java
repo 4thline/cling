@@ -17,7 +17,7 @@ package org.fourthline.cling.support.model;
 
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.model.action.ActionArgumentValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.Map;
 
@@ -26,21 +26,21 @@ import java.util.Map;
  */
 public class PositionInfo {
 
-    private UnsignedIntegerFourBytes track = new UnsignedIntegerFourBytes(0);
-    private String trackDuration = "00:00:00";
-    private String trackMetaData = "NOT_IMPLEMENTED";
-    private String trackURI = "";
-    private String relTime = "00:00:00";
-    private String absTime = "00:00:00"; // TODO: MORE VALUES IN DOMAIN!
-    private int relCount = Integer.MAX_VALUE; // Indicates that we don't support this
-    private int absCount = Integer.MAX_VALUE;
+    private UnsignedIntegerEightBytes track         = new UnsignedIntegerEightBytes(0);
+    private String                    trackDuration = "00:00:00";
+    private String                    trackMetaData = "NOT_IMPLEMENTED";
+    private String                    trackURI      = "";
+    private String                    relTime       = "00:00:00";
+    private String                    absTime       = "00:00:00"; // TODO: MORE VALUES IN DOMAIN!
+    private int                       relCount      = Integer.MAX_VALUE; // Indicates that we don't support this
+    private int                       absCount      = Integer.MAX_VALUE;
 
     public PositionInfo() {
     }
 
     public PositionInfo(Map<String, ActionArgumentValue> args) {
         this(
-                ((UnsignedIntegerFourBytes) args.get("Track").getValue()).getValue(),
+                ((UnsignedIntegerEightBytes) args.get("Track").getValue()).getValue(),
                 (String) args.get("TrackDuration").getValue(),
                 (String) args.get("TrackMetaData").getValue(),
                 (String) args.get("TrackURI").getValue(),
@@ -75,7 +75,7 @@ public class PositionInfo {
 
     public PositionInfo(long track, String trackDuration, String trackURI,
                         String relTime, String absTime) {
-        this.track = new UnsignedIntegerFourBytes(track);
+        this.track = new UnsignedIntegerEightBytes(track);
         this.trackDuration = trackDuration;
         this.trackURI = trackURI;
         this.relTime = relTime;
@@ -85,7 +85,7 @@ public class PositionInfo {
     public PositionInfo(long track, String trackDuration,
                         String trackMetaData, String trackURI,
                         String relTime, String absTime, int relCount, int absCount) {
-        this.track = new UnsignedIntegerFourBytes(track);
+        this.track = new UnsignedIntegerEightBytes(track);
         this.trackDuration = trackDuration;
         this.trackMetaData = trackMetaData;
         this.trackURI = trackURI;
@@ -96,12 +96,12 @@ public class PositionInfo {
     }
 
     public PositionInfo(long track, String trackMetaData, String trackURI) {
-        this.track = new UnsignedIntegerFourBytes(track);
+        this.track = new UnsignedIntegerEightBytes(track);
         this.trackMetaData = trackMetaData;
         this.trackURI = trackURI;
     }
 
-    public UnsignedIntegerFourBytes getTrack() {
+    public UnsignedIntegerEightBytes getTrack() {
         return track;
     }
 

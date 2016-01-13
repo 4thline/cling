@@ -18,7 +18,7 @@ package org.fourthline.cling.support.renderingcontrol.callback;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.support.model.Channel;
 
@@ -33,10 +33,10 @@ public abstract class SetVolume extends ActionCallback {
     private static Logger log = Logger.getLogger(SetVolume.class.getName());
 
     public SetVolume(Service service, long newVolume) {
-        this(new UnsignedIntegerFourBytes(0), service, newVolume);
+        this(new UnsignedIntegerEightBytes(0), service, newVolume);
     }
 
-    public SetVolume(UnsignedIntegerFourBytes instanceId, Service service, long newVolume) {
+    public SetVolume(UnsignedIntegerEightBytes instanceId, Service service, long newVolume) {
         super(new ActionInvocation(service.getAction("SetVolume")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Channel", Channel.Master.toString());

@@ -21,7 +21,7 @@ import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.model.types.UDN;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.support.avtransport.impl.AVTransportService;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
@@ -92,22 +92,22 @@ public class MediaRendererSampleData {
     public static class AudioRenderingControlService extends AbstractAudioRenderingControl {
 
         @Override
-        public boolean getMute(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
+        public boolean getMute(UnsignedIntegerEightBytes instanceId, String channelName) throws RenderingControlException {
             return false;
         }
 
         @Override
-        public void setMute(UnsignedIntegerFourBytes instanceId, String channelName, boolean desiredMute) throws RenderingControlException {
+        public void setMute(UnsignedIntegerEightBytes instanceId, String channelName, boolean desiredMute) throws RenderingControlException {
 
         }
 
         @Override
-        public UnsignedIntegerTwoBytes getVolume(UnsignedIntegerFourBytes instanceId, String channelName) throws RenderingControlException {
+        public UnsignedIntegerTwoBytes getVolume(UnsignedIntegerEightBytes instanceId, String channelName) throws RenderingControlException {
             return new UnsignedIntegerTwoBytes(50);
         }
 
         @Override
-        public void setVolume(UnsignedIntegerFourBytes instanceId, String channelName, UnsignedIntegerTwoBytes desiredVolume) throws RenderingControlException {
+        public void setVolume(UnsignedIntegerEightBytes instanceId, String channelName, UnsignedIntegerTwoBytes desiredVolume) throws RenderingControlException {
 
         }
 
@@ -119,8 +119,8 @@ public class MediaRendererSampleData {
         }
 
         @Override
-        public UnsignedIntegerFourBytes[] getCurrentInstanceIds() {
-            return new UnsignedIntegerFourBytes[0];
+        public UnsignedIntegerEightBytes[] getCurrentInstanceIds() {
+            return new UnsignedIntegerEightBytes[0];
         }
     }
 

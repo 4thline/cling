@@ -15,8 +15,20 @@
 
 package org.fourthline.cling.support.lastchange;
 
-import static org.fourthline.cling.model.XMLUtil.appendNewElement;
+import org.fourthline.cling.model.XMLUtil;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
+import org.fourthline.cling.support.shared.AbstractMap;
+import org.seamless.util.Exceptions;
+import org.seamless.util.io.IO;
+import org.seamless.xml.DOMParser;
+import org.seamless.xml.SAXParser;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.Attributes;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.lang.reflect.Constructor;
@@ -26,20 +38,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.fourthline.cling.model.XMLUtil;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.support.shared.AbstractMap;
-import org.seamless.util.io.IO;
-import org.seamless.util.Exceptions;
-import org.seamless.xml.DOMParser;
-import org.seamless.xml.SAXParser;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.xml.sax.Attributes;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import static org.fourthline.cling.model.XMLUtil.appendNewElement;
 
 /**
  * Reads and writes the "LastChange" XML content.
@@ -148,7 +147,7 @@ public abstract class LastChangeParser extends SAXParser {
             if (CONSTANTS.InstanceID.equals(localName)) {
                 String valAttr = attributes.getValue(CONSTANTS.val.name());
                 if (valAttr != null) {
-                    InstanceID instanceID = new InstanceID(new UnsignedIntegerFourBytes(valAttr));
+                    InstanceID instanceID = new InstanceID(new UnsignedIntegerEightBytes(valAttr));
                     getInstance().getInstanceIDs().add(instanceID);
                     new InstanceIDHandler(instanceID, this);
                 }

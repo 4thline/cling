@@ -15,9 +15,9 @@
 
 package org.fourthline.cling.mediarenderer.gstreamer;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.support.model.TransportState;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.lastchange.LastChange;
+import org.fourthline.cling.support.model.TransportState;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 /**
  * @author Christian Bauer
  */
-public class GstMediaPlayers extends ConcurrentHashMap<UnsignedIntegerFourBytes, GstMediaPlayer> {
+public class GstMediaPlayers extends ConcurrentHashMap<UnsignedIntegerEightBytes, GstMediaPlayer> {
 
     final private static Logger log = Logger.getLogger(GstMediaPlayers.class.getName());
 
@@ -43,7 +43,7 @@ public class GstMediaPlayers extends ConcurrentHashMap<UnsignedIntegerFourBytes,
 
             GstMediaPlayer player =
                     new GstMediaPlayer(
-                            new UnsignedIntegerFourBytes(i),
+                            new UnsignedIntegerEightBytes(i),
                             avTransportLastChange,
                             renderingControlLastChange
                     ) {

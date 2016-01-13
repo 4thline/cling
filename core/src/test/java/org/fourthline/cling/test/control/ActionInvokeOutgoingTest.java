@@ -26,31 +26,15 @@ import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.header.ContentTypeHeader;
 import org.fourthline.cling.model.message.header.SoapActionHeader;
 import org.fourthline.cling.model.message.header.UpnpHeader;
-import org.fourthline.cling.model.meta.Action;
-import org.fourthline.cling.model.meta.ActionArgument;
-import org.fourthline.cling.model.meta.DeviceDetails;
-import org.fourthline.cling.model.meta.LocalDevice;
-import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.meta.RemoteDevice;
-import org.fourthline.cling.model.meta.RemoteService;
-import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.meta.StateVariable;
-import org.fourthline.cling.model.meta.StateVariableEventDetails;
-import org.fourthline.cling.model.meta.StateVariableTypeDetails;
+import org.fourthline.cling.model.meta.*;
 import org.fourthline.cling.model.profile.ClientInfo;
-import org.fourthline.cling.model.types.Datatype;
-import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UDADeviceType;
-import org.fourthline.cling.model.types.UDAServiceId;
-import org.fourthline.cling.model.types.UDAServiceType;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.*;
 import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.test.data.SampleServiceOne;
 import org.fourthline.cling.transport.RouterException;
 import org.testng.annotations.Test;
 
 import java.net.URI;
-import java.util.Arrays;
 
 import static org.testng.Assert.assertEquals;
 
@@ -495,7 +479,7 @@ public class ActionInvokeOutgoingTest {
 
         assert actionInvocation.getFailure() == null;
         // The illegal "-1" value should have been converted (with warning) to 0
-        assertEquals(actionInvocation.getOutput("Result").getValue(), new UnsignedIntegerFourBytes(0));
+        assertEquals(actionInvocation.getOutput("Result").getValue(), new UnsignedIntegerEightBytes(0));
     }
 
     /* TODO: M-POST support

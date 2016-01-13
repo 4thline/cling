@@ -30,7 +30,8 @@ public abstract class UnsignedVariableInteger {
         EIGHT(0xffL),
         SIXTEEN(0xffffL),
         TWENTYFOUR(0xffffffL),
-        THIRTYTWO(0xffffffffL);
+        THIRTYTWO(0xffffffffL),
+        SIXTYFOUR(0x7fffffffffffffffL); //Long.toHexString(Long.MAX_VALUE)
 
         private long maxValue;
 
@@ -100,9 +101,8 @@ public abstract class UnsignedVariableInteger {
 
         UnsignedVariableInteger that = (UnsignedVariableInteger) o;
 
-        if (value != that.value) return false;
+        return value == that.value;
 
-        return true;
     }
 
     @Override

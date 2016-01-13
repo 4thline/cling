@@ -15,8 +15,8 @@
 
 package org.fourthline.cling.support.model;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.model.action.ActionArgumentValue;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.Map;
 
@@ -30,11 +30,11 @@ public class MediaInfo {
     private String nextURI = "NOT_IMPLEMENTED";
     private String nextURIMetaData = "NOT_IMPLEMENTED";
 
-    private UnsignedIntegerFourBytes numberOfTracks = new UnsignedIntegerFourBytes(0);
-    private String mediaDuration = "00:00:00";
-    private StorageMedium playMedium = StorageMedium.NONE;
-    private StorageMedium recordMedium = StorageMedium.NOT_IMPLEMENTED;
-    private RecordMediumWriteStatus writeStatus = RecordMediumWriteStatus.NOT_IMPLEMENTED;
+    private UnsignedIntegerEightBytes numberOfTracks = new UnsignedIntegerEightBytes(0);
+    private String                    mediaDuration  = "00:00:00";
+    private StorageMedium             playMedium     = StorageMedium.NONE;
+    private StorageMedium             recordMedium   = StorageMedium.NOT_IMPLEMENTED;
+    private RecordMediumWriteStatus   writeStatus    = RecordMediumWriteStatus.NOT_IMPLEMENTED;
 
     public MediaInfo() {
     }
@@ -46,7 +46,7 @@ public class MediaInfo {
                 (String) args.get("NextURI").getValue(),
                 (String) args.get("NextURIMetaData").getValue(),
 
-                (UnsignedIntegerFourBytes) args.get("NrTracks").getValue(),
+                (UnsignedIntegerEightBytes) args.get("NrTracks").getValue(),
                 (String) args.get("MediaDuration").getValue(),
                 StorageMedium.valueOrVendorSpecificOf((String) args.get("PlayMedium").getValue()),
                 StorageMedium.valueOrVendorSpecificOf((String) args.get("RecordMedium").getValue()),
@@ -60,7 +60,7 @@ public class MediaInfo {
     }
 
     public MediaInfo(String currentURI, String currentURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
+                     UnsignedIntegerEightBytes numberOfTracks, String mediaDuration,
                      StorageMedium playMedium) {
         this.currentURI = currentURI;
         this.currentURIMetaData = currentURIMetaData;
@@ -70,7 +70,7 @@ public class MediaInfo {
     }
 
     public MediaInfo(String currentURI, String currentURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
+                     UnsignedIntegerEightBytes numberOfTracks, String mediaDuration,
                      StorageMedium playMedium,
                      StorageMedium recordMedium, RecordMediumWriteStatus writeStatus) {
         this.currentURI = currentURI;
@@ -84,7 +84,7 @@ public class MediaInfo {
 
     public MediaInfo(String currentURI, String currentURIMetaData,
                      String nextURI, String nextURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
+                     UnsignedIntegerEightBytes numberOfTracks, String mediaDuration,
                      StorageMedium playMedium) {
         this.currentURI = currentURI;
         this.currentURIMetaData = currentURIMetaData;
@@ -97,7 +97,7 @@ public class MediaInfo {
 
     public MediaInfo(String currentURI, String currentURIMetaData,
                      String nextURI, String nextURIMetaData,
-                     UnsignedIntegerFourBytes numberOfTracks, String mediaDuration,
+                     UnsignedIntegerEightBytes numberOfTracks, String mediaDuration,
                      StorageMedium playMedium,
                      StorageMedium recordMedium, RecordMediumWriteStatus writeStatus) {
         this.currentURI = currentURI;
@@ -127,7 +127,7 @@ public class MediaInfo {
         return nextURIMetaData;
     }
 
-    public UnsignedIntegerFourBytes getNumberOfTracks() {
+    public UnsignedIntegerEightBytes getNumberOfTracks() {
         return numberOfTracks;
     }
 

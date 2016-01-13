@@ -21,23 +21,9 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.support.avtransport.callback.GetMediaInfo;
-import org.fourthline.cling.support.avtransport.callback.GetPositionInfo;
-import org.fourthline.cling.support.avtransport.callback.GetTransportInfo;
-import org.fourthline.cling.support.avtransport.callback.Next;
-import org.fourthline.cling.support.avtransport.callback.Pause;
-import org.fourthline.cling.support.avtransport.callback.Play;
-import org.fourthline.cling.support.avtransport.callback.Previous;
-import org.fourthline.cling.support.avtransport.callback.Seek;
-import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
-import org.fourthline.cling.support.avtransport.callback.SetPlayMode;
-import org.fourthline.cling.support.avtransport.callback.Stop;
-import org.fourthline.cling.support.model.MediaInfo;
-import org.fourthline.cling.support.model.PlayMode;
-import org.fourthline.cling.support.model.PositionInfo;
-import org.fourthline.cling.support.model.TransportInfo;
-import org.fourthline.cling.support.model.TransportState;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
+import org.fourthline.cling.support.avtransport.callback.*;
+import org.fourthline.cling.support.model.*;
 import org.fourthline.cling.workbench.plugins.avtransport.AVTransportControlPoint;
 import org.fourthline.cling.workbench.plugins.avtransport.AVTransportView;
 
@@ -129,7 +115,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onSetAVTransportURISelected(int instanceId, final String uri) {
         controlPoint.execute(
-                new SetAVTransportURI(new UnsignedIntegerFourBytes(instanceId), service, uri) {
+                new SetAVTransportURI(new UnsignedIntegerEightBytes(instanceId), service, uri) {
                     @Override
                     public void success(ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info("New transport URI set: " + uri);
@@ -149,7 +135,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onPauseSelected(int instanceId) {
         controlPoint.execute(
-                new Pause(new UnsignedIntegerFourBytes(instanceId), service) {
+                new Pause(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info(
@@ -170,7 +156,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onPlaySelected(int instanceId) {
         controlPoint.execute(
-                new Play(new UnsignedIntegerFourBytes(instanceId), service) {
+                new Play(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info(
@@ -191,7 +177,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onStopSelected(int instanceId) {
         controlPoint.execute(
-                new Stop(new UnsignedIntegerFourBytes(instanceId), service) {
+                new Stop(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info(
@@ -223,7 +209,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
 
         // Now do the asynchronous remote seek
         controlPoint.execute(
-                new Seek(new UnsignedIntegerFourBytes(instanceId), service, target) {
+                new Seek(new UnsignedIntegerEightBytes(instanceId), service, target) {
                     @Override
                     public void success(final ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info(
@@ -259,7 +245,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onPreviousSelected(int instanceId) {
         controlPoint.execute(
-                new Previous(new UnsignedIntegerFourBytes(instanceId), service) {
+                new Previous(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info(
@@ -280,7 +266,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onNextSelected(int instanceId) {
         controlPoint.execute(
-                new Next(new UnsignedIntegerFourBytes(instanceId), service) {
+                new Next(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void success(ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info(
@@ -301,7 +287,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onUpdatePositionInfo(final int instanceId) {
         controlPoint.execute(
-                new GetPositionInfo(new UnsignedIntegerFourBytes(instanceId), service) {
+                new GetPositionInfo(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void received(ActionInvocation actionInvocation, final PositionInfo positionInfo) {
                         SwingUtilities.invokeLater(new Runnable() {
@@ -326,7 +312,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
     @Override
     public void onSetPlayModeSelected(final int instanceId, PlayMode playMode) {
         controlPoint.execute(
-                new SetPlayMode(new UnsignedIntegerFourBytes(instanceId), service, playMode) {
+                new SetPlayMode(new UnsignedIntegerEightBytes(instanceId), service, playMode) {
                     @Override
                     public void success(ActionInvocation invocation) {
                         AVTransportControlPoint.LOGGER.info(
@@ -347,7 +333,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
 
     public void updateTransportInfo(final int instanceId) {
         controlPoint.execute(
-                new GetTransportInfo(new UnsignedIntegerFourBytes(instanceId), service) {
+                new GetTransportInfo(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void received(ActionInvocation actionInvocation, final TransportInfo transportInfo) {
                         SwingUtilities.invokeLater(new Runnable() {
@@ -372,7 +358,7 @@ public class AVTransportPresenter implements AVTransportView.Presenter {
 
     public void updateMediaInfo(final int instanceId) {
         controlPoint.execute(
-                new GetMediaInfo(new UnsignedIntegerFourBytes(instanceId), service) {
+                new GetMediaInfo(new UnsignedIntegerEightBytes(instanceId), service) {
                     @Override
                     public void received(ActionInvocation actionInvocation, final MediaInfo mediaInfo) {
                         SwingUtilities.invokeLater(new Runnable() {

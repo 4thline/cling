@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.model;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 /**
  * @author Alessio Gaeta
@@ -23,14 +23,14 @@ import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
  */
 public class BrowseResult {
 
-    protected String result;
-    protected UnsignedIntegerFourBytes count;
-    protected UnsignedIntegerFourBytes totalMatches;
-    protected UnsignedIntegerFourBytes containerUpdateID;
+    protected String                    result;
+    protected UnsignedIntegerEightBytes count;
+    protected UnsignedIntegerEightBytes totalMatches;
+    protected UnsignedIntegerEightBytes containerUpdateID;
 
-    public BrowseResult(String result, UnsignedIntegerFourBytes count,
-                        UnsignedIntegerFourBytes totalMatches,
-                        UnsignedIntegerFourBytes containerUpdateID) {
+    public BrowseResult(String result, UnsignedIntegerEightBytes count,
+                        UnsignedIntegerEightBytes totalMatches,
+                        UnsignedIntegerEightBytes containerUpdateID) {
         this.result = result;
         this.count = count;
         this.totalMatches = totalMatches;
@@ -44,9 +44,9 @@ public class BrowseResult {
     public BrowseResult(String result, long count, long totalMatches, long updatedId) {
         this(
                 result,
-                new UnsignedIntegerFourBytes(count),
-                new UnsignedIntegerFourBytes(totalMatches),
-                new UnsignedIntegerFourBytes(updatedId)
+                new UnsignedIntegerEightBytes(count),
+                new UnsignedIntegerEightBytes(totalMatches),
+                new UnsignedIntegerEightBytes(updatedId)
         );
     }
 
@@ -54,7 +54,7 @@ public class BrowseResult {
         return result;
     }
 
-    public UnsignedIntegerFourBytes getCount() {
+    public UnsignedIntegerEightBytes getCount() {
         return count;
     }
 
@@ -62,7 +62,7 @@ public class BrowseResult {
         return count.getValue();
     }
 
-    public UnsignedIntegerFourBytes getTotalMatches() {
+    public UnsignedIntegerEightBytes getTotalMatches() {
         return totalMatches;
     }
 
@@ -70,7 +70,7 @@ public class BrowseResult {
         return totalMatches.getValue();
     }
 
-    public UnsignedIntegerFourBytes getContainerUpdateID() {
+    public UnsignedIntegerEightBytes getContainerUpdateID() {
         return containerUpdateID;
     }
 

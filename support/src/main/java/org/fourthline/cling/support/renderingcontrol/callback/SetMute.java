@@ -18,7 +18,7 @@ package org.fourthline.cling.support.renderingcontrol.callback;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.model.Channel;
 
 import java.util.logging.Logger;
@@ -32,10 +32,10 @@ public abstract class SetMute extends ActionCallback {
     private static Logger log = Logger.getLogger(SetMute.class.getName());
 
     public SetMute(Service service, boolean desiredMute) {
-        this(new UnsignedIntegerFourBytes(0), service, desiredMute);
+        this(new UnsignedIntegerEightBytes(0), service, desiredMute);
     }
 
-    public SetMute(UnsignedIntegerFourBytes instanceId, Service service, boolean desiredMute) {
+    public SetMute(UnsignedIntegerEightBytes instanceId, Service service, boolean desiredMute) {
         super(new ActionInvocation(service.getAction("SetMute")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Channel", Channel.Master.toString());

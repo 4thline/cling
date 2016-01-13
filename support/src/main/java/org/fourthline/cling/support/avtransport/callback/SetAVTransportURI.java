@@ -18,7 +18,7 @@ package org.fourthline.cling.support.avtransport.callback;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.logging.Logger;
 
@@ -30,18 +30,18 @@ public abstract class SetAVTransportURI extends ActionCallback {
     private static Logger log = Logger.getLogger(SetAVTransportURI.class.getName());
 
     public SetAVTransportURI(Service service, String uri) {
-        this(new UnsignedIntegerFourBytes(0), service, uri, null);
+        this(new UnsignedIntegerEightBytes(0), service, uri, null);
     }
 
     public SetAVTransportURI(Service service, String uri, String metadata) {
-        this(new UnsignedIntegerFourBytes(0), service, uri, metadata);
+        this(new UnsignedIntegerEightBytes(0), service, uri, metadata);
     }
 
-    public SetAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri) {
+    public SetAVTransportURI(UnsignedIntegerEightBytes instanceId, Service service, String uri) {
         this(instanceId, service, uri, null);
     }
 
-    public SetAVTransportURI(UnsignedIntegerFourBytes instanceId, Service service, String uri, String metadata) {
+    public SetAVTransportURI(UnsignedIntegerEightBytes instanceId, Service service, String uri, String metadata) {
         super(new ActionInvocation(service.getAction("SetAVTransportURI")));
         log.fine("Creating SetAVTransportURI action for URI: " + uri);
         getActionInvocation().setInput("InstanceID", instanceId);

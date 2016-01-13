@@ -15,16 +15,16 @@
 
 package org.fourthline.cling.protocol.sync;
 
-import java.util.logging.Logger;
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.model.gena.LocalGENASubscription;
 import org.fourthline.cling.model.message.StreamResponseMessage;
 import org.fourthline.cling.model.message.gena.OutgoingEventRequestMessage;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.protocol.SendingSync;
 import org.fourthline.cling.transport.RouterException;
 
 import java.net.URL;
+import java.util.logging.Logger;
 
 /**
  * Sending GENA event messages to remote subscribers.
@@ -42,9 +42,9 @@ public class SendingEvent extends SendingSync<OutgoingEventRequestMessage, Strea
 
     final private static Logger log = Logger.getLogger(SendingEvent.class.getName());
 
-    final protected String subscriptionId;
+    final protected String                        subscriptionId;
     final protected OutgoingEventRequestMessage[] requestMessages;
-    final protected UnsignedIntegerFourBytes currentSequence;
+    final protected UnsignedIntegerEightBytes     currentSequence;
 
     public SendingEvent(UpnpService upnpService, LocalGENASubscription subscription) {
         super(upnpService, null); // Special case, we actually need to send several messages to each callback URL

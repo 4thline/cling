@@ -20,18 +20,15 @@ import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.lastchange.LastChange;
 import org.fourthline.cling.support.model.Channel;
 import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlLastChangeParser;
 import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlVariable;
-import org.fourthline.cling.workbench.Workbench;
 import org.fourthline.cling.workbench.plugins.renderingcontrol.RenderingControlPoint;
-import org.seamless.swing.logging.LogMessage;
 
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Christian Bauer
@@ -84,7 +81,7 @@ abstract public class RenderingControlCallback extends SubscriptionCallback {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                for (UnsignedIntegerFourBytes instanceId : lastChange.getInstanceIDs()) {
+                for (UnsignedIntegerEightBytes instanceId : lastChange.getInstanceIDs()) {
 
                     RenderingControlPoint.LOGGER.fine(
                         "Processing LastChange event values for instance: " + instanceId

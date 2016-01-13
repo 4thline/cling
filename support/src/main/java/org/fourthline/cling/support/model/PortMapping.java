@@ -17,7 +17,7 @@ package org.fourthline.cling.support.model;
 
 import org.fourthline.cling.model.action.ActionArgumentValue;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 
 import java.util.Map;
@@ -32,14 +32,14 @@ public class PortMapping {
         TCP
     }
 
-    private boolean enabled;
-    private UnsignedIntegerFourBytes leaseDurationSeconds;
-    private String remoteHost;
-    private UnsignedIntegerTwoBytes externalPort;
-    private UnsignedIntegerTwoBytes internalPort;
-    private String internalClient;
-    private Protocol protocol;
-    private String description;
+    private boolean                   enabled;
+    private UnsignedIntegerEightBytes leaseDurationSeconds;
+    private String                    remoteHost;
+    private UnsignedIntegerTwoBytes   externalPort;
+    private UnsignedIntegerTwoBytes   internalPort;
+    private String                    internalClient;
+    private Protocol                  protocol;
+    private String                    description;
 
     public PortMapping() {
     }
@@ -48,7 +48,7 @@ public class PortMapping {
     public PortMapping(Map<String, ActionArgumentValue<Service>> map) {
         this(
                 (Boolean) map.get("NewEnabled").getValue(),
-                (UnsignedIntegerFourBytes) map.get("NewLeaseDuration").getValue(),
+                (UnsignedIntegerEightBytes) map.get("NewLeaseDuration").getValue(),
                 (String) map.get("NewRemoteHost").getValue(),
                 (UnsignedIntegerTwoBytes) map.get("NewExternalPort").getValue(),
                 (UnsignedIntegerTwoBytes) map.get("NewInternalPort").getValue(),
@@ -61,7 +61,7 @@ public class PortMapping {
     public PortMapping(int port, String internalClient, Protocol protocol) {
         this(
                 true,
-                new UnsignedIntegerFourBytes(0),
+                new UnsignedIntegerEightBytes(0),
                 null,
                 new UnsignedIntegerTwoBytes(port),
                 new UnsignedIntegerTwoBytes(port),
@@ -74,7 +74,7 @@ public class PortMapping {
     public PortMapping(int port, String internalClient, Protocol protocol, String description) {
         this(
                 true,
-                new UnsignedIntegerFourBytes(0),
+                new UnsignedIntegerEightBytes(0),
                 null,
                 new UnsignedIntegerTwoBytes(port),
                 new UnsignedIntegerTwoBytes(port),
@@ -87,7 +87,7 @@ public class PortMapping {
     public PortMapping(String remoteHost, UnsignedIntegerTwoBytes externalPort, Protocol protocol) {
         this(
                 true,
-                new UnsignedIntegerFourBytes(0),
+                new UnsignedIntegerEightBytes(0),
                 remoteHost,
                 externalPort,
                 null,
@@ -97,7 +97,7 @@ public class PortMapping {
         );
     }
 
-    public PortMapping(boolean enabled, UnsignedIntegerFourBytes leaseDurationSeconds, String remoteHost, UnsignedIntegerTwoBytes externalPort,
+    public PortMapping(boolean enabled, UnsignedIntegerEightBytes leaseDurationSeconds, String remoteHost, UnsignedIntegerTwoBytes externalPort,
                        UnsignedIntegerTwoBytes internalPort, String internalClient, Protocol protocol, String description) {
         this.enabled = enabled;
         this.leaseDurationSeconds = leaseDurationSeconds;
@@ -117,11 +117,11 @@ public class PortMapping {
         this.enabled = enabled;
     }
 
-    public UnsignedIntegerFourBytes getLeaseDurationSeconds() {
+    public UnsignedIntegerEightBytes getLeaseDurationSeconds() {
         return leaseDurationSeconds;
     }
 
-    public void setLeaseDurationSeconds(UnsignedIntegerFourBytes leaseDurationSeconds) {
+    public void setLeaseDurationSeconds(UnsignedIntegerEightBytes leaseDurationSeconds) {
         this.leaseDurationSeconds = leaseDurationSeconds;
     }
 

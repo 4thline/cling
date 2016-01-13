@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.lastchange;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 /**
  * Any service implementation using the "LastChange" mechanism.
@@ -30,11 +30,11 @@ import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
  */
 public interface LastChangeDelegator {
 
-    public LastChange getLastChange();
+    LastChange getLastChange();
 
-    public void appendCurrentState(LastChange lc, UnsignedIntegerFourBytes instanceId) throws Exception;
+    void appendCurrentState(LastChange lc, UnsignedIntegerEightBytes instanceId) throws Exception;
 
-    public abstract UnsignedIntegerFourBytes[] getCurrentInstanceIds();
+    UnsignedIntegerEightBytes[] getCurrentInstanceIds();
 
 
 }

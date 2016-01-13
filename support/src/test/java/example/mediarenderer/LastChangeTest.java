@@ -22,7 +22,7 @@ import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
@@ -30,15 +30,7 @@ import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.lastchange.Event;
 import org.fourthline.cling.support.lastchange.LastChange;
 import org.fourthline.cling.support.lastchange.LastChangeParser;
-import org.fourthline.cling.support.model.Channel;
-import org.fourthline.cling.support.model.DIDLContent;
-import org.fourthline.cling.support.model.PlayMode;
-import org.fourthline.cling.support.model.RecordMediumWriteStatus;
-import org.fourthline.cling.support.model.RecordQualityMode;
-import org.fourthline.cling.support.model.StorageMedium;
-import org.fourthline.cling.support.model.TransportAction;
-import org.fourthline.cling.support.model.TransportState;
-import org.fourthline.cling.support.model.TransportStatus;
+import org.fourthline.cling.support.model.*;
 import org.fourthline.cling.support.renderingcontrol.lastchange.ChannelVolume;
 import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlLastChangeParser;
 import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlVariable;
@@ -123,7 +115,7 @@ public class LastChangeTest {
 
         Event event = avTransportParser.parseResource("org/fourthline/cling/test/support/lastchange/samples/avtransport-roku.xml");
         assertEquals(event.getInstanceIDs().size(), 1);
-        UnsignedIntegerFourBytes instanceId = new UnsignedIntegerFourBytes(0);
+        UnsignedIntegerEightBytes instanceId = new UnsignedIntegerEightBytes(0);
         assertEquals(
                 event.getEventedValue(instanceId, AVTransportVariable.TransportState.class).getValue(),
                 TransportState.STOPPED
@@ -183,13 +175,13 @@ public class LastChangeTest {
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentMediaDuration.class).getValue(), "00:00:00");
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentPlayMode.class).getValue(), PlayMode.NORMAL);
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentRecordQualityMode.class).getValue(), RecordQualityMode.NOT_IMPLEMENTED);
-                    assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentTrack.class).getValue(), new UnsignedIntegerFourBytes(0));
+                    assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentTrack.class).getValue(), new UnsignedIntegerEightBytes(0));
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentTrackDuration.class).getValue(), "00:00:00");
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentTrackMetaData.class).getValue(), "NOT_IMPLEMENTED");
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentTrackURI.class).getValue(), null);
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.CurrentTransportActions.class).getValue(), new TransportAction[]{TransportAction.Stop});
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.NextAVTransportURI.class).getValue().toString(), "NOT_IMPLEMENTED"); // TODO: That's weird
-                    assertEquals(lastChange.getEventedValue(0, AVTransportVariable.NumberOfTracks.class).getValue(), new UnsignedIntegerFourBytes(0));
+                    assertEquals(lastChange.getEventedValue(0, AVTransportVariable.NumberOfTracks.class).getValue(), new UnsignedIntegerEightBytes(0));
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.PossiblePlaybackStorageMedia.class).getValue(), new StorageMedium[]{StorageMedium.NETWORK});
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.PossibleRecordQualityModes.class).getValue(), new RecordQualityMode[]{RecordQualityMode.NOT_IMPLEMENTED});
                     assertEquals(lastChange.getEventedValue(0, AVTransportVariable.PossibleRecordStorageMedia.class).getValue(), new StorageMedium[]{StorageMedium.NOT_IMPLEMENTED});

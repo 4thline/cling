@@ -15,26 +15,17 @@
 
 package org.fourthline.cling.support.avtransport.lastchange;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.InvalidValueException;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
+import org.fourthline.cling.support.lastchange.*;
 import org.fourthline.cling.support.model.PlayMode;
 import org.fourthline.cling.support.model.RecordQualityMode;
-import org.fourthline.cling.support.model.TransportAction;
 import org.fourthline.cling.support.model.StorageMedium;
-import org.fourthline.cling.support.lastchange.EventedValue;
-import org.fourthline.cling.support.lastchange.EventedValueEnum;
-import org.fourthline.cling.support.lastchange.EventedValueEnumArray;
-import org.fourthline.cling.support.lastchange.EventedValueString;
-import org.fourthline.cling.support.lastchange.EventedValueURI;
-import org.fourthline.cling.support.lastchange.EventedValueUnsignedIntegerFourBytes;
+import org.fourthline.cling.support.model.TransportAction;
 
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
-import org.fourthline.cling.model.types.InvalidValueException;
 
 /**
  * @author Christian Bauer
@@ -224,7 +215,7 @@ public class AVTransportVariable {
     }
 
     public static class NumberOfTracks extends EventedValueUnsignedIntegerFourBytes {
-        public NumberOfTracks(UnsignedIntegerFourBytes value) {
+        public NumberOfTracks(UnsignedIntegerEightBytes value) {
             super(value);
         }
 
@@ -234,7 +225,7 @@ public class AVTransportVariable {
     }
 
     public static class CurrentTrack extends EventedValueUnsignedIntegerFourBytes {
-        public CurrentTrack(UnsignedIntegerFourBytes value) {
+        public CurrentTrack(UnsignedIntegerEightBytes value) {
             super(value);
         }
 

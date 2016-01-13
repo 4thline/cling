@@ -18,11 +18,11 @@ package org.fourthline.cling.model.gena;
 import org.fourthline.cling.model.Location;
 import org.fourthline.cling.model.Namespace;
 import org.fourthline.cling.model.NetworkAddress;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.model.UnsupportedDataException;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.beans.PropertyChangeSupport;
 import java.net.URL;
@@ -83,7 +83,7 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
         ended(reason, response);
     }
 
-    synchronized public void receive(UnsignedIntegerFourBytes sequence, Collection<StateVariableValue> newValues) {
+    synchronized public void receive(UnsignedIntegerEightBytes sequence, Collection<StateVariableValue> newValues) {
 
         if (this.currentSequence != null) {
 

@@ -18,7 +18,7 @@ package org.fourthline.cling.support.avtransport.callback;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.model.PlayMode;
 
 import java.util.logging.Logger;
@@ -31,10 +31,10 @@ public abstract class SetPlayMode extends ActionCallback {
     private static Logger log = Logger.getLogger(SetPlayMode.class.getName());
 
     public SetPlayMode(Service service, PlayMode playMode) {
-        this(new UnsignedIntegerFourBytes(0), service, playMode);
+        this(new UnsignedIntegerEightBytes(0), service, playMode);
     }
 
-    public SetPlayMode(UnsignedIntegerFourBytes instanceId, Service service, PlayMode playMode) {
+    public SetPlayMode(UnsignedIntegerEightBytes instanceId, Service service, PlayMode playMode) {
         super(new ActionInvocation(service.getAction("SetPlayMode")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("NewPlayMode", playMode.toString());

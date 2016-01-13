@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.model;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 /**
  * @author Christian Bauer
@@ -28,7 +28,7 @@ public class Connection {
         private long uptimeSeconds;
         private Error lastError;
 
-        public StatusInfo(Status status, UnsignedIntegerFourBytes uptime, Error lastError) {
+        public StatusInfo(Status status, UnsignedIntegerEightBytes uptime, Error lastError) {
             this(status, uptime.getValue(), lastError);
         }
 
@@ -46,8 +46,8 @@ public class Connection {
             return uptimeSeconds;
         }
 
-        public UnsignedIntegerFourBytes getUptime() {
-            return new UnsignedIntegerFourBytes(getUptimeSeconds());
+        public UnsignedIntegerEightBytes getUptime() {
+            return new UnsignedIntegerEightBytes(getUptimeSeconds());
         }
 
         public Error getLastError() {
@@ -63,9 +63,8 @@ public class Connection {
 
             if (uptimeSeconds != that.uptimeSeconds) return false;
             if (lastError != that.lastError) return false;
-            if (status != that.status) return false;
+            return status == that.status;
 
-            return true;
         }
 
         @Override

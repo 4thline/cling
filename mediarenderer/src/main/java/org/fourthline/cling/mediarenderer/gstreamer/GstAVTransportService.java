@@ -15,24 +15,16 @@
 
 package org.fourthline.cling.mediarenderer.gstreamer;
 
-import org.gstreamer.ClockTime;
-import org.gstreamer.State;
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.avtransport.AVTransportErrorCode;
 import org.fourthline.cling.support.avtransport.AVTransportException;
 import org.fourthline.cling.support.avtransport.AbstractAVTransportService;
-import org.fourthline.cling.support.model.DeviceCapabilities;
-import org.fourthline.cling.support.model.MediaInfo;
-import org.fourthline.cling.support.model.PlayMode;
-import org.fourthline.cling.support.model.PositionInfo;
-import org.fourthline.cling.support.model.SeekMode;
-import org.fourthline.cling.support.model.TransportAction;
-import org.fourthline.cling.support.model.TransportInfo;
-import org.fourthline.cling.support.model.TransportSettings;
-import org.fourthline.cling.support.model.StorageMedium;
 import org.fourthline.cling.support.lastchange.LastChange;
+import org.fourthline.cling.support.model.*;
+import org.gstreamer.ClockTime;
+import org.gstreamer.State;
 import org.seamless.http.HttpFetch;
 import org.seamless.util.URIUtil;
 
@@ -47,18 +39,18 @@ public class GstAVTransportService extends AbstractAVTransportService {
 
     final private static Logger log = Logger.getLogger(GstAVTransportService.class.getName());
 
-    final private Map<UnsignedIntegerFourBytes, GstMediaPlayer> players;
+    final private Map<UnsignedIntegerEightBytes, GstMediaPlayer> players;
 
-    protected GstAVTransportService(LastChange lastChange, Map<UnsignedIntegerFourBytes, GstMediaPlayer> players) {
+    protected GstAVTransportService(LastChange lastChange, Map<UnsignedIntegerEightBytes, GstMediaPlayer> players) {
         super(lastChange);
         this.players = players;
     }
 
-    protected Map<UnsignedIntegerFourBytes, GstMediaPlayer> getPlayers() {
+    protected Map<UnsignedIntegerEightBytes, GstMediaPlayer> getPlayers() {
         return players;
     }
 
-    protected GstMediaPlayer getInstance(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    protected GstMediaPlayer getInstance(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         GstMediaPlayer player = getPlayers().get(instanceId);
         if (player == null) {
             throw new AVTransportException(AVTransportErrorCode.INVALID_INSTANCE_ID);
@@ -67,7 +59,7 @@ public class GstAVTransportService extends AbstractAVTransportService {
     }
 
     @Override
-    public void setAVTransportURI(UnsignedIntegerFourBytes instanceId,
+    public void setAVTransportURI(UnsignedIntegerEightBytes instanceId,
                                   String currentURI,
                                   String currentURIMetaData) throws AVTransportException {
         URI uri;
@@ -101,55 +93,55 @@ public class GstAVTransportService extends AbstractAVTransportService {
     }
 
     @Override
-    public MediaInfo getMediaInfo(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public MediaInfo getMediaInfo(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         return getInstance(instanceId).getCurrentMediaInfo();
     }
 
     @Override
-    public TransportInfo getTransportInfo(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public TransportInfo getTransportInfo(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         return getInstance(instanceId).getCurrentTransportInfo();
     }
 
     @Override
-    public PositionInfo getPositionInfo(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public PositionInfo getPositionInfo(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         return getInstance(instanceId).getCurrentPositionInfo();
     }
 
     @Override
-    public DeviceCapabilities getDeviceCapabilities(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public DeviceCapabilities getDeviceCapabilities(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         getInstance(instanceId);
         return new DeviceCapabilities(new StorageMedium[]{StorageMedium.NETWORK});
     }
 
     @Override
-    public TransportSettings getTransportSettings(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public TransportSettings getTransportSettings(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         getInstance(instanceId);
         return new TransportSettings(PlayMode.NORMAL);
     }
 
     @Override
-    public void stop(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public void stop(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         getInstance(instanceId).stop();
     }
 
     @Override
-    public void play(UnsignedIntegerFourBytes instanceId, String speed) throws AVTransportException {
+    public void play(UnsignedIntegerEightBytes instanceId, String speed) throws AVTransportException {
         getInstance(instanceId).play();
     }
 
     @Override
-    public void pause(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public void pause(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         getInstance(instanceId).pause();
     }
 
     @Override
-    public void record(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public void record(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         // Not implemented
         log.info("### TODO: Not implemented: Record");
     }
 
     @Override
-    public void seek(UnsignedIntegerFourBytes instanceId, String unit, String target) throws AVTransportException {
+    public void seek(UnsignedIntegerEightBytes instanceId, String unit, String target) throws AVTransportException {
         final GstMediaPlayer player = getInstance(instanceId);
         SeekMode seekMode;
         try {
@@ -176,19 +168,19 @@ public class GstAVTransportService extends AbstractAVTransportService {
     }
 
     @Override
-    public void next(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public void next(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         // Not implemented
         log.info("### TODO: Not implemented: Next");
     }
 
     @Override
-    public void previous(UnsignedIntegerFourBytes instanceId) throws AVTransportException {
+    public void previous(UnsignedIntegerEightBytes instanceId) throws AVTransportException {
         // Not implemented
         log.info("### TODO: Not implemented: Previous");
     }
 
     @Override
-    public void setNextAVTransportURI(UnsignedIntegerFourBytes instanceId,
+    public void setNextAVTransportURI(UnsignedIntegerEightBytes instanceId,
                                       String nextURI,
                                       String nextURIMetaData) throws AVTransportException {
         log.info("### TODO: Not implemented: SetNextAVTransportURI");
@@ -196,27 +188,27 @@ public class GstAVTransportService extends AbstractAVTransportService {
     }
 
     @Override
-    public void setPlayMode(UnsignedIntegerFourBytes instanceId, String newPlayMode) throws AVTransportException {
+    public void setPlayMode(UnsignedIntegerEightBytes instanceId, String newPlayMode) throws AVTransportException {
         // Not implemented
         log.info("### TODO: Not implemented: SetPlayMode");
     }
 
     @Override
-    public void setRecordQualityMode(UnsignedIntegerFourBytes instanceId, String newRecordQualityMode) throws AVTransportException {
+    public void setRecordQualityMode(UnsignedIntegerEightBytes instanceId, String newRecordQualityMode) throws AVTransportException {
         // Not implemented
         log.info("### TODO: Not implemented: SetRecordQualityMode");
     }
 
     @Override
-    protected TransportAction[] getCurrentTransportActions(UnsignedIntegerFourBytes instanceId) throws Exception {
+    protected TransportAction[] getCurrentTransportActions(UnsignedIntegerEightBytes instanceId) throws Exception {
         return getInstance(instanceId).getCurrentTransportActions();
     }
 
     @Override
-    public UnsignedIntegerFourBytes[] getCurrentInstanceIds() {
-        UnsignedIntegerFourBytes[] ids = new UnsignedIntegerFourBytes[getPlayers().size()];
+    public UnsignedIntegerEightBytes[] getCurrentInstanceIds() {
+        UnsignedIntegerEightBytes[] ids = new UnsignedIntegerEightBytes[getPlayers().size()];
         int i = 0;
-        for (UnsignedIntegerFourBytes id : getPlayers().keySet()) {
+        for (UnsignedIntegerEightBytes id : getPlayers().keySet()) {
             ids[i] = id;
             i++;
         }

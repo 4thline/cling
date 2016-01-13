@@ -16,14 +16,15 @@
 package org.fourthline.cling.protocol.sync;
 
 import org.fourthline.cling.UpnpService;
+import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.gena.RemoteGENASubscription;
 import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.message.gena.IncomingEventRequestMessage;
 import org.fourthline.cling.model.message.gena.OutgoingEventResponseMessage;
 import org.fourthline.cling.model.resource.ServiceEventCallbackResource;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.protocol.ReceivingSync;
-import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
@@ -33,7 +34,7 @@ import java.util.logging.Logger;
  * <p>
  * Attempts to find an outgoing (remote) subscription matching the callback and subscription identifier.
  * Once found, the GENA event message payload will be transformed and the
- * {@link org.fourthline.cling.model.gena.RemoteGENASubscription#receive(org.fourthline.cling.model.types.UnsignedIntegerFourBytes,
+ * {@link org.fourthline.cling.model.gena.RemoteGENASubscription#receive(UnsignedIntegerEightBytes,
  * java.util.Collection)} method will be called asynchronously using the executor
  * returned by {@link org.fourthline.cling.UpnpServiceConfiguration#getRegistryListenerExecutor()}.
  * </p>

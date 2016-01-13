@@ -15,38 +15,18 @@
 
 package org.fourthline.cling.mediarenderer.gstreamer;
 
-import org.gstreamer.Bus;
-import org.gstreamer.Caps;
-import org.gstreamer.ClockTime;
-import org.gstreamer.Element;
-import org.gstreamer.GstObject;
-import org.gstreamer.Pad;
-import org.gstreamer.State;
-import org.gstreamer.Structure;
-import org.gstreamer.TagList;
-import org.gstreamer.media.PlayBinMediaPlayer;
-import org.gstreamer.media.event.DurationChangedEvent;
-import org.gstreamer.media.event.EndOfMediaEvent;
-import org.gstreamer.media.event.MediaListener;
-import org.gstreamer.media.event.PauseEvent;
-import org.gstreamer.media.event.PositionChangedEvent;
-import org.gstreamer.media.event.StartEvent;
-import org.gstreamer.media.event.StopEvent;
-import org.gstreamer.swing.VideoComponent;
 import org.fourthline.cling.model.ModelUtil;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.support.model.MediaInfo;
-import org.fourthline.cling.support.model.TransportAction;
-import org.fourthline.cling.support.model.TransportState;
-import org.fourthline.cling.support.model.PositionInfo;
-import org.fourthline.cling.support.model.TransportInfo;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
-import org.fourthline.cling.support.model.StorageMedium;
 import org.fourthline.cling.support.lastchange.LastChange;
-import org.fourthline.cling.support.model.Channel;
+import org.fourthline.cling.support.model.*;
 import org.fourthline.cling.support.renderingcontrol.lastchange.ChannelMute;
 import org.fourthline.cling.support.renderingcontrol.lastchange.ChannelVolume;
 import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlVariable;
+import org.gstreamer.*;
+import org.gstreamer.media.PlayBinMediaPlayer;
+import org.gstreamer.media.event.*;
+import org.gstreamer.swing.VideoComponent;
 
 import java.net.URI;
 import java.util.logging.Logger;
@@ -58,9 +38,9 @@ public class GstMediaPlayer extends PlayBinMediaPlayer {
 
     final private static Logger log = Logger.getLogger(GstMediaPlayer.class.getName());
 
-    final private UnsignedIntegerFourBytes instanceId;
-    final private LastChange avTransportLastChange;
-    final private LastChange renderingControlLastChange;
+    final private UnsignedIntegerEightBytes instanceId;
+    final private LastChange                avTransportLastChange;
+    final private LastChange                renderingControlLastChange;
 
     final private VideoComponent videoComponent = new VideoComponent();
 
@@ -70,7 +50,7 @@ public class GstMediaPlayer extends PlayBinMediaPlayer {
     private MediaInfo currentMediaInfo = new MediaInfo();
     private double storedVolume;
 
-    public GstMediaPlayer(UnsignedIntegerFourBytes instanceId,
+    public GstMediaPlayer(UnsignedIntegerEightBytes instanceId,
                           LastChange avTransportLastChange,
                           LastChange renderingControlLastChange) {
         super();
@@ -101,7 +81,7 @@ public class GstMediaPlayer extends PlayBinMediaPlayer {
         setVideoSink(videoComponent.getElement());
     }
 
-    public UnsignedIntegerFourBytes getInstanceId() {
+    public UnsignedIntegerEightBytes getInstanceId() {
         return instanceId;
     }
 
@@ -334,7 +314,7 @@ public class GstMediaPlayer extends PlayBinMediaPlayer {
                         new MediaInfo(
                                 currentMediaInfo.getCurrentURI(),
                                 "",
-                                new UnsignedIntegerFourBytes(1),
+                                new UnsignedIntegerEightBytes(1),
                                 newValue,
                                 StorageMedium.NETWORK
                         );

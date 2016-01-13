@@ -20,7 +20,7 @@ import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.DIDLContent;
 import org.fourthline.cling.support.model.SearchResult;
@@ -74,10 +74,10 @@ public abstract class Search extends ActionCallback {
         getActionInvocation().setInput("ContainerID", containerId);
         getActionInvocation().setInput("SearchCriteria", searchCriteria);
         getActionInvocation().setInput("Filter", filter);
-        getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(firstResult));
+        getActionInvocation().setInput("StartingIndex", new UnsignedIntegerEightBytes(firstResult));
         getActionInvocation().setInput(
                 "RequestedCount",
-                new UnsignedIntegerFourBytes(maxResults == null ? getDefaultMaxResults() : maxResults)
+                new UnsignedIntegerEightBytes(maxResults == null ? getDefaultMaxResults() : maxResults)
         );
         getActionInvocation().setInput("SortCriteria", SortCriterion.toString(orderBy));
     }
@@ -94,9 +94,9 @@ public abstract class Search extends ActionCallback {
 
         SearchResult result = new SearchResult(
                 actionInvocation.getOutput("Result").getValue().toString(),
-                (UnsignedIntegerFourBytes) actionInvocation.getOutput("NumberReturned").getValue(),
-                (UnsignedIntegerFourBytes) actionInvocation.getOutput("TotalMatches").getValue(),
-                (UnsignedIntegerFourBytes) actionInvocation.getOutput("UpdateID").getValue());
+                (UnsignedIntegerEightBytes) actionInvocation.getOutput("NumberReturned").getValue(),
+                (UnsignedIntegerEightBytes) actionInvocation.getOutput("TotalMatches").getValue(),
+                (UnsignedIntegerEightBytes) actionInvocation.getOutput("UpdateID").getValue());
 
         boolean proceed = receivedRaw(actionInvocation, result);
 

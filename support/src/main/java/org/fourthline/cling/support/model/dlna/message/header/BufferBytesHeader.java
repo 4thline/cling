@@ -15,21 +15,21 @@
 package org.fourthline.cling.support.model.dlna.message.header;
 
 import org.fourthline.cling.model.message.header.InvalidHeaderException;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 /**
  * @author Mario Franco
  */
-public class BufferBytesHeader extends DLNAHeader<UnsignedIntegerFourBytes> {
+public class BufferBytesHeader extends DLNAHeader<UnsignedIntegerEightBytes> {
 
     public BufferBytesHeader() {
-        setValue(new UnsignedIntegerFourBytes(0L));
+        setValue(new UnsignedIntegerEightBytes(0L));
     }
 
     @Override
     public void setString(String s) throws InvalidHeaderException {
         try {
-            setValue(new UnsignedIntegerFourBytes(s));
+            setValue(new UnsignedIntegerEightBytes(s));
             return;
         } catch (NumberFormatException numberFormatException) {
         }

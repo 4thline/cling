@@ -20,7 +20,7 @@ import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.gena.GENASubscription;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
 import org.fourthline.cling.support.lastchange.LastChange;
@@ -86,7 +86,7 @@ abstract public class AVTransportCallback extends SubscriptionCallback {
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                for (UnsignedIntegerFourBytes instanceId : lastChange.getInstanceIDs()) {
+                for (UnsignedIntegerEightBytes instanceId : lastChange.getInstanceIDs()) {
 
                     AVTransportControlPoint.LOGGER.fine(
                         "Processing LastChange event values for instance: " + instanceId

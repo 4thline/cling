@@ -15,18 +15,18 @@
 
 package org.fourthline.cling.model.message.header;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 /**
  * @author Christian Bauer
  */
-public class EventSequenceHeader extends UpnpHeader<UnsignedIntegerFourBytes> {
+public class EventSequenceHeader extends UpnpHeader<UnsignedIntegerEightBytes> {
 
     public EventSequenceHeader() {
     }
 
     public EventSequenceHeader(long value) {
-        setValue(new UnsignedIntegerFourBytes(value));
+        setValue(new UnsignedIntegerEightBytes(value));
     }
 
     public void setString(String s) throws InvalidHeaderException {
@@ -39,7 +39,7 @@ public class EventSequenceHeader extends UpnpHeader<UnsignedIntegerFourBytes> {
         }
 
         try {
-            setValue(new UnsignedIntegerFourBytes(s));
+            setValue(new UnsignedIntegerEightBytes(s));
         } catch (NumberFormatException ex) {
             throw new InvalidHeaderException("Invalid event sequence, " + ex.getMessage());
         }

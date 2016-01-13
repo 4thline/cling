@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.workbench.plugins.igd.impl;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.support.model.PortMapping;
 import org.fourthline.cling.workbench.Workbench;
@@ -134,7 +134,7 @@ public class PortMappingEditViewImpl extends JPanel implements PortMappingEditVi
         try {
             PortMapping pm = new PortMapping();
             pm.setEnabled(enabledField.isSelected());
-            pm.setLeaseDurationSeconds(new UnsignedIntegerFourBytes(leaseDurationField.getText()));
+            pm.setLeaseDurationSeconds(new UnsignedIntegerEightBytes(leaseDurationField.getText()));
             pm.setRemoteHost(remoteHostField.getText());
             pm.setExternalPort(new UnsignedIntegerTwoBytes(externalPortField.getText()));
             pm.setProtocol((PortMapping.Protocol) protocolField.getSelectedItem());

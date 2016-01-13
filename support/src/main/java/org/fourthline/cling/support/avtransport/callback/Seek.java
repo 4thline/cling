@@ -18,7 +18,7 @@ package org.fourthline.cling.support.avtransport.callback;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.model.SeekMode;
 
 import java.util.logging.Logger;
@@ -32,18 +32,18 @@ public abstract class Seek extends ActionCallback {
     private static Logger log = Logger.getLogger(Seek.class.getName());
 
     public Seek(Service service, String relativeTimeTarget) {
-        this(new UnsignedIntegerFourBytes(0), service, SeekMode.REL_TIME, relativeTimeTarget);
+        this(new UnsignedIntegerEightBytes(0), service, SeekMode.REL_TIME, relativeTimeTarget);
     }
 
-    public Seek(UnsignedIntegerFourBytes instanceId, Service service, String relativeTimeTarget) {
+    public Seek(UnsignedIntegerEightBytes instanceId, Service service, String relativeTimeTarget) {
         this(instanceId, service, SeekMode.REL_TIME, relativeTimeTarget);
     }
 
     public Seek(Service service, SeekMode mode, String target) {
-        this(new UnsignedIntegerFourBytes(0), service, mode, target);
+        this(new UnsignedIntegerEightBytes(0), service, mode, target);
     }
 
-    public Seek(UnsignedIntegerFourBytes instanceId, Service service, SeekMode mode, String target) {
+    public Seek(UnsignedIntegerEightBytes instanceId, Service service, SeekMode mode, String target) {
         super(new ActionInvocation(service.getAction("Seek")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Unit", mode.name());

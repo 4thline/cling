@@ -15,33 +15,14 @@
 
 package org.fourthline.cling.support.avtransport;
 
-import org.fourthline.cling.binding.annotations.UpnpAction;
-import org.fourthline.cling.binding.annotations.UpnpInputArgument;
-import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
-import org.fourthline.cling.binding.annotations.UpnpService;
-import org.fourthline.cling.binding.annotations.UpnpServiceId;
-import org.fourthline.cling.binding.annotations.UpnpServiceType;
-import org.fourthline.cling.binding.annotations.UpnpStateVariable;
-import org.fourthline.cling.binding.annotations.UpnpStateVariables;
+import org.fourthline.cling.binding.annotations.*;
 import org.fourthline.cling.model.ModelUtil;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportVariable;
 import org.fourthline.cling.support.lastchange.LastChange;
 import org.fourthline.cling.support.lastchange.LastChangeDelegator;
-import org.fourthline.cling.support.model.DeviceCapabilities;
-import org.fourthline.cling.support.model.MediaInfo;
-import org.fourthline.cling.support.model.PlayMode;
-import org.fourthline.cling.support.model.PositionInfo;
-import org.fourthline.cling.support.model.RecordMediumWriteStatus;
-import org.fourthline.cling.support.model.RecordQualityMode;
-import org.fourthline.cling.support.model.SeekMode;
-import org.fourthline.cling.support.model.StorageMedium;
-import org.fourthline.cling.support.model.TransportAction;
-import org.fourthline.cling.support.model.TransportInfo;
-import org.fourthline.cling.support.model.TransportSettings;
-import org.fourthline.cling.support.model.TransportState;
-import org.fourthline.cling.support.model.TransportStatus;
+import org.fourthline.cling.support.model.*;
 
 import java.beans.PropertyChangeSupport;
 import java.net.URI;
@@ -224,7 +205,7 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
     }
 
     @Override
-    public void appendCurrentState(LastChange lc, UnsignedIntegerFourBytes instanceId) throws Exception {
+    public void appendCurrentState(LastChange lc, UnsignedIntegerEightBytes instanceId) throws Exception {
 
         MediaInfo mediaInfo = getMediaInfo(instanceId);
         TransportInfo transportInfo = getTransportInfo(instanceId);
@@ -262,18 +243,18 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
         return propertyChangeSupport;
     }
 
-    public static UnsignedIntegerFourBytes getDefaultInstanceID() {
-        return new UnsignedIntegerFourBytes(0);
+    public static UnsignedIntegerEightBytes getDefaultInstanceID() {
+        return new UnsignedIntegerEightBytes(0);
     }
 
     @UpnpAction
-    public abstract void setAVTransportURI(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void setAVTransportURI(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                            @UpnpInputArgument(name = "CurrentURI", stateVariable = "AVTransportURI") String currentURI,
                                            @UpnpInputArgument(name = "CurrentURIMetaData", stateVariable = "AVTransportURIMetaData") String currentURIMetaData)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void setNextAVTransportURI(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void setNextAVTransportURI(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                                @UpnpInputArgument(name = "NextURI", stateVariable = "AVTransportURI") String nextURI,
                                                @UpnpInputArgument(name = "NextURIMetaData", stateVariable = "AVTransportURIMetaData") String nextURIMetaData)
             throws AVTransportException;
@@ -289,7 +270,7 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
             @UpnpOutputArgument(name = "RecordMedium", stateVariable = "RecordStorageMedium", getterName = "getRecordMedium"),
             @UpnpOutputArgument(name = "WriteStatus", stateVariable = "RecordMediumWriteStatus", getterName = "getWriteStatus")
     })
-    public abstract MediaInfo getMediaInfo(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract MediaInfo getMediaInfo(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction(out = {
@@ -297,7 +278,7 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
             @UpnpOutputArgument(name = "CurrentTransportStatus", stateVariable = "TransportStatus", getterName = "getCurrentTransportStatus"),
             @UpnpOutputArgument(name = "CurrentSpeed", stateVariable = "TransportPlaySpeed", getterName = "getCurrentSpeed")
     })
-    public abstract TransportInfo getTransportInfo(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract TransportInfo getTransportInfo(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction(out = {
@@ -310,7 +291,7 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
             @UpnpOutputArgument(name = "RelCount", stateVariable = "RelativeCounterPosition", getterName = "getRelCount"),
             @UpnpOutputArgument(name = "AbsCount", stateVariable = "AbsoluteCounterPosition", getterName = "getAbsCount")
     })
-    public abstract PositionInfo getPositionInfo(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract PositionInfo getPositionInfo(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction(out = {
@@ -318,59 +299,59 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
             @UpnpOutputArgument(name = "RecMedia", stateVariable = "PossibleRecordStorageMedia", getterName = "getRecMediaString"),
             @UpnpOutputArgument(name = "RecQualityModes", stateVariable = "PossibleRecordQualityModes", getterName = "getRecQualityModesString")
     })
-    public abstract DeviceCapabilities getDeviceCapabilities(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract DeviceCapabilities getDeviceCapabilities(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction(out = {
             @UpnpOutputArgument(name = "PlayMode", stateVariable = "CurrentPlayMode", getterName = "getPlayMode"),
             @UpnpOutputArgument(name = "RecQualityMode", stateVariable = "CurrentRecordQualityMode", getterName = "getRecQualityMode")
     })
-    public abstract TransportSettings getTransportSettings(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract TransportSettings getTransportSettings(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void stop(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract void stop(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void play(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void play(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                               @UpnpInputArgument(name = "Speed", stateVariable = "TransportPlaySpeed") String speed)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void pause(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract void pause(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void record(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract void record(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void seek(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void seek(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                               @UpnpInputArgument(name = "Unit", stateVariable = "A_ARG_TYPE_SeekMode") String unit,
                               @UpnpInputArgument(name = "Target", stateVariable = "A_ARG_TYPE_SeekTarget") String target)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void next(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract void next(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void previous(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public abstract void previous(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void setPlayMode(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void setPlayMode(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                      @UpnpInputArgument(name = "NewPlayMode", stateVariable = "CurrentPlayMode") String newPlayMode)
             throws AVTransportException;
 
     @UpnpAction
-    public abstract void setRecordQualityMode(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void setRecordQualityMode(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                               @UpnpInputArgument(name = "NewRecordQualityMode", stateVariable = "CurrentRecordQualityMode") String newRecordQualityMode)
             throws AVTransportException;
 
     @UpnpAction(name = "GetCurrentTransportActions", out = @UpnpOutputArgument(name = "Actions", stateVariable = "CurrentTransportActions"))
-    public String getCurrentTransportActionsString(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId)
+    public String getCurrentTransportActionsString(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId)
             throws AVTransportException {
         try {
             return ModelUtil.toCommaSeparatedList(getCurrentTransportActions(instanceId));
@@ -379,5 +360,5 @@ public abstract class AbstractAVTransportService implements LastChangeDelegator 
         }
     }
 
-    protected abstract TransportAction[] getCurrentTransportActions(UnsignedIntegerFourBytes instanceId) throws Exception;
+    protected abstract TransportAction[] getCurrentTransportActions(UnsignedIntegerEightBytes instanceId) throws Exception;
 }

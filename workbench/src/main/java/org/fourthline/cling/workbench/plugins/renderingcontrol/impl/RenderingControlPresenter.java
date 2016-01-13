@@ -21,7 +21,7 @@ import org.fourthline.cling.model.gena.CancelReason;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.meta.StateVariableAllowedValueRange;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.renderingcontrol.callback.GetVolume;
 import org.fourthline.cling.support.renderingcontrol.callback.SetMute;
 import org.fourthline.cling.support.renderingcontrol.callback.SetVolume;
@@ -113,7 +113,7 @@ public class RenderingControlPresenter implements RenderingControlView.Presenter
 
     @Override
     public void onMuteSelected(int instanceId, final boolean desiredMute) {
-        controlPoint.execute(new SetMute(new UnsignedIntegerFourBytes(instanceId), service, desiredMute) {
+        controlPoint.execute(new SetMute(new UnsignedIntegerEightBytes(instanceId), service, desiredMute) {
 
             @Override
             public void success(ActionInvocation invocation) {
@@ -135,7 +135,7 @@ public class RenderingControlPresenter implements RenderingControlView.Presenter
 
     @Override
     public void onVolumeSelected(int instanceId, final int newVolume) {
-        controlPoint.execute(new SetVolume(new UnsignedIntegerFourBytes(instanceId), service, newVolume) {
+        controlPoint.execute(new SetVolume(new UnsignedIntegerEightBytes(instanceId), service, newVolume) {
             @Override
             public void success(ActionInvocation invocation) {
                 RenderingControlPoint.LOGGER.info(
@@ -155,7 +155,7 @@ public class RenderingControlPresenter implements RenderingControlView.Presenter
     }
 
     protected void updateVolume(final int instanceId) {
-        controlPoint.execute(new GetVolume(new UnsignedIntegerFourBytes(instanceId), service) {
+        controlPoint.execute(new GetVolume(new UnsignedIntegerEightBytes(instanceId), service) {
             @Override
             public void received(ActionInvocation actionInvocation, final int currentVolume) {
                 SwingUtilities.invokeLater(new Runnable() {
