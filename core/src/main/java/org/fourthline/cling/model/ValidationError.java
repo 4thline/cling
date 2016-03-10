@@ -20,6 +20,7 @@ package org.fourthline.cling.model;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ValidationError {
     private Class clazz;
     private String propertyName;

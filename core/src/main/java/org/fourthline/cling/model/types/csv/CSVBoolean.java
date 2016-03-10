@@ -22,7 +22,12 @@ import org.fourthline.cling.model.types.InvalidValueException;
  */
 public class CSVBoolean extends CSV<Boolean> {
 
-    public CSVBoolean() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2484006048143054243L;
+
+	public CSVBoolean() {
     }
 
     public CSVBoolean(String s) throws InvalidValueException {

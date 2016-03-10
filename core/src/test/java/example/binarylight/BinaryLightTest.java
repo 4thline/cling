@@ -10,6 +10,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked"})
 public class BinaryLightTest {
 
     @Test

@@ -15,6 +15,10 @@
 
 package org.fourthline.cling.test.control;
 
+import static org.testng.Assert.assertEquals;
+
+import java.net.URI;
+
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.mock.MockRouter;
 import org.fourthline.cling.mock.MockUpnpService;
@@ -49,12 +53,7 @@ import org.fourthline.cling.test.data.SampleServiceOne;
 import org.fourthline.cling.transport.RouterException;
 import org.testng.annotations.Test;
 
-import java.net.URI;
-import java.util.Arrays;
-
-import static org.testng.Assert.assertEquals;
-
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ActionInvokeOutgoingTest {
 
     public static final String RESPONSE_SUCCESSFUL = "<?xml version=\"1.0\"?>\n" +

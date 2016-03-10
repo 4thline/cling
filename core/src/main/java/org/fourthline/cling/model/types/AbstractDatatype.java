@@ -20,6 +20,7 @@ import java.lang.reflect.ParameterizedType;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class AbstractDatatype<V> implements Datatype<V> {
 
     private Builtin builtin;

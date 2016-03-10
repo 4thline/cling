@@ -19,7 +19,7 @@ import org.fourthline.cling.model.UnsupportedDataException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.control.ActionRequestMessage;
 import org.fourthline.cling.model.message.control.ActionResponseMessage;
-
+@SuppressWarnings({"rawtypes"})
 /**
  * Converts UPnP SOAP messages from/to action invocations.
  * <p>

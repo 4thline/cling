@@ -18,6 +18,7 @@ package org.fourthline.cling.model.types;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class DoubleDatatype extends AbstractDatatype<Double> {
 
     public DoubleDatatype() {

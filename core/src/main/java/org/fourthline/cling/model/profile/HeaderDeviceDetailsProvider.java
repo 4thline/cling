@@ -35,6 +35,7 @@ import java.util.regex.Pattern;
  * @author Mario Franco
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class HeaderDeviceDetailsProvider implements DeviceDetailsProvider {
 
     public static class Key {

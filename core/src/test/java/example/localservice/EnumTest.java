@@ -47,6 +47,7 @@ import static org.testng.Assert.assertEquals;
  * set of possible values.
  * </p>
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class EnumTest {
 
     public LocalDevice createTestDevice(Class serviceClass) throws Exception {

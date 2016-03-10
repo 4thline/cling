@@ -25,7 +25,7 @@ import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.protocol.sync.SendingAction;
 
 import java.net.URL;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 /**
  * Execute actions on any service.
  * <p>

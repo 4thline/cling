@@ -45,6 +45,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class Icon implements Validatable {
 
     final private static Logger log = Logger.getLogger(StateVariable.class.getName());

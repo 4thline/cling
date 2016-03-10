@@ -24,7 +24,12 @@ import java.util.Date;
  */
 public class CSVDate extends CSV<Date> {
 
-    public CSVDate() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7515555582315106303L;
+
+	public CSVDate() {
     }
 
     public CSVDate(String s) throws InvalidValueException {

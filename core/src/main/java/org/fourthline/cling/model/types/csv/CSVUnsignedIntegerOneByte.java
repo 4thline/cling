@@ -23,7 +23,12 @@ import org.fourthline.cling.model.types.UnsignedIntegerOneByte;
  */
 public class CSVUnsignedIntegerOneByte extends CSV<UnsignedIntegerOneByte> {
 
-    public CSVUnsignedIntegerOneByte() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1810883084522779426L;
+
+	public CSVUnsignedIntegerOneByte() {
     }
 
     public CSVUnsignedIntegerOneByte(String s) throws InvalidValueException {

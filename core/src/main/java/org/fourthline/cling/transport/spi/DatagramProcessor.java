@@ -31,6 +31,7 @@ import java.net.InetAddress;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface DatagramProcessor {
 
     /**

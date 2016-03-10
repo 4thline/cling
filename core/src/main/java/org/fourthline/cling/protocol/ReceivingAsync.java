@@ -21,6 +21,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +37,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable {
 
     final private static Logger log = Logger.getLogger(UpnpService.class.getName());
@@ -58,6 +60,10 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
     }
 
     public void run() {
+    	
+    	System.out.println("ReceivingAsync::run(" + this.getClass().getName() + ")");
+    	
+    	long time = (new Date()).getTime();
         boolean proceed;
         try {
             proceed = waitBeforeExecution();
@@ -80,6 +86,8 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
                 }
             }
         }
+        long timeEnd = (new Date()).getTime();
+        System.out.println("ReceivingAsync::run::exit(" + this.getClass().getName() + ") - running time: " + ((timeEnd - time)) + " ms");
     }
 
     /**

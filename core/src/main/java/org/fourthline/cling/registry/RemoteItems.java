@@ -38,6 +38,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 class RemoteItems extends RegistryItems<RemoteDevice, RemoteGENASubscription> {
 
     private static Logger log = Logger.getLogger(Registry.class.getName());

@@ -37,7 +37,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import static org.testng.Assert.assertEquals;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 /**
  * Accessing remote client information
  * <p>

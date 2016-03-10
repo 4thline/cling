@@ -45,7 +45,6 @@
             <!-- Website lifecycle -->
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${maven.site.plugin.version}</version>
                 <configuration>
                     <reportPlugins>
                         <!-- THESE IGNORE GLOBAL PLUGIN MANAGEMENT! -->

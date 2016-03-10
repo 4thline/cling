@@ -16,7 +16,7 @@
 package org.fourthline.cling.binding.staging;
 
 import org.fourthline.cling.model.meta.ActionArgument;
-
+@SuppressWarnings({"rawtypes"})
 /**
  * @author Christian Bauer
  */

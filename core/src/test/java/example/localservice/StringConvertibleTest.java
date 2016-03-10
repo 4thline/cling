@@ -68,6 +68,7 @@ import static org.testng.Assert.assertEquals;
  * CSV converter class as an input argument type.
  * </p>
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class StringConvertibleTest {
 
         public LocalDevice createTestDevice(Class serviceClass) throws Exception {

@@ -19,6 +19,7 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +51,11 @@ public abstract class SendingAsync implements Runnable {
     }
 
     public void run() {
-        try {
+    	
+    	long time = (new Date()).getTime();
+    	System.out.println("SendingAsync::run(" + this.getClass().getName() + ")");
+        
+    	try {
             execute();
         } catch (Exception ex) {
             Throwable cause = Exceptions.unwrap(ex);
@@ -62,6 +67,8 @@ public abstract class SendingAsync implements Runnable {
                 );
             }
         }
+    	long timeEnd = (new Date()).getTime();
+        System.out.println("SendingAsync::run::exit(" + this.getClass().getName() + ") - running time: " + ((timeEnd - time)) + " ms.");
     }
 
     protected abstract void execute() throws RouterException;

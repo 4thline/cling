@@ -15,6 +15,9 @@
 
 package org.fourthline.cling.test.model;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.binding.xml.DeviceDescriptorBinder;
 import org.fourthline.cling.binding.xml.UDA10DeviceDescriptorBinderImpl;
@@ -39,11 +42,7 @@ import org.fourthline.cling.model.types.UDN;
 import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.test.data.SampleDeviceRoot;
 import org.testng.annotations.Test;
-
-import java.net.URI;
-
-import static org.testng.Assert.*;
-
+@SuppressWarnings({"rawtypes"})
 public class IncompatibilityTest {
 
     @Test

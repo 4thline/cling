@@ -42,6 +42,7 @@ import java.util.logging.Logger;
  * </p>
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class DatagramIOImpl implements DatagramIO<DatagramIOConfigurationImpl> {
 
     private static Logger log = Logger.getLogger(DatagramIO.class.getName());

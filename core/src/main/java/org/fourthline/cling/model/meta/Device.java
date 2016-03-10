@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 /**
  * Describes either a root or embedded device.
  *

@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LocalActionInvocationCSVTest {
 
     public LocalDevice createTestDevice(LocalService service) throws Exception {

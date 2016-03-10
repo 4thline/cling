@@ -28,8 +28,6 @@ import org.seamless.util.io.IO;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.*;
-
 /**
  * @author Christian Bauer
  */

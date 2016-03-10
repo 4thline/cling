@@ -26,6 +26,7 @@ import org.fourthline.cling.model.types.ServiceType;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class OutgoingSearchResponseServiceType extends OutgoingSearchResponse {
 
     public OutgoingSearchResponseServiceType(IncomingDatagramMessage request,

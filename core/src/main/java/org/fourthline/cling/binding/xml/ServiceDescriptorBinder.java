@@ -18,7 +18,7 @@ package org.fourthline.cling.binding.xml;
 import org.fourthline.cling.model.ValidationException;
 import org.fourthline.cling.model.meta.Service;
 import org.w3c.dom.Document;
-
+@SuppressWarnings({"rawtypes"})
 /**
  * Reads and generates service descriptor XML metadata.
  *

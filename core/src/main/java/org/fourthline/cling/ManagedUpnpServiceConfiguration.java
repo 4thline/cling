@@ -58,6 +58,7 @@ import java.util.logging.Logger;
  * @author Christian Bauer
  */
 @ApplicationScoped
+@SuppressWarnings({"rawtypes"})
 public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     private static Logger log = Logger.getLogger(DefaultUpnpServiceConfiguration.class.getName());

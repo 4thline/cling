@@ -40,6 +40,7 @@ import java.util.logging.Logger;
  * </p>
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public abstract class UpnpStream implements Runnable {
 
     private static Logger log = Logger.getLogger(UpnpStream.class.getName());

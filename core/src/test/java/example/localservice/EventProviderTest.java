@@ -83,6 +83,7 @@ import static org.testng.Assert.*;
  * </p>
  * <a class="citation" href="javacode://example.localservice.SwitchPowerWithBundledPropertyChange#setTarget(boolean)"/>
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class EventProviderTest extends EventSubscriptionTest {
 
     @Test

@@ -24,6 +24,7 @@ import java.util.List;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings("serial")
 public class RegistrationException extends RuntimeException {
 
     public List<ValidationError> errors;

@@ -33,6 +33,7 @@ import java.net.URL;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class OutgoingActionRequestMessage extends StreamRequestMessage implements ActionRequestMessage {
 
     private static Logger log = Logger.getLogger(OutgoingActionRequestMessage.class.getName());

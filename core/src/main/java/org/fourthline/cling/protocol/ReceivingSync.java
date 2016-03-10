@@ -60,12 +60,15 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
     }
 
     final protected void execute() throws RouterException {
+    	
+    	System.out.println("ReceivingSync::execute()");
         outputMessage = executeSync();
 
         if (outputMessage != null && getRemoteClientInfo().getExtraResponseHeaders().size() > 0) {
             log.fine("Setting extra headers on response message: " + getRemoteClientInfo().getExtraResponseHeaders().size());
             outputMessage.getHeaders().putAll(getRemoteClientInfo().getExtraResponseHeaders());
         }
+        System.out.println("ReceivingSync::execute::complete()");
     }
 
     protected abstract OUT executeSync() throws RouterException;

@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 /**
  * @author Michael Pujos
  */
+@SuppressWarnings({"rawtypes"})
 public class RecoveringUDA10DeviceDescriptorBinderImpl extends UDA10DeviceDescriptorBinderImpl {
 
     private static Logger log = Logger.getLogger(RecoveringUDA10DeviceDescriptorBinderImpl.class.getName());

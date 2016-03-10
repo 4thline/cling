@@ -33,6 +33,7 @@ import java.util.Set;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 abstract class RegistryItems<D extends Device, S extends GENASubscription> {
 
     protected final RegistryImpl registry;

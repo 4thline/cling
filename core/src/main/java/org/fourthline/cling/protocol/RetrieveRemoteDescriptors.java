@@ -63,6 +63,7 @@ import org.seamless.util.Exceptions;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class RetrieveRemoteDescriptors implements Runnable {
 
     final private static Logger log = Logger.getLogger(RetrieveRemoteDescriptors.class.getName());

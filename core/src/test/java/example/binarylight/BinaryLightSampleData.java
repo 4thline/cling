@@ -10,6 +10,7 @@ import org.fourthline.cling.test.data.SampleData;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class BinaryLightSampleData {
 
     public static LocalDevice createDevice(Class<?> serviceClass) throws Exception {

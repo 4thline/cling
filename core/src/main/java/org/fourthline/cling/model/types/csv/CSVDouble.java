@@ -22,7 +22,12 @@ import org.fourthline.cling.model.types.InvalidValueException;
  */
 public class CSVDouble extends CSV<Double> {
 
-    public CSVDouble() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -160816818222514149L;
+
+	public CSVDouble() {
     }
 
     public CSVDouble(String s) throws InvalidValueException {

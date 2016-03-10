@@ -31,6 +31,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class UpnpHeaders extends Headers {
 
     private static final Logger log = Logger.getLogger(UpnpHeaders.class.getName());

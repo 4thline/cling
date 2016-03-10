@@ -21,6 +21,7 @@ import org.fourthline.cling.model.message.StreamRequestMessage;
 import org.fourthline.cling.model.message.UpnpRequest;
 import org.fourthline.cling.protocol.ReceivingSync;
 import org.fourthline.cling.protocol.sync.ReceivingEvent;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.net.URI;
@@ -30,6 +31,7 @@ import static org.testng.Assert.*;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ProtocolFactoryTest {
 
     @Test(expectedExceptions = org.fourthline.cling.protocol.ProtocolCreationException.class)
@@ -43,6 +45,8 @@ public class ProtocolFactoryTest {
                 ""
             )
         );
+        
+        Assert.assertNotNull(protocol);
     }
 
     @Test

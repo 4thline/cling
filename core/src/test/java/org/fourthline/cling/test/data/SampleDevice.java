@@ -28,6 +28,7 @@ import java.lang.reflect.Constructor;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public abstract class SampleDevice {
 
     public DeviceIdentity identity;

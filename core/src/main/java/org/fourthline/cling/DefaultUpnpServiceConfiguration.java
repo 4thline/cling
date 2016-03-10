@@ -84,6 +84,7 @@ import java.util.logging.Logger;
  * @author Christian Bauer
  */
 @Alternative
+@SuppressWarnings({"rawtypes"})
 public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration {
 
     private static Logger log = Logger.getLogger(DefaultUpnpServiceConfiguration.class.getName());
@@ -349,7 +350,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
         protected final ThreadGroup group;
         protected final AtomicInteger threadNumber = new AtomicInteger(1);
-        protected final String namePrefix = "cling-";
+        protected final String namePrefix = "cling-r-";
 
         public ClingThreadFactory() {
             SecurityManager s = System.getSecurityManager();

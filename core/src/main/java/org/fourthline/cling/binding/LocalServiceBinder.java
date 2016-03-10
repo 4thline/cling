@@ -24,6 +24,7 @@ import org.fourthline.cling.model.types.ServiceType;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface LocalServiceBinder {
 
     /**

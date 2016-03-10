@@ -20,6 +20,7 @@ import java.util.Locale;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class BooleanDatatype extends AbstractDatatype<Boolean> {
 
     public BooleanDatatype() {

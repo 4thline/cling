@@ -56,6 +56,7 @@ import org.seamless.util.URIUtil;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class Namespace {
 
     final private static Logger log = Logger.getLogger(Namespace.class.getName());

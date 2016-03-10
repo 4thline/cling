@@ -34,6 +34,7 @@ import static org.testng.Assert.*;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ActionSampleData {
 
     public static LocalDevice createTestDevice() throws Exception {

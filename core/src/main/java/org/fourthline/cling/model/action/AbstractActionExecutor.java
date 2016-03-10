@@ -35,6 +35,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class AbstractActionExecutor implements ActionExecutor {
 
     private static Logger log = Logger.getLogger(AbstractActionExecutor.class.getName());

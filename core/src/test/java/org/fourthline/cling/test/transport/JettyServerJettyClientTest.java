@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class JettyServerJettyClientTest extends StreamServerClientTest {
 
     @Override

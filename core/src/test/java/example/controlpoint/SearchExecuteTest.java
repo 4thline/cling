@@ -59,6 +59,7 @@ import static org.testng.Assert.*;
  * <a class="citation" href="javadoc://this#searchDeviceType" style="read-title: false;"/>
  * <a class="citation" href="javadoc://this#searchServiceType" style="read-title: false;"/>
  */
+@SuppressWarnings({"rawtypes"})
 public class SearchExecuteTest {
 
     /**
@@ -186,7 +187,7 @@ public class SearchExecuteTest {
 
     @Test(expectedExceptions = java.lang.IllegalArgumentException.class)
     public void searchInvalidST() {
-        SendingSearch search = new SendingSearch(new MockUpnpService(), new MXHeader());
+        new SendingSearch(new MockUpnpService(), new MXHeader());
     }
 
     protected void assertMessages(MockUpnpService upnpService, UpnpHeader header) throws Exception {

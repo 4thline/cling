@@ -34,6 +34,7 @@ import java.util.Collection;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class OutgoingEventRequestMessage extends StreamRequestMessage {
 
     final private Collection<StateVariableValue> stateVariableValues;

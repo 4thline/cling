@@ -22,6 +22,7 @@ import org.fourthline.cling.model.meta.LocalService;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface ActionExecutor {
 
     public void execute(final ActionInvocation<LocalService> actionInvocation);

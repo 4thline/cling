@@ -34,7 +34,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LocalActionInvocationEnumTest {
 
     public LocalDevice createTestDevice(LocalService service) throws Exception {

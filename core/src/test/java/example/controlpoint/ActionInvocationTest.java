@@ -108,6 +108,7 @@ import static org.testng.Assert.assertEquals;
  * thing, an empty XML element. If you forget to set an input argument's value, it will be null/empty element.
  * </div>
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ActionInvocationTest {
 
     protected LocalService bindService(Class<?> clazz) throws Exception {
@@ -250,7 +251,7 @@ public class ActionInvocationTest {
         MockUpnpService upnpService = new MockUpnpService();
 
         Service service = device.findService(new UDAServiceId("SwitchPower"));
-        Action getStatusAction = service.getAction("GetStatus");
+        service.getAction("GetStatus");
 
         final boolean[] tests = new boolean[1];
 

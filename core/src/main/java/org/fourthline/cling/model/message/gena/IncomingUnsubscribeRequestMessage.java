@@ -25,6 +25,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class IncomingUnsubscribeRequestMessage extends StreamRequestMessage {
 
     final private LocalService service;

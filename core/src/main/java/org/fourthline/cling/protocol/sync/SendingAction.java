@@ -48,6 +48,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SendingAction extends SendingSync<OutgoingActionRequestMessage, IncomingActionResponseMessage> {
 
     final private static Logger log = Logger.getLogger(SendingAction.class.getName());

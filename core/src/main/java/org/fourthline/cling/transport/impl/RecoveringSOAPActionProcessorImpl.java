@@ -50,6 +50,7 @@ import javax.enterprise.inject.Alternative;
  * @author Michael Pujos
  */
 @Alternative
+@SuppressWarnings({"rawtypes"})
 public class RecoveringSOAPActionProcessorImpl extends PullSOAPActionProcessorImpl {
 
     private static Logger log = Logger.getLogger(SOAPActionProcessor.class.getName());

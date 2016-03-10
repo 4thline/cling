@@ -29,6 +29,7 @@ import java.net.URL;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SampleServiceTwo extends SampleService {
 
     public static URI getThisDescriptorURI() {

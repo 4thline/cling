@@ -37,6 +37,7 @@ import java.util.Set;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LocalService<T> extends Service<LocalDevice, LocalService> {
 
     final protected Map<Action, ActionExecutor> actionExecutors;

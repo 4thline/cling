@@ -24,7 +24,11 @@ import org.fourthline.cling.model.types.ErrorCode;
  */
 public class ActionException extends Exception {
 
-    private int errorCode;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2885380500920903212L;
+	private int errorCode;
 
     public ActionException(int errorCode, String message) {
         super(message);

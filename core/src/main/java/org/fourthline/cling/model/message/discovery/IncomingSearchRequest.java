@@ -25,6 +25,7 @@ import org.fourthline.cling.model.types.NotificationSubtype;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class IncomingSearchRequest extends IncomingDatagramMessage<UpnpRequest> {
 
     public IncomingSearchRequest(IncomingDatagramMessage<UpnpRequest> source) {

@@ -1,0 +1,46 @@
+allprojects  {
+  apply plugin: 'maven'
+
+  group = 'org.fourthline.cling'
+  version = '2.1.1-SNAPSHOT'
+}
+
+subprojects {
+  apply plugin: 'java'
+  sourceCompatibility = 1.7
+  targetCompatibility = 1.7
+
+  
+  repositories {
+    mavenLocal()
+    mavenCentral()
+    
+    maven { url "http://4thline.org/m2" }
+    maven { url "http://repo.maven.apache.org/maven2" }
+  }
+
+  
+  dependencies {
+  
+  compile(group: 'com.google.android', name: 'android', version:'4.1.1.4') {
+exclude(module: 'xpp3')
+exclude(module: 'opengl-api')
+exclude(module: 'json')
+exclude(module: 'xmlParserAPIs')
+exclude(module: 'commons-logging')
+    }
+    
+    testCompile(group: 'org.testng', name: 'testng', version:'6.8.21') {
+exclude(module: 'junit')
+    }
+}
+
+  test.useTestNG()
+	test{
+	 	testLogging {
+	        // Show that tests are run in the command-line output
+	        events 'started', 'passed'
+	    }
+	}
+
+}

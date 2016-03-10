@@ -72,6 +72,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class SubscriptionCallback implements Runnable {
 
     protected static Logger log = Logger.getLogger(SubscriptionCallback.class.getName());
@@ -141,7 +142,8 @@ public abstract class SubscriptionCallback implements Runnable {
             localSubscription =
                     new LocalGENASubscription(service, Integer.MAX_VALUE, Collections.EMPTY_LIST) {
 
-                        public void failed(Exception ex) {
+                        @SuppressWarnings("unused")
+						public void failed(Exception ex) {
                             synchronized (SubscriptionCallback.this) {
                                 SubscriptionCallback.this.setSubscription(null);
                                 SubscriptionCallback.this.failed(null, null, ex);

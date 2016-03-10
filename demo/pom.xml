@@ -33,7 +33,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${maven.site.plugin.version}</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>

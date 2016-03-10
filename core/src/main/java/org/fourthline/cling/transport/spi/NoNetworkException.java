@@ -23,7 +23,12 @@ package org.fourthline.cling.transport.spi;
  */
 public class NoNetworkException extends InitializationException {
 
-    public NoNetworkException(String s) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6325617230142752475L;
+
+	public NoNetworkException(String s) {
         super(s);
     }
 }

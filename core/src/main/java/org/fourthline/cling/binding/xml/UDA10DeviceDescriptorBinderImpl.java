@@ -64,6 +64,7 @@ import org.xml.sax.SAXParseException;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class UDA10DeviceDescriptorBinderImpl implements DeviceDescriptorBinder, ErrorHandler {
 
     private static Logger log = Logger.getLogger(DeviceDescriptorBinder.class.getName());

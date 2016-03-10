@@ -15,6 +15,14 @@
 
 package org.fourthline.cling.test.gena;
 
+import static org.testng.Assert.assertEquals;
+
+import java.net.URI;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
 import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.controlpoint.SubscriptionCallback;
 import org.fourthline.cling.mock.MockRouter;
@@ -39,18 +47,9 @@ import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.test.data.SampleData;
-import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
-
-import java.net.URI;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Semaphore;
-
-import static org.testng.Assert.assertEquals;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class OutgoingSubscriptionLifecycleTest {
 
     @Test

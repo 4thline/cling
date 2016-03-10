@@ -22,7 +22,12 @@ package org.fourthline.cling.binding.xml;
  */
 public class DescriptorBindingException extends Exception {
 
-    public DescriptorBindingException(String s) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5675217860767178925L;
+
+	public DescriptorBindingException(String s) {
         super(s);
     }
 

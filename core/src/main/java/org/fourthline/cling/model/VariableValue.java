@@ -25,6 +25,7 @@ import org.fourthline.cling.model.types.InvalidValueException;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class VariableValue {
 
     final private static Logger log = Logger.getLogger(VariableValue.class.getName());

@@ -15,6 +15,10 @@
 
 package org.fourthline.cling.test.model;
 
+import static org.testng.Assert.assertEquals;
+
+import java.util.Random;
+
 import org.fourthline.cling.binding.LocalServiceBinder;
 import org.fourthline.cling.binding.annotations.AnnotationLocalServiceBinder;
 import org.fourthline.cling.binding.annotations.UpnpAction;
@@ -30,17 +34,13 @@ import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.types.Datatype;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.test.data.SampleData;
-import org.seamless.util.ByteArray;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.util.Random;
-
-import static org.testng.Assert.assertEquals;
 
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class LocalServiceBindingDatatypesTest {
 
     public LocalDevice createTestDevice(LocalService service) throws Exception {

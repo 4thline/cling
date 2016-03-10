@@ -42,6 +42,7 @@ import javax.enterprise.inject.Alternative;
  * @author Christian Bauer
  */
 @Alternative
+@SuppressWarnings({"rawtypes"})
 public class MockUpnpService implements UpnpService {
 
     protected final UpnpServiceConfiguration configuration;

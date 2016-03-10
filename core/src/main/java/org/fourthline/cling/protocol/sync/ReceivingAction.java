@@ -46,6 +46,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked"})
 public class ReceivingAction extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
     final private static Logger log = Logger.getLogger(ReceivingAction.class.getName());

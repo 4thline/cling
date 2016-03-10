@@ -22,6 +22,7 @@ import java.net.URI;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ServiceEventSubscriptionResource extends Resource<LocalService> {
 
     public ServiceEventSubscriptionResource(URI localURI, LocalService model) {

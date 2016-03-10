@@ -1,0 +1,11 @@
+
+description = 'Cling MediaRenderer'
+dependencies {
+  compile project(':cling-support')
+    compile group: 'net.java.dev.jna', name: 'jna', version:'3.2.5'
+    compile(group: 'com.googlecode.gstreamer-java', name: 'gstreamer-java', version:'1.5') {
+exclude(module: 'macosx')
+exclude(module: 'x86')
+exclude(module: 'x86_64')
+    }
+}

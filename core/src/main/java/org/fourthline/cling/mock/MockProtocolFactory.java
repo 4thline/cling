@@ -42,6 +42,7 @@ import java.net.URL;
  * @author Christian Bauer
  */
 @Alternative
+@SuppressWarnings({"rawtypes"})
 public class MockProtocolFactory implements ProtocolFactory {
 
     @Override

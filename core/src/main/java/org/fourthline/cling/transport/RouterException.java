@@ -29,7 +29,12 @@ package org.fourthline.cling.transport;
  */
 public class RouterException extends Exception {
 
-    public RouterException() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 9044067780359048253L;
+
+	public RouterException() {
         super();
     }
 

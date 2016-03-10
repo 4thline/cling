@@ -63,6 +63,7 @@ import org.fourthline.cling.transport.RouterException;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ReceivingSearch extends ReceivingAsync<IncomingSearchRequest> {
 
     final private static Logger log = Logger.getLogger(ReceivingSearch.class.getName());

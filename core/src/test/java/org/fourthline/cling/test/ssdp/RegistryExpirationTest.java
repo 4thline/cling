@@ -27,7 +27,7 @@ import java.net.URI;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
-
+@SuppressWarnings({"unchecked","rawtypes"})
 public class RegistryExpirationTest {
 
     @Test

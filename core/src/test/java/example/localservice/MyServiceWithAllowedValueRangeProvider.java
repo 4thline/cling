@@ -15,7 +15,6 @@
 
 package example.localservice;
 
-import org.fourthline.cling.binding.AllowedValueProvider;
 import org.fourthline.cling.binding.AllowedValueRangeProvider;
 import org.fourthline.cling.binding.annotations.UpnpAction;
 import org.fourthline.cling.binding.annotations.UpnpInputArgument;

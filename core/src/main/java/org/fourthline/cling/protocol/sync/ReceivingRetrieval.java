@@ -53,6 +53,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ReceivingRetrieval extends ReceivingSync<StreamRequestMessage, StreamResponseMessage> {
 
     final private static Logger log = Logger.getLogger(ReceivingRetrieval.class.getName());

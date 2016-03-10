@@ -220,6 +220,11 @@ public class ManagedUpnpService implements UpnpService {
         @Override
         public void beforeShutdown(Registry registry) {
             registryShutdownEvent.select(new AnnotationLiteral<Before>() {
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = 4750962750713720501L;
             }).fire(
                     new RegistryShutdown()
             );
@@ -228,6 +233,11 @@ public class ManagedUpnpService implements UpnpService {
         @Override
         public void afterShutdown() {
             registryShutdownEvent.select(new AnnotationLiteral<After>() {
+
+				/**
+				 * 
+				 */
+				private static final long serialVersionUID = -2618953398230494798L;
             }).fire(
                     new RegistryShutdown()
             );

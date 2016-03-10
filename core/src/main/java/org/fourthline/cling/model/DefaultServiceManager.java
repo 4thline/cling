@@ -33,7 +33,7 @@ import org.fourthline.cling.model.state.StateVariableAccessor;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.seamless.util.Exceptions;
 import org.seamless.util.Reflections;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 /**
  * Default implementation, creates and manages a single instance of a plain Java bean.
  * <p>

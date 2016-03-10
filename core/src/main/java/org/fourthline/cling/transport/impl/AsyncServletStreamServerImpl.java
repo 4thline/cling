@@ -96,7 +96,12 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
 
     protected Servlet createServlet(final Router router) {
         return new HttpServlet() {
-            @Override
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = -7824737275948526982L;
+
+			@Override
             protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
             	final long startTime = System.currentTimeMillis();

@@ -58,6 +58,7 @@ import java.util.Collection;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface Registry {
 
     public UpnpService getUpnpService();

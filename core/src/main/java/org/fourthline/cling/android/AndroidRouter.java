@@ -40,6 +40,7 @@ import java.util.logging.Logger;
  * @author Michael Pujos
  * @author Christian Bauer
  */
+
 public class AndroidRouter extends RouterImpl {
 
     final private static Logger log = Logger.getLogger(Router.class.getName());
@@ -303,7 +304,8 @@ public class AndroidRouter extends RouterImpl {
             String reason = intent.getStringExtra(ConnectivityManager.EXTRA_REASON);
             boolean isFailover = intent.getBooleanExtra(ConnectivityManager.EXTRA_IS_FAILOVER, false);
 
-            NetworkInfo currentNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
+            @SuppressWarnings("deprecation")
+			NetworkInfo currentNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
             NetworkInfo otherNetworkInfo = (NetworkInfo) intent.getParcelableExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO);
 
             log.info("Connectivity change detected...");

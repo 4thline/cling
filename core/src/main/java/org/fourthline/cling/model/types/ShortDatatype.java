@@ -19,6 +19,7 @@ package org.fourthline.cling.model.types;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ShortDatatype extends AbstractDatatype<Short> {
 
     @Override

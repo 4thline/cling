@@ -53,6 +53,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class AnnotationLocalServiceBinder implements LocalServiceBinder {
 
     private static Logger log = Logger.getLogger(AnnotationLocalServiceBinder.class.getName());

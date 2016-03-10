@@ -15,6 +15,13 @@
 
 package org.fourthline.cling.test.data;
 
+import java.lang.reflect.Constructor;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+import java.net.UnknownHostException;
+
 import org.fourthline.cling.DefaultUpnpServiceConfiguration;
 import org.fourthline.cling.binding.LocalServiceBinder;
 import org.fourthline.cling.binding.annotations.AnnotationLocalServiceBinder;
@@ -30,26 +37,17 @@ import org.fourthline.cling.model.meta.RemoteDevice;
 import org.fourthline.cling.model.meta.RemoteDeviceIdentity;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.meta.StateVariable;
+import org.fourthline.cling.model.profile.DeviceDetailsProvider;
 import org.fourthline.cling.model.types.DeviceType;
 import org.fourthline.cling.model.types.ServiceId;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.transport.impl.NetworkAddressFactoryImpl;
 import org.fourthline.cling.transport.spi.DatagramProcessor;
 
-import java.lang.reflect.Constructor;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.logging.Logger;
-
-import org.fourthline.cling.model.profile.DeviceDetailsProvider;
-
-
+@SuppressWarnings({"unchecked","rawtypes"})
 public class SampleData {
 
-    private static Logger log = Logger.getLogger(SampleData.class.getName());
+//    private static Logger log = Logger.getLogger(SampleData.class.getName());
 
     /* ###################################################################################### */
 

@@ -45,6 +45,7 @@ import javax.enterprise.inject.Alternative;
  * @author Michael Pujos
  */
 @Alternative
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class PullSOAPActionProcessorImpl extends SOAPActionProcessorImpl {
 
     protected static Logger log = Logger.getLogger(SOAPActionProcessor.class.getName());

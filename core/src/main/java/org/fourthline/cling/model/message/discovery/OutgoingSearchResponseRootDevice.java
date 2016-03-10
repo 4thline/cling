@@ -25,6 +25,7 @@ import org.fourthline.cling.model.meta.LocalDevice;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class OutgoingSearchResponseRootDevice extends OutgoingSearchResponse {
 
     public OutgoingSearchResponseRootDevice(IncomingDatagramMessage request,

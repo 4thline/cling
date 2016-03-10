@@ -39,6 +39,7 @@ import java.util.Locale;
  * 
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class DatagramProcessorImpl implements DatagramProcessor {
 
     private static Logger log = Logger.getLogger(DatagramProcessor.class.getName());

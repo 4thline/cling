@@ -55,6 +55,7 @@ import static org.testng.Assert.assertEquals;
  * <a class="citation" href="javadoc://this#quickstartListener" style="read-title: false"/>
  * <a class="citation" href="javadoc://this#regularListener" style="read-title: false"/>
  */
+@SuppressWarnings({"rawtypes"})
 public class RegistryListenerTest {
 
     // Just for documentation inclusion!

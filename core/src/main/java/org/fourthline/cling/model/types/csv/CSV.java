@@ -39,9 +39,14 @@ import java.util.List;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class CSV<T> extends ArrayList<T> {
 
-    protected final Datatype.Builtin datatype;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4674111495736291703L;
+	protected final Datatype.Builtin datatype;
 
     public CSV() {
         datatype = getBuiltinDatatype();

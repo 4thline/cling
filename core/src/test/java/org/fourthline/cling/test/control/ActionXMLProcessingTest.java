@@ -15,6 +15,11 @@
 
 package org.fourthline.cling.test.control;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
+
+import java.net.URI;
+
 import org.fourthline.cling.mock.MockUpnpService;
 import org.fourthline.cling.mock.MockUpnpServiceConfiguration;
 import org.fourthline.cling.model.action.ActionException;
@@ -43,11 +48,7 @@ import org.fourthline.cling.transport.impl.SOAPActionProcessorImpl;
 import org.fourthline.cling.transport.spi.SOAPActionProcessor;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.net.URI;
-
-import static org.testng.Assert.*;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ActionXMLProcessingTest {
 
     public static final String ENCODED_REQUEST = "<?xml version=\"1.0\"?>\n" +

@@ -14,12 +14,19 @@
  */
 package example.registry;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+
+import java.net.URI;
+import java.util.Collection;
+
 import org.fourthline.cling.mock.MockUpnpService;
-import org.fourthline.cling.model.resource.DeviceDescriptorResource;
-import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.RemoteDevice;
+import org.fourthline.cling.model.resource.DeviceDescriptorResource;
+import org.fourthline.cling.model.resource.Resource;
 import org.fourthline.cling.model.types.DeviceType;
 import org.fourthline.cling.model.types.ServiceType;
 import org.fourthline.cling.model.types.UDADeviceType;
@@ -32,11 +39,6 @@ import org.fourthline.cling.test.data.SampleDeviceRootLocal;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.net.URI;
-import java.util.Collection;
-
-import static org.testng.Assert.*;
-
 /**
  * Browsing the Registry
  * <p>
@@ -47,6 +49,7 @@ import static org.testng.Assert.*;
  * <a class="citation" href="javadoc://this#findDevice" style="read-title: false"/>
  * <a class="citation" href="javadoc://this#findDeviceByType" style="read-title: false"/>
  */
+@SuppressWarnings({"rawtypes"})
 public class RegistryBrowseTest {
 
     /**
@@ -142,6 +145,8 @@ public class RegistryBrowseTest {
                         DeviceDescriptorResource.class,
                         URI.create("http://host/invalid/absolute/URI")
         );
+        
+        Assert.assertNotNull(resource);
     }
 
     /* TODO: We for now just ignore duplicate devices because we need to test proxies

@@ -75,6 +75,7 @@ import static org.testng.Assert.assertEquals;
  * <a class="citation" href="javadoc://example.localservice.SwitchPowerBeanReturn"/>
  * </div>
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BasicBindingTest {
 
     public LocalDevice createTestDevice(Class serviceClass) throws Exception {

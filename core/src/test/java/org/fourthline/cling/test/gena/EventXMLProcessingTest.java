@@ -41,7 +41,7 @@ import java.util.List;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-
+@SuppressWarnings({"rawtypes"})
 public class EventXMLProcessingTest {
 
     public static final String EVENT_MSG =
@@ -93,12 +93,19 @@ public class EventXMLProcessingTest {
         LocalDevice localDevice = GenaSampleData.createTestDevice(GenaSampleData.LocalTestService.class);
         LocalService localService = localDevice.getServices()[0];
 
-        List<URL> urls = new ArrayList<URL>() {{
+        List<URL> urls = new ArrayList<URL>() {/**
+			 * 
+			 */
+			private static final long serialVersionUID = -2539709854799598624L;
+
+		{
             add(SampleData.getLocalBaseURL());
         }};
         
         LocalGENASubscription subscription =
                 new LocalGENASubscription(localService, 1800, urls) {
+        	
+        			@SuppressWarnings("unused")
                     public void failed(Exception ex) {
                         throw new RuntimeException("TEST SUBSCRIPTION FAILED: " + ex);
                     }
