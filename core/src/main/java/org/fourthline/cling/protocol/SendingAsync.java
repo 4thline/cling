@@ -52,9 +52,6 @@ public abstract class SendingAsync implements Runnable {
 
     public void run() {
     	
-    	long time = (new Date()).getTime();
-    	System.out.println("SendingAsync::run(" + this.getClass().getName() + ")");
-        
     	try {
             execute();
         } catch (Exception ex) {
@@ -67,8 +64,6 @@ public abstract class SendingAsync implements Runnable {
                 );
             }
         }
-    	long timeEnd = (new Date()).getTime();
-        System.out.println("SendingAsync::run::exit(" + this.getClass().getName() + ") - running time: " + ((timeEnd - time)) + " ms.");
     }
 
     protected abstract void execute() throws RouterException;

@@ -61,9 +61,6 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
 
     public void run() {
     	
-    	System.out.println("ReceivingAsync::run(" + this.getClass().getName() + ")");
-    	
-    	long time = (new Date()).getTime();
         boolean proceed;
         try {
             proceed = waitBeforeExecution();
@@ -86,8 +83,6 @@ public abstract class ReceivingAsync<M extends UpnpMessage> implements Runnable 
                 }
             }
         }
-        long timeEnd = (new Date()).getTime();
-        System.out.println("ReceivingAsync::run::exit(" + this.getClass().getName() + ") - running time: " + ((timeEnd - time)) + " ms");
     }
 
     /**
