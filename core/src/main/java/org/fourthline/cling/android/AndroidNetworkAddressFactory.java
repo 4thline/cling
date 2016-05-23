@@ -52,8 +52,9 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
             // TODO: Workaround Android DNS reverse lookup issue, still a problem on ICS+?
             // http://4thline.org/projects/mailinglists.html#nabble-td3011461
             String hostName = address.getHostAddress();
-	    Field field0;
-	    Object target;
+
+	    Field field0 = null;
+	    Object target = null;
 
 	    try {
 
@@ -68,8 +69,12 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
 			target = address;
 		    }                
 
-		    field0.setAccessible(true);
-		    field0.set(target, hostName);
+		    if (field != null && target != null && hostName != null) {
+				field0.setAccessible(true);
+		    	field0.set(target, hostName);
+			} else {
+				return false;
+			}
 
 	    } catch (Exception ex) {
                 log.log(Level.SEVERE,
