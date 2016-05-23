@@ -15,9 +15,12 @@
 
 package org.fourthline.cling.android;
 
+import android.os.Build;
+
 import org.fourthline.cling.transport.impl.NetworkAddressFactoryImpl;
 import org.fourthline.cling.transport.spi.InitializationException;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
@@ -52,11 +55,26 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
             // TODO: Workaround Android DNS reverse lookup issue, still a problem on ICS+?
             // http://4thline.org/projects/mailinglists.html#nabble-td3011461
             String hostName = address.getHostAddress();
-            try {
-                Field field = InetAddress.class.getDeclaredField("hostName");
-                field.setAccessible(true);
-                field.set(address, hostName);
-            } catch (Exception ex) {
+	    Field field0;
+	    Object target;
+
+	    try {
+
+		    try {
+			field0 = InetAddress.class.getDeclaredField("holder");
+			field0.setAccessible(true);
+		        target = field0.get(address);
+		        field0 = target.getClass().getDeclaredField("hostName");
+		    } catch( NoSuchFieldException e ) {
+			// Let's try the non-OpenJDK variant
+		        field0 = InetAddress.class.getDeclaredField("hostName");
+			target = address;
+		    }                
+
+		    field0.setAccessible(true);
+		    field0.set(target, hostName);
+
+	    } catch (Exception ex) {
                 log.log(Level.SEVERE,
                     "Failed injecting hostName to work around Android InetAddress DNS bug: " + address,
                     ex
