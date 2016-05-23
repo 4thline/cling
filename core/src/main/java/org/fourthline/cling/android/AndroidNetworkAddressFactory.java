@@ -69,7 +69,7 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
 			target = address;
 		    }                
 
-		    if (field != null && target != null && hostName != null) {
+		    if (field0 != null && target != null && hostName != null) {
 				field0.setAccessible(true);
 		    	field0.set(target, hostName);
 			} else {
