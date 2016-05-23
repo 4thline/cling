@@ -15,12 +15,9 @@
 
 package org.fourthline.cling.android;
 
-import android.os.Build;
-
 import org.fourthline.cling.transport.impl.NetworkAddressFactoryImpl;
 import org.fourthline.cling.transport.spi.InitializationException;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
