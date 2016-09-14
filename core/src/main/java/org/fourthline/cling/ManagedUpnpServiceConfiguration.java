@@ -217,6 +217,16 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
         return getDefaultExecutorService();
     }
 
+    @Override
+    public long getThreadTimeoutInMilliseconds() {
+        try {
+            return Long.parseLong(System.getProperty("cling.thread_timeout", "60000"));
+        }
+        catch (NumberFormatException e) {
+            return 60000L;
+        }
+    }
+
     public NetworkAddressFactory createNetworkAddressFactory() {
         return createNetworkAddressFactory(streamListenPort);
     }
@@ -255,6 +265,6 @@ public class ManagedUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     protected ExecutorService createDefaultExecutorService() {
-        return new DefaultUpnpServiceConfiguration.ClingExecutor();
+        return new DefaultUpnpServiceConfiguration.ClingExecutor(getThreadTimeoutInMilliseconds());
     }
 }

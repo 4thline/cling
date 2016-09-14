@@ -249,6 +249,11 @@ public interface UpnpServiceConfiguration {
     public Executor getRegistryListenerExecutor();
 
     /**
+     * @return The timeout for thread connections
+     */
+    public long getThreadTimeoutInMilliseconds();
+
+    /**
      * Called by the {@link org.fourthline.cling.UpnpService} on shutdown, useful to e.g. shutdown thread pools.
      */
     public void shutdown();

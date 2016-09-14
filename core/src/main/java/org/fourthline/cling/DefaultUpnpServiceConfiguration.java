@@ -148,11 +148,13 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     public StreamClient createStreamClient() {
-        return new StreamClientImpl(
-            new StreamClientConfigurationImpl(
+        StreamClientConfigurationImpl configuration = new StreamClientConfigurationImpl(
                 getSyncProtocolExecutorService()
-            )
         );
+
+        configuration.setTimeoutSeconds((int) (getThreadTimeoutInMilliseconds() / 1000));
+
+        return new StreamClientImpl(configuration);
     }
 
     public MulticastReceiver createMulticastReceiver(NetworkAddressFactory networkAddressFactory) {
@@ -257,6 +259,15 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
         return createNetworkAddressFactory(streamListenPort);
     }
 
+    public long getThreadTimeoutInMilliseconds() {
+        try {
+            return Long.parseLong(System.getProperty("cling.thread_timeout", "60000"));
+        }
+        catch (NumberFormatException e) {
+            return 60000L;
+        }
+    }
+
     public void shutdown() {
         log.fine("Shutting down default executor service");
         getDefaultExecutorService().shutdownNow();
@@ -295,12 +306,12 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
     }
 
     protected ExecutorService createDefaultExecutorService() {
-        return new ClingExecutor();
+        return new ClingExecutor(getThreadTimeoutInMilliseconds());
     }
 
     public static class ClingExecutor extends ThreadPoolExecutor {
 
-        public ClingExecutor() {
+        public ClingExecutor(long timeoutInMilliseconds) {
             this(new ClingThreadFactory(),
                  new ThreadPoolExecutor.DiscardPolicy() {
                      // The pool is unbounded but rejections will happen during shutdown
@@ -310,16 +321,17 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
                          log.info("Thread pool rejected execution of " + runnable.getClass());
                          super.rejectedExecution(runnable, threadPoolExecutor);
                      }
-                 }
+                 },
+                 timeoutInMilliseconds
             );
         }
 
-        public ClingExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler) {
+        public ClingExecutor(ThreadFactory threadFactory, RejectedExecutionHandler rejectedHandler, long timeoutInMilliseconds) {
             // This is the same as Executors.newCachedThreadPool
             super(0,
                   Integer.MAX_VALUE,
-                  60L,
-                  TimeUnit.SECONDS,
+                  timeoutInMilliseconds,
+                  TimeUnit.MILLISECONDS,
                   new SynchronousQueue<Runnable>(),
                   threadFactory,
                   rejectedHandler
