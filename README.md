@@ -36,19 +36,19 @@ The main Cling modules are:
 
 An embeddable Java library that implements the <a href="http://www.upnp.org/resources/documents.asp">UPnP Device Architecture 1.0</a>. Use Cling Core to expose services with a UPnP remoting interface, or to write control point applications that discover UPnP devices and utilize their services. You can also integrate <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#chapter.Android">Cling Core as an Android UPnP/DLNA library in your applications</a> (platform level 15/4.0 required).
 
-[User Manual](http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml)
-[API Javadoc](http://4thline.org/projects/cling/core/apidocs)
-[Source XRef](http://4thline.org/projects/cling/core/xref)
-[Test Source XRef](http://4thline.org/projects/cling/core/xref-test)
+- [User Manual](http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml)
+- [API Javadoc](http://4thline.org/projects/cling/core/apidocs)
+- [Source XRef](http://4thline.org/projects/cling/core/xref)
+- [Test Source XRef](http://4thline.org/projects/cling/core/xref-test)
 
 ### Cling Support
 
 Optional classes and useful infrastructure for developing and controlling UPnP services with Cling Core; extensions that simplify working with UPnP media servers and renderers, <a href="http://4thline.org/projects/cling/support/manual/cling-support-manual.xhtml#section.PortMapping">NAT port mapping on routers</a>, etc.
 
-[User Manual](http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml)
-[API Javadoc](http://4thline.org/projects/cling/core/apidocs)
-[Source XRef](http://4thline.org/projects/cling/core/xref)
-[Test Source XRef](http://4thline.org/projects/cling/core/xref-test)
+- [User Manual](http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml)
+- [API Javadoc](http://4thline.org/projects/cling/core/apidocs)
+- [Source XRef](http://4thline.org/projects/cling/core/xref)
+- [Test Source XRef](http://4thline.org/projects/cling/core/xref-test)
 
 ### Cling Workbench
 
@@ -211,3 +211,4 @@ RuntimeException at org.teleal.cling.protocol.sync.ReceivingSubscribe.responseSe
 ```
 
 Your service was already being used by something else and didn't give up the lock during the 500 millisecond default wait time. Increase the wait time by overriding DefaultServiceManager in LocalService. Or don't block the service action/methods for a long time.
+
