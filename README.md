@@ -143,7 +143,7 @@ If your project or product is using Cling and you'd like to add it to this page,
 
 * <a href="http://www.yaacc.de/">YAACC</a> -An Android UPnP controller, FREE SOFTWARE as GPL. It allows you to discover, use and control UPnP devices in your network in order to stream media files. Since it's a subset of UPnP it also is capable of communicating with DLNA devices.
 
-## Noteworth Forks of Cling
+## Noteworthy forks of Cling
 
 * <a href="http://www.openhab.org/jupnp/">jUPnP</a> - Forked from pre-2.0, this code base still contains the OSGi feature, which has been removed in Cling 2.0.
 
@@ -182,7 +182,7 @@ Cling Core is distributed as a single JAR file. It only has one other dependency
 
 First write a control point and a `RegistryListener` as explained <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#section.BinaryLightClient">in the manual</a>. Then call `device.getServices()` when a device has been discovered.
 
-### Cling doesn't work if I start my application on Tomcat/JBoss/Glassfish/etc?!
+#### Cling doesn't work if I start my application on Tomcat/JBoss/Glassfish/etc?!
 
 You'll get an error on startup, this error tells you that Cling couldn't use the Java JDK's `HTTPURLConnection` for HTTP client operations. This is an old and badly designed part of the JDK: Only &quot;one application&quot; in the whole JVM can configure it. You have to switch Cling to an alternative HTTP client, e.g. the other bundled implementation based on Apache HTTP Core. This is explained in more detail in <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#section.BasicAPI.UpnpService.Configuration"> the user manual</a>.
 
