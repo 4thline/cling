@@ -30,6 +30,8 @@ Then [download the Cling distribution](https://github.com/4thline/cling/releases
 
 Read <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#chapter.GettingStarted">the first chapter of the manual</a> for a simple Cling usage example. Have a look at the <a href="https://github.com/4thline/cling/tree/master/demo/android">Android application examples</a>.
 
+**Please post Cling usage questions on [stackoverflow.com](https://stackoverflow.com/questions/tagged/cling+upnp) with the appropriate tags.**
+
 The main Cling modules are:
 
 ### Cling Core
