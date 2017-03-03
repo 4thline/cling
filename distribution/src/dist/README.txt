@@ -83,9 +83,9 @@ JAR files and remove 'about.html'.
 
 ==============================================================================
 
-Feedback, bug reports: http://4thline.org/projects/mailinglists.html
+Copyright 2017, 4th Line GmbH, Switzerland
 
-Copyright 2015, 4th Line GmbH, Switzerland, http://4thline.com/
+For licensing questions, please contact: license(at)4thline.com
 
 You may at your option receive a license to this program under EITHER
 the terms of the GNU Lesser General Public License (LGPL) OR the
