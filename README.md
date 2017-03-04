@@ -47,10 +47,10 @@ An embeddable Java library that implements the <a href="http://www.upnp.org/reso
 
 Optional classes and useful infrastructure for developing and controlling UPnP services with Cling Core; extensions that simplify working with UPnP media servers and renderers, <a href="http://4thline.org/projects/cling/support/manual/cling-support-manual.xhtml#section.PortMapping">NAT port mapping on routers</a>, etc.
 
-- [User Manual](http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml)
-- [API Javadoc](http://4thline.org/projects/cling/core/apidocs)
-- [Source XRef](http://4thline.org/projects/cling/core/xref)
-- [Test Source XRef](http://4thline.org/projects/cling/core/xref-test)
+- [User Manual](http://4thline.org/projects/cling/support/manual/cling-support-manual.xhtml)
+- [API Javadoc](http://4thline.org/projects/cling/support/apidocs)
+- [Source XRef](http://4thline.org/projects/cling/support/xref)
+- [Test Source XRef](http://4thline.org/projects/cling/support/xref-test)
 
 ### Cling Workbench
 
@@ -204,7 +204,7 @@ The `java.util.logging` implementation on Android is broken, it does not allow y
 
 Cling 1.0 supports Android 2.1. With Cling 2.0, we currently require platform level 15 (Android 4.0.3).
 
-### I get a lock acquisition timeout exception?
+#### I get a lock acquisition timeout exception?
 
 Your service receives a subscription, then this happens:
 
