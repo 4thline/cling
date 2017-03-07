@@ -30,6 +30,7 @@ import java.util.List;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class MutableService {
 
     public ServiceType serviceType;

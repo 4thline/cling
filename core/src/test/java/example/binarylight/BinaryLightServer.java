@@ -9,7 +9,7 @@ import org.fourthline.cling.model.meta.*;
 import org.fourthline.cling.model.types.*;
 
 import java.io.IOException;
-
+@SuppressWarnings({"unchecked","rawtypes"})
 public class BinaryLightServer implements Runnable {
 
     public static void main(String[] args) throws Exception {

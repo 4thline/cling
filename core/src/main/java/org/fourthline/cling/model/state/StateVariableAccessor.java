@@ -28,6 +28,7 @@ import org.fourthline.cling.model.meta.StateVariable;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class StateVariableAccessor {
 
     public StateVariableValue read(final StateVariable<LocalService> stateVariable, final Object serviceImpl) throws Exception {

@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class AnnotationStateVariableBinder {
 
     private static Logger log = Logger.getLogger(AnnotationLocalServiceBinder.class.getName());

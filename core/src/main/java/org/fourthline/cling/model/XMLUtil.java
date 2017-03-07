@@ -33,6 +33,7 @@ import java.util.Set;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class XMLUtil {
 
     /* TODO: How it should be done (nice API, eh?)

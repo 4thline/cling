@@ -31,6 +31,7 @@ import org.fourthline.cling.test.data.SampleData;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class GenaSampleData {
 
     public static LocalDevice createTestDevice() throws Exception {

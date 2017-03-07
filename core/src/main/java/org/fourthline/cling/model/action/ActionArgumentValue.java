@@ -25,6 +25,7 @@ import org.fourthline.cling.model.types.InvalidValueException;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ActionArgumentValue<S extends Service> extends VariableValue {
 
     final private ActionArgument<S> argument;

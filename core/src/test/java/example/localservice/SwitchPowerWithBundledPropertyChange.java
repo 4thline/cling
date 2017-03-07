@@ -15,6 +15,8 @@
 
 package example.localservice;
 
+import java.beans.PropertyChangeSupport;
+
 import org.fourthline.cling.binding.annotations.UpnpAction;
 import org.fourthline.cling.binding.annotations.UpnpInputArgument;
 import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
@@ -22,9 +24,6 @@ import org.fourthline.cling.binding.annotations.UpnpService;
 import org.fourthline.cling.binding.annotations.UpnpServiceId;
 import org.fourthline.cling.binding.annotations.UpnpServiceType;
 import org.fourthline.cling.binding.annotations.UpnpStateVariable;
-import org.fourthline.cling.model.ModelUtil;
-
-import java.beans.PropertyChangeSupport;
 
 @UpnpService(
         serviceId = @UpnpServiceId("SwitchPower"),

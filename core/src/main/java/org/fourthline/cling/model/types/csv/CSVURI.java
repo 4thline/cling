@@ -24,7 +24,12 @@ import java.net.URI;
  */
 public class CSVURI extends CSV<URI> {
 
-    public CSVURI() {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5815997107871596639L;
+
+	public CSVURI() {
     }
 
     public CSVURI(String s) throws InvalidValueException {

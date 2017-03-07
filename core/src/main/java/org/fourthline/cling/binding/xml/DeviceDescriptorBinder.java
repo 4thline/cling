@@ -26,6 +26,7 @@ import org.w3c.dom.Document;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface DeviceDescriptorBinder {
 
     public <T extends Device> T describe(T undescribedDevice, String descriptorXml)

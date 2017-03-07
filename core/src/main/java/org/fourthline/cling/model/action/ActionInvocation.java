@@ -30,6 +30,7 @@ import java.util.Map;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ActionInvocation<S extends Service> {
 
     final protected Action<S> action;

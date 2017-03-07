@@ -23,6 +23,7 @@ import org.fourthline.cling.model.profile.RemoteClientInfo;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RemoteActionInvocation extends ActionInvocation {
 
     final protected RemoteClientInfo remoteClientInfo;

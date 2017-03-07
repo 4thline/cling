@@ -25,6 +25,7 @@ import org.fourthline.cling.transport.spi.StreamServer;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class JDKServerJettyClientTest extends StreamServerClientTest {
 
     @Override

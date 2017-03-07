@@ -32,6 +32,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SampleDeviceRootLocal extends SampleDeviceRoot {
 
     public SampleDeviceRootLocal(DeviceIdentity identity, LocalService service, Device embeddedDevice) {

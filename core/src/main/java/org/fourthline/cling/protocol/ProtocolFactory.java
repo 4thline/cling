@@ -47,6 +47,7 @@ import java.net.URL;
  * 
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface ProtocolFactory {
 
     public UpnpService getUpnpService();

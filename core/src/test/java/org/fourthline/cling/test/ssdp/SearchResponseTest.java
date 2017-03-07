@@ -43,6 +43,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SearchResponseTest {
 
     @Test

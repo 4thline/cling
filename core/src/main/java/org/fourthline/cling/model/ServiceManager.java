@@ -15,11 +15,11 @@
 
 package org.fourthline.cling.model;
 
-import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.state.StateVariableValue;
-
 import java.beans.PropertyChangeSupport;
 import java.util.Collection;
+
+import org.fourthline.cling.model.meta.LocalService;
+import org.fourthline.cling.model.state.StateVariableValue;
 
 /**
  * Binds the metadata of a service to a service implementation, unified interface for accessing local services.
@@ -69,6 +69,7 @@ import java.util.Collection;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface ServiceManager<T> {
 
     /**

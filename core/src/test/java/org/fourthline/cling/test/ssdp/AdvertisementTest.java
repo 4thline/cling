@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
 
-
+@SuppressWarnings({"rawtypes"})
 public class AdvertisementTest {
 
     @Test

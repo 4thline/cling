@@ -31,6 +31,7 @@ import org.fourthline.cling.model.types.UDN;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SampleDeviceEmbeddedTwo extends SampleDevice {
 
     public SampleDeviceEmbeddedTwo(DeviceIdentity identity, Service service, Device embeddedDevice) {

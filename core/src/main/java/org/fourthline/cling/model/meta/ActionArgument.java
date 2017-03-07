@@ -32,6 +32,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ActionArgument<S extends Service> implements Validatable {
 
     final private static Logger log = Logger.getLogger(ActionArgument.class.getName());

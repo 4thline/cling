@@ -25,6 +25,7 @@ import org.fourthline.cling.model.types.InvalidValueException;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class StateVariableValue<S extends Service> extends VariableValue {
 
     private StateVariable<S> stateVariable;

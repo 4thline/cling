@@ -14,6 +14,14 @@
  */
 package org.fourthline.cling.mock;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.enterprise.inject.Alternative;
+
 import org.fourthline.cling.UpnpServiceConfiguration;
 import org.fourthline.cling.model.NetworkAddress;
 import org.fourthline.cling.model.message.IncomingDatagramMessage;
@@ -25,15 +33,7 @@ import org.fourthline.cling.transport.Router;
 import org.fourthline.cling.transport.RouterException;
 import org.fourthline.cling.transport.impl.NetworkAddressFactoryImpl;
 import org.fourthline.cling.transport.spi.InitializationException;
-import org.fourthline.cling.transport.spi.NetworkAddressFactory;
 import org.fourthline.cling.transport.spi.UpnpStream;
-
-import javax.enterprise.inject.Alternative;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * <p>
@@ -47,6 +47,7 @@ import java.util.List;
  * @author Christian Bauer
  */
 @Alternative
+@SuppressWarnings({"rawtypes"})
 public class MockRouter implements Router {
 
     public int counter = -1;

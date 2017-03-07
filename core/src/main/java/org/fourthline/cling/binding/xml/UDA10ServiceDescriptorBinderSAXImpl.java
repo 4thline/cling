@@ -39,12 +39,13 @@ import java.util.logging.Logger;
 
 import static org.fourthline.cling.binding.xml.Descriptor.Service.ATTRIBUTE;
 import static org.fourthline.cling.binding.xml.Descriptor.Service.ELEMENT;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 /**
  * Implementation based on JAXP SAX.
  *
  * @author Christian Bauer
  */
+
 public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorBinderImpl {
 
     private static Logger log = Logger.getLogger(ServiceDescriptorBinder.class.getName());
@@ -190,6 +191,9 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 case name:
                     getInstance().name = getCharacters();
                     break;
+                default:
+                	break;
+                
             }
         }
 
@@ -252,6 +256,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 case retval:
                     getInstance().retval = true;
                     break;
+                default: break;
             }
         }
 
@@ -327,6 +332,8 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 case defaultValue:
                     getInstance().defaultValue = getCharacters();
                     break;
+                default:
+                	break;
             }
         }
 
@@ -350,6 +357,8 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                 case allowedValue:
                     getInstance().add(getCharacters());
                     break;
+                default:
+                	break;
             }
         }
 
@@ -380,6 +389,7 @@ public class UDA10ServiceDescriptorBinderSAXImpl extends UDA10ServiceDescriptorB
                     case step:
                         getInstance().step = Long.valueOf(getCharacters());
                         break;
+                    default: break;
                 }
             } catch (Exception ex) {
                 // Ignore

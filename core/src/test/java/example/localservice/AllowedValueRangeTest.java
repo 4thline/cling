@@ -52,6 +52,7 @@ import static org.testng.Assert.assertEquals;
  * once when your service is bound in Cling.
  * </p>
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class AllowedValueRangeTest {
 
     public LocalDevice createTestDevice(Class serviceClass) throws Exception {

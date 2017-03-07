@@ -22,7 +22,12 @@ package org.fourthline.cling.model.types;
  */
 public class InvalidValueException extends RuntimeException {
 
-    public InvalidValueException(String s) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8828092920540634434L;
+
+	public InvalidValueException(String s) {
         super(s);
     }
 

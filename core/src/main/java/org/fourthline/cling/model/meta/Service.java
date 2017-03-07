@@ -33,6 +33,7 @@ import org.fourthline.cling.model.types.ServiceType;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class Service<D extends Device, S extends Service> {
 
 	final private static Logger log = Logger.getLogger(Service.class.getName());

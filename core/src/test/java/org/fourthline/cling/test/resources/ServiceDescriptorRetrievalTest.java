@@ -36,7 +36,7 @@ import java.net.URI;
 
 import static org.testng.Assert.*;
 
-
+@SuppressWarnings({"rawtypes"})
 public class ServiceDescriptorRetrievalTest {
 
     @Test

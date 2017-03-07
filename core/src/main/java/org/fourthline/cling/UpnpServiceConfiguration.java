@@ -48,6 +48,7 @@ import java.util.concurrent.ExecutorService;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface UpnpServiceConfiguration {
 
     /**

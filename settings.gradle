@@ -1,0 +1,22 @@
+rootProject.name = 'cling'
+include ':cling-core'
+include ':cling-demo:cling-demo-android:cling-demo-android-browser'
+include ':cling-demo:cling-demo-android:cling-demo-android-light'
+include ':cling-demo:cling-demo-android'
+include ':cling-demo'
+include ':cling-workbench'
+include ':cling-website'
+include ':cling-distribution'
+include ':cling-support'
+include ':cling-mediarenderer'
+
+project(':cling-core').projectDir = "$rootDir/core" as File
+project(':cling-demo:cling-demo-android:cling-demo-android-browser').projectDir = "$rootDir/demo/android/browser" as File
+project(':cling-demo:cling-demo-android:cling-demo-android-light').projectDir = "$rootDir/demo/android/light" as File
+project(':cling-demo:cling-demo-android').projectDir = "$rootDir/demo/android" as File
+project(':cling-demo').projectDir = "$rootDir/demo" as File
+project(':cling-workbench').projectDir = "$rootDir/workbench" as File
+project(':cling-website').projectDir = "$rootDir/website" as File
+project(':cling-distribution').projectDir = "$rootDir/distribution" as File
+project(':cling-support').projectDir = "$rootDir/support" as File
+project(':cling-mediarenderer').projectDir = "$rootDir/mediarenderer" as File

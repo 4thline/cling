@@ -27,6 +27,7 @@ import java.util.Locale;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ModelUtil {
 
     /**

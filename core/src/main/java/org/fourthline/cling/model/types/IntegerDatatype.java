@@ -20,6 +20,7 @@ package org.fourthline.cling.model.types;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class IntegerDatatype extends AbstractDatatype<Integer> {
 
     private int byteSize;

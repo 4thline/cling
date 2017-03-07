@@ -38,7 +38,7 @@ import java.net.URI;
 import java.util.logging.Logger;
 
 import static org.testng.Assert.*;
-
+@SuppressWarnings({"rawtypes"})
 abstract public class StreamServerClientTest {
 
     final private static Logger log = Logger.getLogger(StreamServerClientTest.class.getName());

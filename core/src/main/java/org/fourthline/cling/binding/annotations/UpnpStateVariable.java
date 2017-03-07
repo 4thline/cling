@@ -23,6 +23,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
+@SuppressWarnings({"rawtypes"})
 public @interface UpnpStateVariable {
 
     String name() default "";

@@ -22,6 +22,7 @@ import org.fourthline.cling.model.ExpirationDetails;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 class RegistryItem<K, I> {
 
     private K key;

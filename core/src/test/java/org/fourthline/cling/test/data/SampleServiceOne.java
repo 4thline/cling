@@ -38,6 +38,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SampleServiceOne extends SampleService {
 
     public static URL getDescriptorURL() {

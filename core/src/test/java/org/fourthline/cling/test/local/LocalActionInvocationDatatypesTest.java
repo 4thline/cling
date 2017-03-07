@@ -36,6 +36,7 @@ import static org.testng.Assert.assertEquals;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class LocalActionInvocationDatatypesTest {
 
     @Test

@@ -26,6 +26,7 @@ import org.fourthline.cling.model.types.ErrorCode;
  * 
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class QueryStateVariableExecutor extends AbstractActionExecutor {
     
     @Override

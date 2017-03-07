@@ -29,6 +29,7 @@ import java.util.List;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class IncomingSubscribeRequestMessage extends StreamRequestMessage {
 
     final private LocalService service;

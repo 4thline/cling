@@ -46,6 +46,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class GENAEventProcessorImpl implements GENAEventProcessor, ErrorHandler {
 
     private static Logger log = Logger.getLogger(GENAEventProcessor.class.getName());

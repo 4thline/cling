@@ -21,6 +21,7 @@ import org.fourthline.cling.model.meta.StateVariable;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SampleServiceOneUndescribed extends SampleServiceOne {
 
     @Override

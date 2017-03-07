@@ -47,7 +47,7 @@ import java.util.Map;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
-
+@SuppressWarnings({"rawtypes"})
 public class InvalidEventXMLProcessingTest {
 
     @DataProvider(name = "invalidXMLFile")

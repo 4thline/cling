@@ -28,6 +28,7 @@ import org.fourthline.cling.model.ModelUtil;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class OutgoingSearchRequest extends OutgoingDatagramMessage<UpnpRequest> {
 
     private UpnpHeader searchTarget;

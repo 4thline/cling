@@ -45,7 +45,7 @@ import java.net.InetSocketAddress;
 
 import static org.testng.Assert.*;
 
-
+@SuppressWarnings({"unchecked","rawtypes"})
 public class DatagramParsingTest {
 
     @Test

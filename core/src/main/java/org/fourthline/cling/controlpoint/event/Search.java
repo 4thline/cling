@@ -22,6 +22,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class Search {
 
     protected UpnpHeader searchType = new STAllHeader();

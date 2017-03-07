@@ -32,6 +32,7 @@ import java.util.ArrayList;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class IncomingEventRequestMessage extends StreamRequestMessage {
 
     final private List<StateVariableValue> stateVariableValues = new ArrayList<>();

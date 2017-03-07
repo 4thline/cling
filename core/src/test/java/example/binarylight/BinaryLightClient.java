@@ -9,7 +9,7 @@ import org.fourthline.cling.model.message.header.*;
 import org.fourthline.cling.model.meta.*;
 import org.fourthline.cling.model.types.*;
 import org.fourthline.cling.registry.*;
-
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class BinaryLightClient implements Runnable {
 
     public static void main(String[] args) throws Exception {

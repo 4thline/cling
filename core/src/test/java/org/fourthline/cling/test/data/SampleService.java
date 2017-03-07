@@ -27,6 +27,7 @@ import java.net.URI;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public abstract class SampleService {
 
     public abstract ServiceType getServiceType();

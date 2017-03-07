@@ -29,6 +29,7 @@ import org.fourthline.cling.model.meta.RemoteDevice;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class DefaultRegistryListener implements RegistryListener {
 
     public void remoteDeviceDiscoveryStarted(Registry registry, RemoteDevice device) {

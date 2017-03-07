@@ -25,6 +25,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
+@SuppressWarnings({"rawtypes"})
 public @interface UpnpService {
 
     UpnpServiceId serviceId();

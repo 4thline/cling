@@ -54,6 +54,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class SOAPActionProcessorImpl implements SOAPActionProcessor, ErrorHandler {
 
     private static Logger log = Logger.getLogger(SOAPActionProcessor.class.getName());

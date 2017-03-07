@@ -58,6 +58,7 @@ import static org.fourthline.cling.model.XMLUtil.appendNewElementIfNotNull;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class UDA10ServiceDescriptorBinderImpl implements ServiceDescriptorBinder, ErrorHandler {
 
     private static Logger log = Logger.getLogger(ServiceDescriptorBinder.class.getName());

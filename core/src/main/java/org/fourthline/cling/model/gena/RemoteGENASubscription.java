@@ -39,6 +39,7 @@ import java.util.List;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class RemoteGENASubscription extends GENASubscription<RemoteService> {
 
     protected PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);

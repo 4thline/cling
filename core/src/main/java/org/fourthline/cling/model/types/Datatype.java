@@ -26,6 +26,7 @@ import java.util.Locale;
  * @param <V> The Java type of the value handled by this datatype.
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface Datatype<V> {
 
     /**
@@ -138,7 +139,12 @@ public interface Datatype<V> {
         URI("uri", new URIDatatype()),
         UUID("uuid", new StringDatatype());
 
-        private static Map<String, Builtin> byName = new HashMap<String, Builtin>() {{
+        private static Map<String, Builtin> byName = new HashMap<String, Builtin>() {/**
+			 * 
+			 */
+			private static final long serialVersionUID = 914411749147875243L;
+
+		{
             for (Builtin b : Builtin.values()) {
                 // Lowercase descriptor name!
                 if (containsKey(b.getDescriptorName().toLowerCase(Locale.ROOT)))

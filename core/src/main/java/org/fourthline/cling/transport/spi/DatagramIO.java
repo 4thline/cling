@@ -48,6 +48,7 @@ import java.net.DatagramPacket;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface DatagramIO<C extends DatagramIOConfiguration> extends Runnable {
 
     /**

@@ -22,7 +22,12 @@ package org.fourthline.cling.binding;
  */
 public class LocalServiceBindingException extends RuntimeException {
 
-    public LocalServiceBindingException(String s) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -2542248652930028755L;
+
+	public LocalServiceBindingException(String s) {
         super(s);
     }
 

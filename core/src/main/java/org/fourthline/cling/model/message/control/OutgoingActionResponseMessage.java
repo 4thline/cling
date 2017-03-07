@@ -28,6 +28,7 @@ import org.fourthline.cling.model.message.header.UpnpHeader;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class OutgoingActionResponseMessage extends StreamResponseMessage implements ActionResponseMessage {
 
     private String actionNamespace;

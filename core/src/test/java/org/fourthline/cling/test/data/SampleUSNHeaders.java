@@ -36,6 +36,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class SampleUSNHeaders {
 
     public static void assertUSNHeaders(List<OutgoingDatagramMessage> msgs, LocalDevice rootDevice, LocalDevice embeddedDevice, UpnpHeader.Type ntstHeaderType) {

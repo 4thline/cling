@@ -44,6 +44,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SampleDeviceRoot extends SampleDevice {
 
     public SampleDeviceRoot(DeviceIdentity identity, Service service, Device embeddedDevice) {

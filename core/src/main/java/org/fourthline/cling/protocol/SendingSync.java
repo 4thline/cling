@@ -51,7 +51,9 @@ public abstract class SendingSync<IN extends StreamRequestMessage, OUT extends S
     }
 
     final protected void execute() throws RouterException {
+    	System.out.println("SendingSync::execute()");
         outputMessage = executeSync();
+        System.out.println("SendingSync::execute::complete()");
     }
 
     protected abstract OUT executeSync() throws RouterException;

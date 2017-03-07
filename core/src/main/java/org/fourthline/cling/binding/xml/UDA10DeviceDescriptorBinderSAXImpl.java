@@ -15,12 +15,19 @@
 
 package org.fourthline.cling.binding.xml;
 
+import java.io.StringReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+
 import org.fourthline.cling.binding.staging.MutableDevice;
 import org.fourthline.cling.binding.staging.MutableIcon;
 import org.fourthline.cling.binding.staging.MutableService;
 import org.fourthline.cling.binding.staging.MutableUDAVersion;
+import org.fourthline.cling.binding.xml.Descriptor.Device.ELEMENT;
 import org.fourthline.cling.model.ValidationException;
-import org.fourthline.cling.model.XMLUtil;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.types.DLNACaps;
 import org.fourthline.cling.model.types.DLNADoc;
@@ -34,20 +41,12 @@ import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import java.io.StringReader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.logging.Logger;
-
-import static org.fourthline.cling.binding.xml.Descriptor.Device.ELEMENT;
-
 /**
  * A JAXP SAX parser implementation, which is actually slower than the DOM implementation (on desktop and on Android)!
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBinderImpl {
 
     private static Logger log = Logger.getLogger(DeviceDescriptorBinder.class.getName());
@@ -121,6 +120,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                         throw new SAXException("Invalid URLBase: " + ex.toString());
                     }
                     break;
+                default: break;
             }
         }
     }
@@ -152,6 +152,7 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     }
                     getInstance().minor = Integer.valueOf(minorVersion);
                     break;
+                default: break;
             }
         }
 
@@ -241,6 +242,8 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                 case X_DLNACAP:
                     getInstance().dlnaCaps = DLNACaps.valueOf(getCharacters());
                     break;
+
+                default: break;
             }
         }
 
@@ -310,6 +313,8 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                         getInstance().mimeType = "";
                     }
                     break;
+                    
+                default: break;
             }
         }
 
@@ -378,6 +383,8 @@ public class UDA10DeviceDescriptorBinderSAXImpl extends UDA10DeviceDescriptorBin
                     case eventSubURL:
                         getInstance().eventSubscriptionURI = parseURI(getCharacters());
                         break;
+                        
+                    default: break;
                 }
             } catch (InvalidValueException ex) {
                 log.warning(

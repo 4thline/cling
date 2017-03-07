@@ -19,6 +19,7 @@ import org.fourthline.cling.UpnpService;
 import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.Exceptions;
 
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -50,7 +51,8 @@ public abstract class SendingAsync implements Runnable {
     }
 
     public void run() {
-        try {
+    	
+    	try {
             execute();
         } catch (Exception ex) {
             Throwable cause = Exceptions.unwrap(ex);

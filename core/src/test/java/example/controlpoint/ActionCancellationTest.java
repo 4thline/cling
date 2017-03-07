@@ -109,6 +109,7 @@ import static org.testng.Assert.assertEquals;
  * silently ignore the interruption and continue waiting for the server to respond.
  * </p>
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ActionCancellationTest {
 
     protected LocalService bindService(Class<?> clazz) throws Exception {

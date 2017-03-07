@@ -52,6 +52,7 @@ import static org.testng.Assert.*;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ActionInvokeIncomingTest {
 
     public static final String SET_REQUEST = "<?xml version=\"1.0\"?>\n" +
@@ -152,6 +153,7 @@ public class ActionInvokeIncomingTest {
         );
 
         IncomingActionResponseMessage responseMessage = new IncomingActionResponseMessage(response);
+       
         ActionInvocation responseInvocation = new ActionInvocation(action);
         upnpService.getConfiguration().getSoapActionProcessor().readBody(responseMessage, responseInvocation);
 

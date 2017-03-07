@@ -30,6 +30,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class StateVariable<S extends Service> implements Validatable {
 
     final private static Logger log = Logger.getLogger(StateVariable.class.getName());

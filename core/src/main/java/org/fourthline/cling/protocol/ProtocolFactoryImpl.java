@@ -63,6 +63,7 @@ import java.util.logging.Logger;
  * @author Christian Bauer
  */
 @ApplicationScoped
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ProtocolFactoryImpl implements ProtocolFactory {
 
     final private static Logger log = Logger.getLogger(ProtocolFactory.class.getName());
@@ -97,6 +98,8 @@ public class ProtocolFactoryImpl implements ProtocolFactory {
                         ? createReceivingNotification(incomingRequest) : null;
                 case MSEARCH:
                     return createReceivingSearch(incomingRequest);
+			default:
+				break;
             }
 
         } else if (message.getOperation() instanceof UpnpResponse) {

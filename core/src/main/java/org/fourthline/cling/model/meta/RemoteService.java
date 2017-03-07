@@ -33,6 +33,7 @@ import java.util.List;
  * 
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class RemoteService extends Service<RemoteDevice, RemoteService> {
 
     final private URI descriptorURI;

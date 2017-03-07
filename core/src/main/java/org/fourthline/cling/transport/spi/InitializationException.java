@@ -27,7 +27,12 @@ package org.fourthline.cling.transport.spi;
  */
 public class InitializationException extends RuntimeException {
 
-    public InitializationException(String s) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5147372450470212499L;
+
+	public InitializationException(String s) {
         super(s);
     }
 

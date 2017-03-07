@@ -26,6 +26,7 @@ import java.util.List;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class MutableStateVariable {
 
     public String name;

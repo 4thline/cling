@@ -59,6 +59,7 @@ import org.fourthline.cling.transport.spi.StreamServer;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfiguration {
 
     public AndroidUpnpServiceConfiguration() {

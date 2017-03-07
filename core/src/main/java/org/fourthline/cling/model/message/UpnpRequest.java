@@ -39,7 +39,12 @@ public class UpnpRequest extends UpnpOperation {
         UNSUBSCRIBE("UNSUBSCRIBE"),
         UNKNOWN("UNKNOWN");
 
-        private static Map<String, Method> byName = new HashMap<String, Method>() {{
+        private static Map<String, Method> byName = new HashMap<String, Method>() {/**
+			 * 
+			 */
+			private static final long serialVersionUID = -3109630455423248L;
+
+		{
             for (Method m : Method.values()) {
                 put(m.getHttpName(), m);
             }

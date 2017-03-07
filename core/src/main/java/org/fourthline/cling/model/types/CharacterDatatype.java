@@ -18,6 +18,7 @@ package org.fourthline.cling.model.types;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class CharacterDatatype extends AbstractDatatype<Character> {
 
     public CharacterDatatype() {

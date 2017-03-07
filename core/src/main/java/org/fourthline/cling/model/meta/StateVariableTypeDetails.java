@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
-
+@SuppressWarnings({"rawtypes"})
 /**
  * Type of a state variable, its default value, and integrity rules for allowed values and ranges.
  *

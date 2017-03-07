@@ -60,6 +60,7 @@ public abstract class ReceivingSync<IN extends StreamRequestMessage, OUT extends
     }
 
     final protected void execute() throws RouterException {
+    	
         outputMessage = executeSync();
 
         if (outputMessage != null && getRemoteClientInfo().getExtraResponseHeaders().size() > 0) {

@@ -41,6 +41,7 @@ import javax.enterprise.inject.Alternative;
  * @author Michael Pujos
  */
 @Alternative
+@SuppressWarnings({"unchecked","rawtypes"})
 public class PullGENAEventProcessorImpl extends GENAEventProcessorImpl {
 
 	private static Logger log = Logger.getLogger(GENAEventProcessor.class.getName());

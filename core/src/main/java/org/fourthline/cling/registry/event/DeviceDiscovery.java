@@ -22,6 +22,7 @@ import org.fourthline.cling.model.meta.Device;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class DeviceDiscovery<D extends Device> {
 
     protected D device;

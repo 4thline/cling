@@ -91,6 +91,7 @@ import static org.testng.Assert.*;
  * your control point from the service.
  * </p>
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class EventSubscriptionTest {
 
     @Test

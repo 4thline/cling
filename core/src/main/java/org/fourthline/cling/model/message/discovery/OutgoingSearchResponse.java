@@ -31,6 +31,7 @@ import org.fourthline.cling.model.meta.LocalDevice;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class OutgoingSearchResponse extends OutgoingDatagramMessage<UpnpResponse> {
 
     public OutgoingSearchResponse(IncomingDatagramMessage request,

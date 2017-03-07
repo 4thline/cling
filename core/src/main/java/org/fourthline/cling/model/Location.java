@@ -16,7 +16,6 @@
 package org.fourthline.cling.model;
 
 import java.net.InetAddress;
-import java.net.URI;
 import java.net.URL;
 
 /**

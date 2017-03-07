@@ -33,6 +33,7 @@ import java.net.URI;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class SampleDeviceEmbeddedOne extends SampleDevice {
 
     public SampleDeviceEmbeddedOne(DeviceIdentity identity, Service service, Device embeddedDevice) {

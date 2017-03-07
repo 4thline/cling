@@ -22,7 +22,12 @@ package org.fourthline.cling.protocol;
  */
 public class ProtocolCreationException extends Exception {
 
-    public ProtocolCreationException(String s) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -3716311492738810440L;
+
+	public ProtocolCreationException(String s) {
         super(s);
     }
 

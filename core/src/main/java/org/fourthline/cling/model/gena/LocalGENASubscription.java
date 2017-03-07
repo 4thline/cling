@@ -53,6 +53,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public abstract class LocalGENASubscription extends GENASubscription<LocalService> implements PropertyChangeListener {
 
     private static Logger log = Logger.getLogger(LocalGENASubscription.class.getName());

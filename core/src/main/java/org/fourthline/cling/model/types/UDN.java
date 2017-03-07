@@ -15,14 +15,12 @@
 
 package org.fourthline.cling.model.types;
 
-import org.fourthline.cling.model.ModelUtil;
-
-
 import java.io.UnsupportedEncodingException;
-import java.util.UUID;
-import java.security.MessageDigest;
 import java.math.BigInteger;
-import java.util.logging.Logger;
+import java.security.MessageDigest;
+import java.util.UUID;
+
+import org.fourthline.cling.model.ModelUtil;
 
 /**
  * A unique device name.
@@ -38,7 +36,7 @@ import java.util.logging.Logger;
  */
 public class UDN {
 
-    final private static Logger log = Logger.getLogger(UDN.class.getName());
+//    final private static Logger log = Logger.getLogger(UDN.class.getName());
 
     public static final String PREFIX = "uuid:";
 

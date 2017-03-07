@@ -32,6 +32,7 @@ import java.util.logging.Logger;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public abstract class UpnpHeader<T> {
 
     final private static Logger log = Logger.getLogger(UpnpHeader.class.getName());
@@ -87,7 +88,12 @@ public abstract class UpnpHeader<T> {
         EXT_IFACE_MAC("X-CLING-IFACE-MAC", InterfaceMacHeader.class),
         EXT_AV_CLIENT_INFO("X-AV-CLIENT-INFO", AVClientInfoHeader.class);
 
-        private static Map<String, Type> byName = new HashMap<String, Type>() {{
+        private static Map<String, Type> byName = new HashMap<String, Type>() {/**
+			 * 
+			 */
+			private static final long serialVersionUID = -2523754959029321910L;
+
+		{
             for (Type t : Type.values()) {
                 put(t.getHttpName(), t);
             }

@@ -28,6 +28,7 @@ import java.util.Collections;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class QueryStateVariableAction<S extends Service> extends Action<S> {
 
     public static final String INPUT_ARG_VAR_NAME = "varName";

@@ -42,6 +42,7 @@ import java.util.List;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class LocalDevice extends Device<DeviceIdentity, LocalDevice, LocalService> {
 
     final private DeviceDetailsProvider deviceDetailsProvider;

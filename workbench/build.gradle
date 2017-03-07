@@ -1,0 +1,12 @@
+
+description = 'Cling Workbench'
+dependencies {
+  compile project(':cling-support')
+    compile group: 'org.seamless', name: 'seamless-cdi', version:'1.1.1'
+    compile group: 'args4j', name: 'args4j', version:'2.0.12'
+    compile group: 'org.jboss.weld.se', name: 'weld-se-core', version:'1.1.10.Final'
+    compile group: 'org.jboss.weld', name: 'weld-core', version:'1.1.10.Final'
+    compile group: 'org.javassist', name: 'javassist', version:'3.19.0-GA'
+    compile group: 'org.slf4j', name: 'slf4j-jdk14', version:'1.7.12'
+    compile group: 'javax.ejb', name: 'ejb-api', version:'3.0'
+}

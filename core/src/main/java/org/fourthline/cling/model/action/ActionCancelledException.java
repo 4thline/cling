@@ -21,7 +21,12 @@ import org.fourthline.cling.model.types.ErrorCode;
  */
 public class ActionCancelledException extends ActionException {
 
-    public ActionCancelledException(InterruptedException cause) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5399403090729026586L;
+
+	public ActionCancelledException(InterruptedException cause) {
         super(ErrorCode.ACTION_FAILED, "Action execution interrupted", cause);
     }
 }

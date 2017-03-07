@@ -33,6 +33,7 @@ import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public abstract class GENASubscription<S extends Service> {
 
     protected S service;

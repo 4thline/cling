@@ -36,6 +36,7 @@ import java.util.List;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"unchecked","rawtypes"})
 public class MutableDevice {
 
     public UDN udn;

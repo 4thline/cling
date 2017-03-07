@@ -25,7 +25,11 @@ import java.util.List;
  */
 public class ValidationException extends Exception {
 
-    public List<ValidationError> errors;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 8167545450483471941L;
+	public List<ValidationError> errors;
 
     public ValidationException(String s) {
         super(s);

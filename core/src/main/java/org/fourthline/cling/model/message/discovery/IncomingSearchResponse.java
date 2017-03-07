@@ -34,6 +34,7 @@ import java.net.URL;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class IncomingSearchResponse extends IncomingDatagramMessage<UpnpResponse> {
 
     public IncomingSearchResponse(IncomingDatagramMessage<UpnpResponse> source) {

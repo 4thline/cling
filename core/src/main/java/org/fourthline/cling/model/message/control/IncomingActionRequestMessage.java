@@ -28,6 +28,7 @@ import org.fourthline.cling.model.types.SoapActionType;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class IncomingActionRequestMessage extends StreamRequestMessage implements ActionRequestMessage {
 
     final private Action action;

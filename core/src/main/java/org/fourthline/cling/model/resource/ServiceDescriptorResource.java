@@ -22,6 +22,7 @@ import java.net.URI;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class ServiceDescriptorResource extends Resource<LocalService> {
 
     public ServiceDescriptorResource(URI localURI, LocalService model) {

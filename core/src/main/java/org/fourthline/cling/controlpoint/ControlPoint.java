@@ -27,6 +27,7 @@ import java.util.concurrent.Future;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface ControlPoint {
 
     public UpnpServiceConfiguration getConfiguration();

@@ -52,6 +52,7 @@ import java.util.List;
  *
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public interface Router {
 
     /**

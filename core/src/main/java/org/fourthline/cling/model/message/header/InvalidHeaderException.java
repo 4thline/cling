@@ -20,6 +20,7 @@ package org.fourthline.cling.model.message.header;
  * 
  * @author Christian Bauer
  */
+@SuppressWarnings("serial")
 public class InvalidHeaderException extends RuntimeException {
 
     public InvalidHeaderException(String s) {

@@ -49,6 +49,7 @@ import static org.testng.Assert.assertTrue;
 /**
  * TODO: These timing-sensitive tests fail sometimes... should use latches instead to coordinate threads
  */
+@SuppressWarnings({"rawtypes"})
 public class LocalDeviceBindingAdvertisementTest {
 
     @Test
@@ -84,7 +85,7 @@ public class LocalDeviceBindingAdvertisementTest {
         // TODO: more tests
 
         ServiceDescriptorBinder svcBinder = upnpService.getConfiguration().getServiceDescriptorBinderUDA10();
-        String serviceXml = svcBinder.generate(binaryLight.getServices()[0]);
+        svcBinder.generate(binaryLight.getServices()[0]);
 
         // TODO: more tests
     }

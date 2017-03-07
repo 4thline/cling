@@ -24,7 +24,7 @@ import org.fourthline.cling.protocol.SendingAsync;
 import org.fourthline.cling.transport.RouterException;
 
 import java.util.logging.Logger;
-
+@SuppressWarnings({"rawtypes"})
 /**
  * Sending search request messages using the supplied search type.
  * <p>

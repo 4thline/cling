@@ -24,6 +24,7 @@ import java.util.List;
 /**
  * @author Christian Bauer
  */
+@SuppressWarnings({"rawtypes"})
 public class MutableAction {
 
     public String name;
