@@ -29,7 +29,7 @@ public class DoubleDatatype extends AbstractDatatype<Double> {
     }
 
     public Double valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s == null || s.equals("")) return null;
         try {
             return Double.parseDouble(s);
         } catch (NumberFormatException ex) {

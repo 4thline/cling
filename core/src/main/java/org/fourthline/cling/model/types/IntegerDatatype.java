@@ -34,7 +34,7 @@ public class IntegerDatatype extends AbstractDatatype<Integer> {
     }
 
     public Integer valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s == null || s.equals("")) return null;
         try {
             Integer value = Integer.parseInt(s.trim());
             if (!isValid(value)) {

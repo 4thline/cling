@@ -21,7 +21,7 @@ package org.fourthline.cling.model.types;
 public class UnsignedIntegerFourBytesDatatype extends AbstractDatatype<UnsignedIntegerFourBytes> {
 
     public UnsignedIntegerFourBytes valueOf(String s) throws InvalidValueException {
-        if (s.equals("")) return null;
+        if (s == null || s.equals("")) return null;
         try {
             return new UnsignedIntegerFourBytes(s);
         } catch (NumberFormatException ex) {
