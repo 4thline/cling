@@ -88,18 +88,18 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
     private static Logger log = Logger.getLogger(DefaultUpnpServiceConfiguration.class.getName());
 
-    final private int streamListenPort;
+    private final  int streamListenPort;
 
-    final private ExecutorService defaultExecutorService;
+    private final ExecutorService defaultExecutorService;
 
-    final private DatagramProcessor datagramProcessor;
-    final private SOAPActionProcessor soapActionProcessor;
-    final private GENAEventProcessor genaEventProcessor;
+    private final DatagramProcessor datagramProcessor;
+    private final SOAPActionProcessor soapActionProcessor;
+    private final GENAEventProcessor genaEventProcessor;
 
-    final private DeviceDescriptorBinder deviceDescriptorBinderUDA10;
-    final private ServiceDescriptorBinder serviceDescriptorBinderUDA10;
+    private final DeviceDescriptorBinder deviceDescriptorBinderUDA10;
+    private final ServiceDescriptorBinder serviceDescriptorBinderUDA10;
 
-    final private Namespace namespace;
+    private final Namespace namespace;
 
     /**
      * Defaults to port '0', ephemeral.
@@ -349,7 +349,7 @@ public class DefaultUpnpServiceConfiguration implements UpnpServiceConfiguration
 
         protected final ThreadGroup group;
         protected final AtomicInteger threadNumber = new AtomicInteger(1);
-        protected final String namePrefix = "cling-";
+        protected static final String namePrefix = "cling-";
 
         public ClingThreadFactory() {
             SecurityManager s = System.getSecurityManager();
