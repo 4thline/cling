@@ -133,8 +133,9 @@
                             The <code>NetworkAddressFactory</code> provides the network interfaces, ports, and
                             multicast settings which are used by the UPnP stack. At the time of writing, the following
                             interfaces and IP addresses are ignored by the default configuration: any IPv6 interfaces
-                            and addresses, interfaces whose name is "vmnet*", "vnic*", "*virtual*", or "ppp*", and the
-                            local loopback. Otherwise, all interfaces and their TCP/IP addresses are used and bound.
+                            and addresses, interfaces whose name is "vmnet*", "vnic*", "vboxnet*", "*virtual*", or
+                            "ppp*", and the local loopback. Otherwise, all interfaces and their TCP/IP addresses are
+                            used and bound.
                         </p>
                         <p>
                             You can set the system property <code>org.fourthline.cling.network.useInterfaces</code> to

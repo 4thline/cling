@@ -40,7 +40,6 @@ import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.logging.Handler;
 import java.util.logging.LogManager;
 
 /**

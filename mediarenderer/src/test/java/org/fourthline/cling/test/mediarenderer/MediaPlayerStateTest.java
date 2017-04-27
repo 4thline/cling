@@ -127,7 +127,7 @@ public class MediaPlayerStateTest {
         mp.setVolume(0.50);
         Thread.sleep(500);
         lastChangeExpected =
-                "<Event xmlns=\"urn:schemas-upnp-org:metadata-1-0/RCS/\">" +
+                "<Event xmlns=\"urn:schemas-upnp-org:metadata-1-0//RCS/\">" +
                         "<InstanceID val=\"0\">" +
                         "<Volume channel=\"Master\" val=\"50\"/>" +
                         "</InstanceID>" +
@@ -139,7 +139,7 @@ public class MediaPlayerStateTest {
         mp.setMute(true);
         Thread.sleep(500);
         lastChangeExpected =
-                "<Event xmlns=\"urn:schemas-upnp-org:metadata-1-0/RCS/\">" +
+                "<Event xmlns=\"urn:schemas-upnp-org:metadata-1-0//RCS/\">" +
                         "<InstanceID val=\"0\">" +
                         "<Volume channel=\"Master\" val=\"0\"/>" +
                         "<Mute channel=\"Master\" val=\"1\"/>" +

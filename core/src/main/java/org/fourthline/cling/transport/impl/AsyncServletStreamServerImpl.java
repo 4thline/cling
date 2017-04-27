@@ -58,12 +58,14 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
 
     synchronized public void init(InetAddress bindAddress, final Router router) throws InitializationException {
         try {
-            log.info("Setting executor service on servlet container adapter");
+            if (log.isLoggable(Level.FINE))
+                log.fine("Setting executor service on servlet container adapter");
             getConfiguration().getServletContainerAdapter().setExecutorService(
                 router.getConfiguration().getStreamServerExecutorService()
             );
 
-            log.info("Adding connector: " + bindAddress + ":" + getConfiguration().getListenPort());
+            if (log.isLoggable(Level.FINE))
+                log.fine("Adding connector: " + bindAddress + ":" + getConfiguration().getListenPort());
             hostAddress = bindAddress.getHostAddress();
             localPort = getConfiguration().getServletContainerAdapter().addConnector(
                 hostAddress,
@@ -99,11 +101,8 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
 
             	final long startTime = System.currentTimeMillis();
             	final int counter = mCounter++;
-            	log.info(String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
                 if (log.isLoggable(Level.FINE))
-                    log.fine(
-                        "Handling Servlet request asynchronously: " + req
-                    );
+                	log.fine(String.format("HttpServlet.service(): id: %3d, request URI: %s", counter, req.getRequestURI()));
 
                 AsyncContext async = req.startAsync();
                 async.setTimeout(getConfiguration().getAsyncTimeoutSeconds()*1000);
@@ -113,28 +112,31 @@ public class AsyncServletStreamServerImpl implements StreamServer<AsyncServletSt
                     @Override
                     public void onTimeout(AsyncEvent arg0) throws IOException {
                         long duration = System.currentTimeMillis() - startTime;
-                        log.warning(String.format("AsyncListener.onTimeout(): id: %3d, duration: %,4d, request: %s", counter, duration, arg0.getSuppliedRequest()));
+                        if (log.isLoggable(Level.FINE))
+                            log.fine(String.format("AsyncListener.onTimeout(): id: %3d, duration: %,4d, request: %s", counter, duration, arg0.getSuppliedRequest()));
                     }
 
 
                     @Override
                     public void onStartAsync(AsyncEvent arg0) throws IOException {
-                        // useless
-                        log.info(String.format("AsyncListener.onStartAsync(): id: %3d, request: %s", counter, arg0.getSuppliedRequest()));
+                        if (log.isLoggable(Level.FINE))
+                            log.fine(String.format("AsyncListener.onStartAsync(): id: %3d, request: %s", counter, arg0.getSuppliedRequest()));
                     }
 
 
                     @Override
                     public void onError(AsyncEvent arg0) throws IOException {
                         long duration = System.currentTimeMillis() - startTime;
-                        log.warning(String.format("AsyncListener.onError(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
+                        if (log.isLoggable(Level.FINE))
+                            log.fine(String.format("AsyncListener.onError(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
                     }
 
 
                     @Override
                     public void onComplete(AsyncEvent arg0) throws IOException {
                         long duration = System.currentTimeMillis() - startTime;
-                        log.info(String.format("AsyncListener.onComplete(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
+                        if (log.isLoggable(Level.FINE))
+                            log.fine(String.format("AsyncListener.onComplete(): id: %3d, duration: %,4d, response: %s", counter, duration, arg0.getSuppliedResponse()));
                     }
 
                 });

@@ -27,13 +27,6 @@
                 implementation. Note that this implementation does <em>NOT WORK</em> on Android, the
                 <code>URLStreamHandlerFactory</code> can't be patched on Android!
             </dd>
-            <dt><code>org.fourthline.cling.transport.impl.apache.StreamClientImpl</code></dt>
-            <dd>
-                This implementation relies on <em>Apache HTTP Client 4.2</em>, you need the
-                <code>org.apache.httpcomponents:httpclient:4.2</code> artifact on your classpath to use it. Note that
-                this implementation does <em>NOT WORK</em> on Android! The hardcoded version of
-                <code>org.apache.http.*</code> on Android is 4.0 and can't ever be upgraded.
-            </dd>
             <dt><code>org.fourthline.cling.transport.impl.jetty.StreamClientImpl</code></dt>
             <dd>
                 This implementation is based on the <em>Jetty 8</em> HTTP client, you need the artifact
@@ -53,13 +46,6 @@
                 This implementation uses the built-in webserver of the Sun JDK 6
                 (<code>com.sun.net.httpserver.HttpServer</code>), hence, it does <em>NOT WORK</em> in an
                 Android environment.
-            </dd>
-            <dt><code>org.fourthline.cling.transport.impl.apache.StreamServerImpl</code></dt>
-            <dd>
-                This implementation relies on <em>Apache HTTP Components 4.2</em>, you need the
-                <code>org.apache.httpcomponents:httpcore:4.2</code> artifact on your classpath to use it. Note that
-                this implementation does <em>NOT WORK</em> on Android! The hardcoded version of
-                <code>org.apache.http.*</code> on Android is 4.0 and can't ever be upgraded.
             </dd>
             <dt><code>org.fourthline.cling.transport.impl.AsyncServletStreamServerImpl</code></dt>
             <dd>

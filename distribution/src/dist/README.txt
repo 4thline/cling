@@ -57,10 +57,10 @@ DEPENDENCIES
 
 Required dependencies of Cling Core (included with this distribution):
 
-    +- org.fourthline.cling:cling-core:jar:2.0.1
-       +- org.seamless:seamless-util:jar:1.0.0
-       +- org.seamless:seamless-http:jar:1.0.0
-       \- org.seamless:seamless-xml:jar:1.0.0
+    +- org.fourthline.cling:cling-core:jar:2.1.2-SNAPSHOT
+       +- org.seamless:seamless-util:jar:1.1.1
+       +- org.seamless:seamless-http:jar:1.1.1
+       \- org.seamless:seamless-xml:jar:1.1.1
 
 Additional dependencies of Cling Core on Android (not included):
 
@@ -83,9 +83,9 @@ JAR files and remove 'about.html'.
 
 ==============================================================================
 
-Feedback, bug reports: http://4thline.org/projects/mailinglists.html
+Copyright 2017, 4th Line GmbH, Switzerland
 
-Copyright 2014, 4th Line GmbH, Switzerland, http://4thline.com/
+For licensing questions, please contact: license(at)4thline.com
 
 You may at your option receive a license to this program under EITHER
 the terms of the GNU Lesser General Public License (LGPL) OR the

@@ -34,6 +34,7 @@ import org.seamless.util.io.HexBin;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import java.net.MalformedURLException;
 import java.net.URI;
 
 /**
@@ -160,7 +161,16 @@ public class DeviceTreeModel extends DefaultTreeModel {
 
     protected void addIfNotNull(DefaultMutableTreeNode parent, String info, URI uri, Device device) {
         if (device instanceof RemoteDevice) {
-            addIfNotNull(parent, info, uri != null ? ((RemoteDevice) device).normalizeURI(uri) : null, true);
+            try {
+                addIfNotNull(parent, info, uri != null ? ((RemoteDevice) device).normalizeURI(uri) : null, true);
+            } catch (IllegalArgumentException ex) {
+                if (ex.getCause() != null && ex.getCause() instanceof MalformedURLException) {
+                    // If it's an unsupported URL (which in Java is pretty much anything but HTTP) show the plain text
+                    addIfNotNull(parent, info, uri, false);
+                } else {
+                    throw ex;
+                }
+            }
         } else if (device instanceof LocalDevice) {
             addIfNotNull(parent, info, uri, false);
         }
@@ -173,7 +183,7 @@ public class DeviceTreeModel extends DefaultTreeModel {
     protected void addIfNotNull(DefaultMutableTreeNode parent, String info, Object data, boolean isUrl) {
         if (data != null) {
             parent.add(new DefaultMutableTreeNode(
-                    new InfoItem(info, data, isUrl)
+                new InfoItem(info, data, isUrl)
             ));
         }
     }
