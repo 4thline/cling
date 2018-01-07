@@ -32,7 +32,9 @@ Read <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xh
 
 **Please post Cling usage questions on [stackoverflow.com](https://stackoverflow.com/questions/tagged/cling+upnp) with the appropriate tags.**
 
-The main Cling modules are:
+**See the [forum archive](http://mailinglists.945824.n3.nabble.com/Cling-users-and-developers-Closed-read-only-f945824.html) for older discussions.**
+
+## Cling Modules
 
 ### Cling Core
 
