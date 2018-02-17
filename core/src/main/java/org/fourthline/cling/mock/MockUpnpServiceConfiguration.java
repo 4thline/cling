@@ -67,9 +67,9 @@ public class MockUpnpServiceConfiguration extends DefaultUpnpServiceConfiguratio
     }
 
     @Override
-    protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort) {
+    protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastPort) {
         // We are only interested in 127.0.0.1
-        return new NetworkAddressFactoryImpl(streamListenPort) {
+        return new NetworkAddressFactoryImpl(streamListenPort, multicastPort) {
             @Override
             protected boolean isUsableNetworkInterface(NetworkInterface iface) throws Exception {
                 return (iface.isLoopback());

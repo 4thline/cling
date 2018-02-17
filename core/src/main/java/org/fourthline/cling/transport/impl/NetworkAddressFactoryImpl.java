@@ -63,16 +63,19 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
     final protected List<InetAddress> bindAddresses = new ArrayList<>();
 
     protected int streamListenPort;
-
+    protected int multicastPort;
     /**
      * Defaults to an ephemeral port.
      */
     public NetworkAddressFactoryImpl() throws InitializationException {
         this(DEFAULT_TCP_HTTP_LISTEN_PORT);
     }
-
-    public NetworkAddressFactoryImpl(int streamListenPort) throws InitializationException {
-    	
+    public NetworkAddressFactoryImpl(int streamListenPort) throws InitializationException
+    {
+    		this(streamListenPort, Constants.UPNP_MULTICAST_PORT);
+    }
+    public NetworkAddressFactoryImpl(int streamListenPort, int multicastPort) throws InitializationException {
+    		this.multicastPort=multicastPort;
     	System.setProperty("java.net.preferIPv4Stack", "true");
 
         String useInterfacesString = System.getProperty(SYSTEM_PROPERTY_NET_IFACES);
@@ -134,7 +137,7 @@ public class NetworkAddressFactoryImpl implements NetworkAddressFactory {
     }
 
     public int getMulticastPort() {
-        return Constants.UPNP_MULTICAST_PORT;
+        return multicastPort;
     }
 
     public int getStreamListenPort() {
