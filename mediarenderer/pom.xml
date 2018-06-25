@@ -24,7 +24,7 @@
 
             <!-- Package a standalone JAR with all dependencies -->
             <plugin>
-                <groupId>org.dstovall</groupId>
+                <groupId>com.jolira</groupId>
                 <artifactId>onejar-maven-plugin</artifactId>
                 <executions>
                     <execution>
