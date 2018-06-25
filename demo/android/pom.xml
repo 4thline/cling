@@ -30,7 +30,7 @@
                         <sdk>
                             <!-- Don't forget to set your ANDROID_HOME environment variable to your SDK directory! -->
                             <path>${env.ANDROID_HOME}</path>
-                            <platform>22</platform>
+                            <platform>15</platform>
                         </sdk>
                         <androidManifestFile>${project.basedir}/src/android/AndroidManifest.xml</androidManifestFile>
                         <resourceDirectory>${project.basedir}/src/android/res</resourceDirectory>
