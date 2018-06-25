@@ -1,5 +1,7 @@
 # Cling - The UPnP stack for Java and Android
 
+[![Build Status](https://travis-ci.org/spikehip/cling.svg?branch=master)](https://travis-ci.org/spikehip/cling)
+
 Cling is an effort to create a UPnP-compatible software stack in Java. The project's goals are strict specification compliance, complete, clean and extensive APIs, as well as rich SPIs for easy customization.
 
 Cling is Free Software, distributed under the terms of the <a href="http://www.gnu.org/licenses/lgpl-2.1.html">GNU Lesser General Public License</a> <b>or at your option</b> the <a href="http://opensource.org/licenses/CDDL-1.0">Common Development and Distribution License</a>.
