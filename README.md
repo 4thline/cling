@@ -1,4 +1,8 @@
-# Cling - The UPnP stack for Java and Android
+# Cling EOL: This project is no longer actively maintained, code may be outdated. If you are interested in maintaining and developing this project, comment [here](https://github.com/4thline/cling/issues/244).
+
+---
+
+## Cling - The UPnP stack for Java and Android
 
 Cling is an effort to create a UPnP-compatible software stack in Java. The project's goals are strict specification compliance, complete, clean and extensive APIs, as well as rich SPIs for easy customization.
 
