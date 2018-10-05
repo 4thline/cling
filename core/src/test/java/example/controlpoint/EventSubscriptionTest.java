@@ -178,7 +178,7 @@ public class EventSubscriptionTest {
         service.getManager().getPropertyChangeSupport().firePropertyChange("Status", false, true);
 
         assertEquals(callback.getSubscription().getCurrentSequence().getValue(), Long.valueOf(2)); // It's the NEXT sequence!
-        assert callback.getSubscription().getSubscriptionId().startsWith("uuid:");
+        assertTrue(callback.getSubscription().getSubscriptionId().startsWith("uuid:"));
 
         // Actually, the local subscription we are testing here has an "unlimited" duration
         assertEquals(callback.getSubscription().getActualDurationSeconds(), Integer.MAX_VALUE);
@@ -187,7 +187,7 @@ public class EventSubscriptionTest {
 
         assertEquals(testAssertions.size(), 4);
         for (Boolean testAssertion : testAssertions) {
-            assert testAssertion;
+            assertTrue(testAssertion);
         }
 
         assertEquals(upnpService.getRouter().getSentStreamRequestMessages().size(), 0);

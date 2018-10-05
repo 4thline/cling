@@ -27,7 +27,7 @@ Then [download the Cling distribution](https://github.com/4thline/cling/releases
     <dependency>
         <groupId>org.fourthline.cling</groupId>
         <artifactId>cling-core</artifactId>
-        <version>2.1.1</version>
+        <version>2.1.2</version>
     </dependency>
 </dependencies>
 ```
@@ -96,7 +96,7 @@ If your build fails with Android/dex packaging errors, you forgot the clean.
   <dependency>
     <groupId>org.fourthline.cling</groupId>
     <artifactId>cling-core</artifactId>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>2.1.2</version>
   </dependency>
 </dependencies>
 ````
@@ -105,8 +105,8 @@ Building OS X Workbench DMG
 ---
 
     hdiutil create -srcfolder \
-        workbench/target/cling-workbench-2.1.2-SNAPSHOT/Cling\ Workbench.app \
-        workbench/target/cling-workbench-2.1.2-SNAPSHOT/Cling\ Workbench.dmg
+        workbench/target/cling-workbench-2.1.2/Cling\ Workbench.app \
+        workbench/target/cling-workbench-2.1.2/Cling\ Workbench.dmg
 
 Publishing a release
 --------------------
@@ -118,7 +118,7 @@ Update Maven repository:
 
 ````
 mvn clean install
-mvn deploy
+mvn clean deploy -DskipTests
 ````
 
 ## Projects and applications using Cling

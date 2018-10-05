@@ -26,7 +26,7 @@
     <groupId>org.fourthline.cling</groupId>
     <artifactId>cling</artifactId>
     <packaging>pom</packaging>
-    <version>2.1.2-SNAPSHOT</version>
+    <version>2.1.2</version>
 
     <modules>
         <module>core</module>
@@ -73,7 +73,7 @@
     <distributionManagement>
         <repository>
             <id>4thline.org</id>
-            <url>scpexe://4thline.org/webroot/vhosts/8080/4thline.org/m2/</url>
+            <url>scpexe://4thline/data/website/docroot/m2/</url>
         </repository>
     </distributionManagement>
 
@@ -84,7 +84,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
 
-        <seamless.version>1.1.1</seamless.version>
+        <seamless.version>1.1.2</seamless.version>
         <lemma.version>1.1.1</lemma.version>
         <testng.version>6.14.3</testng.version>
         <android.version>4.1.1.4</android.version>
@@ -258,12 +258,11 @@
 
         </pluginManagement>
 
-        <!-- Required for we-don't-care-about-compatibility-Maven3 'deploy' goal -->
         <extensions>
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh-external</artifactId>
-                <version>1.0-beta-7</version>
+                <version>3.2.0</version>
             </extension>
         </extensions>
 

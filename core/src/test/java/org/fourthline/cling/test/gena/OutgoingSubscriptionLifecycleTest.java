@@ -39,7 +39,6 @@ import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
 import org.fourthline.cling.protocol.ProtocolCreationException;
 import org.fourthline.cling.test.data.SampleData;
-import org.fourthline.cling.transport.RouterException;
 import org.seamless.util.URIUtil;
 import org.testng.annotations.Test;
 
@@ -49,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 public class OutgoingSubscriptionLifecycleTest {
 
@@ -98,7 +97,7 @@ public class OutgoingSubscriptionLifecycleTest {
 
             @Override
             public void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus) {
-                assert reason == null;
+                assertNull(reason);
                 assertEquals(responseStatus.getStatusCode(), UpnpResponse.Status.OK.getStatusCode());
                 testAssertions.add(true);
             }
@@ -119,7 +118,7 @@ public class OutgoingSubscriptionLifecycleTest {
 
         // Subscription process OK?
         for (Boolean testAssertion : testAssertions) {
-            assert testAssertion;
+            assertTrue(testAssertion);
         }
 
         // Simulate received event
@@ -136,11 +135,11 @@ public class OutgoingSubscriptionLifecycleTest {
 
         callback.end();
 
-        assert callback.getSubscription() == null;
+        assertNull(callback.getSubscription());
 
         assertEquals(testAssertions.size(), 3);
         for (Boolean testAssertion : testAssertions) {
-            assert testAssertion;
+            assertTrue(testAssertion);
         }
 
         List<StreamRequestMessage> sentMessages = upnpService.getRouter().getSentStreamRequestMessages();
@@ -302,7 +301,7 @@ public class OutgoingSubscriptionLifecycleTest {
         assertEquals(1, notificationCalled.size());
 
         for (Boolean testAssertion : testAssertions) {
-            assert testAssertion;
+            assertTrue(testAssertion);
         }
     }
 

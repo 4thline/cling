@@ -57,24 +57,24 @@ DEPENDENCIES
 
 Required dependencies of Cling Core (included with this distribution):
 
-    +- org.fourthline.cling:cling-core:jar:2.1.2-SNAPSHOT
-       +- org.seamless:seamless-util:jar:1.1.1
-       +- org.seamless:seamless-http:jar:1.1.1
-       \- org.seamless:seamless-xml:jar:1.1.1
+    +- org.fourthline.cling:cling-core:jar:2.1.2
+       +- org.seamless:seamless-util:jar:1.1.2
+       +- org.seamless:seamless-http:jar:1.1.2
+       \- org.seamless:seamless-xml:jar:1.1.2
 
 Additional dependencies of Cling Core on Android (not included):
 
-    +- org.eclipse.jetty:jetty-server:jar:8.1.8.v20121106
+    +- org.eclipse.jetty:jetty-server:jar:8.1.22.v20160922
     |  +- org.eclipse.jetty.orbit:javax.servlet:jar:3.0.0.v201112011016
-    |  +- org.eclipse.jetty:jetty-continuation:jar:8.1.8.v20121106
-    |  \- org.eclipse.jetty:jetty-http:jar:8.1.8.v20121106
-    |     \- org.eclipse.jetty:jetty-io:jar:8.1.8.v20121106
-    |        \- org.eclipse.jetty:jetty-util:jar:8.1.8.v20121106
-    +- org.eclipse.jetty:jetty-servlet:jar:8.1.8.v20121106
-    |  \- org.eclipse.jetty:jetty-security:jar:8.1.8.v20121106
-    +- org.eclipse.jetty:jetty-client:jar:8.1.8.v20121106
-    +- org.slf4j:slf4j-jdk14:jar:1.6.1  (or any other SLF4J implementation)
-       \- org.slf4j:slf4j-api:jar:1.6.1
+    |  +- org.eclipse.jetty:jetty-continuation:jar:8.1.22.v20160922
+    |  \- org.eclipse.jetty:jetty-http:jar:8.1.22.v20160922
+    |     \- org.eclipse.jetty:jetty-io:jar:8.1.22.v20160922
+    |        \- org.eclipse.jetty:jetty-util:jar:8.1.22.v20160922
+    +- org.eclipse.jetty:jetty-servlet:jar:8.1.22.v20160922
+    |  \- org.eclipse.jetty:jetty-security:jar:8.1.22.v20160922
+    +- org.eclipse.jetty:jetty-client:jar:8.1.22.v20160922
+    +- org.slf4j:slf4j-jdk14:jar:1.7.25  (or any other SLF4J implementation)
+       \- org.slf4j:slf4j-api:jar:1.7.25
 
 WARNING: Jetty JAR files each contain an 'about.html' file, you will get
 an error when trying to package your application with APK. Use the Android
