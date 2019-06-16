@@ -16,7 +16,7 @@ Then [download the Cling distribution](https://github.com/4thline/cling/releases
 <repositories>
     <repository>
         <id>4thline-repo</id>
-        <url>http://4thline.org/m2</url>
+        <url>http://fourthline.org/m2</url>
         <snapshots>
             <enabled>false</enabled> <!-- Or true, if you like to use unreleased code -->
         </snapshots>
@@ -32,7 +32,7 @@ Then [download the Cling distribution](https://github.com/4thline/cling/releases
 </dependencies>
 ```
 
-Read <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#chapter.GettingStarted">the first chapter of the manual</a> for a simple Cling usage example. Have a look at the <a href="https://github.com/4thline/cling/tree/master/demo/android">Android application examples</a>.
+Read <a href="http://fouthline.org/projects/cling/core/manual/cling-core-manual.xhtml#chapter.GettingStarted">the first chapter of the manual</a> for a simple Cling usage example. Have a look at the <a href="https://github.com/4thline/cling/tree/master/demo/android">Android application examples</a>.
 
 **Please post Cling usage questions on [stackoverflow.com](https://stackoverflow.com/questions/tagged/cling+upnp) with the appropriate tags.**
 
@@ -42,21 +42,21 @@ Read <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xh
 
 ### Cling Core
 
-An embeddable Java library that implements the <a href="http://www.upnp.org/resources/documents.asp">UPnP Device Architecture 1.0</a>. Use Cling Core to expose services with a UPnP remoting interface, or to write control point applications that discover UPnP devices and utilize their services. You can also integrate <a href="http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml#chapter.Android">Cling Core as an Android UPnP/DLNA library in your applications</a> (platform level 15/4.0 required).
+An embeddable Java library that implements the <a href="http://www.upnp.org/resources/documents.asp">UPnP Device Architecture 1.0</a>. Use Cling Core to expose services with a UPnP remoting interface, or to write control point applications that discover UPnP devices and utilize their services. You can also integrate <a href="http://fourthline.org/projects/cling/core/manual/cling-core-manual.xhtml#chapter.Android">Cling Core as an Android UPnP/DLNA library in your applications</a> (platform level 15/4.0 required).
 
-- [User Manual](http://4thline.org/projects/cling/core/manual/cling-core-manual.xhtml)
-- [API Javadoc](http://4thline.org/projects/cling/core/apidocs)
-- [Source XRef](http://4thline.org/projects/cling/core/xref)
-- [Test Source XRef](http://4thline.org/projects/cling/core/xref-test)
+- [User Manual](http://fourthline.org/projects/cling/core/manual/cling-core-manual.xhtml)
+- [API Javadoc](http://fourthline.org/projects/cling/core/apidocs)
+- [Source XRef](http://fourthline.org/projects/cling/core/xref)
+- [Test Source XRef](http://fourthline.org/projects/cling/core/xref-test)
 
 ### Cling Support
 
-Optional classes and useful infrastructure for developing and controlling UPnP services with Cling Core; extensions that simplify working with UPnP media servers and renderers, <a href="http://4thline.org/projects/cling/support/manual/cling-support-manual.xhtml#section.PortMapping">NAT port mapping on routers</a>, etc.
+Optional classes and useful infrastructure for developing and controlling UPnP services with Cling Core; extensions that simplify working with UPnP media servers and renderers, <a href="http://fourthline.org/projects/cling/support/manual/cling-support-manual.xhtml#section.PortMapping">NAT port mapping on routers</a>, etc.
 
-- [User Manual](http://4thline.org/projects/cling/support/manual/cling-support-manual.xhtml)
-- [API Javadoc](http://4thline.org/projects/cling/support/apidocs)
-- [Source XRef](http://4thline.org/projects/cling/support/xref)
-- [Test Source XRef](http://4thline.org/projects/cling/support/xref-test)
+- [User Manual](http://fourthline.org/projects/cling/support/manual/cling-support-manual.xhtml)
+- [API Javadoc](http://fourthline.org/projects/cling/support/apidocs)
+- [Source XRef](http://fourthline.org/projects/cling/support/xref)
+- [Test Source XRef](http://fourthline.org/projects/cling/support/xref-test)
 
 ### Cling Workbench
 
