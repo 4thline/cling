@@ -88,7 +88,7 @@ public class Main {
 
         // This will create necessary network resources for UPnP right away
         System.out.println("Starting Cling...");
-        UpnpService upnpService = new UpnpServiceImpl(listener);
+        UpnpService upnpService = new UpnpServiceImpl(new DefaultUpnpServiceConfiguration(0, 1900),listener);
 
         // Send a search message to all devices and services, they should respond soon
         System.out.println("Sending SEARCH message to all devices...");

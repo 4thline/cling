@@ -73,8 +73,8 @@ public class AndroidUpnpServiceConfiguration extends DefaultUpnpServiceConfigura
     }
 
     @Override
-    protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort) {
-        return new AndroidNetworkAddressFactory(streamListenPort);
+    protected NetworkAddressFactory createNetworkAddressFactory(int streamListenPort, int multicastPort) {
+        return new AndroidNetworkAddressFactory(streamListenPort, multicastPort);
     }
 
     @Override

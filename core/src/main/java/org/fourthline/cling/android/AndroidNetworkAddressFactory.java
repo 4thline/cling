@@ -40,6 +40,10 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
         super(streamListenPort);
     }
 
+    public AndroidNetworkAddressFactory(int streamListenPort, int multicastPort) {
+        super(streamListenPort, multicastPort);
+    }
+
     @Override
     protected boolean requiresNetworkInterface() {
         return false;
