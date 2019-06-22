@@ -23,6 +23,7 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.util.Enumeration;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -108,6 +109,25 @@ public class AndroidNetworkAddressFactory extends NetworkAddressFactoryImpl {
             // http://code.google.com/p/android/issues/detail?id=33661
             log.warning("Exception while enumerating network interfaces, trying once more: " + ex);
             super.discoverNetworkInterfaces();
+        }
+    }
+
+    public byte[] getHardwareAddress(InetAddress inetAddress) {
+        try {
+            if (inetAddress == null) {
+                throw new NullPointerException("inetAddress == null");
+            }
+            for (NetworkInterface networkInterface : networkInterfaces) {
+                Enumeration<InetAddress> e = networkInterface.getInetAddresses();
+                while(e.hasMoreElements()) {
+                    e.nextElement().equals(inetAddress);
+                    return networkInterface.getHardwareAddress();
+                }
+            }
+            return null;
+        } catch (Throwable ex) {
+            log.log(Level.WARNING, "Cannot get hardware address for: " + inetAddress, ex);
+            return null;
         }
     }
 }
