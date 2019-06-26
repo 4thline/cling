@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.lastchange;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,19 +25,19 @@ import java.util.List;
  */
 public class InstanceID {
 
-    protected UnsignedIntegerFourBytes id;
+    protected UnsignedIntegerEightBytes id;
     protected List<EventedValue> values = new ArrayList<>();
 
-    public InstanceID(UnsignedIntegerFourBytes id) {
+    public InstanceID(UnsignedIntegerEightBytes id) {
         this(id, new ArrayList<EventedValue>());
     }
 
-    public InstanceID(UnsignedIntegerFourBytes id, List<EventedValue> values) {
+    public InstanceID(UnsignedIntegerEightBytes id, List<EventedValue> values) {
         this.id = id;
         this.values = values;
     }
 
-    public UnsignedIntegerFourBytes getId() {
+    public UnsignedIntegerEightBytes getId() {
         return id;
     }
 

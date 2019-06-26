@@ -34,7 +34,7 @@ public abstract class GetSystemUpdateID extends ActionCallback {
         boolean ok = true;
         long id = 0;
         try {
-            id = Long.valueOf(invocation.getOutput("Id").getValue().toString()); // UnsignedIntegerFourBytes...
+            id = Long.valueOf(invocation.getOutput("Id").getValue().toString()); // UnsignedIntegerEightBytes...
         } catch (Exception ex) {
             invocation.setFailure(new ActionException(ErrorCode.ACTION_FAILED, "Can't parse GetSystemUpdateID response: " + ex, ex));
             failure(invocation, null);

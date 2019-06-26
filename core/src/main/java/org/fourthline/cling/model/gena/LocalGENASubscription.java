@@ -21,20 +21,13 @@ import org.fourthline.cling.model.message.header.SubscriptionIdHeader;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.meta.StateVariable;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.seamless.util.Exceptions;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -97,7 +90,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         }
 
         this.subscriptionId = SubscriptionIdHeader.PREFIX + UUID.randomUUID();
-        this.currentSequence = new UnsignedIntegerFourBytes(0);
+        this.currentSequence = new UnsignedIntegerEightBytes(0);
         this.callbackURLs = callbackURLs;
     }
 

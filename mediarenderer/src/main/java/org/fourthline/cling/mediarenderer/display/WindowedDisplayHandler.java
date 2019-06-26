@@ -17,11 +17,10 @@ package org.fourthline.cling.mediarenderer.display;
 
 import org.fourthline.cling.mediarenderer.MediaRenderer;
 import org.fourthline.cling.mediarenderer.gstreamer.GstMediaPlayer;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
@@ -36,7 +35,7 @@ public class WindowedDisplayHandler implements DisplayHandler {
 
     final private static Logger log = Logger.getLogger(WindowedDisplayHandler.class.getName());
 
-    final protected Map<UnsignedIntegerFourBytes, JFrame> playerWindows = new HashMap<>();
+    final protected Map<UnsignedIntegerEightBytes, JFrame> playerWindows = new HashMap<>();
 
     public WindowedDisplayHandler() {
         MediaRenderer.APP.log(Level.INFO, "Enabling window handler for each player instance");

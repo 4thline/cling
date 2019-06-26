@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.lastchange;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +39,7 @@ public class Event {
         return instanceIDs;
     }
 
-    public InstanceID getInstanceID(UnsignedIntegerFourBytes id) {
+    public InstanceID getInstanceID(UnsignedIntegerEightBytes id) {
         for (InstanceID instanceID : instanceIDs) {
             if (instanceID.getId().equals(id)) return instanceID;
         }
@@ -50,7 +50,7 @@ public class Event {
         instanceIDs = new ArrayList<>();
     }
 
-    public void setEventedValue(UnsignedIntegerFourBytes id, EventedValue ev) {
+    public void setEventedValue(UnsignedIntegerEightBytes id, EventedValue ev) {
         InstanceID instanceID = null;
         for (InstanceID i : getInstanceIDs()) {
             if (i.getId().equals(id)) {
@@ -72,7 +72,7 @@ public class Event {
         instanceID.getValues().add(ev);
     }
 
-    public <EV extends EventedValue> EV getEventedValue(UnsignedIntegerFourBytes id, Class<EV> type) {
+    public <EV extends EventedValue> EV getEventedValue(UnsignedIntegerEightBytes id, Class<EV> type) {
         for (InstanceID instanceID : getInstanceIDs()) {
             if (instanceID.getId().equals(id)) {
                 for (EventedValue eventedValue : instanceID.getValues()) {

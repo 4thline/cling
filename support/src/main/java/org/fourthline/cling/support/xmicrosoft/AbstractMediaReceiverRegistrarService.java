@@ -15,15 +15,8 @@
 
 package org.fourthline.cling.support.xmicrosoft;
 
-import org.fourthline.cling.binding.annotations.UpnpAction;
-import org.fourthline.cling.binding.annotations.UpnpInputArgument;
-import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
-import org.fourthline.cling.binding.annotations.UpnpService;
-import org.fourthline.cling.binding.annotations.UpnpServiceId;
-import org.fourthline.cling.binding.annotations.UpnpServiceType;
-import org.fourthline.cling.binding.annotations.UpnpStateVariable;
-import org.fourthline.cling.binding.annotations.UpnpStateVariables;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.binding.annotations.*;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.beans.PropertyChangeSupport;
 
@@ -64,16 +57,16 @@ public abstract class AbstractMediaReceiverRegistrarService {
     final protected PropertyChangeSupport propertyChangeSupport;
 
     @UpnpStateVariable(eventMinimumDelta = 1)
-    private UnsignedIntegerFourBytes authorizationGrantedUpdateID = new UnsignedIntegerFourBytes(0);
+    private UnsignedIntegerEightBytes authorizationGrantedUpdateID = new UnsignedIntegerEightBytes(0);
 
     @UpnpStateVariable(eventMinimumDelta = 1)
-    private UnsignedIntegerFourBytes authorizationDeniedUpdateID = new UnsignedIntegerFourBytes(0);
+    private UnsignedIntegerEightBytes authorizationDeniedUpdateID = new UnsignedIntegerEightBytes(0);
 
     @UpnpStateVariable
-    private UnsignedIntegerFourBytes validationSucceededUpdateID = new UnsignedIntegerFourBytes(0);
+    private UnsignedIntegerEightBytes validationSucceededUpdateID = new UnsignedIntegerEightBytes(0);
 
     @UpnpStateVariable
-    private UnsignedIntegerFourBytes validationRevokedUpdateID = new UnsignedIntegerFourBytes(0);
+    private UnsignedIntegerEightBytes validationRevokedUpdateID = new UnsignedIntegerEightBytes(0);
 
     protected AbstractMediaReceiverRegistrarService() {
         this(null);
@@ -89,22 +82,22 @@ public abstract class AbstractMediaReceiverRegistrarService {
 
 
     @UpnpAction(out = @UpnpOutputArgument(name = "AuthorizationGrantedUpdateID"))
-    public UnsignedIntegerFourBytes getAuthorizationGrantedUpdateID() {
+    public UnsignedIntegerEightBytes getAuthorizationGrantedUpdateID() {
         return authorizationGrantedUpdateID;
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "AuthorizationDeniedUpdateID"))
-    public UnsignedIntegerFourBytes getAuthorizationDeniedUpdateID() {
+    public UnsignedIntegerEightBytes getAuthorizationDeniedUpdateID() {
         return authorizationDeniedUpdateID;
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "ValidationSucceededUpdateID"))
-    public UnsignedIntegerFourBytes getValidationSucceededUpdateID() {
+    public UnsignedIntegerEightBytes getValidationSucceededUpdateID() {
         return validationSucceededUpdateID;
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "ValidationRevokedUpdateID"))
-    public UnsignedIntegerFourBytes getValidationRevokedUpdateID() {
+    public UnsignedIntegerEightBytes getValidationRevokedUpdateID() {
         return validationRevokedUpdateID;
     }
 

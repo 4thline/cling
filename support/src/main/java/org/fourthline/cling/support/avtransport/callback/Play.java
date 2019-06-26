@@ -18,7 +18,7 @@ package org.fourthline.cling.support.avtransport.callback;
 import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.logging.Logger;
 
@@ -31,18 +31,18 @@ public abstract class Play extends ActionCallback {
     private static Logger log = Logger.getLogger(Play.class.getName());
 
     public Play(Service service) {
-        this(new UnsignedIntegerFourBytes(0), service, "1");
+        this(new UnsignedIntegerEightBytes(0), service, "1");
     }
 
     public Play(Service service, String speed) {
-        this(new UnsignedIntegerFourBytes(0), service, speed);
+        this(new UnsignedIntegerEightBytes(0), service, speed);
     }
 
-    public Play(UnsignedIntegerFourBytes instanceId, Service service) {
+    public Play(UnsignedIntegerEightBytes instanceId, Service service) {
         this(instanceId, service, "1");
     }
 
-    public Play(UnsignedIntegerFourBytes instanceId, Service service, String speed) {
+    public Play(UnsignedIntegerEightBytes instanceId, Service service, String speed) {
         super(new ActionInvocation(service.getAction("Play")));
         getActionInvocation().setInput("InstanceID", instanceId);
         getActionInvocation().setInput("Speed", speed);

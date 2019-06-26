@@ -19,7 +19,7 @@ import org.fourthline.cling.controlpoint.ActionCallback;
 import org.fourthline.cling.controlpoint.ControlPoint;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.logging.Logger;
 
@@ -40,10 +40,10 @@ public abstract class Pause extends ActionCallback {
     }
 
     public Pause(Service service) {
-        this(new UnsignedIntegerFourBytes(0), service);
+        this(new UnsignedIntegerEightBytes(0), service);
     }
 
-    public Pause(UnsignedIntegerFourBytes instanceId, Service service) {
+    public Pause(UnsignedIntegerEightBytes instanceId, Service service) {
         super(new ActionInvocation(service.getAction("Pause")));
         getActionInvocation().setInput("InstanceID", instanceId);
     }

@@ -15,25 +15,14 @@
 
 package org.fourthline.cling.test.local;
 
-import org.fourthline.cling.binding.annotations.AnnotationLocalServiceBinder;
-import org.fourthline.cling.binding.annotations.UpnpAction;
-import org.fourthline.cling.binding.annotations.UpnpInputArgument;
-import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
-import org.fourthline.cling.binding.annotations.UpnpService;
-import org.fourthline.cling.binding.annotations.UpnpServiceId;
-import org.fourthline.cling.binding.annotations.UpnpServiceType;
-import org.fourthline.cling.binding.annotations.UpnpStateVariable;
+import org.fourthline.cling.binding.annotations.*;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.DeviceDetails;
 import org.fourthline.cling.model.meta.LocalDevice;
 import org.fourthline.cling.model.meta.LocalService;
 import org.fourthline.cling.model.types.UDADeviceType;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.model.types.csv.CSV;
-import org.fourthline.cling.model.types.csv.CSVBoolean;
-import org.fourthline.cling.model.types.csv.CSVInteger;
-import org.fourthline.cling.model.types.csv.CSVString;
-import org.fourthline.cling.model.types.csv.CSVUnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
+import org.fourthline.cling.model.types.csv.*;
 import org.fourthline.cling.test.data.SampleData;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -102,16 +91,16 @@ public class LocalActionInvocationCSVTest {
         assertEquals(csvBoolean.get(1), new Boolean(true));
         assertEquals(csvBoolean.get(2), new Boolean(false));
 
-        List<UnsignedIntegerFourBytes> testUifour = new CSVUnsignedIntegerFourBytes();
-        testUifour.add(new UnsignedIntegerFourBytes(123));
-        testUifour.add(new UnsignedIntegerFourBytes(456));
-        testUifour.add(new UnsignedIntegerFourBytes(789));
+        List<UnsignedIntegerEightBytes> testUifour = new CSVUnsignedIntegerFourBytes();
+        testUifour.add(new UnsignedIntegerEightBytes(123));
+        testUifour.add(new UnsignedIntegerEightBytes(456));
+        testUifour.add(new UnsignedIntegerEightBytes(789));
         result = executeActions(svc, "SetUifourVar", "GetUifourVar", testUifour);
-        List<UnsignedIntegerFourBytes> csvUifour = new CSVUnsignedIntegerFourBytes(result);
+        List<UnsignedIntegerEightBytes> csvUifour = new CSVUnsignedIntegerFourBytes(result);
         assert csvUifour.size() == 3;
-        assertEquals(csvUifour.get(0), new UnsignedIntegerFourBytes(123));
-        assertEquals(csvUifour.get(1), new UnsignedIntegerFourBytes(456));
-        assertEquals(csvUifour.get(2), new UnsignedIntegerFourBytes(789));
+        assertEquals(csvUifour.get(0), new UnsignedIntegerEightBytes(123));
+        assertEquals(csvUifour.get(1), new UnsignedIntegerEightBytes(456));
+        assertEquals(csvUifour.get(2), new UnsignedIntegerEightBytes(789));
     }
 
     protected String executeActions(LocalService svc, String setAction, String getAction, List input) throws Exception {
@@ -148,7 +137,7 @@ public class LocalActionInvocationCSVTest {
         private CSV<Boolean> booleanVar;
 
         @UpnpStateVariable(sendEvents = false)
-        private CSV<UnsignedIntegerFourBytes> uifourVar;
+        private CSV<UnsignedIntegerEightBytes> uifourVar;
 
         @UpnpAction
         public void setStringVar(@UpnpInputArgument(name = "StringVar") CSVString stringVar) {
@@ -196,13 +185,13 @@ public class LocalActionInvocationCSVTest {
         public void setUifourVar(@UpnpInputArgument(name = "UifourVar") CSVUnsignedIntegerFourBytes uifourVar) {
             this.uifourVar = uifourVar;
             assertEquals(uifourVar.size(), 3);
-            assertEquals(uifourVar.get(0), new UnsignedIntegerFourBytes(123));
-            assertEquals(uifourVar.get(1), new UnsignedIntegerFourBytes(456));
-            assertEquals(uifourVar.get(2), new UnsignedIntegerFourBytes(789));
+            assertEquals(uifourVar.get(0), new UnsignedIntegerEightBytes(123));
+            assertEquals(uifourVar.get(1), new UnsignedIntegerEightBytes(456));
+            assertEquals(uifourVar.get(2), new UnsignedIntegerEightBytes(789));
         }
 
         @UpnpAction(out = @UpnpOutputArgument(name = "UifourVar"))
-        public CSV<UnsignedIntegerFourBytes> getUifourVar() {
+        public CSV<UnsignedIntegerEightBytes> getUifourVar() {
             return uifourVar;
         }
 

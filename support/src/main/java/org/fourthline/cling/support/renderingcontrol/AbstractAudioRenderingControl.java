@@ -15,28 +15,16 @@
 
 package org.fourthline.cling.support.renderingcontrol;
 
-import org.fourthline.cling.binding.annotations.UpnpAction;
-import org.fourthline.cling.binding.annotations.UpnpInputArgument;
-import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
-import org.fourthline.cling.binding.annotations.UpnpService;
-import org.fourthline.cling.binding.annotations.UpnpServiceId;
-import org.fourthline.cling.binding.annotations.UpnpServiceType;
-import org.fourthline.cling.binding.annotations.UpnpStateVariable;
-import org.fourthline.cling.binding.annotations.UpnpStateVariables;
+import org.fourthline.cling.binding.annotations.*;
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.UnsignedIntegerTwoBytes;
 import org.fourthline.cling.support.lastchange.LastChange;
 import org.fourthline.cling.support.lastchange.LastChangeDelegator;
 import org.fourthline.cling.support.model.Channel;
 import org.fourthline.cling.support.model.PresetName;
 import org.fourthline.cling.support.model.VolumeDBRange;
-import org.fourthline.cling.support.renderingcontrol.lastchange.ChannelLoudness;
-import org.fourthline.cling.support.renderingcontrol.lastchange.ChannelMute;
-import org.fourthline.cling.support.renderingcontrol.lastchange.ChannelVolume;
-import org.fourthline.cling.support.renderingcontrol.lastchange.ChannelVolumeDB;
-import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlLastChangeParser;
-import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlVariable;
+import org.fourthline.cling.support.renderingcontrol.lastchange.*;
 
 import java.beans.PropertyChangeSupport;
 
@@ -120,7 +108,7 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
     }
 
     @Override
-    public void appendCurrentState(LastChange lc, UnsignedIntegerFourBytes instanceId) throws Exception {
+    public void appendCurrentState(LastChange lc, UnsignedIntegerEightBytes instanceId) throws Exception {
         for (Channel channel : getCurrentChannels()) {
             String channelString = channel.name();
             lc.setEventedValue(
@@ -138,46 +126,46 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
         return propertyChangeSupport;
     }
 
-    public static UnsignedIntegerFourBytes getDefaultInstanceID() {
-        return new UnsignedIntegerFourBytes(0);
+    public static UnsignedIntegerEightBytes getDefaultInstanceID() {
+        return new UnsignedIntegerEightBytes(0);
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "CurrentPresetNameList", stateVariable = "PresetNameList"))
-    public String listPresets(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId) throws RenderingControlException {
+    public String listPresets(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId) throws RenderingControlException {
         return PresetName.FactoryDefaults.toString();
     }
 
     @UpnpAction
-    public void selectPreset(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public void selectPreset(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                              @UpnpInputArgument(name = "PresetName") String presetName) throws RenderingControlException {
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "CurrentMute", stateVariable = "Mute"))
-    public abstract boolean getMute(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract boolean getMute(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                     @UpnpInputArgument(name = "Channel") String channelName) throws RenderingControlException;
 
     @UpnpAction
-    public abstract void setMute(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void setMute(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                  @UpnpInputArgument(name = "Channel") String channelName,
                                  @UpnpInputArgument(name = "DesiredMute", stateVariable = "Mute") boolean desiredMute) throws RenderingControlException;
 
     @UpnpAction(out = @UpnpOutputArgument(name = "CurrentVolume", stateVariable = "Volume"))
-    public abstract UnsignedIntegerTwoBytes getVolume(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract UnsignedIntegerTwoBytes getVolume(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                                       @UpnpInputArgument(name = "Channel") String channelName) throws RenderingControlException;
 
     @UpnpAction
-    public abstract void setVolume(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public abstract void setVolume(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                    @UpnpInputArgument(name = "Channel") String channelName,
                                    @UpnpInputArgument(name = "DesiredVolume", stateVariable = "Volume") UnsignedIntegerTwoBytes desiredVolume) throws RenderingControlException;
 
     @UpnpAction(out = @UpnpOutputArgument(name = "CurrentVolume", stateVariable = "VolumeDB"))
-    public Integer getVolumeDB(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public Integer getVolumeDB(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                              @UpnpInputArgument(name = "Channel") String channelName) throws RenderingControlException {
         return 0;
     }
 
     @UpnpAction
-    public void setVolumeDB(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public void setVolumeDB(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                             @UpnpInputArgument(name = "Channel") String channelName,
                             @UpnpInputArgument(name = "DesiredVolume", stateVariable = "VolumeDB") Integer  desiredVolumeDB) throws RenderingControlException {
         /*
@@ -191,19 +179,19 @@ public abstract class AbstractAudioRenderingControl implements LastChangeDelegat
             @UpnpOutputArgument(name = "MinValue", stateVariable = "VolumeDB", getterName = "getMinValue"),
             @UpnpOutputArgument(name = "MaxValue", stateVariable = "VolumeDB", getterName = "getMaxValue")
     })
-    public VolumeDBRange getVolumeDBRange(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public VolumeDBRange getVolumeDBRange(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                           @UpnpInputArgument(name = "Channel") String channelName) throws RenderingControlException {
         return new VolumeDBRange(0, 0);
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "CurrentLoudness", stateVariable = "Loudness"))
-    public boolean getLoudness(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public boolean getLoudness(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                                @UpnpInputArgument(name = "Channel") String channelName) throws RenderingControlException {
         return false;
     }
 
     @UpnpAction
-    public void setLoudness(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerFourBytes instanceId,
+    public void setLoudness(@UpnpInputArgument(name = "InstanceID") UnsignedIntegerEightBytes instanceId,
                             @UpnpInputArgument(name = "Channel") String channelName,
                             @UpnpInputArgument(name = "DesiredLoudness", stateVariable = "Loudness") boolean desiredLoudness) throws RenderingControlException {
 /*

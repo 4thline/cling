@@ -20,7 +20,7 @@ import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.model.Connection;
 
 /**
@@ -42,7 +42,7 @@ public abstract class GetStatusInfo extends ActionCallback {
             Connection.Error lastError =
                     Connection.Error.valueOf(invocation.getOutput("NewLastConnectionError").getValue().toString());
 
-            success(new Connection.StatusInfo(status, (UnsignedIntegerFourBytes) invocation.getOutput("NewUptime").getValue(), lastError));
+            success(new Connection.StatusInfo(status, (UnsignedIntegerEightBytes) invocation.getOutput("NewUptime").getValue(), lastError));
 
         } catch (Exception ex) {
             invocation.setFailure(

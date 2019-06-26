@@ -15,14 +15,14 @@
 
 package org.fourthline.cling.test.mediarenderer;
 
-import org.gstreamer.Gst;
-import org.gstreamer.State;
 import org.fourthline.cling.mediarenderer.gstreamer.GstMediaPlayer;
 import org.fourthline.cling.mediarenderer.gstreamer.GstMediaPlayers;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.lastchange.LastChange;
 import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlLastChangeParser;
+import org.gstreamer.Gst;
+import org.gstreamer.State;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -45,7 +45,7 @@ public class MediaPlayerStateTest {
     @Test
     public void lastChangePropagation() throws Exception {
 
-        UnsignedIntegerFourBytes instanceId = new UnsignedIntegerFourBytes(0);
+        UnsignedIntegerEightBytes instanceId = new UnsignedIntegerEightBytes(0);
 
         LastChange avTransportLastChange = new LastChange(new AVTransportLastChangeParser());
         LastChange renderingControlLastChange = new LastChange(new RenderingControlLastChangeParser());

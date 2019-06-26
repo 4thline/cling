@@ -20,11 +20,7 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Device;
 import org.fourthline.cling.model.meta.Service;
-import org.fourthline.cling.model.types.DeviceType;
-import org.fourthline.cling.model.types.ServiceType;
-import org.fourthline.cling.model.types.UDADeviceType;
-import org.fourthline.cling.model.types.UDAServiceType;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.*;
 import org.fourthline.cling.support.avtransport.callback.SetAVTransportURI;
 import org.fourthline.cling.support.connectionmanager.callback.GetProtocolInfo;
 import org.fourthline.cling.support.model.Protocol;
@@ -38,12 +34,7 @@ import org.fourthline.cling.workbench.plugins.contentdirectory.DetailView;
 import org.seamless.util.MimeType;
 
 import javax.inject.Inject;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Christian Bauer
@@ -203,7 +194,7 @@ public class DetailPresenter implements DetailView.Presenter {
     protected void sendToMediaRenderer(final int instanceId, final Service avTransportService, String uri) {
 
         SetAVTransportURI setAVTransportURIActionCallback =
-                new SetAVTransportURI(new UnsignedIntegerFourBytes(instanceId), avTransportService, uri) {
+                new SetAVTransportURI(new UnsignedIntegerEightBytes(instanceId), avTransportService, uri) {
 
                     @Override
                     public void success(ActionInvocation invocation) {

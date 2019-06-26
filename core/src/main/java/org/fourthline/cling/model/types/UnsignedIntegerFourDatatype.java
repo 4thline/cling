@@ -13,20 +13,20 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  */
 
-package org.fourthline.cling.model.types.csv;
-
-import org.fourthline.cling.model.types.InvalidValueException;
-import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
+package org.fourthline.cling.model.types;
 
 /**
  * @author Christian Bauer
  */
-public class CSVUnsignedIntegerFourBytes extends CSV<UnsignedIntegerEightBytes> {
+public class UnsignedIntegerFourDatatype extends AbstractDatatype<UnsignedIntegerFourBytes> {
 
-    public CSVUnsignedIntegerFourBytes() {
+    public UnsignedIntegerFourBytes valueOf(String s) throws InvalidValueException {
+        if (s.equals("")) return null;
+        try {
+            return new UnsignedIntegerFourBytes(s);
+        } catch (NumberFormatException ex) {
+            throw new InvalidValueException("Can't convert string to number or not in range: " + s, ex);
+        }
     }
 
-    public CSVUnsignedIntegerFourBytes(String s) throws InvalidValueException {
-        super(s);
-    }
 }

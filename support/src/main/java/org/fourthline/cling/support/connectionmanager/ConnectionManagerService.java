@@ -15,17 +15,10 @@
 
 package org.fourthline.cling.support.connectionmanager;
 
-import org.fourthline.cling.binding.annotations.UpnpAction;
-import org.fourthline.cling.binding.annotations.UpnpInputArgument;
-import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
-import org.fourthline.cling.binding.annotations.UpnpService;
-import org.fourthline.cling.binding.annotations.UpnpServiceId;
-import org.fourthline.cling.binding.annotations.UpnpServiceType;
-import org.fourthline.cling.binding.annotations.UpnpStateVariable;
-import org.fourthline.cling.binding.annotations.UpnpStateVariables;
+import org.fourthline.cling.binding.annotations.*;
 import org.fourthline.cling.model.ServiceReference;
 import org.fourthline.cling.model.action.ActionException;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.csv.CSV;
 import org.fourthline.cling.model.types.csv.CSVUnsignedIntegerFourBytes;
 import org.fourthline.cling.support.model.ConnectionInfo;
@@ -135,10 +128,10 @@ public class ConnectionManagerService {
     @UpnpAction(out = {
             @UpnpOutputArgument(name = "ConnectionIDs")
     })
-    synchronized public CSV<UnsignedIntegerFourBytes> getCurrentConnectionIDs() {
-        CSV<UnsignedIntegerFourBytes> csv = new CSVUnsignedIntegerFourBytes();
+    synchronized public CSV<UnsignedIntegerEightBytes> getCurrentConnectionIDs() {
+        CSV<UnsignedIntegerEightBytes> csv = new CSVUnsignedIntegerFourBytes();
         for (Integer connectionID : activeConnections.keySet()) {
-            csv.add(new UnsignedIntegerFourBytes(connectionID));
+            csv.add(new UnsignedIntegerEightBytes(connectionID));
         }
         log.fine("Returning current connection IDs: " + csv.size());
         return csv;

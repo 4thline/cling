@@ -14,16 +14,9 @@
  */
 package org.fourthline.cling.support.contentdirectory;
 
-import org.fourthline.cling.binding.annotations.UpnpAction;
-import org.fourthline.cling.binding.annotations.UpnpInputArgument;
-import org.fourthline.cling.binding.annotations.UpnpOutputArgument;
-import org.fourthline.cling.binding.annotations.UpnpService;
-import org.fourthline.cling.binding.annotations.UpnpServiceId;
-import org.fourthline.cling.binding.annotations.UpnpServiceType;
-import org.fourthline.cling.binding.annotations.UpnpStateVariable;
-import org.fourthline.cling.binding.annotations.UpnpStateVariables;
+import org.fourthline.cling.binding.annotations.*;
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.csv.CSV;
 import org.fourthline.cling.model.types.csv.CSVString;
 import org.fourthline.cling.support.model.BrowseFlag;
@@ -109,7 +102,7 @@ public abstract class AbstractContentDirectoryService {
             defaultValue = "0",
             eventMaximumRateMilliseconds = 200
     )
-    private UnsignedIntegerFourBytes systemUpdateID = new UnsignedIntegerFourBytes(0);
+    private UnsignedIntegerEightBytes systemUpdateID = new UnsignedIntegerEightBytes(0);
 
     final protected PropertyChangeSupport propertyChangeSupport;
 
@@ -141,7 +134,7 @@ public abstract class AbstractContentDirectoryService {
     }
 
     @UpnpAction(out = @UpnpOutputArgument(name = "Id"))
-    synchronized public UnsignedIntegerFourBytes getSystemUpdateID() {
+    synchronized public UnsignedIntegerEightBytes getSystemUpdateID() {
         return systemUpdateID;
     }
 
@@ -184,8 +177,8 @@ public abstract class AbstractContentDirectoryService {
             @UpnpInputArgument(name = "ObjectID", aliases = "ContainerID") String objectId,
             @UpnpInputArgument(name = "BrowseFlag") String browseFlag,
             @UpnpInputArgument(name = "Filter") String filter,
-            @UpnpInputArgument(name = "StartingIndex", stateVariable = "A_ARG_TYPE_Index") UnsignedIntegerFourBytes firstResult,
-            @UpnpInputArgument(name = "RequestedCount", stateVariable = "A_ARG_TYPE_Count") UnsignedIntegerFourBytes maxResults,
+            @UpnpInputArgument(name = "StartingIndex", stateVariable = "A_ARG_TYPE_Index") UnsignedIntegerEightBytes firstResult,
+            @UpnpInputArgument(name = "RequestedCount", stateVariable = "A_ARG_TYPE_Count") UnsignedIntegerEightBytes maxResults,
             @UpnpInputArgument(name = "SortCriteria") String orderBy)
             throws ContentDirectoryException {
 
@@ -245,8 +238,8 @@ public abstract class AbstractContentDirectoryService {
             @UpnpInputArgument(name = "ContainerID", stateVariable = "A_ARG_TYPE_ObjectID") String containerId,
             @UpnpInputArgument(name = "SearchCriteria") String searchCriteria,
             @UpnpInputArgument(name = "Filter") String filter,
-            @UpnpInputArgument(name = "StartingIndex", stateVariable = "A_ARG_TYPE_Index") UnsignedIntegerFourBytes firstResult,
-            @UpnpInputArgument(name = "RequestedCount", stateVariable = "A_ARG_TYPE_Count") UnsignedIntegerFourBytes maxResults,
+            @UpnpInputArgument(name = "StartingIndex", stateVariable = "A_ARG_TYPE_Index") UnsignedIntegerEightBytes firstResult,
+            @UpnpInputArgument(name = "RequestedCount", stateVariable = "A_ARG_TYPE_Count") UnsignedIntegerEightBytes maxResults,
             @UpnpInputArgument(name = "SortCriteria") String orderBy)
             throws ContentDirectoryException {
 

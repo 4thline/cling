@@ -25,7 +25,7 @@ import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.message.UpnpResponse;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.model.types.csv.CSV;
 import org.fourthline.cling.support.connectionmanager.callback.ConnectionComplete;
 import org.fourthline.cling.support.connectionmanager.callback.PrepareForConnection;
@@ -70,18 +70,18 @@ public abstract class AbstractPeeringConnectionManagerService extends Connection
     }
 
     synchronized protected void storeConnection(ConnectionInfo info) {
-        CSV<UnsignedIntegerFourBytes> oldConnectionIDs = getCurrentConnectionIDs();
+        CSV<UnsignedIntegerEightBytes> oldConnectionIDs = getCurrentConnectionIDs();
         activeConnections.put(info.getConnectionID(), info);
         log.fine("Connection stored, firing event: " + info.getConnectionID());
-        CSV<UnsignedIntegerFourBytes> newConnectionIDs = getCurrentConnectionIDs();
+        CSV<UnsignedIntegerEightBytes> newConnectionIDs = getCurrentConnectionIDs();
         getPropertyChangeSupport().firePropertyChange("CurrentConnectionIDs", oldConnectionIDs, newConnectionIDs);
     }
 
     synchronized protected void removeConnection(int connectionID) {
-        CSV<UnsignedIntegerFourBytes> oldConnectionIDs = getCurrentConnectionIDs();
+        CSV<UnsignedIntegerEightBytes> oldConnectionIDs = getCurrentConnectionIDs();
         activeConnections.remove(connectionID);
         log.fine("Connection removed, firing event: " + connectionID);
-        CSV<UnsignedIntegerFourBytes> newConnectionIDs = getCurrentConnectionIDs();
+        CSV<UnsignedIntegerEightBytes> newConnectionIDs = getCurrentConnectionIDs();
         getPropertyChangeSupport().firePropertyChange("CurrentConnectionIDs", oldConnectionIDs, newConnectionIDs);
     }
 

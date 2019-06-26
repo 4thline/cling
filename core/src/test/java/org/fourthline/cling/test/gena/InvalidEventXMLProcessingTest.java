@@ -30,7 +30,7 @@ import org.fourthline.cling.model.message.gena.IncomingEventRequestMessage;
 import org.fourthline.cling.model.message.gena.OutgoingEventRequestMessage;
 import org.fourthline.cling.model.meta.RemoteService;
 import org.fourthline.cling.model.state.StateVariableValue;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.test.data.SampleData;
 import org.fourthline.cling.transport.impl.PullGENAEventProcessorImpl;
 import org.fourthline.cling.transport.impl.RecoveringGENAEventProcessorImpl;
@@ -162,7 +162,7 @@ public class InvalidEventXMLProcessingTest {
             public void invalidMessage(UnsupportedDataException ex) {
             }
         };
-        subscription.receive(new UnsignedIntegerFourBytes(0), new ArrayList<StateVariableValue>());
+        subscription.receive(new UnsignedIntegerEightBytes(0), new ArrayList<StateVariableValue>());
 
         OutgoingEventRequestMessage outgoingCall =
             new OutgoingEventRequestMessage(subscription, SampleData.getLocalBaseURL());

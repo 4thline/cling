@@ -17,8 +17,8 @@ package org.fourthline.cling.model.types;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * The type of a state variable value, able to convert to/from string representation.
@@ -39,7 +39,7 @@ public interface Datatype<V> {
      * Java type.
      * </p>
      */
-    public static enum Default {
+    enum Default {
 
         BOOLEAN(Boolean.class, Builtin.BOOLEAN),
         BOOLEAN_PRIMITIVE(Boolean.TYPE, Builtin.BOOLEAN),
@@ -49,7 +49,7 @@ public interface Datatype<V> {
         INTEGER_PRIMITIVE(Integer.TYPE, Builtin.I4),
         UNSIGNED_INTEGER_ONE_BYTE(UnsignedIntegerOneByte.class, Builtin.UI1),
         UNSIGNED_INTEGER_TWO_BYTES(UnsignedIntegerTwoBytes.class, Builtin.UI2),
-        UNSIGNED_INTEGER_FOUR_BYTES(UnsignedIntegerFourBytes.class, Builtin.UI4),
+        UNSIGNED_INTEGER_FOUR_BYTES(UnsignedIntegerEightBytes.class, Builtin.UI4),
         FLOAT(Float.class, Builtin.R4),
         FLOAT_PRIMITIVE(Float.TYPE, Builtin.R4),
         DOUBLE(Double.class, Builtin.FLOAT),
@@ -95,11 +95,11 @@ public interface Datatype<V> {
     /**
      * Mapping from UPnP built-in standardized type to actual subtype of {@link Datatype}.
      */
-    public static enum Builtin {
+    enum Builtin {
 
         UI1("ui1", new UnsignedIntegerOneByteDatatype()),
         UI2("ui2", new UnsignedIntegerTwoBytesDatatype()),
-        UI4("ui4", new UnsignedIntegerFourBytesDatatype()),
+        UI4("ui4", new UnsignedIntegerEightBytesDatatype()),
         I1("i1", new IntegerDatatype(1)),
         I2("i2", new IntegerDatatype(2)),
         I2_SHORT("i2", new ShortDatatype()),
@@ -187,19 +187,19 @@ public interface Datatype<V> {
     /**
      * @return <code>true</code> if this datatype can handle values of the given Java type.
      */
-    public boolean isHandlingJavaType(Class type);
+    boolean isHandlingJavaType(Class type);
 
     /**
      * @return The built-in UPnP standardized type this datatype is mapped to or
      *         <code>null</code> if this is a custom datatype.
      */
-    public Builtin getBuiltin();
+    Builtin getBuiltin();
 
     /**
      * @param value The value to validate or <code>null</code>.
      * @return Returns <code>true</code> if the value was <code>null</code>, validation result otherwise.
      */
-    public boolean isValid(V value);
+    boolean isValid(V value);
 
     /**
      * Transforms a value supported by this datatype into a string representation.
@@ -212,7 +212,7 @@ public interface Datatype<V> {
      * @return The transformed value as a string, or an empty string when the value is null, never returns <code>null</code>.
      * @throws InvalidValueException
      */
-    public String getString(V value) throws InvalidValueException;
+    String getString(V value) throws InvalidValueException;
 
     /**
      * Transforms a string representation into a value of the supported type.
@@ -221,13 +221,13 @@ public interface Datatype<V> {
      * @return The converted value or <code>null</code> if the string was <code>null</code> or empty.
      * @throws InvalidValueException If the string couldn't be parsed.
      */
-    public V valueOf(String s) throws InvalidValueException;
+    V valueOf(String s) throws InvalidValueException;
 
     /**
      * @return Metadata about this datatype, a nice string for display that describes
      *         this datatype (e.g. concrete class name).
      */
-    public String getDisplayString();
+    String getDisplayString();
 
 
 }

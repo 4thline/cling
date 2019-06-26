@@ -20,7 +20,7 @@ import org.fourthline.cling.model.action.ActionException;
 import org.fourthline.cling.model.action.ActionInvocation;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.types.ErrorCode;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.contentdirectory.DIDLParser;
 import org.fourthline.cling.support.model.BrowseFlag;
 import org.fourthline.cling.support.model.BrowseResult;
@@ -76,9 +76,9 @@ public abstract class Browse extends ActionCallback {
         getActionInvocation().setInput("ObjectID", objectID);
         getActionInvocation().setInput("BrowseFlag", flag.toString());
         getActionInvocation().setInput("Filter", filter);
-        getActionInvocation().setInput("StartingIndex", new UnsignedIntegerFourBytes(firstResult));
+        getActionInvocation().setInput("StartingIndex", new UnsignedIntegerEightBytes(firstResult));
         getActionInvocation().setInput("RequestedCount",
-                new UnsignedIntegerFourBytes(maxResults == null ? getDefaultMaxResults() : maxResults)
+                new UnsignedIntegerEightBytes(maxResults == null ? getDefaultMaxResults() : maxResults)
         );
         getActionInvocation().setInput("SortCriteria", SortCriterion.toString(orderBy));
     }
@@ -94,9 +94,9 @@ public abstract class Browse extends ActionCallback {
 
         BrowseResult result = new BrowseResult(
                 invocation.getOutput("Result").getValue().toString(),
-                (UnsignedIntegerFourBytes) invocation.getOutput("NumberReturned").getValue(),
-                (UnsignedIntegerFourBytes) invocation.getOutput("TotalMatches").getValue(),
-                (UnsignedIntegerFourBytes) invocation.getOutput("UpdateID").getValue()
+                (UnsignedIntegerEightBytes) invocation.getOutput("NumberReturned").getValue(),
+                (UnsignedIntegerEightBytes) invocation.getOutput("TotalMatches").getValue(),
+                (UnsignedIntegerEightBytes) invocation.getOutput("UpdateID").getValue()
         );
 
         boolean proceed = receivedRaw(invocation, result);

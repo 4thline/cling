@@ -23,24 +23,17 @@ import org.fourthline.cling.model.DefaultServiceManager;
 import org.fourthline.cling.model.ModelUtil;
 import org.fourthline.cling.model.ServiceManager;
 import org.fourthline.cling.model.ValidationException;
-import org.fourthline.cling.model.meta.DeviceDetails;
-import org.fourthline.cling.model.meta.DeviceIdentity;
-import org.fourthline.cling.model.meta.Icon;
-import org.fourthline.cling.model.meta.LocalDevice;
-import org.fourthline.cling.model.meta.LocalService;
-import org.fourthline.cling.model.meta.ManufacturerDetails;
-import org.fourthline.cling.model.meta.ModelDetails;
+import org.fourthline.cling.model.meta.*;
 import org.fourthline.cling.model.types.UDADeviceType;
 import org.fourthline.cling.model.types.UDN;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
-import org.fourthline.cling.support.lastchange.LastChangeAwareServiceManager;
-import org.fourthline.cling.support.model.TransportState;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 import org.fourthline.cling.support.avtransport.lastchange.AVTransportLastChangeParser;
 import org.fourthline.cling.support.lastchange.LastChange;
+import org.fourthline.cling.support.lastchange.LastChangeAwareServiceManager;
+import org.fourthline.cling.support.model.TransportState;
 import org.fourthline.cling.support.renderingcontrol.lastchange.RenderingControlLastChangeParser;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -57,7 +50,7 @@ public class GstMediaRenderer {
     final protected LastChange avTransportLastChange = new LastChange(new AVTransportLastChangeParser());
     final protected LastChange renderingControlLastChange = new LastChange(new RenderingControlLastChangeParser());
 
-    final protected Map<UnsignedIntegerFourBytes, GstMediaPlayer> mediaPlayers;
+    final protected Map<UnsignedIntegerEightBytes, GstMediaPlayer> mediaPlayers;
 
     final protected ServiceManager<GstConnectionManagerService> connectionManager;
     final protected LastChangeAwareServiceManager<GstAVTransportService> avTransport;
@@ -186,7 +179,7 @@ public class GstMediaRenderer {
         this.displayHandler = displayHandler;
     }
 
-    synchronized public Map<UnsignedIntegerFourBytes, GstMediaPlayer> getMediaPlayers() {
+    synchronized public Map<UnsignedIntegerEightBytes, GstMediaPlayer> getMediaPlayers() {
         return mediaPlayers;
     }
 

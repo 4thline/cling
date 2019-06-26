@@ -15,7 +15,7 @@
 
 package org.fourthline.cling.support.model;
 
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 /**
  * @author TK Kocheran &lt;rfkrocktk@gmail.com&gt;
@@ -24,15 +24,15 @@ public class SearchResult {
 
     protected String result;
 
-    protected UnsignedIntegerFourBytes count;
+    protected UnsignedIntegerEightBytes count;
 
-    protected UnsignedIntegerFourBytes totalMatches;
+    protected UnsignedIntegerEightBytes totalMatches;
 
-    protected UnsignedIntegerFourBytes containerUpdateID;
+    protected UnsignedIntegerEightBytes containerUpdateID;
 
-    public SearchResult(String result, UnsignedIntegerFourBytes count,
-                        UnsignedIntegerFourBytes totalMatches,
-                        UnsignedIntegerFourBytes containerUpdateID) {
+    public SearchResult(String result, UnsignedIntegerEightBytes count,
+                        UnsignedIntegerEightBytes totalMatches,
+                        UnsignedIntegerEightBytes containerUpdateID) {
         this.result = result;
         this.count = count;
         this.totalMatches = totalMatches;
@@ -46,9 +46,9 @@ public class SearchResult {
     public SearchResult(String result, long count, long totalMatches, long updateID) {
         this(
                 result,
-                new UnsignedIntegerFourBytes(count),
-                new UnsignedIntegerFourBytes(totalMatches),
-                new UnsignedIntegerFourBytes(updateID)
+                new UnsignedIntegerEightBytes(count),
+                new UnsignedIntegerEightBytes(totalMatches),
+                new UnsignedIntegerEightBytes(updateID)
         );
     }
 
@@ -56,7 +56,7 @@ public class SearchResult {
         return result;
     }
 
-    public UnsignedIntegerFourBytes getCount() {
+    public UnsignedIntegerEightBytes getCount() {
         return count;
     }
 
@@ -64,7 +64,7 @@ public class SearchResult {
         return count.getValue();
     }
 
-    public UnsignedIntegerFourBytes getTotalMatches() {
+    public UnsignedIntegerEightBytes getTotalMatches() {
         return totalMatches;
     }
 
@@ -72,7 +72,7 @@ public class SearchResult {
         return totalMatches.getValue();
     }
 
-    public UnsignedIntegerFourBytes getContainerUpdateID() {
+    public UnsignedIntegerEightBytes getContainerUpdateID() {
         return containerUpdateID;
     }
 

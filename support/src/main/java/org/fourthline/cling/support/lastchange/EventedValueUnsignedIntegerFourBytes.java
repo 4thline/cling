@@ -16,16 +16,16 @@
 package org.fourthline.cling.support.lastchange;
 
 import org.fourthline.cling.model.types.Datatype;
-import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+import org.fourthline.cling.model.types.UnsignedIntegerEightBytes;
 
 import java.util.Map;
 
 /**
  * @author Christian Bauer
  */
-public class EventedValueUnsignedIntegerFourBytes extends EventedValue<UnsignedIntegerFourBytes> {
+public class EventedValueUnsignedIntegerFourBytes extends EventedValue<UnsignedIntegerEightBytes> {
 
-    public EventedValueUnsignedIntegerFourBytes(UnsignedIntegerFourBytes value) {
+    public EventedValueUnsignedIntegerFourBytes(UnsignedIntegerEightBytes value) {
         super(value);
     }
 
