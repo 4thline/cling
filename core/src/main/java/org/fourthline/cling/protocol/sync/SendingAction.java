@@ -128,7 +128,7 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
                 log.fine("Error writing SOAP body: " + ex);
                 log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
             }
-            throw new ActionException(ErrorCode.ACTION_FAILED, "Error writing request message. " + ex.getMessage());
+            throw new ActionException(ErrorCode.ACTION_FAILED.getCode(), "Error writing request message. " + ex.getMessage(), ex);
         }
     }
 
@@ -141,9 +141,9 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
             log.fine("Error reading SOAP body: " + ex);
             log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
             throw new ActionException(
-                ErrorCode.ACTION_FAILED,
+                ErrorCode.ACTION_FAILED.getCode(),
                 "Error reading SOAP response message. " + ex.getMessage(),
-                false
+                ex
             );
         }
     }
@@ -157,9 +157,9 @@ public class SendingAction extends SendingSync<OutgoingActionRequestMessage, Inc
             log.fine("Error reading SOAP body: " + ex);
             log.log(Level.FINE, "Exception root cause: ", Exceptions.unwrap(ex));
             throw new ActionException(
-                ErrorCode.ACTION_FAILED,
+                ErrorCode.ACTION_FAILED.getCode(),
                 "Error reading SOAP response failure message. " + ex.getMessage(),
-                false
+                ex
             );
         }
     }
