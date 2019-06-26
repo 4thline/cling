@@ -37,6 +37,7 @@ import org.testng.annotations.Test;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -96,7 +97,7 @@ public class EventXMLProcessingTest {
         List<URL> urls = new ArrayList<URL>() {{
             add(SampleData.getLocalBaseURL());
         }};
-        
+
         LocalGENASubscription subscription =
                 new LocalGENASubscription(localService, 1800, urls) {
                     public void failed(Exception ex) {
@@ -111,7 +112,7 @@ public class EventXMLProcessingTest {
 
                     }
 
-                    public void eventReceived() {
+                    public void eventReceived(Map<String, StateVariableValue<?>> changedValues) {
 
                     }
                 };

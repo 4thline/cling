@@ -156,7 +156,7 @@ public class InvalidEventXMLProcessingTest {
             public void established() {
             }
 
-            public void eventReceived() {
+            public void eventReceived(Map<String, StateVariableValue<?>> changedValues) {
             }
 
             public void invalidMessage(UnsupportedDataException ex) {

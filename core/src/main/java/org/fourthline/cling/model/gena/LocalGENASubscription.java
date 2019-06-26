@@ -27,14 +27,7 @@ import org.seamless.util.Exceptions;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.net.URL;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,9 +39,9 @@ import java.util.logging.Logger;
  * {@link #registerOnService()} method is called next, and from this point forward all
  * {@link org.fourthline.cling.model.ServiceManager#EVENTED_STATE_VARIABLES} property change
  * events are detected by this subscription. After moderation of state variable values
- * (frequency and range of changes), the {@link #eventReceived()} method is called.
+ * (frequency and range of changes), the {@link #eventReceived(Map)} method is called.
  * Delivery of the event message to the subscriber is not part of this class, but the
- * implementor of {@link #eventReceived()}.
+ * implementor of {@link #eventReceived(Map)}.
  * </p>
  *
  * @author Christian Bauer
@@ -130,7 +123,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
 
     /**
      * Moderates {@link org.fourthline.cling.model.ServiceManager#EVENTED_STATE_VARIABLES} events and state variable
-     * values, calls {@link #eventReceived()}.
+     * values, calls {@link #eventReceived(Map)}.
      */
     synchronized public void propertyChange(PropertyChangeEvent e) {
         if (!e.getPropertyName().equals(ServiceManager.EVENTED_STATE_VARIABLES)) return;
@@ -142,11 +135,12 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
         Collection<StateVariableValue> newValues = (Collection) e.getNewValue();
         Set<String> excludedVariables = moderateStateVariables(currentTime, newValues);
 
-        currentValues.clear();
+        Map<String, StateVariableValue<?>> changedValues = new HashMap<>(newValues.size());
         for (StateVariableValue newValue : newValues) {
             String name = newValue.getStateVariable().getName();
             if (!excludedVariables.contains(name)) {
                 log.fine("Adding state variable value to current values of event: " + newValue.getStateVariable() + " = " + newValue);
+                changedValues.put(newValue.getStateVariable().getName(), newValue);
                 currentValues.put(newValue.getStateVariable().getName(), newValue);
 
                 // Preserve "last sent" state for future moderation
@@ -162,7 +156,7 @@ public abstract class LocalGENASubscription extends GENASubscription<LocalServic
             // TODO: I'm not happy with this design, this dispatches to a separate thread which _then_
             // is supposed to lock and read the values off this instance. That obviously doesn't work
             // so it's currently a hack in SendingEvent.java
-            eventReceived();
+            eventReceived(changedValues);
         } else {
             log.fine("No state variable values for event (all moderated out?), not triggering event");
         }

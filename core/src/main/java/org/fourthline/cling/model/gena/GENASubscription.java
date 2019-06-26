@@ -15,13 +15,13 @@
 
 package org.fourthline.cling.model.gena;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.fourthline.cling.model.UserConstants;
 import org.fourthline.cling.model.meta.Service;
 import org.fourthline.cling.model.state.StateVariableValue;
 import org.fourthline.cling.model.types.UnsignedIntegerFourBytes;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * An established subscription, with identifer, expiration duration, sequence handling, and state variable values.
@@ -87,7 +87,7 @@ public abstract class GENASubscription<S extends Service> {
     }
 
     public abstract void established();
-    public abstract void eventReceived();
+    public abstract void eventReceived(Map<String, StateVariableValue<?>> changedValues);
 
     @Override
     public String toString() {

@@ -46,6 +46,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import static org.testng.Assert.*;
@@ -102,7 +103,7 @@ public class OutgoingSubscriptionLifecycleTest {
                 testAssertions.add(true);
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
                 assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
                 testAssertions.add(true);
@@ -222,7 +223,7 @@ public class OutgoingSubscriptionLifecycleTest {
             public void ended(GENASubscription subscription, CancelReason reason, UpnpResponse responseStatus) {
             }
 
-            public void eventReceived(GENASubscription subscription) {
+            public void eventReceived(GENASubscription subscription, Map<String, StateVariableValue<?>> changedValues) {
                 assertEquals(subscription.getCurrentValues().get("Status").toString(), "0");
                 assertEquals(subscription.getCurrentValues().get("Target").toString(), "1");
                 testAssertions.add(true);
@@ -251,7 +252,7 @@ public class OutgoingSubscriptionLifecycleTest {
             public void established() {
             }
             @Override
-            public void eventReceived() {
+            public void eventReceived(Map<String, StateVariableValue<?>> changedValues) {
             }
             @Override
             public void invalidMessage(UnsupportedDataException ex) {

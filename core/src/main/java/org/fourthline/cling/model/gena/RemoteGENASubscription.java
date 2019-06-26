@@ -26,14 +26,12 @@ import org.fourthline.cling.model.UnsupportedDataException;
 
 import java.beans.PropertyChangeSupport;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * An outgoing subscription to a remote service.
  * <p>
- * Once established, calls its {@link #eventReceived()} method whenever an event has
+ * Once established, calls its {@link #eventReceived(Map)}  method whenever an event has
  * been received from the remote service.
  * </p>
  *
@@ -107,13 +105,14 @@ public abstract class RemoteGENASubscription extends GENASubscription<RemoteServ
 
         this.currentSequence = sequence;
 
+        Map<String, StateVariableValue<?>> changedValues = new HashMap<>(newValues.size());
         for (StateVariableValue newValue : newValues) {
+            changedValues.put(newValue.getStateVariable().getName(), newValue);
             currentValues.put(newValue.getStateVariable().getName(), newValue);
         }
-
-        eventReceived();
+        eventReceived(changedValues);
     }
-    
+
     public abstract void invalidMessage(UnsupportedDataException ex);
 
     public abstract void failed(UpnpResponse responseStatus);
