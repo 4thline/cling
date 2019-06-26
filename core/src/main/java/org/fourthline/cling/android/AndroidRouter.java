@@ -74,7 +74,7 @@ public class AndroidRouter extends RouterImpl {
 
     @Override
     protected int getLockTimeoutMillis() {
-        return 15000;
+        return (int) (getConfiguration().getThreadTimeoutInMilliseconds() + 5000);
     }
 
     @Override
